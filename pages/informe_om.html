@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe Técnico de Mantenimiento</title>
+<link rel="stylesheet" href="../css/informe_om.css">
+<script src="../js/api-config.js"></script>
+</head>
+<body data-no-global-layout>
+
+  <div class="topbar no-print">
+    <span class="topbar-title">Informe técnico de mantenimiento</span>
+    <div class="topbar-actions">
+      <button type="button" id="btn-volver" class="btn btn-ghost">Volver a solicitudes</button>
+      <button type="button" id="btn-editar" class="btn btn-primary">Editar informe</button>
+      <button type="button" id="btn-imprimir" class="btn btn-primary">Imprimir / Guardar PDF</button>
+    </div>
+  </div>
+
+  <!-- Panel de datos: no se imprime -->
+  <aside class="panel no-print" id="panel">
+    <div class="panel-head">
+      <h2>Datos del informe</h2>
+      <button type="button" id="btn-cerrar-panel" class="btn-close">✕</button>
+    </div>
+    <p class="panel-hint">Los valores se cargan de <code>datos.json</code>. Podés ajustarlos acá para esta vista puntual.</p>
+
+    <form id="form-datos">
+      <label>PARA
+        <input type="text" name="para" value="Gustavo González">
+      </label>
+
+      <div class="panel-grid">
+        <label>DE
+          <input type="text" name="reparador" value="Carlos Duarte">
+        </label>
+        <label>FECHA
+          <input type="text" name="fecha" value="10/09/2026" placeholder="dd/mm/aaaa">
+        </label>
+      </div>
+
+      <label>ASUNTO
+        <input type="text" name="equipo" value="Compresor Línea 3">
+      </label>
+
+      <label>Solicitante
+        <input type="text" name="solicitante" value="Juan Pérez">
+      </label>
+
+      <label class="full">Incidencia reportada
+        <textarea name="averia" rows="2">Fuga de aceite en el sello del cigüeñal y ruido anormal durante el arranque. Unidad detenida preventivamente.</textarea>
+      </label>
+
+      <label class="full">Trabajo ejecutado
+        <textarea name="reparacion" rows="2">Se reemplazaron los rodamientos y el sello del cigüeñal, y se ajustó la tensión de la correa de transmisión.</textarea>
+      </label>
+
+      <label class="full">Observaciones importantes realizadas
+        <textarea name="observaciones" rows="2">No se registran observaciones adicionales.</textarea>
+      </label>
+
+      <label>Estado final
+        <select name="estado">
+          <option value="Operativo" selected>Operativo</option>
+          <option value="Operativo con observaciones">Operativo con observaciones</option>
+          <option value="Fuera de servicio">Fuera de servicio</option>
+          <option value="Pendiente">Pendiente</option>
+          <option value="No iniciado">No iniciado</option>
+          <option value="Asignado">Asignado</option>
+          <option value="Completado">Completado</option>
+          <option value="Reprogramado">Reprogramado</option>
+          <option value="De baja">De baja</option>
+        </select>
+      </label>
+
+      <div class="panel-grid">
+        <label>Código
+          <input type="text" name="codigo" value="FR-014">
+        </label>
+        <label>Rev.
+          <input type="text" name="rev" value="00">
+        </label>
+      </div>
+
+      <div class="panel-actions">
+        <button type="button" id="btn-limpiar" class="btn btn-secondary">Recargar desde JSON</button>
+      </div>
+    </form>
+  </aside>
+
+  <!-- Hoja imprimible: una sola página A4 -->
+  <main class="page">
+    <section class="sheet">
+      <!--<img class="watermark" src="marca-aguas.png" alt="logo mv">-->
+
+      <div class="sheet-head">
+        <img src="../img/modulo_logo.png" alt="Metalúrgica Vera S.A.E." class="brand-logo">
+        <div class="doc-meta">
+          <span class="doc-meta-item">Código <strong data-field="codigo">FR-014</strong></span>
+          <span class="doc-meta-item">Rev. <strong data-field="rev">00</strong></span>
+        </div>
+      </div>
+
+      <h1 class="sheet-title">INFORME TÉCNICO DE MANTENIMIENTO</h1>
+      <hr class="title-rule">
+
+      <div class="memo-fields memo-fields--stacked">
+        <div class="memo-row">
+          <span class="memo-label">PARA</span>
+          <span class="memo-value" data-field="para">Gustavo González</span>
+        </div>
+        <div class="memo-row">
+          <span class="memo-label">DE</span>
+          <span class="memo-value" data-field="reparador">Carlos Duarte</span>
+        </div>
+        <div class="memo-row">
+          <span class="memo-label">FECHA</span>
+          <span class="memo-value" data-field="fecha">10/09/2026</span>
+        </div>
+        <div class="memo-row">
+          <span class="memo-label">ASUNTO</span>
+          <span class="memo-value" data-field="equipo">Compresor Línea 3</span>
+        </div>
+      </div>
+
+      <p class="body-text">
+        En atención al reporte recibido de <strong data-field="solicitante">Juan Pérez</strong>, se realizó la intervención técnica del equipo indicado.
+      </p>
+      <span class="section-label">INCIDENCIA REPORTADA</span>
+      <p class="averia-box" data-field="averia">Fuga de aceite en el sello del cigüeñal y ruido anormal durante el arranque. Unidad detenida preventivamente.</p>
+
+      <span class="section-label">TRABAJO EJECUTADO</span>
+      <p class="averia-box averia-box--ok" data-field="reparacion">Se reemplazaron los rodamientos y el sello del cigüeñal, y se ajustó la tensión de la correa de transmisión.</p>
+
+      <span class="section-label">OBSERVACIONES IMPORTANTES REALIZADAS</span>
+      <p class="averia-box averia-box--ok" data-field="observaciones">No se registran observaciones adicionales.</p>
+
+      <ul class="checklist">
+        <li>Finalizado el trabajo se realiza la verificación general.</li>
+        <li>Se realizan los ensayos de funcionamiento correspondientes.</li>
+        <li>Se realiza la limpieza de la máquina y del área afectada.</li>
+      </ul>
+
+      <span class="section-label final-status-label">ESTADO FINAL DEL EQUIPO</span>
+      <p class="averia-box averia-box--ok final-status"><span data-field="estado">Operativo</span></p>
+
+      <footer class="report-footer">
+        <p class="generated-note"><span class="footer-label">Generado</span> <span data-field="generado">—</span></p>
+        <p class="dynamic-line technician-note"><span class="footer-label">Técnico responsable</span> <span data-field="reparador">Carlos Duarte</span><span class="footer-signature">Firma: <span class="signature-line"></span></span></p>
+      </footer>
+    </section>
+  </main>
+
+<script src="../js/informe_om.js"></script>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Mantenimiento Metalúrgica Vera S.A.E.</title>
+        <link rel="icon" href="../img/Logo.png" type="image/png" sizes="32x32">
+        <link rel="stylesheet" href="../css/styles.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="../js/api-config.js"></script>
+</head>
+    <body>
+        <!--<hr>-->
+
+            <main class="solicitud">
+                <div class="titulo"><h2>Modificar Solicitud de Mantenimiento</h2></div>
+                <form action="/api/ordenes/solicitud" method="post" data-modificacion="true">
+                    <!-- Select dinámico para elegir la solicitud/orden a modificar -->
+                    <div>
+                        <label for="ordenSeleccionada">Solicitud a modificar</label>
+                        <select id="ordenSeleccionada" name="ordenSeleccionada"></select>
+                    </div>
+                    <input type="hidden" id="ordenId" name="orden_id" value="">
+
+                    <!-- Select con buscador (máquina/equipo) -->
+                    <div>
+                        <label for="maquinaEquipo">Máquina/Equipo</label>
+                        <select id="maquinaEquipo" name="codigo"></select>
+                    </div>
+                    <label for="declarado-radio">¿Necesita agregar una descripción al nombre?  </label><input type="checkbox" id="declarado-radio" name="declarado-radio">
+
+                    <div class="declarado">
+                    <label for="declarado">Nombre Declarado *</label>
+                    <input type="text" id="declarado" name="nombre_declarado" placeholder="*Solo completar si se selecciona servicio">
+                    </div>
+
+                    <!-- Area de texto (descripcion de la averia) -->
+                    <div class="campo-ancho">
+                        <label for="averia">Descripcion de la averia</label>
+                        <textarea id="averia" name="averia" rows="5" placeholder="Describa la averia o el problema detectado"></textarea>
+                    </div>
+                    <!-- Campo de texto (solicitante) -->
+                    <div>
+                        <label for="solicitante">Solicitante</label>
+                        <input type="text" id="solicitante" name="solicitado" placeholder="Nombre del solicitante">
+                    </div>
+                      <!-- Select normal (Sector) -->
+                    <div>
+                        <label for="sector">Sector</label>
+                        <select id="sector" name="sector">
+                        <option value="" disabled selected>--Asignar Sector--</option>     
+                        <option value="1">Mantenimiento</option>
+                        <option value="2">Maquinado</option>
+                        <option value="3">Armado</option>
+                        <option value="4">Accesorios</option>
+                        <option value="5">Herrería</option>
+                        <option value="6">Pintura</option>
+                        <option value="7">Logística</option>
+                        <option value="8">Galvamax</option>
+                        <option value="9">Administración</option>
+                        <option value="10">Obras</option>
+                        </select>
+                    </div>
+                     <!-- Select normal (categorí­a) -->
+                    <div>
+                        <label for="categoria">Categori­a</label>
+                        <select id="categoria" name="categoria">
+                        <option value="1">Correctivo</option>
+                        <option value="2">Preventivo</option>
+                        <option value="3">Predictivo</option>
+                        </select>
+                    </div>
+                    <button type="submit">Modificar solicitud</button>
+                </form>
+
+                <div id="confirmacionModificacion" class="login-modal" role="dialog" aria-modal="true" aria-labelledby="tituloConfirmacion" hidden>
+                    <div class="login-modal-content">
+                        <h2 id="tituloConfirmacion">¿Quieres registrar la modificación?</h2>
+                        <p id="contadorConfirmacion">Podrás confirmar en 10 segundos.</p>
+                        <button type="button" id="confirmarModificacion" disabled>SI</button>
+                        <button type="button" id="cancelarModificacion">NO</button>
+                    </div>
+                </div>
+
+                <!-- Buscadores propios para los selects del formulario -->
+                <script src="../js/cierre_ordenes.js"></script>
+                <script src="../js/codigo_maquina.js"></script>
+                <script src="../js/modificar.js"></script>
+                <script src="../js/formularios.js"></script>
+
+            </main>
+
+
+
+
+<script src="../js/site-layout.js"></script>
+<script src="../js/login-modal.js"></script>
+<script src="../js/nav-responsive.js"></script>
+</body>
+</html>
+
+

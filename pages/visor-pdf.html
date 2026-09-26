@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Mantenimiento Metalúrgica Vera S.A.E.</title>
+        <link rel="icon" href="../img/Logo.png" type="image/png" sizes="32x32">
+        <link rel="stylesheet" href="../css/styles.css">
+        <link rel="stylesheet" href="../css/estilo-visor.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="../js/api-config.js"></script>
+</head>
+    <body>
+        <!--<hr>-->
+        <section class="selector-doc">
+            <div class="select-title">
+                <!--nuevo sector-->
+                <h2>Visor de documentos técnicos</h2>
+            </div>
+            <div class="container-select">
+                <label for="listaDocs">Archivo seleccionado:</label>
+                <!-- Select dinámico -->
+                <select class="pg-select" id="listaDocs" onchange="mostrarPDF()" aria-label="Archivo seleccionado">
+                    <option value="">-- Elegir documento --</option>
+                </select>
+            </div>
+
+            <div class="pg-iframe">
+                <!-- Iframe para mostrar PDF -->
+                <iframe id="visor"
+                title="Visor de documento técnico"
+                width="1080"
+                height="800">
+                </iframe>
+                
+                <div id="fallback">
+                    <p>
+                    <a id="fallback-link" href="#" target="_blank" rel="noopener noreferrer" title="Abrir documento PDF" aria-label="Abrir documento PDF">Abrir documento PDF</a>
+                    </p>
+                </div>
+
+                <script src="../js/iframe-pdf.js"></script>
+
+            </div>   
+                <!--fin de nuevo sector--> 
+        </section>
+
+
+
+
+<script src="../js/site-layout.js"></script>
+<script src="../js/login-modal.js"></script>
+<script src="../js/nav-responsive.js"></script>
+</body>
+    
+</html>

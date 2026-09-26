@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Reporte de órdenes de mantenimiento</title>
+    <link rel="icon" href="../img/Logo.png" type="image/png" sizes="32x32">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/reporte-ordenes.css">
+    <link rel="stylesheet" href="../css/reporte-ordenes-ui.css">
+  <script src="../js/api-config.js"></script>
+</head>
+  <body class="report-page-shell">
+    <main class="app">
+      <aside class="filters" id="reportFilters" aria-label="Filtros del reporte">
+        <h2>Filtros</h2>
+        <label>Año<select id="yearFilter"><option value="Todos">Todos</option></select></label>
+        <label>Mes<select id="monthFilter"><option value="Todos">Todos</option></select></label>
+        <label>Progreso<select id="statusFilter"><option value="Todos">Todos</option></select></label>
+        <label>Prioridad<select id="priorityFilter"><option value="Todos">Todos</option></select></label>
+        <p id="filterCount" class="filter-count"></p>
+      </aside>
+      <section class="report">
+        <div class="report-toolbar">
+          <h1>Reporte de Órdenes de Mantenimiento</h1>
+          <div class="report-actions">
+            <button class="filter-toggle" id="toggleFilters" type="button" aria-controls="reportFilters" aria-expanded="true">☰ Filtros</button>
+            <button class="reset" id="resetFilters" type="button">↺ Restablecer filtros</button>
+          </div>
+        </div>
+        <nav class="tabs" aria-label="Páginas del reporte">
+          <button class="tab active" data-page="resumen" type="button">Resumen</button>
+          <button class="tab" data-page="operacion" type="button">Operación</button>
+          <button class="tab" data-page="detalle" type="button">Detalle de órdenes</button>
+          <button class="tab" data-page="indicadores" type="button">Indicadores</button>
+          <button class="tab" data-page="sector" type="button">Por sector</button>
+          <button class="tab" data-page="prioridad" type="button">Por prioridad</button>
+        </nav>
+        <div id="dashboard" aria-live="polite">
+          <section class="report-page active" data-page-section="resumen" aria-label="Resumen">
+            <div class="dashboard summary-dashboard">
+              <div class="kpis" id="resumen-kpis"></div>
+              <div class="visual span-5" id="resumen-ordenes-dia"><h3>Órdenes por día</h3><div class="visual-content"></div></div>
+              <div class="visual span-3" id="resumen-progreso"><h3>Órdenes por progreso</h3><div class="visual-content"></div></div>
+              <div class="visual span-4" id="resumen-prioridad"><h3>Órdenes por prioridad</h3><div class="visual-content"></div></div>
+              <div class="visual span-5" id="resumen-costo-dia"><h3>Costo total por día</h3><div class="visual-content"></div></div>
+              <div class="visual span-3" id="resumen-apoyo"><h3>Apoyo requerido</h3><div class="visual-content"></div></div>
+              <div class="visual span-4" id="resumen-responsable"><h3>Órdenes por responsable</h3><div class="visual-content"></div></div>
+            </div>
+          </section>
+          <section class="report-page" data-page-section="operacion" aria-label="Operación" hidden>
+            <div class="dashboard">
+              <div class="visual span-4" id="operacion-responsable"><h3>Órdenes por responsable y progreso</h3><div class="visual-content"></div></div>
+              <div class="visual span-4" id="operacion-prioridad"><h3>Órdenes por prioridad</h3><div class="visual-content"></div></div>
+              <div class="visual span-4" id="operacion-resumen-progreso"><h3>Resumen por progreso</h3><div class="visual-content"></div></div>
+              <div class="visual span-4" id="operacion-ordenes-mes"><h3>Órdenes por mes</h3><div class="visual-content"></div></div>
+              <div class="visual span-4" id="operacion-costo"><h3>Costo total por mes</h3><div class="visual-content"></div></div>
+              <div class="visual span-4" id="operacion-costo-mes"><h3>Costo por mes</h3><div class="visual-content"></div></div>
+            </div>
+          </section>
+          <section class="report-page" data-page-section="detalle" aria-label="Detalle de órdenes" hidden>
+            <div class="dashboard"><div class="visual span-12" id="detalle-ordenes"><h3>Detalle de órdenes de mantenimiento</h3><div class="visual-content"></div></div></div>
+          </section>
+          <section class="report-page" data-page-section="indicadores" aria-label="Indicadores" hidden>
+            <div class="dashboard"><div class="visual span-12" id="indicadores-equipos"><h3>MTBR, MTTF y disponibilidad por equipo</h3><div class="visual-content"></div></div></div>
+          </section>
+          <section class="report-page" data-page-section="sector" aria-label="Por sector" hidden>
+            <div class="dashboard sector-dashboard">
+              <div class="visual" id="sector-progreso"><h3>Órdenes por sector y progreso</h3><div class="visual-content"></div></div>
+              <div class="visual" id="sector-detalle"><h3>Detalle por sector</h3><div class="visual-content"></div></div>
+            </div>
+          </section>
+          <section class="report-page" data-page-section="prioridad" aria-label="Por prioridad" hidden>
+            <div class="dashboard">
+              <div class="visual span-12" id="prioridad-global"><h3>Órdenes por prioridad</h3><div class="visual-content"></div></div>
+              <div class="priority-breakdown span-12" id="prioridad-desglose" aria-label="Distribución de progreso por prioridad"></div>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+<script src="../js/reporte-ordenes.js"></script>
+    <script src="../js/reporte-ordenes-embed.js"></script>
+
+
+
+
+<script src="../js/site-layout.js"></script>
+<script src="../js/login-modal.js"></script>
+<script src="../js/nav-responsive.js"></script>
+</body>
+</html>

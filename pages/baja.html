@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Mantenimiento Metalúrgica Vera S.A.E.</title>
+        <link rel="icon" href="../img/Logo.png" type="image/png" sizes="32x32">
+        <link rel="stylesheet" href="../css/styles.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="../js/api-config.js"></script>
+</head>
+    <body>
+        <!--<hr>-->
+
+            <main class="solicitud">
+                <div class="titulo"><h2>Formulario de solicitud de Baja de equipos</h2></div>
+                <form action="/api/ordenes/baja" method="post" id="bajaForm">
+                    <div>
+                        <label for="maquina">Solicitud/Maquina</label>
+                        <select id="maquina" name="id" required></select>
+                    </div>
+                    <p id="info-averia" class="info-averia"></p>
+                    <div class="campo-ancho">
+                        <label for="notas">Motivo de la baja</label>
+                        <textarea id="notas" name="notas" rows="5" placeholder="Describa la razón para dar de baja el equipo" required></textarea>
+                    </div>
+                    <button type="submit">Equipo para Baja</button>
+                </form>
+
+                <script src="../js/cierre_ordenes.js"></script>
+                <script src="../js/baja_ordenes.js"></script>
+
+            </main>
+
+
+
+
+<script src="../js/site-layout.js"></script>
+<script src="../js/login-modal.js"></script>
+<script src="../js/nav-responsive.js"></script>
+</body>
+</html>
+
+

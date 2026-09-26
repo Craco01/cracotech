@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Listado para Inventario</title>
+<link rel="stylesheet" href="../css/reporte_inventario.css?v=20260923-11">
+<script src="../js/api-config.js"></script>
+</head>
+<body data-no-global-layout>
+
+  <div class="toolbar no-print">
+    <a class="toolbar-button" href="contol_inventario.html">Volver a control de inventario</a>
+    <button id="btnImprimir">Imprimir</button>
+  </div>
+
+  <div id="estado" class="estado no-print"></div>
+
+  <main id="hoja" class="hoja">
+
+    <table class="tabla-inventario">
+      <colgroup>
+        <col class="col-codigo">
+        <col class="col-descripcion">
+        <col class="col-um">
+        <col class="col-ubicacion">
+        <col class="col-stock">
+        <col class="col-fisica">
+        <col class="col-observacion">
+      </colgroup>
+      <thead>
+        <tr class="fila-empresa">
+          <th colspan="4" class="celda-empresa">
+            <span class="empresa-nombre">Metalúrgica Vera S.A.E.</span>
+            <span class="empresa-direccion">Carretera Ruta PY 01 Acceso Sur Km 28.6 Ypane - Tel. 3283242</span>
+          </th>
+          <th colspan="3" class="celda-meta">
+            <div class="meta-contenido">
+              <div class="meta-linea">Pag: <span id="paginaActual">1</span> de <span id="totalPaginas">1</span></div>
+              <div class="meta-linea" id="usuario">CristhianRedes</div>
+              <div class="meta-linea" id="fechaHora"></div>
+            </div>
+          </th>
+        </tr>
+        <tr class="fila-subtitulo"><th colspan="7">Listado para Inventario</th></tr>
+        <tr class="fila-columnas">
+          <th class="col-codigo">Codigo</th>
+          <th class="col-descripcion">Descripción de Producto</th>
+          <th class="col-um">UM</th>
+          <th class="col-ubicacion">Ubicación</th>
+          <th class="col-stock">Stock F9</th>
+          <th class="col-fisica">Cantidad Física</th>
+          <th class="col-observacion">Observación</th>
+        </tr>
+      </thead>
+      <tbody id="cuerpoTabla">
+        <tr>
+          <td colspan="7" class="sin-datos">Cargando datos...</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr class="fila-total">
+          <td colspan="4"></td>
+          <td id="totalStock">0</td>
+          <td id="totalFisica">0</td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <section class="pie">
+      <div class="filtros">
+        <h4>Filtros Establecidos</h4>
+        <table class="tabla-filtros">
+          <thead>
+            <tr><th></th><th>Desde</th><th>Hasta</th></tr>
+          </thead>
+          <tbody id="cuerpoFiltros">
+            <tr><td>Producto</td><td>Todos</td><td>Todos</td></tr>
+            <tr><td>Sección:</td><td>Todos</td><td>Todos</td></tr>
+            <tr><td>Sub Sección:</td><td>Todos</td><td>Todos</td></tr>
+            <tr><td>Grupo:</td><td>Todos</td><td>Todos</td></tr>
+            <tr><td>Categoría:</td><td>Todos</td><td>Todos</td></tr>
+            <tr><td>Sub Categoría:</td><td>Todos</td><td>Todos</td></tr>
+            <tr><td>Marca:</td><td>Todos</td><td>Todos</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="resumen">
+        <p><strong>Fecha</strong></p>
+        <p id="depositoInfo">Deposito CI.4188660-CRISTHIAN REDES</p>
+        <p id="fechaCorta"></p>
+        <p class="totales-linea">
+          <span id="totalStockResumen">0</span>
+          &nbsp;&nbsp; Lineas : <span id="totalLineas">0</span>
+        </p>
+      </div>
+    </section>
+
+  </main>
+<script src="../js/reporte_inventario.js"></script>
+
+
+
+
+</body>
+</html>

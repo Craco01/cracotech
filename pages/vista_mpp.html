@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mantenimientos Preventivos | Metalúrgica Vera</title>
+  <link rel="icon" href="../img/Logo.png" type="image/png" sizes="32x32">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/preventivo-programado.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="../js/api-config.js"></script>
+</head>
+<body class="mpp-page">
+  <main class="mpp-content">
+    <div class="mpp-heading">
+      <div>
+        <h1>Registro de Mantenimientos Preventivos</h1>
+        <p class="mpp-intro">Consulta la planificación por tabla, mes o año.</p>
+      </div>
+      <label class="view-control" for="selectorVista">
+        <span>Vista</span>
+        <select id="selectorVista">
+          <option value="tabla">Tabla</option>
+          <option value="mensual">Calendario Mensual</option>
+          <option value="anual" selected>Calendario Anual</option>
+        </select>
+      </label>
+    </div>
+
+  <!-- Vista en tabla -->
+  <section id="vistaTabla" hidden>
+    <h2>Vista en tabla</h2>
+    <div class="table-scroll"><table id="tablaMantenimientos"></table></div>
+  </section>
+
+  <!-- Calendario mensual con selector -->
+  <section id="vistaMensual" hidden>
+    <h2>Calendario Mensual</h2>
+    <label for="mes">Mes:</label>
+    <select id="mes">
+      <option value="1">Enero</option>
+      <option value="2">Febrero</option>
+      <option value="3">Marzo</option>
+      <option value="4">Abril</option>
+      <option value="5">Mayo</option>
+      <option value="6">Junio</option>
+      <option value="7">Julio</option>
+      <option value="8">Agosto</option>
+      <option value="9">Septiembre</option>
+      <option value="10">Octubre</option>
+      <option value="11">Noviembre</option>
+      <option value="12">Diciembre</option>
+    </select>
+
+    <span class="current-year">Año vigente: <strong id="anio"></strong></span>
+
+    <div class="calendar-shell" id="calendarioMensual"></div>
+  </section>
+
+  <!-- Calendario anual -->
+ <section id="vistaAnual">
+    <h2>Calendario Anual</h2>
+    <div class="table-scroll"><table id="calendarioAnual">
+      <thead>
+        <tr>
+          <th>Ítem</th>
+          <th>Máquina</th>
+          <th>Sector</th>
+          <!-- Encabezado de semanas -->
+          <!-- 52 columnas -->
+          <!-- Agrupadas por meses -->
+          <th colspan="4">Enero</th>
+          <th colspan="4">Febrero</th>
+          <th colspan="4">Marzo</th>
+          <th colspan="4">Abril</th>
+          <th colspan="4">Mayo</th>
+          <th colspan="4">Junio</th>
+          <th colspan="4">Julio</th>
+          <th colspan="4">Agosto</th>
+          <th colspan="4">Septiembre</th>
+          <th colspan="4">Octubre</th>
+          <th colspan="4">Noviembre</th>
+          <th colspan="4">Diciembre</th>
+        </tr>
+        <tr>
+          <th colspan="3"></th>
+          <!-- Semanas numeradas -->
+          <!-- 52 semanas -->
+          <!-- ejemplo: 4 por mes -->
+          <th>1</th><th>2</th><th>3</th><th>4</th>
+          <th>5</th><th>6</th><th>7</th><th>8</th>
+          <th>9</th><th>10</th><th>11</th><th>12</th>
+          <th>13</th><th>14</th><th>15</th><th>16</th>
+          <th>17</th><th>18</th><th>19</th><th>20</th>
+          <th>21</th><th>22</th><th>23</th><th>24</th>
+          <th>25</th><th>26</th><th>27</th><th>28</th>
+          <th>29</th><th>30</th><th>31</th><th>32</th>
+          <th>33</th><th>34</th><th>35</th><th>36</th>
+          <th>37</th><th>38</th><th>39</th><th>40</th>
+          <th>41</th><th>42</th><th>43</th><th>44</th>
+          <th>45</th><th>46</th><th>47</th><th>48</th>
+          <th>49</th><th>50</th><th>51</th><th>52</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Se llena dinámicamente -->
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- JS en la misma carpeta -->
+  <script src="../js/preventivo-programado-tabla.js"></script>
+  <script src="../js/preventivo-programado-mensual.js"></script>
+  <script src="../js/preventivo-programado-anual.js"></script>
+  <script src="../js/preventivo-programado-seleccion.js"></script>
+  <script src="../js/vista-mpp.js"></script>
+
+
+
+
+<script src="../js/site-layout.js"></script>
+<script src="../js/login-modal.js"></script>
+<script src="../js/nav-responsive.js"></script>
+</body>
+</html>

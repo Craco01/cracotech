@@ -1,0 +1,140 @@
+.report-container {
+  width: min(1500px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 28px 0 40px;
+}
+
+.report-container h2 {
+  margin: 0 0 18px;
+  color: #072885;
+  font-size: clamp(20px, 2.5vw, 28px);
+}
+
+.report-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+  padding: 14px 16px;
+  border: 1px solid #d9e1e8;
+  border-radius: 8px;
+  background: #e8f5fc;
+  box-shadow: 0 3px 12px rgba(16, 42, 67, 0.08);
+}
+
+.report-filters {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.report-filters label {
+  color: #506176;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.report-filters select {
+  margin-left: 5px;
+  padding: 8px 10px;
+  border: 1px solid #c8d3df;
+  border-radius: 5px;
+  background: #fff;
+  color: #172033;
+}
+
+.report-table-wrap {
+  overflow: auto;
+  border: 1px solid #d9e1e8;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 3px 12px rgba(16, 42, 67, 0.08);
+}
+
+.report-table {
+  width: 100%;
+  min-width: 900px;
+  border-collapse: collapse;
+  color: #172033;
+}
+
+.report-table th,
+.report-table td {
+  border-bottom: 1px solid #e1e8ef;
+  padding: 10px 12px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.report-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #072885;
+  color: #fff;
+  font-size: 12px;
+}
+
+.report-table th button {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  text-align: inherit;
+}
+
+.report-table th button:hover,
+.report-table th button:focus-visible {
+  color: #a8e6ff;
+  outline: none;
+}
+
+.report-table tbody tr:nth-child(even) {
+  background: #f6faff;
+}
+
+.report-table tbody tr:hover {
+  background: #e8f5fc;
+}
+
+.report-table tfoot {
+  background: #e8f5fc;
+  color: #072885;
+  font-weight: 700;
+}
+
+.report-table tfoot td {
+  border-top: 2px solid #1a9ee8;
+}
+
+.status {
+  margin: 10px 0;
+  color: #506176;
+  font-size: 13px;
+}
+
+.number {
+  text-align: right !important;
+}
+
+.empty {
+  padding: 25px;
+  color: #617287;
+  text-align: center;
+}
+
+.error {
+  color: #a00;
+}
+
+@media (max-width: 600px) {
+  .report-container {
+    width: min(100% - 20px, 1500px);
+    padding-top: 20px;
+  }
+}

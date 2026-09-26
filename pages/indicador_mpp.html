@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Indicadores MPP</title>
+    <link rel="icon" href="../img/Logo.png" type="image/png" sizes="32x32" />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <link rel="stylesheet" href="../css/indicador_mpp.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="../js/api-config.js"></script>
+</head>
+  <body>
+    <main class="indicador-mpp-shell">
+      <div class="indicador-card-header">
+        <div>
+          <p class="eyebrow">Mediciones e indicadores</p>
+          <h2>Mantenimiento Preventivo</h2>
+        </div>
+        <span class="meta-pill">Meta ≤ 10%</span>
+      </div>
+
+      <div id="indicadorStatus" class="indicador-status">Cargando datos desde mantenimientos preventivos...</div>
+
+      <div class="indicador-grid">
+        <article class="indicador-card" id="card-maq1">
+          <div class="card-head">
+            <h3>Maquinarias · 1° Semestre</h3>
+            <span class="card-badge">Semestral</span>
+          </div>
+          <div class="gauge-row">
+            <div class="gauge-wrap">
+              <svg viewBox="0 0 140 140" class="gauge" aria-label="Indicador maquinaria primer semestre">
+                <circle cx="70" cy="70" r="58" class="gauge-track" />
+                <circle id="arc-maq1" cx="70" cy="70" r="58" class="gauge-progress" />
+                <text x="70" y="66" text-anchor="middle" class="gauge-value" id="pct-maq1">0%</text>
+                <text x="70" y="84" text-anchor="middle" class="gauge-label">reprogramado</text>
+              </svg>
+            </div>
+            <div class="metric-copy">
+              <span class="status-pill status-ok" id="pill-maq1">Dentro de meta</span>
+              <p><strong id="txt-maq1-frac">0 de 0</strong> mantenimientos reprogramados</p>
+              <p class="muted">Meta del indicador: menor o igual a 10%</p>
+            </div>
+          </div>
+          <div class="scope-note">Alcance: equipos y maquinarias del programa de mantenimiento.</div>
+        </article>
+
+        <article class="indicador-card" id="card-maq2">
+          <div class="card-head">
+            <h3>Maquinarias · 2° Semestre</h3>
+            <span class="card-badge">Semestral</span>
+          </div>
+          <div class="gauge-row">
+            <div class="gauge-wrap">
+              <svg viewBox="0 0 140 140" class="gauge" aria-label="Indicador maquinaria segundo semestre">
+                <circle cx="70" cy="70" r="58" class="gauge-track" />
+                <circle id="arc-maq2" cx="70" cy="70" r="58" class="gauge-progress" />
+                <text x="70" y="66" text-anchor="middle" class="gauge-value" id="pct-maq2">0%</text>
+                <text x="70" y="84" text-anchor="middle" class="gauge-label">reprogramado</text>
+              </svg>
+            </div>
+            <div class="metric-copy">
+              <span class="status-pill status-ok" id="pill-maq2">Dentro de meta</span>
+              <p><strong id="txt-maq2-frac">0 de 0</strong> mantenimientos reprogramados</p>
+              <p class="muted">Meta del indicador: menor o igual a 10%</p>
+            </div>
+          </div>
+          <div class="scope-note">Alcance: equipos y maquinarias del programa de mantenimiento.</div>
+        </article>
+
+        <article class="indicador-card wide" id="card-infra">
+          <div class="card-head">
+            <h3>Infraestructura</h3>
+            <span class="card-badge">Anual</span>
+          </div>
+          <div class="gauge-row">
+            <div class="gauge-wrap">
+              <svg viewBox="0 0 140 140" class="gauge" aria-label="Indicador infraestructura">
+                <circle cx="70" cy="70" r="58" class="gauge-track" />
+                <circle id="arc-infra" cx="70" cy="70" r="58" class="gauge-progress" />
+                <text x="70" y="66" text-anchor="middle" class="gauge-value" id="pct-infra">0%</text>
+                <text x="70" y="84" text-anchor="middle" class="gauge-label">reprogramado</text>
+              </svg>
+            </div>
+            <div class="metric-copy">
+              <span class="status-pill status-ok" id="pill-infra">Dentro de meta</span>
+              <p><strong id="txt-infra-frac">0 de 0</strong> mantenimientos reprogramados</p>
+              <p class="muted">Meta del indicador: menor o igual a 10%</p>
+            </div>
+          </div>
+          <div class="scope-note">Alcance: infraestructura y servicios críticos del sitio.</div>
+        </article>
+      </div>
+    </main>
+<script src="../js/indicador_mpp.js"></script>
+
+
+
+
+<script src="../js/site-layout.js"></script>
+<script src="../js/login-modal.js"></script>
+<script src="../js/nav-responsive.js"></script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Mantenimiento Metalúrgica Vera S.A.E.</title>
+        <link rel="icon" href="../img/Logo.png" type="image/png" sizes="32x32">
+        <link rel="stylesheet" href="../css/styles.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="../js/api-config.js"></script>
+</head>
+    <body>
+        <!--<hr>-->
+
+            <main class="solicitud">
+                <div class="titulo"><h2>Cierre de Solicitud de Mantenimiento</h2></div>
+                <form id="formCierreMPP" action="/api/mantenimientos-preventivos/cierre" method="post">
+                    <div>
+                        <label for="maquina">Mantenimiento</label>
+                        <select id="maquina" name="id" required></select>
+                    </div>
+                     <div>
+                        <label for="fecha_inicio">Seleccione la fecha de inicio de trabajos:</label>
+                        <input class="fecha-reprogramacion" type="date" id="fecha_inicio" name="ejecucion_inicio" required>
+                    </div>
+                    
+                    <!-- Tabla de Costeo de Repuestos -->
+                    <div class="campo-ancho">
+                        <label for="tablaCostos">Costeo de Repuestos</label>
+                        <table class="tabla-costos">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Cantidad</th>
+                                    <th>Costo Unitario</th>
+                                    <th>Total</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaBody">
+                                <!-- Primera fila vacía se genera desde JS -->
+                            </tbody>
+                        </table>
+                        <div id="resultado">
+                            <span id="costoTotal">0</span>
+                        </div>
+                        <input type="hidden" id="unidad_mo" name="unidad_mo" value="0">
+                        <input type="hidden" id="costo_repuestos" name="costo_repuestos" value="0">
+                        <input type="hidden" id="costo_mano_obra" name="costo_mano_obra" value="0">
+                    </div>
+
+                    <!-- datalist global -->
+                    <datalist id="listaProductos"></datalist>
+
+                    <!--Entrada de horas empleadas-->
+                    <div>
+                        <label for="horas">Horas empleadas en la reparación</label>
+                        <input type="number" name="horas" id="horas" max="300" min="1" step="1" inputmode="numeric" placeholder="Ej: 8" required>
+                    </div>
+                    
+                    <div class="campo-ancho">
+                        <label for="observavcion">Observaciones</label>
+                        <textarea id="observacion" name="notas" rows="5" placeholder="Deje aca las observacions que desee acotar"></textarea>
+                    </div>
+                    <button type="submit">Cerrar Mantenimiento Preventivo</button>
+                </form>
+
+                <script src="../js/mpp-alert.js"></script>
+                <script src="../js/mantenimientos-preventivos-select.js"></script>
+                <script src="../js/cierre_costos.js"></script>
+                <script src="../js/mantenimiento-preventivo-formularios.js"></script>
+
+            </main>
+
+
+
+
+<script src="../js/site-layout.js"></script>
+<script src="../js/login-modal.js"></script>
+<script src="../js/nav-responsive.js"></script>
+</body>
+</html>
+
+

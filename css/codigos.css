@@ -1,0 +1,133 @@
+/* Encapsulado con prefijo codigos- */
+#codigos-title {
+  text-align: center;
+  color: #fff;
+  margin-bottom: 15px;
+}
+
+#codigos-search {
+  display: flex;
+  width: 80%;
+  padding: 10px;
+  margin: 0 auto;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+#codigos-table-wrap {
+  width: min(75%, 1100px);
+  height: 75vh;
+  margin: 15px auto;
+  overflow-y: auto;
+  background: #fff;
+}
+
+#codigos-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#codigos-table th, 
+#codigos-table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+#codigos-table th {
+  background: #007acc;
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+#codigos-table tr:nth-child(even) {
+  background: #f2f2f2;
+}
+
+#codigos-solicitudes {
+  width: min(75vw, 1100px);
+  margin: 34px auto 40px;
+  padding: 0 0 24px;
+  box-sizing: border-box;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+#codigos-solicitudes-title {
+  margin: 0;
+  color: #fff;
+  text-align: left;
+  font-size: clamp(18px, 2.3vw, 26px);
+  line-height: 1.25;
+}
+
+.codigos-form-container {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.codigos-form-card {
+  display: flex;
+  min-height: 82px;
+  padding: 12px 10px;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
+  color: #f8fafc;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 700;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.codigos-form-card:hover,
+.codigos-form-card:focus-visible {
+  background: rgba(37, 99, 235, 0.7);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.codigos-form-card:focus-visible {
+  outline: 3px solid #facc15;
+  outline-offset: 3px;
+}
+
+.codigos-form-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.codigos-form-card > span:last-child {
+  display: block;
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+@media (max-width: 800px) {
+  #codigos-table-wrap,
+  #codigos-solicitudes {
+    width: 92vw;
+  }
+
+  #codigos-table-wrap {
+    height: 60vh;
+  }
+
+  .codigos-form-container {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .codigos-form-container {
+    grid-template-columns: 1fr;
+  }
+}

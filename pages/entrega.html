@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entrega de orden de mantenimiento</title>
+  <link rel="stylesheet" href="../css/entrega.css">
+<script src="../js/api-config.js"></script>
+</head>
+<body data-no-global-layout>
+  <div class="print-btn"><button class="back-btn" type="button" onclick="window.location.href='lista_solicitudes.html'">Volver a solicitudes</button><button id="imprimirPaginaEntrega" type="button">Imprimir / Guardar PDF</button></div>
+  <main class="page" id="page" aria-live="polite"></main>
+  <template id="copy-template">
+    <section class="copy">
+      <span class="copy-tag"></span>
+      <div class="header"><div class="header-left"><img class="letterhead-logo" src="../img/logomv.jpg" alt="Metalúrgica Vera S.A.E."><h1>ORDEN DE MANTENIMIENTO</h1></div><div class="header-right"><div class="order-id">N.º ORDEN: <span data-field="id"></span></div><span class="priority-badge" data-field="prioridad"></span></div></div>
+      <div class="grid-3">
+        <div class="field"><span class="label">Máquina/Equipo</span><span class="value" data-field="maquina_equipo"></span></div><div class="field"><span class="label">Nombre declarado</span><span class="value" data-field="nombre_declarado"></span></div><div class="field"><span class="label">Código</span><span class="value" data-field="codigo"></span></div><div class="field"><span class="label">Sector</span><span class="value" data-field="sector"></span></div><div class="field"><span class="label">Clasificación</span><span class="value" data-field="clasificacion"></span></div><div class="field"><span class="label">Prioridad</span><span class="value" data-field="prioridad"></span></div>
+      </div>
+      <div class="section-title">Avería</div><div class="averia-box" data-field="averia"></div>
+      <div class="grid-2">
+        <div class="field"><span class="label">Solicitado por</span><span class="value" data-field="solicitado"></span></div><div class="field"><span class="label">Contacto</span><span class="value" data-field="contacto"></span></div><div class="field"><span class="label">Registrado por</span><span class="value" data-field="registrado"></span></div><div class="field"><span class="label">Responsable</span><span class="value" data-field="responsable"></span></div>
+      </div>
+      <div class="dates-row"><div class="date-box"><span class="label">Fecha inicio</span><span class="value" data-date="fecha_inicio"></span></div><div class="date-box"><span class="label">Fecha final</span><span class="value" data-date="fecha_final"></span></div><div class="date-box entregado"><span class="label">Entregado</span><span class="value entregado-value" data-date="fecha_entrega"></span></div></div>
+      <div class="signatures"><div class="sign-line">Entregado por</div><div class="sign-line">Recibido por</div></div>
+      <div class="doc-footer"><span class="ts"></span></div>
+    </section>
+  </template>
+<script src="../js/entrega.js"></script>
+
+
+
+
+</body>
+</html>

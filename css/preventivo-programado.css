@@ -1,0 +1,427 @@
+/* Estilos propios del modulo MPP */
+.mpp-page {
+  margin: 0;
+  color: #172033;
+}
+
+.mpp-content {
+  width: 100%;/* esto controla el ancho de contenido general*/
+  margin: 0 auto;
+  padding: 42px 0 72px;
+}
+
+.mpp-heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  min-width: 0;
+  margin: 0;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(7, 40, 133, 0.2);
+  position: relative;
+}
+
+.mpp-heading h1,
+.mpp-page h2 {
+  color: #000;
+  font-family: Georgia, 'Times New Roman', serif;
+  text-shadow: 3px 3px 5px rgba(255,255,255,0.6);
+}
+
+.mpp-heading h1 {
+  margin: 0 auto;
+  font-size: clamp(20px, 2vw, 32px);
+  line-height: 1.08;
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: clip;
+  text-align: center;
+  max-width: none;
+}
+
+.mpp-page h2 {
+  margin-top: 0;
+  font-size: clamp(22px, 3vw, 28px);
+}
+
+
+.mpp-intro {
+  color: #000;
+  font-size: 1.6rem;
+  margin: 5px 3vw;
+   text-shadow: 3px 3px 5px rgba(255,255,255,0.6);
+}
+
+.view-control {
+  display: grid;
+  gap: 7px;
+  margin-right: 0;
+  min-width: 210px;
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  position: absolute;
+  right: 0;
+}
+.view-control span {
+  font-size: 24px;
+  color: #172033;
+}
+
+.mpp-page select {
+  border: 1px solid #b9c5d6;
+  border-radius: 6px;
+  background: #fff;
+  color: #172033;
+  font: inherit;
+  padding: 10px 12px;
+}
+
+.current-year {
+  display: inline-block;
+  margin: 12px 18px 18px 0;
+  color: #526078;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.mpp-page section {
+  padding: 28px;
+  border: 1px solid rgba(185, 197, 214, 0.85);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 10px 28px rgba(7, 40, 133, 0.08);
+  /*border: 3px solid red;*/
+}
+
+.mpp-page table {
+  width: 100%;
+  margin-bottom: 0;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+.mpp-page th,
+.mpp-page td {
+  border: 1px solid #c9d2df;
+  padding: 8px;
+  text-align: center;
+}
+
+.mpp-page th {
+  background: #072885;
+  color: #fff;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.mpp-page td {
+  color: #26334a;
+  font-size: 13px;
+}
+
+.mpp-page tbody tr:nth-child(even) {
+  background: #f3f7fb;
+}
+
+.mpp-page tbody tr:hover {
+  background: #e5f3eb;
+}
+
+.table-scroll,
+.calendar-shell {
+  width: 100%;
+  max-height: 75vh;
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+#vistaTabla .table-scroll,
+#vistaAnual .table-scroll {
+  width: 100%;
+  margin: 0 6px;
+}
+
+#vistaMensual {
+  width: 65%;
+  margin: 0 auto;
+}
+
+#vistaMensual .calendar-shell {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.mpp-page thead {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+.mpp-page thead th {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+}
+
+#calendarioAnual thead tr:nth-child(2) th {
+  top: 0;
+  position: sticky;
+  z-index: 2;
+}
+
+#calendarioMensual table {
+  table-layout: fixed;
+}
+
+#calendarioMensual th {
+  background: #138a42;
+  font-size: 14px;
+}
+
+#calendarioMensual td {
+  width: 14.28%;
+  height: 145px;
+  min-height: 145px;
+  vertical-align: top;
+  background: #f8fafc;
+}
+
+#calendarioMensual td .dia-contenido {
+  height: 125px;
+  overflow: hidden;
+}
+
+#calendarioMensual td .dia-num {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+#calendarioMensual td.evento {
+  border: 2px solid #138a42;
+  background: #e5f3eb;
+}
+
+#calendarioMensual td.evento.programado {
+  background: rgba(59, 130, 246, 0.14);
+  border-color: #3B82F6;
+}
+
+#calendarioMensual td.evento.reprogramado {
+  background: rgba(245, 158, 11, 0.16);
+  border-color: #F59E0B;
+}
+
+#calendarioMensual td.evento.reprogramadoEjecucion {
+  background: rgba(249, 115, 22, 0.18);
+  border-color: #F97316;
+}
+
+#calendarioMensual td.evento.completado {
+  background: rgba(34, 197, 94, 0.16);
+  border-color: #22C55E;
+}
+
+#calendarioMensual td.evento.reemplazado {
+  background: rgba(156, 163, 175, 0.18);
+  border-color: #9CA3AF;
+}
+
+#calendarioMensual td.evento.vencido {
+  background: rgba(220, 38, 38, 0.12);
+  border-color: #DC2626;
+}
+
+#calendarioMensual td.evento.vencidoReprog {
+  background: rgba(153, 27, 27, 0.14);
+  border-color: #991B1B;
+}
+
+#calendarioMensual td .evento-item {
+  margin-top: 4px;
+  padding: 4px;
+  border-radius: 4px;
+  background: #072885;
+  color: #fff;
+  font-size: 12px;
+  text-align: left;
+  max-height: 34px;
+  overflow: hidden;
+}
+
+#calendarioMensual td .evento-item.programado { background: #3B82F6; }
+#calendarioMensual td .evento-item.reprogramado { background: #F59E0B; color: #172033; }
+#calendarioMensual td .evento-item.reprogramadoEjecucion { background: #F97316; }
+#calendarioMensual td .evento-item.completado { background: #22C55E; }
+#calendarioMensual td .evento-item.reemplazado { background: #9CA3AF; }
+#calendarioMensual td .evento-item.vencido { background: #DC2626; }
+#calendarioMensual td .evento-item.vencidoReprog { background: #991B1B; }
+
+#calendarioMensual td.seleccionado {
+  height: 300px;
+  vertical-align: top;
+}
+
+#calendarioMensual td.seleccionado .dia-contenido {
+  height: auto;
+  overflow: visible;
+}
+
+#calendarioAnual {
+  width: 100%;
+  min-width: 1200px;
+  table-layout: fixed;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+#calendarioAnual th,
+#calendarioAnual td {
+  min-width: 12px;
+  padding: 3px;
+  font-size: 10px;
+  line-height: 1;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+#calendarioAnual thead {
+  border-collapse: collapse;
+}
+
+#calendarioAnual thead tr {
+  height: 22px;
+  line-height: 1;
+}
+
+#calendarioAnual thead tr:nth-child(1) th[colspan] {
+  height: 26px;
+  padding: 4px 4px 0;
+  line-height: 1.1;
+  border-bottom: 1px solid #c9d2df;
+}
+
+#calendarioAnual thead tr:nth-child(2) th,
+#calendarioAnual thead tr:nth-child(2) td {
+  width: 18px;
+  min-width: 18px;
+  max-width: 18px;
+  height: 20px;
+  padding: 0;
+  font-size: 8.5px;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+  text-align: center;
+  border-top: 0;
+  border-bottom: 1px solid #c9d2df;
+}
+
+#calendarioAnual thead tr:nth-child(2) th {
+  border-top: 0;
+  border-bottom: 1px solid #c9d2df;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+#calendarioAnual thead tr:nth-child(1) th,
+#calendarioAnual thead tr:nth-child(2) th {
+  border-right: 1px solid #c9d2df;
+  border-left: 1px solid #c9d2df;
+}
+
+#calendarioAnual th:nth-child(2),
+#calendarioAnual td:nth-child(2) {
+  width: 200px;
+  min-width: 200px;
+  max-width: 200px;
+  text-align: left;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+#calendarioAnual th:nth-child(3),
+#calendarioAnual td:nth-child(3) {
+  width: 80px;
+  min-width: 80px;
+  max-width: 80px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+#calendarioAnual th:nth-child(n + 4),
+#calendarioAnual td:nth-child(n + 4) {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+#calendarioAnual th:first-child,
+#calendarioAnual td:first-child {
+  min-width: 40px;
+}
+
+.mpp-page td {
+  cursor: pointer;
+  transition: box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.mpp-page td.seleccionado,
+.mpp-page tr.seleccionado td {
+  position: relative;
+  z-index: 1;
+  box-shadow: inset 0 3px 0 #138a42, inset 0 -3px 0 #138a42;
+}
+
+.mpp-page tr.seleccionado td:first-child {
+  box-shadow: inset 3px 0 0 #138a42, inset 0 3px 0 #138a42, inset 0 -3px 0 #138a42;
+}
+
+.mpp-page tr.seleccionado td:last-child {
+  box-shadow: inset -3px 0 0 #138a42, inset 0 3px 0 #138a42, inset 0 -3px 0 #138a42;
+}
+
+#calendarioAnual td.programado { background: #3B82F6; color: #fff; }
+#calendarioAnual td.reprogramado { background: #F59E0B; color: #172033; }
+#calendarioAnual td.reprogramadoEjecucion { background: #F97316; color: #fff; }
+#calendarioAnual td.completado { background: #22C55E; color: #fff; }
+#calendarioAnual td.reemplazado { background: #9CA3AF; color: #fff; }
+#calendarioAnual td.completadoReprog { background: #ff9800; color: #fff; }
+#calendarioAnual td.vencido { background: #DC2626; color: #fff; }
+#calendarioAnual td.vencidoReprog { background: #991B1B; color: #fff; }
+
+@media (max-width: 700px) {
+  .mpp-page .mpp-content {
+    width: calc(100% - 24px);
+    padding-top: 28px;
+  }
+
+  .mpp-page .mpp-heading {
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    padding-right: 0;
+  }
+
+  .mpp-page .mpp-heading h1 {
+    width: 100%;
+    max-width: 100%;
+    text-align: center;
+    white-space: nowrap;
+    overflow: visible;
+    text-overflow: clip;
+  }
+
+  .mpp-page .view-control {
+    position: static;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .mpp-page section {
+    padding: 18px 12px;
+  }
+}

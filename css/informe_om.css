@@ -1,0 +1,414 @@
+:root {
+  --navy: #1c2b4a;
+  --navy-light: #2b3f66;
+  --red: #d9362e;
+  --green: #2e7d32;
+  --label: #8a93a6;
+  --border: #dde1e8;
+  --box-bg: #f7f8fa;
+  --text: #222834;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--text);
+  background: #e6e8ec;
+}
+
+/* ---------- Barra superior ---------- */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+}
+
+.topbar-title {
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.topbar-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  border: none;
+  border-radius: 6px;
+  padding: 9px 16px;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.btn-primary { background: var(--navy); color: #fff; }
+.btn-primary:hover { background: var(--navy-light); }
+
+.btn-ghost { background: #eef0f4; color: var(--navy); }
+.btn-ghost:hover { background: #e3e6ec; }
+
+.btn-secondary { background: #eee; color: #444; }
+.btn-secondary:hover { background: #e0e0e0; }
+
+/* ---------- Panel lateral de edición ---------- */
+.panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 360px;
+  background: #fff;
+  box-shadow: -4px 0 16px rgba(0,0,0,0.12);
+  padding: 20px;
+  overflow-y: auto;
+  transform: translateX(100%);
+  transition: transform 0.2s ease;
+  z-index: 30;
+}
+
+.panel.open { transform: translateX(0); }
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.panel-head h2 { font-size: 16px; margin: 0; }
+
+.panel-hint {
+  font-size: 11.5px;
+  color: #888;
+  line-height: 1.4;
+  margin: 0 0 12px;
+}
+
+.panel-hint code {
+  background: #f0f1f4;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+.btn-close {
+  border: none;
+  background: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #888;
+}
+
+.panel-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.panel-grid > label { flex: 1 1 110px; }
+
+#form-datos label {
+  display: block;
+  font-size: 11.5px;
+  font-weight: bold;
+  color: #555;
+  margin-bottom: 12px;
+}
+
+#form-datos label.full { grid-column: 1 / -1; }
+
+#form-datos input,
+#form-datos select,
+#form-datos textarea {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  padding: 7px 8px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: normal;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: vertical;
+}
+
+.panel-actions { margin-top: 6px; }
+.panel-actions .btn { width: 100%; }
+
+/* ---------- Página / hoja imprimible (tamaño A4 completo) ---------- */
+.page {
+  width: 210mm;
+  margin: 28px auto 60px;
+}
+
+.sheet {
+  position: relative;
+  width: 210mm;
+  min-height: 296mm;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+  padding: 8mm 12mm 10mm;
+  overflow: hidden;
+}
+
+.sheet::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("../img/marca-aguas.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center calc(50% - 60px);
+  opacity: 0.2;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  transform: translate(-50%, -50%);
+  opacity: 0.9;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.watermark img {
+  width: 100%;
+  opacity: 0.9;
+}
+
+.sheet > * {
+  position: relative;
+  z-index: 1;
+}
+
+.sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.brand-logo { height: 44px; object-fit: contain; }
+
+.doc-meta {
+  display: flex;
+  gap: 8px;
+}
+
+.doc-meta-item {
+  background: var(--box-bg);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 5px 12px;
+  font-size: 11.5px;
+  color: var(--label);
+  font-weight: bold;
+}
+
+.doc-meta-item strong {
+  color: var(--text);
+  margin-left: 4px;
+}
+
+.sheet-title {
+  font-size: 22px;
+  margin: 8px 0 8px;
+}
+
+.title-rule {
+  border: none;
+  border-top: 3px solid var(--navy);
+  margin: 0 0 10px;
+}
+
+.memo-fields {
+  margin-bottom: 10px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 18px;
+}
+
+.memo-fields--stacked {
+  grid-template-columns: 1fr;
+}
+
+.compact-meta {
+  max-width: 70%;
+}
+
+.memo-row {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  align-items: baseline;
+  gap: 10px;
+  padding: 4px 0;
+  border-bottom: 1px dashed var(--border);
+  min-height: 26px;
+}
+
+.memo-label {
+  width: auto;
+  flex-shrink: 0;
+  font-size: 10.5px;
+  font-weight: bold;
+  letter-spacing: 0.4px;
+  color: var(--label);
+}
+
+.memo-value {
+  font-size: 13.8px;
+  font-weight: bold;
+  color: var(--text);
+  line-height: 1.25;
+}
+
+.section-label {
+  display: block;
+  font-size: 10.5px;
+  font-weight: bold;
+  letter-spacing: 0.4px;
+  color: var(--navy);
+  margin: 8px 0 4px;
+}
+
+.final-status-label {
+  margin-top: 16px;
+}
+
+.body-text {
+  font-size: 13.5px;
+  line-height: 1.5;
+  margin: 0 0 6px;
+}
+
+.averia-box {
+  background-color: transparent;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--red);
+  border-radius: 6px;
+  padding: 9px 12px;
+  font-size: 12.9px;
+  line-height: 1.5;
+  margin: 0 0 10px;
+}
+
+.averia-box--ok {
+  border-left-color: var(--green);
+}
+
+.checklist {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+}
+
+.checklist li {
+  position: relative;
+  padding: 3px 0 3px 26px;
+  font-size: 13px;
+  color: #444;
+}
+
+.checklist li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 5px;
+  color: var(--green);
+  font-weight: bold;
+}
+
+.dynamic-line {
+  font-size: 12.9px;
+  line-height: 1.5;
+  color: var(--text);
+  margin: 12px 0 0;
+}
+
+.generated-note {
+  text-align: left;
+  font-size: 10.5px;
+  color: #999;
+  margin: 0;
+}
+
+.report-footer {
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 20px;
+}
+
+.technician-note {
+  margin: 0;
+  text-align: right;
+}
+
+.footer-label {
+  color: var(--label);
+  font-size: 10.5px;
+  font-weight: bold;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.footer-signature {
+  margin-left: 16px;
+  color: var(--label);
+  font-size: 11px;
+}
+
+.signature-line {
+  display: inline-block;
+  width: 180px;
+  margin-left: 4px;
+  border-bottom: 1px solid var(--label);
+  vertical-align: middle;
+}
+
+/* ---------- Impresión ---------- */
+@media print {
+  .no-print { display: none !important; }
+
+  body { background: #fff; }
+
+  .page {
+    width: 210mm;
+    margin: 0;
+  }
+
+  .sheet {
+    width: 210mm;
+    min-height: 297mm;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 9mm 12mm 10mm;
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
+  }
+}
