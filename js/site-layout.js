@@ -14,12 +14,12 @@
           <div class="nav-menu-wrap">
             <ul class="list-bar">
               <li><a href="${root}upkeepmv.html">Inicio</a></li>
-              <li><a href="${root}index.html#solicitudes">Solicitudes</a></li>
-              <li><a href="${root}index.html#mpp">MPP</a></li>
-              <li><a href="${root}index.html#informaciones">Informaciones</a></li>
-              <li><a href="${root}index.html#form-adds">Formularios</a></li>
-              <li><a href="${root}index.html#otros">Otros</a></li>
-              <li><a href="${root}index.html#contacto">Contacto</a></li>
+              <li><a href="${root}upkeepmv.html#solicitudes">Solicitudes</a></li>
+              <li><a href="${root}upkeepmv.html#mpp">MPP</a></li>
+              <li><a href="${root}upkeepmv.html#informaciones">Informaciones</a></li>
+              <li><a href="${root}upkeepmv.html#form-adds">Formularios</a></li>
+              <li><a href="${root}upkeepmv.html#otros">Otros</a></li>
+              <li><a href="${root}upkeepmv.html#contacto">Contacto</a></li>
               <li><a href="${root}index.html">Autor</a></li>
             </ul>
             <div id="nav-login"></div>
