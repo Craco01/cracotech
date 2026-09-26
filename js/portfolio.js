@@ -3,12 +3,18 @@ const navToggle = document.getElementById('navToggle');
 const index = document.getElementById('index');
 
 navToggle.addEventListener('click', () => {
-  index.classList.toggle('open');
+  const isOpen = index.classList.toggle('open');
+  navToggle.setAttribute('aria-expanded', String(isOpen));
+  navToggle.setAttribute('aria-label', isOpen ? 'Cerrar índice' : 'Abrir índice');
 });
 
 // Cierra el índice al elegir una sección (mobile)
 index.querySelectorAll('a').forEach(link => {
-  link.addEventListener('click', () => index.classList.remove('open'));
+  link.addEventListener('click', () => {
+    index.classList.remove('open');
+    navToggle.setAttribute('aria-expanded', 'false');
+    navToggle.setAttribute('aria-label', 'Abrir índice');
+  });
 });
 
 // Resalta la sección visible en el índice
