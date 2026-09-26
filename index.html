@@ -1,403 +1,821 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Mantenimiento Metalúrgica Vera S.A.E.</title>
-        <link rel="icon" href="./img/Logo.png" type="image/png" sizes="32x32">
-        <link rel="stylesheet" href="./css/styles.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-        <link rel="stylesheet" href="./css/footer-estilo.css">
-    <script src="./js/api-config.js"></script>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Cristhian Redes — Mantenimiento Industrial, Automatización y Software</title>
+
+  <meta name="description" content="Portfolio profesional de Cristhian Redes: mantenimiento industrial, electromecánica, automatización industrial y desarrollo de software aplicado a operaciones.">
+
+  <link rel="stylesheet" href="./css/portfolio.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@500&display=swap"
+    rel="stylesheet">
 </head>
-    <body>
-        <!--<hr>-->
 
-        <main class="inicio" id="inicio">
-            <h2>Servicios disponibles.</h2>
+<body>
 
-            <div class="principal"> 
-                <!-- 1 -->
-                <figure class="card">
-                    <a href="#solicitudes" ><img height="120" width="200" src="img/solicitudes.webp" alt="Solicitud de mantenimiento"></a>
-                    <figcaption>Solicitudes de Mantenimiento</figcaption>
-                </figure>
-                <!--1.1-->
-                <figure class="card">
-                    <a href="#mpp" ><img height="120" width="200" src="img/mpp.png" alt="Mantenimiento Preventivo Programado"></a>
-                    <figcaption>Mantenimiento Preventivo Programado</figcaption>
-                </figure>
-    
-                <!-- 2 -->
-                <figure class="card">
-                    <a href="#informaciones" > <img height="120" width="200" src="img/informes.webp"  alt="Informes y reportes"></a>
-                    <figcaption>Informaciones Útiles y Reportes</figcaption>
-                </figure>
-        
-                <!-- 3 -->
-                <figure class="card">
-                    <a href="#form-adds" ><img height="120" width="200" src="img/formularios.webp" alt="Formularios adicionales"> </a>
-                    <figcaption>Formularios Adicionales</figcaption>
-                </figure>
-        
-                <!-- 4 -->
-                <figure class="card">
-                    <a href="./pages/visor-pdf.html?grupo=grupo4" ><img height="120" width="200" src="img/puente_grua.webp"  alt="Puente grúa"></a>
-                    <figcaption>Información sobre Puente Grúa</figcaption>
-                </figure>
-            
-                <!-- 5 -->       
-                <figure class="card">
-                    <a href="./pages/visor-pdf.html?grupo=grupo1"><img height="120" width="200" src="img/equipos.webp"  alt="Equipos de soldadura"></a>
-                    <figcaption>Datos Técnicos Equipos de Soldar</figcaption>
-                </figure>
-        
-                <!-- 6 -->
-                <figure class="card">
-                    <a href="./pages/visor-pdf.html?grupo=grupo2"><img height="120" width="200" src="img/makita.webp"  alt="Herramientas eléctricas"></a>
-                    <figcaption>Datos Técnicos Herramientas Eléctricas</figcaption>
-                </figure>
-            
-                <!-- 7 -->      
-                <figure class="card">
-                    <a href="./pages/visor-pdf.html?grupo=grupo3"><img height="120" width="200" src="img/mvande3.webp"  alt="Material de examen"> </a>
-                    <figcaption>Materiales sobre Electricidad</figcaption>
-                </figure>
+  <!-- Navegación -->
+  <button
+    class="nav-toggle"
+    id="navToggle"
+    aria-label="Abrir índice"
+    aria-controls="index"
+    aria-expanded="false">
+    ☰
+  </button>
 
-                <!-- 8 -->
-                <figure class="card">
-                    <a href="./pages/contol_inventario.html" ><img height="120" width="200" src="img/inventario.png" alt="Control de inventario"></a>
-                    <figcaption>Control de Inventario</figcaption>
-                </figure>
-            </div>    
+  <nav class="index" id="index" aria-label="Navegación principal">
 
-        </main>
+    <div class="index-mark">
+      <img
+        class="brand-logo"
+        src="./img/craco-mark.svg"
+        alt="Logotipo CRACO">
+      <span>CRACOTECH</span>
+    </div>
 
-        <hr>
+    <ol>
+      <li>
+        <a href="#hero" data-i="00">Inicio</a>
+      </li>
 
-        <section id="solicitudes">
-            <h2 id="solicitudes-title">Solicitudes de Mantenimiento</h2>
+      <li>
+        <a href="#perfil" data-i="01">Perfil</a>
+      </li>
 
-            <div class="solicitudes-description">
-                <div class="form-container">
-                    <div class="item-formularios">
-                    <a href="./pages/solicitud.html"><p><span>📝</span> Crear solicitud</p></a>
-                </div>
+      <li>
+        <a href="#experiencia" data-i="02">Experiencia</a>
+      </li>
 
-                <div class="item-formularios">
-                    <a href="./pages/asignar.html"><p><span>👷‍♂️</span> Asignar técnicos</p></a>
-                </div>
+      <li>
+        <a href="#cracotech" data-i="03">Upkeep MV</a>
+      </li>
 
-                <div class="item-formularios">
-                    <a href="./pages/cierre.html"><p><span>✅</span> Cerrar solicitudes</p></a>
-                </div>
+      <li>
+        <a href="#proyectos" data-i="04">Proyectos</a>
+      </li>
 
-                <div class="item-formularios">
-                    <a href="./pages/reprogramar.html"><p><span>🔄</span> Reprogramar solicitudes</p></a>
-                </div>
+      <li>
+        <a href="#diseno-cad" data-i="05">Diseño CAD</a>
+      </li>
 
-                <div class="item-formularios">
-                    <a href="./pages/modificar.html"><p><span>💻</span> Modificar solicitud</p></a>
-                </div>
+      <li>
+        <a href="#habilidades" data-i="06">Habilidades</a>
+      </li>
 
-                <div class="item-formularios">
-                    <a href="./pages/codigos.html"><p><span>📑</span> Código de Máquinas</p></a>
-                </div>
+      <li>
+        <a href="#contacto" data-i="07">Contacto</a>
+      </li>
 
-                <div class="item-formularios">
-                    <a href="./pages/lista_solicitudes.html" ><p><span>📋</span> Ver solicitudes</p></a>
-                </div>
-                <div class="item-formularios">
-                    <a href="./pages/modulo_solicitudes.html"><p><span>📁</span> Ver informes digitales</p></a>
-                </div>
-                <div class="item-formularios">
-                    <a href="./pages/baja.html"><p><span>🛑</span> Dar de baja equipos</p></a>
-                </div>
-            </div>
-               
-        </section>
+    </ol>
 
-        <section id="mpp" class="mpp-section" aria-label="Ciclo de mantenimiento preventivo">
-            <div class="mpp-header">
-                <h2>Mantenimiento Preventivo Programado</h2>
-            </div>
+  </nav>
 
-            <div class="mpp-cycle">
-                <a class="mpp-step mpp-step-5" href="./pages/vista_mpp.html" aria-label="Programar mantenimientos preventivos">
-                    <div class="mpp-label">Programar<br />Mantenimientos Preventivos</div>
-                    <div class="mpp-node mpp-node-gold mpp-node-top">
-                        <div class="mpp-node-icon mpp-calendar large">
-                            <span class="mpp-calendar-top"></span>
-                            <span class="mpp-calendar-date">F</span>
-                        </div>
-                    </div>
-                </a>
 
-                <a class="mpp-step mpp-step-2" href="./pages/vista_mpp.html" aria-label="Ver lista de mantenimientos">
-                    <div class="mpp-label">Ver Lista de<br />Mantenimientos</div>
-                    <div class="mpp-node mpp-node-blue">
-                        <div class="mpp-node-icon mpp-clipboard">
-                            <span class="mpp-clip-line"></span>
-                            <span class="mpp-clip-line short"></span>
-                            <span class="mpp-clip-line short"></span>
-                        </div>
-                    </div>
-                </a>
+  <main>
 
-                <a class="mpp-step mpp-step-3" href="./pages/reprogramar_mpp.html" aria-label="Reprogramar mantenimiento">
-                    <div class="mpp-label">Reprogramar<br />Mantenimiento</div>
-                    <div class="mpp-node mpp-node-gold">
-                        <div class="mpp-node-icon mpp-calendar">
-                            <span class="mpp-calendar-top"></span>
-                            <span class="mpp-calendar-date">F</span>
-                        </div>
-                    </div>
-                </a>
+    <!-- =====================================================
+         HOJA 00 — INICIO
+    ====================================================== -->
 
-                <a class="mpp-step mpp-step-4" href="./pages/asignar_mpp.html" aria-label="Asignar técnicos">
-                    <div class="mpp-label">Asignar<br />Técnicos</div>
-                    <div class="mpp-node mpp-node-blue">
-                        <div class="mpp-node-icon mpp-worker">
-                            <span class="mpp-hardhat"></span>
-                            <span class="mpp-face"></span>
-                            <span class="mpp-body"></span>
-                        </div>
-                    </div>
-                </a>
+    <section id="hero" class="sheet hero">
 
-                <a class="mpp-step mpp-step-1" href="./pages/cierre_mpp.html" aria-label="Cerrar mantenimiento">
-                    <div class="mpp-label">Cerrar<br />Mantenimiento Preventivo</div>
-                    <div class="mpp-node mpp-node-green">
-                        <div class="mpp-node-icon mpp-check">✓</div>
-                    </div>
-                </a>
+      <p class="tblock">
+        HOJA 00 · PERFIL PROFESIONAL
+      </p>
 
-                <a class="mpp-step mpp-step-6" href="./pages/indicador_mpp.html" aria-label="Indicadores de mantenimiento preventivo">
-                    <div class="mpp-label">Indicadores de<br />Mantenimiento Preventivo</div>
-                    <div class="mpp-node mpp-node-hex mpp-node-green">
-                        <div class="mpp-node-icon mpp-radar">
-                            <span class="mpp-radar-ring mpp-r1"></span>
-                            <span class="mpp-radar-ring mpp-r2"></span>
-                            <span class="mpp-radar-center"></span>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </section>
+      <h1>
+        De la planta<br>
+        al código.
+      </h1>
 
-        <hr>
+      <p class="lede">
+        Profesional de mantenimiento industrial con más de una década
+        de experiencia en entornos metalúrgicos, especializado en
+        mantenimiento electromecánico, automatización industrial y
+        gestión de equipos técnicos.
+      </p>
 
-        <section class="informaciones" id="informaciones">
-            <div class="title-informaciones">
-                <h2>Informaciones Útiles</h2>
-                <p>(Todos los vinculos de esta sección se abren en una nueva ventana)</p>
-            </div>
-            <div class="informaciones-container">
-                <ol class="option-list">
-                    <li><a href="./pages/reporte-ordenes.html"><i class="fa-solid fa-wrench"></i> Panel de Mantenimiento</a></li>
-                    <li><a href="https://mvaceros.sharepoint.com/sites/SISTEMADETICKETPEDIDOS-LOGISTICAMV/Lists/SISTEMA%20TICKET%20%20LOGISTICA/AllItems.aspx?e=3%3Ad9f93b3ebd32486fa6ba6edb8d07b9b3&sharingv2=true&fromShare=true&at=9&CT=1743844213698&OR=OWA%2DNT%2DMail&CID=5d3ef917%2D5f01%2Dd2a5%2Dcaf8%2Da0387112bbce" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-truck"></i>Pedidos de Logística</a></li>
-                    <li><a href="./pages/mantenimiento_generadores.html"><i class="fa-solid fa-bolt"></i>Grupo Generadores</a></li>
-                    <li><a href="./pages/mantenimiento_compresores.html"><i class="fa-solid fa-compress"></i>Compresores a Tornillo</a></li>
-                    <li><a href="./pages/horometros_turnos.html"><i class="fa-solid fa-calendar-check"></i>Turnos Maquinas</a></li>
-                    <li><a href="./pages/horometros_datos.html"><i class="fa-solid fa-clock"></i>Horómetros Maquinado</a></li>
-                </ol>
+      <p class="lede">
+        Integro experiencia práctica de planta con programación y
+        desarrollo de software para transformar necesidades operativas
+        en soluciones concretas.
+      </p>
 
-                <div class="datos-container">
-                    <h3>Vista previa del Panel de Mantenimiento</h3>
-                    <iframe class="Datos"
-                        title="Resumen de órdenes de mantenimiento"
-                        width="720" 
-                        height="480" 
-                        src="./pages/reporte-ordenes.html?embed=1"
-                        frameborder="0" 
-                        allowFullScreen="true">Panel de Mantenimiento
-                    </iframe>
-                </div>
-            </div>
+      <div class="role">
+        <img
+          class="hero-logo"
+          src="./img/cracovec-mark.svg"
+          alt="Logotipo Cracovec">
+        <span>Cristhian Redes — Ypané, Paraguay</span>
+      </div>
 
-        </section>
+    </section>
 
-        <hr>
 
-        <section class="form-adds" id="form-adds">
-            <div class="formularios-timeline">
-                <h2>📑 Formularios Adicionales y Solicitudes</h2>
-                <ul class="timeline">
-                    <li>
-                        <a href="./pages/hora_maquinado.html"><div class="content">
-                            <h3>Registro de Horómetros de Máquinas</h3>
-                            <p>Control y seguimiento de equipos.</p>
-                        </div></a>
-                    </li>
-                    <li>
-                        <a href="./pages/mantenimiento_criticos.html"><div class="content">
-                            <h3>Registro de Horómetros Compresores y Generadores</h3>
-                            <p>Monitoreo de horas de servicio.</p>
-                        </div></a>
-                    </li>
-                    <li>
-                        <a href="./pages/formulario-simple.html?src=https://forms.office.com/pages/responsepage.aspx?id=NZva7YvtyUWWTKbrPuRyG1V57RwX81VLkJJXgmMnoMxUQ0tUQ0RPUllLMkhQREYxVVNZUDQ5V1BGQi4u&route=shorturl"><div class="content">
-                            <h3>Ticket de Pedidos Logística</h3>
-                            <p>Solicitudes de materiales y suministros.</p>
-                        </div></a>
-                    </li>
-                    <li>
-                        <a href="./pages/formulario-simple.html?src=https://forms.office.com/pages/responsepage.aspx?id=NZva7YvtyUWWTKbrPuRyG7laUpBIOjJIv4R4MpPr2n5UOEY5VEFFV0cyOUdGVlY3QkZXTUYzNEdVUC4u"><div class="content">
-                            <h3>Ticket de Informática - TI</h3>
-                            <p>Soporte técnico y requerimientos.</p>
-                        </div></a>
-                    </li>
-                </ul>
-            </div>
-        </section>
+    <!-- =====================================================
+         HOJA 01 — PERFIL
+    ====================================================== -->
 
-        <hr>
-        
-        <section class="otros" id="otros">
-            <h2>Otros Proyectos</h2>
+    <section id="perfil" class="sheet">
 
-            <div class="video-otros">
-                <div Class="video-container">
-                    <iframe src="https://drive.google.com/file/d/1I_pJN12CTtoR_SQI5AvYBqD036TkrbkP/preview"
-                     width="1080" 
-                     height="720" 
-                     frameborder="0" 
-                     scrolling="no" 
-                     allowfullscreen 
-                     title="Desbobinadora v7.avi">
-                    </iframe>
-                </div>
-                <div class="video-description">
-                    <h3>Proyecto Desbobinador de Chapa</h3>
-                    <p>El proyecto consiste en el diseño y la simulación de un desbobinador de chapa, desarrollado mediante modelado 3D para representar
-                        su estructura, componentes principales y funcionamiento básico. El modelo permite visualizar el proceso de desenrollado de la bobina
-                        y el movimiento de los diferentes elementos mecánicos involucrados en la alimentación continua del material.</p> 
-                    <p>La animación muestra la rotación controlada de la bobina y el comportamiento general del sistema durante su operación, permitiendo
-                        analizar aspectos como la estabilidad estructural, la transmisión de movimiento y la correcta disposición de los componentes.
-                        Esta simulación facilita la validación del diseño, la identificación de posibles interferencias y la optimización de la solución
-                        antes de su fabricación, reduciendo tiempos de desarrollo y costos asociados.</p>
-                    <p>El prototipo fue concebido como una herramienta de estudio y evaluación para procesos de manipulación y alimentación de chapa,
-                        contribuyendo a mejorar la eficiencia operativa, la seguridad de funcionamiento y la confiabilidad del sistema en aplicaciones
-                        industriales.
-                    </p>
-                </div>
-            </div>
+      <p class="tblock">
+        HOJA 01 · SOBRE MÍ
+      </p>
 
-            <div class="video-otros2">
-                <div Class="video-container2">
-                    <iframe src="https://drive.google.com/file/d/13FDGC7X2nj18fcrW-Nu4kvJO4qdm1dsQ/preview"
-                     width="1080" 
-                     height="720" 
-                     frameborder="0" 
-                     scrolling="no" 
-                     allowfullscreen 
-                     title="Desbobinadora v7.avi">
-                    </iframe>
-                </div>
-                <div class="video-description2">
-                    <h3>Proyecto Centrifugadora para Piezas Galvanizadas por Inmersión en Caliente</h3>
-                    <p>El proyecto consiste en el diseño y la simulación de una centrifugadora para piezas galvanizadas por inmersión en caliente en zinc,
-                        desarrollada mediante modelado 3D para representar su estructura, componentes principales y funcionamiento básico. El modelo permite
-                        visualizar el proceso de rotación de la canasta centrifugadora, utilizada para eliminar el exceso de zinc fundido adherido a las piezas 
-                        después de su extracción del baño de galvanizado.</p>
-                    <p>La animación muestra el movimiento de giro del conjunto, permitiendo analizar aspectos como la distribución de cargas, la estabilidad
-                        estructural y el comportamiento mecánico del sistema durante la operación. Esta simulación facilita la validación del diseño, la detección
-                        temprana de posibles interferencias y la optimización de los componentes antes de su fabricación, reduciendo costos y tiempos de desarrollo.</p>
-                    <p>El prototipo fue concebido como una herramienta de estudio y evaluación del proceso de centrifugado, contribuyendo a mejorar la calidad del
-                        recubrimiento, la uniformidad de la capa de zinc y la eficiencia operativa del sistema de galvanizado.
-                    </p>
-                </div>
-            </div>
-        </section>
+      <h2>
+        Perfil
+      </h2>
 
-        <!-- Botón flotante de WhatsApp -->
-        <a href="#" class="whatsapp-float" id="waButton">
-        <img src="./img/WhatsApp.png" alt="WhatsApp" />
+      <div class="grid-2">
+
+        <p>
+          Cuento con más de diez años de experiencia en mantenimiento
+          industrial, evolucionando desde funciones técnicas hasta
+          posiciones de coordinación y supervisión.
+        </p>
+
+        <p>
+          Esta trayectoria me permitió desarrollar una visión integral
+          de las instalaciones industriales, combinando diagnóstico de
+          fallas, mantenimiento preventivo y correctivo, automatización
+          y gestión de equipos técnicos.
+        </p>
+
+        <p>
+          Paralelamente, desarrollé competencias en programación,
+          bases de datos y desarrollo web, aplicándolas directamente
+          a necesidades reales de la operación industrial.
+        </p>
+
+        <p>
+          Mi objetivo es integrar tecnología y experiencia de campo
+          para desarrollar herramientas que mejoren la trazabilidad,
+          disponibilidad de información y eficiencia de los procesos
+          de mantenimiento.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         HOJA 02 — EXPERIENCIA
+    ====================================================== -->
+
+    <section id="experiencia" class="sheet">
+
+      <p class="tblock">
+        HOJA 02 · TRAYECTORIA
+      </p>
+
+      <h2>
+        Experiencia
+      </h2>
+
+      <ul class="timeline">
+
+        <li>
+
+          <span class="tl-date">
+            2025 — actualidad
+          </span>
+
+          <h3>
+            Supervisor de Mantenimiento
+          </h3>
+
+          <p>
+            Metalúrgica Vera S.R.L.
+          </p>
+
+          <p>
+            Supervisión de actividades de mantenimiento, coordinación
+            de personal técnico, planificación de intervenciones y
+            seguimiento de trabajos preventivos y correctivos.
+          </p>
+
+        </li>
+
+
+        <li>
+
+          <span class="tl-date">
+            2023 — 2025
+          </span>
+
+          <h3>
+            Coordinador de Mantenimiento
+          </h3>
+
+          <p>
+            Metalúrgica Vera S.R.L.
+          </p>
+
+          <p>
+            Coordinación de actividades de mantenimiento y
+            automatización de procesos. Implementación de herramientas
+            de diagnóstico y análisis para mejorar la identificación
+            y resolución de fallas.
+          </p>
+
+        </li>
+
+
+        <li>
+
+          <span class="tl-date">
+            2021 — actualidad
+          </span>
+
+          <h3>
+            Especialista en Soporte Técnico
+          </h3>
+
+          <p>
+            GGC Electromecánica — Profesional independiente
+          </p>
+
+          <p>
+            Diagnóstico, asistencia técnica y resolución de problemas
+            relacionados con sistemas eléctricos, electromecánicos
+            y de automatización.
+          </p>
+
+        </li>
+
+
+        <li>
+
+          <span class="tl-date">
+            2017 — 2021
+          </span>
+
+          <h3>
+            Jefe de Mantenimiento
+          </h3>
+
+          <p>
+            Metalúrgica Vera S.R.L.
+          </p>
+
+          <p>
+            Gestión y coordinación de actividades de mantenimiento
+            preventivo y correctivo, planificación de trabajos y
+            seguimiento de equipos e instalaciones.
+          </p>
+
+        </li>
+
+
+        <li>
+
+          <span class="tl-date">
+            2014 — 2017
+          </span>
+
+          <h3>
+            Técnico Eléctrico
+          </h3>
+
+          <p>
+            Metalúrgica Vera S.R.L.
+          </p>
+
+          <p>
+            Mantenimiento eléctrico industrial, diagnóstico de fallas,
+            reparación de instalaciones y asistencia en sistemas
+            electromecánicos y de automatización.
+          </p>
+
+        </li>
+
+      </ul>
+
+    </section>
+
+
+    <!-- =====================================================
+         HOJA 03 — UPKEEP MV
+    ====================================================== -->
+
+    <section id="cracotech" class="sheet">
+
+      <p class="tblock">
+        HOJA 03 · SISTEMA DE MANTENIMIENTO
+      </p>
+
+      <h2>
+        Upkeep MV
+      </h2>
+
+      <p class="lede-small">
+        Plataforma web para la gestión integral del mantenimiento
+        industrial, diseñada y desarrollada para centralizar la
+        información operativa y facilitar el seguimiento de las
+        actividades del área de mantenimiento de Metalúrgica Vera.
+      </p>
+
+      <p class="lede-small">
+        La plataforma fue desarrollada a partir de necesidades reales
+        de operación, incorporando herramientas para gestionar
+        solicitudes, mantenimiento preventivo, inventario, horómetros
+        e informes.
+      </p>
+
+
+      <div class="panel-grid">
+
+        <div class="panel">
+
+          <span class="pcode">
+            MOD·01
+          </span>
+
+          <h3>
+            Solicitudes
+          </h3>
+
+          <p>
+            Gestión del ciclo completo de las órdenes de mantenimiento:
+            creación, asignación, seguimiento, reprogramación y cierre
+            de trabajos.
+          </p>
+
+        </div>
+
+
+        <div class="panel">
+
+          <span class="pcode">
+            MOD·02
+          </span>
+
+          <h3>
+            MPP
+          </h3>
+
+          <p>
+            Gestión del mantenimiento preventivo programado,
+            seguimiento de actividades e indicadores de cumplimiento.
+          </p>
+
+        </div>
+
+
+        <div class="panel">
+
+          <span class="pcode">
+            MOD·03
+          </span>
+
+          <h3>
+            Inventario
+          </h3>
+
+          <p>
+            Control y trazabilidad del inventario asociado al área
+            de mantenimiento, incluyendo movimientos y bajas de equipos.
+          </p>
+
+        </div>
+
+
+        <div class="panel">
+
+          <span class="pcode">
+            MOD·04
+          </span>
+
+          <h3>
+            Informes
+          </h3>
+
+          <p>
+            Visualización de información operativa mediante paneles,
+            registros de horómetros e informes para facilitar el
+            seguimiento del mantenimiento.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <a
+        class="cta"
+        href="upkeepmv.html">
+
+        Abrir Upkeep MV ↗
+
+      </a>
+
+    </section>
+
+
+    <!-- =====================================================
+         HOJA 04 — PROYECTOS
+    ====================================================== -->
+
+    <section id="proyectos" class="sheet">
+
+      <p class="tblock">
+        HOJA 04 · OTROS PROYECTOS
+      </p>
+
+      <h2>
+        Proyectos
+      </h2>
+
+
+      <div class="panel-grid">
+
+        <div class="panel">
+
+          <span class="pcode">
+            PROY·01
+          </span>
+
+          <h3>
+            Desbobinador de chapa
+          </h3>
+
+          <p>
+            Diseño y modelado tridimensional de un desbobinador
+            industrial, orientado al estudio de su configuración
+            mecánica y composición estructural.
+          </p>
+
+        </div>
+
+
+        <div class="panel">
+
+          <span class="pcode">
+            PROY·02
+          </span>
+
+          <h3>
+            Centrifugadora de galvanizado
+          </h3>
+
+          <p>
+            Modelado tridimensional de una centrifugadora destinada
+            al proceso de galvanizado por inmersión, considerando la
+            disposición general de sus componentes.
+          </p>
+
+        </div>
+
+
+        <div class="panel">
+
+          <span class="pcode">
+            PROY·03
+          </span>
+
+          <h3>
+            Finales de carrera ultrasónicos
+          </h3>
+
+          <p>
+            Desarrollo conceptual de un sistema de detección mediante
+            sensores ultrasónicos multidireccionales, con un rango
+            de operación aproximado de 10 cm a 4 m.
+          </p>
+
+        </div>
+
+
+        <div class="panel">
+
+          <span class="pcode">
+            PROY·04
+          </span>
+
+          <h3>
+            Portón corredizo automático
+          </h3>
+
+          <p>
+            Diseño e implementación de un sistema de automatización
+            para portón corredizo utilizando Arduino Uno como
+            controlador.
+          </p>
+
+        </div>
+
+
+        <div class="panel">
+
+          <span class="pcode">
+            PROY·05
+          </span>
+
+          <h3>
+            Lavarropas automático
+          </h3>
+
+          <p>
+            Desarrollo de un sistema de control para automatizar
+            las distintas etapas del ciclo de funcionamiento de
+            un lavarropas mediante Arduino Uno.
+          </p>
+
+        </div>
+
+
+        <div class="panel">
+
+          <span class="pcode">
+            PROY·06
+          </span>
+
+          <h3>
+            Tablero de pruebas — BDP
+          </h3>
+
+          <p>
+            Diseño y construcción de un tablero destinado a pruebas
+            y diagnóstico de sistemas asociados a una línea de
+            embotellado de Bebidas del Paraguay S.A.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <a
+        class="cta"
+        href="#contacto">
+
+        ¿Tenés un proyecto relacionado o una idea para desarrollar?
+        Escribime.
+
+      </a>
+
+    </section>
+
+
+    <!-- =====================================================
+         HOJA 05 — DISEÑO CAD
+    ====================================================== -->
+
+    <section id="diseno-cad" class="sheet">
+
+      <p class="tblock">
+        HOJA 05 · DISEÑO CAD
+      </p>
+
+      <h2>
+        Diseño CAD
+      </h2>
+
+      <p class="lede-small">
+        Además de mi experiencia en planta, utilizo herramientas
+        de diseño tridimensional para desarrollar y visualizar
+        soluciones mecánicas antes de su fabricación.
+      </p>
+
+      <p class="lede-small">
+        El modelado CAD permite estudiar la geometría, composición
+        y ensamblaje de diferentes elementos, facilitando la
+        evaluación conceptual de una solución antes de pasar
+        a una etapa constructiva.
+      </p>
+
+
+      <div class="panel">
+
+        <span class="pcode">
+          CAD·01
+        </span>
+
+        <h3>
+          Puente grúa con aparejo de cadena
+        </h3>
+
+        <p>
+          Diseño conceptual de la estructura y composición de un
+          puente grúa equipado con aparejo de cadena
+          (<em>chain hoist</em>).
+        </p>
+
+        <p>
+          El modelo representa de manera aproximada la configuración
+          general, componentes y ensamblaje del sistema.
+        </p>
+
+        <p>
+          Se trata de un modelo conceptual desarrollado con fines
+          de análisis, visualización y estudio de la solución, por
+          lo que no representa dimensiones reales de fabricación.
+        </p>
+
+
+        <a
+          class="cta"
+          href="https://cad.onshape.com/documents/c28c9693bdd10cdc1f48da6e/w/fcf09065dd80c17df7290cd9/e/dc14b814c5d5d45325fcb6de"
+          target="_blank"
+          rel="noopener noreferrer">
+
+          Ver modelo en Onshape ↗
+
         </a>
 
-        <!-- Modal con opciones -->
-        <div id="waModal" class="overlay">
-        <div class="modal">
-            <h2>Elegir contacto</h2>
-            <a href="https://wa.me/595986221400" target="_blank" rel="noopener">Cristhian Redes</a>
-            <a href="https://wa.me/595982156163" target="_blank" rel="noopener">Gustavo González</a>
-            <a href="https://wa.me/595991986712" target="_blank" rel="noopener">Blas Gimenez</a>
-            <button id="closeBtn">Cerrar</button>
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         HOJA 06 — HABILIDADES
+    ====================================================== -->
+
+    <section id="habilidades" class="sheet">
+
+      <p class="tblock">
+        HOJA 06 · HABILIDADES
+      </p>
+
+      <h2>
+        Habilidades
+      </h2>
+
+
+      <div class="grid-2">
+
+        <div>
+
+          <h3>
+            Industrial
+          </h3>
+
+          <ul class="skill-list">
+
+            <li>
+              Electromecánica
+            </li>
+
+            <li>
+              Automatización industrial
+            </li>
+
+            <li>
+              Controladores lógicos programables (PLC)
+            </li>
+
+            <li>
+              Ingeniería eléctrica
+            </li>
+
+            <li>
+              Mantenimiento preventivo y correctivo
+            </li>
+
+            <li>
+              Diagnóstico y resolución de fallas
+            </li>
+
+            <li>
+              Gestión y supervisión de mantenimiento
+            </li>
+
+          </ul>
+
         </div>
+
+
+        <div>
+
+          <h3>
+            Digital
+          </h3>
+
+          <ul class="skill-list">
+
+            <li>
+              Python
+            </li>
+
+            <li>
+              SQL
+            </li>
+
+            <li>
+              C++
+            </li>
+
+            <li>
+              Desarrollo web
+            </li>
+
+            <li>
+              Diseño y desarrollo de sistemas de gestión
+            </li>
+
+            <li>
+              Bases de datos
+            </li>
+
+            <li>
+              Automatización de procesos
+            </li>
+
+            <li>
+              Inbound Marketing — HubSpot
+            </li>
+
+          </ul>
+
         </div>
-        <script src="./js/modal-wa.js"></script>
-        
-        <hr>    
-              <!--Informacion de contacto-->
-        <footer class="footer-contacto" id="contacto">
-            <address>
-                <h2>Contacto</h2>
-                <ul>
-                    <li>
-                        <p>Informaciones</p>
-                        <i class="fa-solid fa-phone"></i>
-                        <a href="tel:+595213283240">(+595) 21 3283240/2/3</a>
-                    </li>
-                    <li> 
-                        <p>Gustavo González</p>
-                        <i class="fa-brands fa-whatsapp"></i>
-                        <a href="tel:+595982156163">(+595) 982 156163</a>
-                    </li>
-                     <li>
-                        <p>Cristhian Redes</p>
-                        <i class="fa-brands fa-whatsapp"></i>
-                        <a href="tel:+595986221400">(+595) 986 221400</a> 
-                    </li>
-                    <li>
-                        <p>Gustavo González</p>
-                        <i class="fa-solid fa-envelope"></i>
-                        <a href="mailto:mantenimiento2@metalurgicavera.com.py">mantenimiento2@metalurgicavera.com.py</a>
-                    </li>
-                    <li>
-                        <p>Cristhian Redes</p>
-                        <i class="fa-solid fa-envelope"></i>
-                        <a href="mailto:reparaciones@metalurgicavera.com.py">reparaciones@metalurgicavera.com.py</a>
-                    </li>
-                    <li>
-                        <p>Blas Gimenez</p>
-                        <i class="fa-solid fa-envelope"></i>
-                        <a href="mailto:reparaciones2@metalurgicavera.com.py">reparaciones2@metalurgicavera.com.py</a>
-                    </li>
-                    <li>
-                        <i class="fa-brands fa-facebook"></i>
-                        <span>Metalúrgica Vera S.A.E.</span>
-                    </li>
-                    <li>
-                        <i class="fa-solid fa-globe"></i>
-                        <a href="https://www.metalurgicavera.com.py" target="_blank" rel="noopener noreferrer">www.metalurgicavera.com.py</a>
-                    </li>
-                    <li>
-                        <i class="fa-solid fa-location-dot"></i>
-                        <span>Ruta PY 01, Km 28,6 (Acceso Sur), Ypané</span>
-                    </li>
-                </ul>
-            </address>
-            <section class="mapa">
-                <div class="mapa-description">
-                    
-                    <span><i class="fa-solid fa-location-dot"></i>Metalúrgica Vera S.A.E.</span>
-                </div>
-                
-                <iframe title="mapa de ubicación" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3601.6318628140593!2d-57.49297322382588!3d-25.48396533503066!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x945c525ca4d7e83b%3A0xa27d522bed160530!2sMetal%C3%BArgica%20Vera%20S.R.L!5e0!3m2!1ses!2spy!4v1781532505861!5m2!1ses!2spy"
-                    width="480" 
-                    height="300"
-                    allowfullscreen="" 
-                    loading="lazy" 
-                    referrerpolicy="no-referrer">
-                </iframe>
-            </section>
-        </footer>
+
+      </div>
+
+    </section>
 
 
+    <!-- =====================================================
+         HOJA 07 — CONTACTO
+    ====================================================== -->
+
+    <section id="contacto" class="sheet">
+
+      <p class="tblock">
+        HOJA 07 · CONTACTO
+      </p>
+
+      <h2>
+        Hablemos
+      </h2>
+
+      <p class="lede-small">
+        Me interesa conectar experiencia industrial con tecnología
+        para desarrollar soluciones que resuelvan problemas reales
+        de operación.
+      </p>
+
+      <p class="lede-small">
+        Si necesitás asesoría en mantenimiento industrial,
+        automatización, desarrollo de herramientas digitales para
+        operaciones o tenés un proyecto en el que podamos colaborar,
+        podemos conversar.
+      </p>
 
 
-<script src="./js/site-layout.js"></script>
-<script src="./js/login-modal.js"></script>
-<script src="./js/nav-responsive.js"></script>
+      <div class="contact-list">
+
+        <a
+          href="https://www.linkedin.com/in/cristhian-redes-0970a1164/"
+          target="_blank"
+          rel="noopener noreferrer">
+
+          LinkedIn ↗
+
+        </a>
+
+
+        <a
+          href="mailto:craco_01@outlook.com">
+
+          craco_01@outlook.com
+
+        </a>
+
+
+        <a
+          href="https://wa.me/595961282852"
+          target="_blank"
+          rel="noopener noreferrer">
+
+          WhatsApp ↗
+
+        </a>
+
+      </div>
+
+
+      <p class="foot-note">
+        Paraguay
+      </p>
+
+    </section>
+
+  </main>
+
+
+  <!-- JavaScript -->
+  <script src="./js/portfolio.js"></script>
+
 </body>
 </html>
+```

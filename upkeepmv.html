@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Mantenimiento Metalúrgica Vera S.A.E.</title>
+        <link rel="icon" href="./img/Logo.png" type="image/png" sizes="32x32">
+        <link rel="stylesheet" href="./css/styles.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+        <link rel="stylesheet" href="./css/footer-estilo.css">
+    <script src="./js/api-config.js"></script>
+</head>
+    <body>
+        <!--<hr>-->
+
+        <main class="inicio" id="inicio">
+            <h2>Servicios disponibles.</h2>
+
+            <div class="principal">
+                <!-- 1 -->
+                <figure class="card">
+                    <a href="#solicitudes" ><img height="120" width="200" src="img/solicitudes.webp" alt="Solicitud de mantenimiento"></a>
+                    <figcaption>Solicitudes de Mantenimiento</figcaption>
+                </figure>
+                <!--1.1-->
+                <figure class="card">
+                    <a href="#mpp" ><img height="120" width="200" src="img/mpp.png" alt="Mantenimiento Preventivo Programado"></a>
+                    <figcaption>Mantenimiento Preventivo Programado</figcaption>
+                </figure>
+
+                <!-- 2 -->
+                <figure class="card">
+                    <a href="#informaciones" > <img height="120" width="200" src="img/informes.webp"  alt="Informes y reportes"></a>
+                    <figcaption>Informaciones Útiles y Reportes</figcaption>
+                </figure>
+
+                <!-- 3 -->
+                <figure class="card">
+                    <a href="#form-adds" ><img height="120" width="200" src="img/formularios.webp" alt="Formularios adicionales"> </a>
+                    <figcaption>Formularios Adicionales</figcaption>
+                </figure>
+
+                <!-- 4 -->
+                <figure class="card">
+                    <a href="./pages/visor-pdf.html?grupo=grupo4" ><img height="120" width="200" src="img/puente_grua.webp"  alt="Puente grúa"></a>
+                    <figcaption>Información sobre Puente Grúa</figcaption>
+                </figure>
+
+                <!-- 5 -->
+                <figure class="card">
+                    <a href="./pages/visor-pdf.html?grupo=grupo1"><img height="120" width="200" src="img/equipos.webp"  alt="Equipos de soldadura"></a>
+                    <figcaption>Datos Técnicos Equipos de Soldar</figcaption>
+                </figure>
+
+                <!-- 6 -->
+                <figure class="card">
+                    <a href="./pages/visor-pdf.html?grupo=grupo2"><img height="120" width="200" src="img/makita.webp"  alt="Herramientas eléctricas"></a>
+                    <figcaption>Datos Técnicos Herramientas Eléctricas</figcaption>
+                </figure>
+
+                <!-- 7 -->
+                <figure class="card">
+                    <a href="./pages/visor-pdf.html?grupo=grupo3"><img height="120" width="200" src="img/mvande3.webp"  alt="Material de examen"> </a>
+                    <figcaption>Materiales sobre Electricidad</figcaption>
+                </figure>
+
+                <!-- 8 -->
+                <figure class="card">
+                    <a href="./pages/contol_inventario.html" ><img height="120" width="200" src="img/inventario.png" alt="Control de inventario"></a>
+                    <figcaption>Control de Inventario</figcaption>
+                </figure>
+            </div>
+
+        </main>
+
+        <hr>
+
+        <section id="solicitudes">
+            <h2 id="solicitudes-title">Solicitudes de Mantenimiento</h2>
+
+            <div class="solicitudes-description">
+                <div class="form-container">
+                    <div class="item-formularios">
+                    <a href="./pages/solicitud.html"><p><span>📝</span> Crear solicitud</p></a>
+                </div>
+
+                <div class="item-formularios">
+                    <a href="./pages/asignar.html"><p><span>👷‍♂️</span> Asignar técnicos</p></a>
+                </div>
+
+                <div class="item-formularios">
+                    <a href="./pages/cierre.html"><p><span>✅</span> Cerrar solicitudes</p></a>
+                </div>
+
+                <div class="item-formularios">
+                    <a href="./pages/reprogramar.html"><p><span>🔄</span> Reprogramar solicitudes</p></a>
+                </div>
+
+                <div class="item-formularios">
+                    <a href="./pages/modificar.html"><p><span>💻</span> Modificar solicitud</p></a>
+                </div>
+
+                <div class="item-formularios">
+                    <a href="./pages/codigos.html"><p><span>📑</span> Código de Máquinas</p></a>
+                </div>
+
+                <div class="item-formularios">
+                    <a href="./pages/lista_solicitudes.html" ><p><span>📋</span> Ver solicitudes</p></a>
+                </div>
+                <div class="item-formularios">
+                    <a href="./pages/modulo_solicitudes.html"><p><span>📁</span> Ver informes digitales</p></a>
+                </div>
+                <div class="item-formularios">
+                    <a href="./pages/baja.html"><p><span>🛑</span> Dar de baja equipos</p></a>
+                </div>
+            </div>
+
+        </section>
+
+        <section id="mpp" class="mpp-section" aria-label="Ciclo de mantenimiento preventivo">
+            <div class="mpp-header">
+                <h2>Mantenimiento Preventivo Programado</h2>
+            </div>
+
+            <div class="mpp-cycle">
+                <a class="mpp-step mpp-step-5" href="./pages/vista_mpp.html" aria-label="Programar mantenimientos preventivos">
+                    <div class="mpp-label">Programar<br />Mantenimientos Preventivos</div>
+                    <div class="mpp-node mpp-node-gold mpp-node-top">
+                        <div class="mpp-node-icon mpp-calendar large">
+                            <span class="mpp-calendar-top"></span>
+                            <span class="mpp-calendar-date">F</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a class="mpp-step mpp-step-2" href="./pages/vista_mpp.html" aria-label="Ver lista de mantenimientos">
+                    <div class="mpp-label">Ver Lista de<br />Mantenimientos</div>
+                    <div class="mpp-node mpp-node-blue">
+                        <div class="mpp-node-icon mpp-clipboard">
+                            <span class="mpp-clip-line"></span>
+                            <span class="mpp-clip-line short"></span>
+                            <span class="mpp-clip-line short"></span>
+                        </div>
+                    </div>
+                </a>
+
+                <a class="mpp-step mpp-step-3" href="./pages/reprogramar_mpp.html" aria-label="Reprogramar mantenimiento">
+                    <div class="mpp-label">Reprogramar<br />Mantenimiento</div>
+                    <div class="mpp-node mpp-node-gold">
+                        <div class="mpp-node-icon mpp-calendar">
+                            <span class="mpp-calendar-top"></span>
+                            <span class="mpp-calendar-date">F</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a class="mpp-step mpp-step-4" href="./pages/asignar_mpp.html" aria-label="Asignar técnicos">
+                    <div class="mpp-label">Asignar<br />Técnicos</div>
+                    <div class="mpp-node mpp-node-blue">
+                        <div class="mpp-node-icon mpp-worker">
+                            <span class="mpp-hardhat"></span>
+                            <span class="mpp-face"></span>
+                            <span class="mpp-body"></span>
+                        </div>
+                    </div>
+                </a>
+
+                <a class="mpp-step mpp-step-1" href="./pages/cierre_mpp.html" aria-label="Cerrar mantenimiento">
+                    <div class="mpp-label">Cerrar<br />Mantenimiento Preventivo</div>
+                    <div class="mpp-node mpp-node-green">
+                        <div class="mpp-node-icon mpp-check">✓</div>
+                    </div>
+                </a>
+
+                <a class="mpp-step mpp-step-6" href="./pages/indicador_mpp.html" aria-label="Indicadores de mantenimiento preventivo">
+                    <div class="mpp-label">Indicadores de<br />Mantenimiento Preventivo</div>
+                    <div class="mpp-node mpp-node-hex mpp-node-green">
+                        <div class="mpp-node-icon mpp-radar">
+                            <span class="mpp-radar-ring mpp-r1"></span>
+                            <span class="mpp-radar-ring mpp-r2"></span>
+                            <span class="mpp-radar-center"></span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <hr>
+
+        <section class="informaciones" id="informaciones">
+            <div class="title-informaciones">
+                <h2>Informaciones Útiles</h2>
+                <p>(Todos los vinculos de esta sección se abren en una nueva ventana)</p>
+            </div>
+            <div class="informaciones-container">
+                <ol class="option-list">
+                    <li><a href="./pages/reporte-ordenes.html"><i class="fa-solid fa-wrench"></i> Panel de Mantenimiento</a></li>
+                    <li><a href="https://mvaceros.sharepoint.com/sites/SISTEMADETICKETPEDIDOS-LOGISTICAMV/Lists/SISTEMA%20TICKET%20%20LOGISTICA/AllItems.aspx?e=3%3Ad9f93b3ebd32486fa6ba6edb8d07b9b3&sharingv2=true&fromShare=true&at=9&CT=1743844213698&OR=OWA%2DNT%2DMail&CID=5d3ef917%2D5f01%2Dd2a5%2Dcaf8%2Da0387112bbce" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-truck"></i>Pedidos de Logística</a></li>
+                    <li><a href="./pages/mantenimiento_generadores.html"><i class="fa-solid fa-bolt"></i>Grupo Generadores</a></li>
+                    <li><a href="./pages/mantenimiento_compresores.html"><i class="fa-solid fa-compress"></i>Compresores a Tornillo</a></li>
+                    <li><a href="./pages/horometros_turnos.html"><i class="fa-solid fa-calendar-check"></i>Turnos Maquinas</a></li>
+                    <li><a href="./pages/horometros_datos.html"><i class="fa-solid fa-clock"></i>Horómetros Maquinado</a></li>
+                </ol>
+
+                <div class="datos-container">
+                    <h3>Vista previa del Panel de Mantenimiento</h3>
+                    <iframe class="Datos"
+                        title="Resumen de órdenes de mantenimiento"
+                        width="720"
+                        height="480"
+                        src="./pages/reporte-ordenes.html?embed=1"
+                        frameborder="0"
+                        allowFullScreen="true">Panel de Mantenimiento
+                    </iframe>
+                </div>
+            </div>
+
+        </section>
+
+        <hr>
+
+        <section class="form-adds" id="form-adds">
+            <div class="formularios-timeline">
+                <h2>📑 Formularios Adicionales y Solicitudes</h2>
+                <ul class="timeline">
+                    <li>
+                        <a href="./pages/hora_maquinado.html"><div class="content">
+                            <h3>Registro de Horómetros de Máquinas</h3>
+                            <p>Control y seguimiento de equipos.</p>
+                        </div></a>
+                    </li>
+                    <li>
+                        <a href="./pages/mantenimiento_criticos.html"><div class="content">
+                            <h3>Registro de Horómetros Compresores y Generadores</h3>
+                            <p>Monitoreo de horas de servicio.</p>
+                        </div></a>
+                    </li>
+                    <li>
+                        <a href="./pages/formulario-simple.html?src=https://forms.office.com/pages/responsepage.aspx?id=NZva7YvtyUWWTKbrPuRyG1V57RwX81VLkJJXgmMnoMxUQ0tUQ0RPUllLMkhQREYxVVNZUDQ5V1BGQi4u&route=shorturl"><div class="content">
+                            <h3>Ticket de Pedidos Logística</h3>
+                            <p>Solicitudes de materiales y suministros.</p>
+                        </div></a>
+                    </li>
+                    <li>
+                        <a href="./pages/formulario-simple.html?src=https://forms.office.com/pages/responsepage.aspx?id=NZva7YvtyUWWTKbrPuRyG7laUpBIOjJIv4R4MpPr2n5UOEY5VEFFV0cyOUdGVlY3QkZXTUYzNEdVUC4u"><div class="content">
+                            <h3>Ticket de Informática - TI</h3>
+                            <p>Soporte técnico y requerimientos.</p>
+                        </div></a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <hr>
+
+        <section class="otros" id="otros">
+            <h2>Otros Proyectos</h2>
+
+            <div class="video-otros">
+                <div Class="video-container">
+                    <iframe src="https://drive.google.com/file/d/1I_pJN12CTtoR_SQI5AvYBqD036TkrbkP/preview"
+                     width="1080"
+                     height="720"
+                     frameborder="0"
+                     scrolling="no"
+                     allowfullscreen
+                     title="Desbobinadora v7.avi">
+                    </iframe>
+                </div>
+                <div class="video-description">
+                    <h3>Proyecto Desbobinador de Chapa</h3>
+                    <p>El proyecto consiste en el diseño y la simulación de un desbobinador de chapa, desarrollado mediante modelado 3D para representar
+                        su estructura, componentes principales y funcionamiento básico. El modelo permite visualizar el proceso de desenrollado de la bobina
+                        y el movimiento de los diferentes elementos mecánicos involucrados en la alimentación continua del material.</p>
+                    <p>La animación muestra la rotación controlada de la bobina y el comportamiento general del sistema durante su operación, permitiendo
+                        analizar aspectos como la estabilidad estructural, la transmisión de movimiento y la correcta disposición de los componentes.
+                        Esta simulación facilita la validación del diseño, la identificación de posibles interferencias y la optimización de la solución
+                        antes de su fabricación, reduciendo tiempos de desarrollo y costos asociados.</p>
+                    <p>El prototipo fue concebido como una herramienta de estudio y evaluación para procesos de manipulación y alimentación de chapa,
+                        contribuyendo a mejorar la eficiencia operativa, la seguridad de funcionamiento y la confiabilidad del sistema en aplicaciones
+                        industriales.
+                    </p>
+                </div>
+            </div>
+
+            <div class="video-otros2">
+                <div Class="video-container2">
+                    <iframe src="https://drive.google.com/file/d/13FDGC7X2nj18fcrW-Nu4kvJO4qdm1dsQ/preview"
+                     width="1080"
+                     height="720"
+                     frameborder="0"
+                     scrolling="no"
+                     allowfullscreen
+                     title="Desbobinadora v7.avi">
+                    </iframe>
+                </div>
+                <div class="video-description2">
+                    <h3>Proyecto Centrifugadora para Piezas Galvanizadas por Inmersión en Caliente</h3>
+                    <p>El proyecto consiste en el diseño y la simulación de una centrifugadora para piezas galvanizadas por inmersión en caliente en zinc,
+                        desarrollada mediante modelado 3D para representar su estructura, componentes principales y funcionamiento básico. El modelo permite
+                        visualizar el proceso de rotación de la canasta centrifugadora, utilizada para eliminar el exceso de zinc fundido adherido a las piezas
+                        después de su extracción del baño de galvanizado.</p>
+                    <p>La animación muestra el movimiento de giro del conjunto, permitiendo analizar aspectos como la distribución de cargas, la estabilidad
+                        estructural y el comportamiento mecánico del sistema durante la operación. Esta simulación facilita la validación del diseño, la detección
+                        temprana de posibles interferencias y la optimización de los componentes antes de su fabricación, reduciendo costos y tiempos de desarrollo.</p>
+                    <p>El prototipo fue concebido como una herramienta de estudio y evaluación del proceso de centrifugado, contribuyendo a mejorar la calidad del
+                        recubrimiento, la uniformidad de la capa de zinc y la eficiencia operativa del sistema de galvanizado.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Botón flotante de WhatsApp -->
+        <a href="#" class="whatsapp-float" id="waButton">
+        <img src="./img/WhatsApp.png" alt="WhatsApp" />
+        </a>
+
+        <!-- Modal con opciones -->
+        <div id="waModal" class="overlay">
+        <div class="modal">
+            <h2>Elegir contacto</h2>
+            <a href="https://wa.me/595986221400" target="_blank" rel="noopener">Cristhian Redes</a>
+            <a href="https://wa.me/595982156163" target="_blank" rel="noopener">Gustavo González</a>
+            <a href="https://wa.me/595991986712" target="_blank" rel="noopener">Blas Gimenez</a>
+            <button id="closeBtn">Cerrar</button>
+        </div>
+        </div>
+        <script src="./js/modal-wa.js"></script>
+
+        <hr>
+              <!--Informacion de contacto-->
+        <footer class="footer-contacto" id="contacto">
+            <address>
+                <h2>Contacto</h2>
+                <ul>
+                    <li>
+                        <p>Informaciones</p>
+                        <i class="fa-solid fa-phone"></i>
+                        <a href="tel:+595213283240">(+595) 21 3283240/2/3</a>
+                    </li>
+                    <li>
+                        <p>Gustavo González</p>
+                        <i class="fa-brands fa-whatsapp"></i>
+                        <a href="tel:+595982156163">(+595) 982 156163</a>
+                    </li>
+                     <li>
+                        <p>Cristhian Redes</p>
+                        <i class="fa-brands fa-whatsapp"></i>
+                        <a href="tel:+595986221400">(+595) 986 221400</a>
+                    </li>
+                    <li>
+                        <p>Gustavo González</p>
+                        <i class="fa-solid fa-envelope"></i>
+                        <a href="mailto:mantenimiento2@metalurgicavera.com.py">mantenimiento2@metalurgicavera.com.py</a>
+                    </li>
+                    <li>
+                        <p>Cristhian Redes</p>
+                        <i class="fa-solid fa-envelope"></i>
+                        <a href="mailto:reparaciones@metalurgicavera.com.py">reparaciones@metalurgicavera.com.py</a>
+                    </li>
+                    <li>
+                        <p>Blas Gimenez</p>
+                        <i class="fa-solid fa-envelope"></i>
+                        <a href="mailto:reparaciones2@metalurgicavera.com.py">reparaciones2@metalurgicavera.com.py</a>
+                    </li>
+                    <li>
+                        <i class="fa-brands fa-facebook"></i>
+                        <span>Metalúrgica Vera S.A.E.</span>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-globe"></i>
+                        <a href="https://www.metalurgicavera.com.py" target="_blank" rel="noopener noreferrer">www.metalurgicavera.com.py</a>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span>Ruta PY 01, Km 28,6 (Acceso Sur), Ypané</span>
+                    </li>
+                </ul>
+            </address>
+            <section class="mapa">
+                <div class="mapa-description">
+
+                    <span><i class="fa-solid fa-location-dot"></i>Metalúrgica Vera S.A.E.</span>
+                </div>
+
+                <iframe title="mapa de ubicación" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3601.6318628140593!2d-57.49297322382588!3d-25.48396533503066!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x945c525ca4d7e83b%3A0xa27d522bed160530!2sMetal%C3%BArgica%20Vera%20S.R.L!5e0!3m2!1ses!2spy!4v1781532505861!5m2!1ses!2spy"
+                    width="480"
+                    height="300"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer">
+                </iframe>
+            </section>
+        </footer>
+
+
+
+
+<script src="./js/site-layout.js"></script>
+<script src="./js/login-modal.js"></script>
+<script src="./js/nav-responsive.js"></script>
+</body>
+</html>

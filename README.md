@@ -1,6 +1,6 @@
-# Frontend - Portal de mantenimiento
+# Frontend de CracoTech
 
-Este proyecto sigue siendo un proyecto académico, desarrollado para aplicar y consolidar conocimientos de frontend, arquitectura web y consumo de API en un contexto realista de mantenimiento industrial para Metalúrgica Vera S.A.E.
+Este repositorio contiene el portafolio público de CracoTech y el portal web de mantenimiento industrial para Metalúrgica Vera S.A.E. El portal consume la API REST del backend mediante JavaScript fetch.
 
 Este directorio contiene la interfaz web del sistema de mantenimiento para Metalúrgica Vera S.A.E. La aplicación está construida como un frontend estático y consume la API REST del backend mediante JavaScript fetch.
 
@@ -29,11 +29,17 @@ La estructura está pensada para funcionar como sitio público y de gestión, pe
 
 ```text
 frontend/
-├── index.html
+├── index.html                 # Portafolio público
+├── upkeepmv.html              # Portal de mantenimiento
 ├── css/
+│   ├── portfolio.css
 ├── data/
 ├── img/
+│   ├── craco-mark.svg
+│   └── cracovec-mark.svg
 ├── js/
+│   ├── api-config.js
+│   └── portfolio.js
 ├── pages/
 ├── README.md
 ├── .github/workflows/deploy-pages.yml
@@ -42,16 +48,16 @@ frontend/
 
 ## Flujo principal
 
-1. El navegador carga la página principal desde GitHub Pages.
-2. El script [js/api-config.js](js/api-config.js) centraliza la URL base de la API.
-3. La aplicación realiza llamadas a rutas bajo `/api/...` con JWT en el header cuando hay sesión activa.
-4. El backend valida autenticación, roles y permisos antes de ejecutar la operación.
+1. GitHub Pages sirve el portafolio desde `index.html`.
+2. El portal de mantenimiento está disponible en [upkeepmv.html](upkeepmv.html).
+3. En el portal, [js/api-config.js](js/api-config.js) centraliza la URL base de la API.
+4. El portal realiza llamadas a rutas bajo `/api/...` y el backend valida autenticación, roles y permisos.
 
 ## Autenticación
 
 La sesión no se guarda en el backend; se maneja por token JWT enviado desde el frontend y almacenado en localStorage.
 
-Los componentes principales del flujo de login están en:
+Los componentes del flujo de login del portal están en:
 - [js/login-modal.js](js/login-modal.js)
 - [js/api-config.js](js/api-config.js)
 
@@ -81,11 +87,13 @@ El frontend se encuentra en una etapa funcional con varias pantallas y módulos 
 
 ## Mantenimiento
 
-Cuando se modifique la navegación, módulos o formularios, conviene revisar:
-- [index.html](index.html)
+Cuando se modifique la navegación, módulos o formularios del portal, conviene revisar:
+- [upkeepmv.html](upkeepmv.html)
 - [pages/](pages/)
 - [js/](js/)
 - [css/](css/)
+
+Para cambios en el portafolio, revisar [index.html](index.html), [css/portfolio.css](css/portfolio.css) y [js/portfolio.js](js/portfolio.js).
 
 ## Autor
 
