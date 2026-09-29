@@ -179,7 +179,25 @@ function valorCampo(row, campo, fecha = false) {
 }
 
 function crearCampo(etiqueta, valor) {
-  return `<div class="solicitud-campo"><dt>${etiqueta}</dt><dd>${valor}</dd></div>`;
+  const campo = document.createElement('div');
+  const titulo = document.createElement('dt');
+  const contenido = document.createElement('dd');
+  campo.className = 'solicitud-campo';
+  titulo.textContent = etiqueta;
+  contenido.textContent = valor;
+  campo.append(titulo, contenido);
+  return campo;
+}
+
+function crearCelda(etiqueta, valor, clase = '') {
+  const celda = document.createElement('div');
+  const titulo = document.createElement('span');
+  const contenido = document.createElement('strong');
+  celda.className = `solicitud-celda${clase ? ` ${clase}` : ''}`;
+  titulo.textContent = etiqueta;
+  contenido.textContent = valor;
+  celda.append(titulo, contenido);
+  return celda;
 }
 
 function renderSolicitud(row) {
@@ -188,17 +206,18 @@ function renderSolicitud(row) {
   const card = document.createElement('article');
   card.className = `solicitud-row ${claseEstado}`;
   card.dataset.id = row.id;
-  card.innerHTML = `
-    <div class="solicitud-celda solicitud-id"><span>ID</span><strong>${valorCampo(row, 'id')}</strong></div>
-    <div class="solicitud-celda"><span>Código</span><strong>${valorCampo(row, 'codigo')}</strong></div>
-      ${crearCampo('Avería', valorCampo(row, 'averia'))}
-      ${crearCampo('Prioridad', valorCampo(row, 'prioridad'))}
-      ${crearCampo('Solicitado', valorCampo(row, 'solicitado'))}
-      ${crearCampo('Sector', valorCampo(row, 'sector'))}
-      ${crearCampo('Fecha inicio', valorCampo(row, 'fecha_inicio', true))}
-      ${crearCampo('Fecha vencimiento', valorCampo(row, 'fecha_vencimiento', true))}
-      ${crearCampo('Responsable', valorCampo(row, 'responsable'))}
-      <div class="solicitud-celda"><span>Progreso</span><strong>${estado}</strong></div>`;
+  card.append(
+    crearCelda('ID', valorCampo(row, 'id'), 'solicitud-id'),
+    crearCelda('Código', valorCampo(row, 'codigo')),
+    crearCampo('Avería', valorCampo(row, 'averia')),
+    crearCampo('Prioridad', valorCampo(row, 'prioridad')),
+    crearCampo('Solicitado', valorCampo(row, 'solicitado')),
+    crearCampo('Sector', valorCampo(row, 'sector')),
+    crearCampo('Fecha inicio', valorCampo(row, 'fecha_inicio', true)),
+    crearCampo('Fecha vencimiento', valorCampo(row, 'fecha_vencimiento', true)),
+    crearCampo('Responsable', valorCampo(row, 'responsable')),
+    crearCelda('Progreso', estado)
+  );
   card.addEventListener('click', () => seleccionarFila(row, card));
   card.addEventListener('contextmenu', event => {
     event.preventDefault();
@@ -229,10 +248,22 @@ function renderLista(data) {
 
   gruposOrdenados.forEach(([equipo, solicitudes]) => {
     const carpeta = document.createElement('details');
+    const summary = document.createElement('summary');
+    const icono = document.createElement('span');
+    const nombre = document.createElement('span');
+    const contador = document.createElement('span');
+    const contenido = document.createElement('div');
     carpeta.className = 'equipo-carpeta';
     carpeta.open = false;
-    carpeta.innerHTML = `<summary><span class="carpeta-icono">▸</span><span class="equipo-nombre">${equipo}</span><span class="equipo-contador">${solicitudes.length} solicitud${solicitudes.length === 1 ? '' : 'es'}</span></summary><div class="solicitudes-equipo"></div>`;
-    const contenido = carpeta.querySelector('.solicitudes-equipo');
+    icono.className = 'carpeta-icono';
+    icono.textContent = '▸';
+    nombre.className = 'equipo-nombre';
+    nombre.textContent = equipo;
+    contador.className = 'equipo-contador';
+    contador.textContent = `${solicitudes.length} solicitud${solicitudes.length === 1 ? '' : 'es'}`;
+    summary.append(icono, nombre, contador);
+    contenido.className = 'solicitudes-equipo';
+    carpeta.append(summary, contenido);
     solicitudes.forEach(row => contenido.appendChild(renderSolicitud(row)));
     lista.appendChild(carpeta);
   });

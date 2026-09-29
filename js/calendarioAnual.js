@@ -95,18 +95,22 @@ function generarCalendarioAnual(mantenimientos, anio) {
   tbody.innerHTML = "";
 
   mantenimientos.forEach((m, index) => {
-    let fila = `<tr>
-      <td>${index + 1}</td>
-      <td>${m.maquina_equipo}</td>
-      <td>${m.sector || "-"}</td>`;
+    const fila = document.createElement('tr');
+    [index + 1, m.maquina_equipo, m.sector || '-'].forEach(valor => {
+      const celda = document.createElement('td');
+      celda.textContent = valor === null || valor === undefined ? '' : String(valor);
+      fila.appendChild(celda);
+    });
 
     for (let semana = 1; semana <= semanasAnuales; semana++) {
       const clase = obtenerClaseSemana(m, semana, anio);
-      fila += `<td class="${clase}" title="Semana ${semana}"></td>`;
+      const celda = document.createElement('td');
+      celda.className = clase;
+      celda.title = `Semana ${semana}`;
+      fila.appendChild(celda);
     }
 
-    fila += "</tr>";
-    tbody.innerHTML += fila;
+    tbody.appendChild(fila);
   });
 }
 

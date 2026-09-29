@@ -26,26 +26,34 @@ function renderInventarioTable(items) {
 
   items.forEach(item => {
     const row = document.createElement("tr");
-    row.dataset.codigo = item.Codigo;
-    row.innerHTML = `
-      <td>${item.Codigo}</td>
-      <td>${item.Producto}</td>
-      <td>${item.UM}</td>
-      <td>${item.StockF9}</td>
-      <td class="${obtenerClaseDiferencia(item.Diferencia)}">${item.Diferencia ?? ""}</td>
-      <td>
-        <input type="text" class="inventario-input inventario-input--modal" data-campo="CantidadFisica" data-etiqueta="Cantidad Física"
-          value="${item.CantidadFisica ?? ""}" readonly>
-      </td>
-      <td>
-        <input type="text" class="inventario-input inventario-input--modal" data-campo="Ubicacion" data-etiqueta="Ubicación"
-          value="${item.Ubicacion ?? ""}" readonly>
-      </td>
-      <td>
-        <input type="text" class="inventario-input inventario-input--modal" data-campo="Observacion" data-etiqueta="Observación"
-          value="${item.Observacion ?? ""}" readonly>
-      </td>
-    `;
+    row.dataset.codigo = String(item.Codigo ?? '');
+    const agregarCelda = (valor, clase = '') => {
+      const celda = document.createElement('td');
+      celda.className = clase;
+      celda.textContent = valor === null || valor === undefined ? '' : String(valor);
+      row.appendChild(celda);
+    };
+    const agregarCampo = (campo, etiqueta, valor) => {
+      const celda = document.createElement('td');
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'inventario-input inventario-input--modal';
+      input.dataset.campo = campo;
+      input.dataset.etiqueta = etiqueta;
+      input.value = valor === null || valor === undefined ? '' : String(valor);
+      input.readOnly = true;
+      celda.appendChild(input);
+      row.appendChild(celda);
+    };
+
+    agregarCelda(item.Codigo);
+    agregarCelda(item.Producto);
+    agregarCelda(item.UM);
+    agregarCelda(item.StockF9);
+    agregarCelda(item.Diferencia, obtenerClaseDiferencia(item.Diferencia));
+    agregarCampo('CantidadFisica', 'Cantidad Física', item.CantidadFisica);
+    agregarCampo('Ubicacion', 'Ubicación', item.Ubicacion);
+    agregarCampo('Observacion', 'Observación', item.Observacion);
     tableBody.appendChild(row);
   });
 }

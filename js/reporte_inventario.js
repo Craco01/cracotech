@@ -125,7 +125,7 @@ function renderizarTabla(filas) {
       <td>${escapeHtml(fila.um)}</td>
       <td>${escapeHtml(fila.ubicacion)}</td>
       <td>${formatearNumero(fila.stockF9)}</td>
-      <td class="celda-f9" data-codigo="${escapeHtml(fila.codigo)}">${
+      <td class="celda-f9">${
         fila.cantidadFisica !== null && fila.cantidadFisica !== undefined
           ? formatearNumero(toNumero(fila.cantidadFisica))
           : ""

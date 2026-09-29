@@ -161,38 +161,21 @@ function renderTabla(data) {
       seleccionarFila(row, tr);
       abrirModalEntrega();
     });
-    tr.innerHTML = `
-      <td>${row.id}</td>
-      <td>${row.NE || ""}</td>
-      <td>${row.codigo || ""}</td>
-      <td>${row.maquina_equipo || ""}</td>
-      <td>${row.nombre_declarado || ""}</td>
-      <td>${row.averia || ""}</td>
-      <td>${row.prioridad || ""}</td>
-      <td>${row.solicitado || ""}</td>
-      <td>${row.sector || ""}</td>
-      <td>${row.registrado || ""}</td>
-      <td>${formatFecha(row.fecha_inicio)}</td>
-      <td>${formatFecha(row.fecha_vencimiento)}</td>
-      <td>${formatFecha(row.fecha_final)}</td>
-      <td>${formatFecha(row.fecha_entrega)}</td>
-      <td>${row.reparacion || ""}</td>
-      <td>${row.responsable || ""}</td>
-      <td>${row.apoyo || ""}</td>
-      <td>${row.categoria || ""}</td>
-      <td>${row.clasificacion || ""}</td>
-      <td>${row.costo_repuestos || ""}</td>
-      <td>${row.unidad_mo || ""}</td>
-      <td>${row.horas || ""}</td>
-      <td>${row.total_mo || ""}</td>
-      <td>${row.total_costo || ""}</td>
-      <td>${row.notas || ""}</td>
-      <td>${row.progreso || ""}</td>
-      <td>${row.estado_ejecucion || ""}</td>
-      <td>${row.carga || ""}</td>
-      <td>${row.horas_paro || ""}</td>
-      <td>${row.horas_mes || ""}</td>
-    `;
+    const valores = [
+      row.id, row.NE, row.codigo, row.maquina_equipo, row.nombre_declarado,
+      row.averia, row.prioridad, row.solicitado, row.sector, row.registrado,
+      formatFecha(row.fecha_inicio), formatFecha(row.fecha_vencimiento),
+      formatFecha(row.fecha_final), formatFecha(row.fecha_entrega), row.reparacion,
+      row.responsable, row.apoyo, row.categoria, row.clasificacion,
+      row.costo_repuestos, row.unidad_mo, row.horas, row.total_mo,
+      row.total_costo, row.notas, row.progreso, row.estado_ejecucion,
+      row.carga, row.horas_paro, row.horas_mes
+    ];
+    valores.forEach(valor => {
+      const celda = document.createElement('td');
+      celda.textContent = valor === null || valor === undefined ? '' : String(valor);
+      tr.appendChild(celda);
+    });
     tbody.appendChild(tr);
   });
 }

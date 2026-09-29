@@ -25,10 +25,11 @@ function renderTable(filteredData) {
   filteredData.forEach(item => {
     const row = document.createElement("tr");
     const descripcion = item["Descripción"] ?? item.descripcion;
-    row.innerHTML = `
-      <td>${item.codigo}</td>
-      <td>${descripcion}</td>
-    `;
+    [item.codigo, descripcion].forEach(valor => {
+      const celda = document.createElement('td');
+      celda.textContent = valor === null || valor === undefined ? '' : String(valor);
+      row.appendChild(celda);
+    });
     tableBody.appendChild(row);
   });
 }

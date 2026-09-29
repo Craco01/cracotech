@@ -7,29 +7,36 @@ fetch('./mantenimientos.json')
   .then(res => res.json())
   .then(data => {
     const tabla = document.getElementById('tablaMantenimientos');
-    tabla.innerHTML = `
-      <thead>
-        <tr>
-          <th>ID</th><th>Máquina</th><th>Código</th>
-          <th>Fecha Inicio</th><th>Fecha Final</th>
-          <th>Reprog. Inicio</th><th>Reprog. Final</th>
-          <th># Reprog.</th><th>Responsable</th>
-          <th>Apoyos</th><th>Repuestos</th>
-          <th>Costo Repuestos</th><th>Costo Mano Obra</th>
-          <th>Costo Total</th><th>Notas</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${data.map(m => `
-          <tr>
-            <td>${valorTabla(m.id)}</td><td>${valorTabla(m.maquina_equipo)}</td><td>${valorTabla(m.codigo)}</td>
-            <td>${valorTabla(m.fecha_inicio)}</td><td>${valorTabla(m.fecha_final)}</td>
-            <td>${valorTabla(m.reprogramacion_inicio)}</td><td>${valorTabla(m.reprogramacion_final)}</td>
-            <td>${valorTabla(m.contador_reprogramaciones)}</td><td>${valorTabla(m.responsable)}</td>
-            <td>${valorTabla(m.apoyos)}</td><td>${valorTabla(m.repuestos_utilizados)}</td>
-            <td>${valorTabla(m.costo_repuestos)}</td><td>${valorTabla(m.costo_mano_obra)}</td>
-            <td>${valorTabla(m.costo_total)}</td><td>${valorTabla(m.notas)}</td>
-          </tr>`).join('')}
-      </tbody>
-    `;
+    const encabezados = [
+      'ID', 'Máquina', 'Código', 'Fecha Inicio', 'Fecha Final',
+      'Reprog. Inicio', 'Reprog. Final', '# Reprog.', 'Responsable',
+      'Apoyos', 'Repuestos', 'Costo Repuestos', 'Costo Mano Obra',
+      'Costo Total', 'Notas'
+    ];
+    const thead = document.createElement('thead');
+    const filaEncabezado = document.createElement('tr');
+    encabezados.forEach(texto => {
+      const th = document.createElement('th');
+      th.textContent = texto;
+      filaEncabezado.appendChild(th);
+    });
+    thead.appendChild(filaEncabezado);
+
+    const tbody = document.createElement('tbody');
+    data.forEach(m => {
+      const fila = document.createElement('tr');
+      const valores = [
+        m.id, m.maquina_equipo, m.codigo, m.fecha_inicio, m.fecha_final,
+        m.reprogramacion_inicio, m.reprogramacion_final, m.contador_reprogramaciones,
+        m.responsable, m.apoyos, m.repuestos_utilizados, m.costo_repuestos,
+        m.costo_mano_obra, m.costo_total, m.notas
+      ];
+      valores.forEach(valor => {
+        const td = document.createElement('td');
+        td.textContent = valorTabla(valor);
+        fila.appendChild(td);
+      });
+      tbody.appendChild(fila);
+    });
+    tabla.replaceChildren(thead, tbody);
   });

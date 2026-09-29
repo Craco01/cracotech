@@ -35,31 +35,40 @@ API_FETCH('/api/mantenimientos-preventivos')
   .then(data => {
     if (!Array.isArray(data)) return;
     const tabla = document.getElementById('tablaMantenimientos');
-    tabla.innerHTML = `
-      <thead>
-        <tr>
-          <th>ID</th><th>Máquina</th><th>Código</th>
-          <th>Fecha Inicio</th><th>Fecha Final</th>
-          <th>Fecha Ejec. Inicio</th><th>Fecha Ejec. Final</th>
-          <th>Reprog. Inicio</th><th>Reprog. Final</th>
-          <th># Reprog.</th><th>Responsable</th>
-          <th>Apoyos</th><th>Repuestos</th>
-          <th>Costo Repuestos</th><th>Costo Mano Obra</th>
-          <th>Costo Total</th><th>Notas</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${data.map(m => `
-          <tr>
-            <td>${valorTabla(m.id)}</td><td>${valorTabla(m.maquina_equipo)}</td><td>${valorTabla(m.codigo)}</td>
-            <td>${formatearFechaAbsoluta(m.fecha_inicio)}</td><td>${formatearFechaAbsoluta(m.fecha_final)}</td>
-            <td>${formatearFechaAbsoluta(m.fecha_ejecucion_inicio)}</td><td>${formatearFechaAbsoluta(m.fecha_ejecucion_final)}</td>
-            <td>${formatearFechaAbsoluta(m.reprogramacion_inicio)}</td><td>${formatearFechaAbsoluta(m.reprogramacion_final)}</td>
-            <td>${valorTabla(m.contador_reprogramaciones)}</td><td>${valorTabla(m.responsable)}</td>
-            <td>${valorTabla(m.apoyos)}</td><td>${valorTabla(m.repuestos_utilizados)}</td>
-            <td>${valorTabla(m.costo_repuestos)}</td><td>${valorTabla(m.costo_mano_obra)}</td>
-            <td>${valorTabla(m.costo_total)}</td><td>${valorTabla(m.notas)}</td>
-          </tr>`).join('')}
-      </tbody>
-    `;
+    const encabezados = [
+      'ID', 'Máquina', 'Código', 'Fecha Inicio', 'Fecha Final',
+      'Fecha Ejec. Inicio', 'Fecha Ejec. Final', 'Reprog. Inicio',
+      'Reprog. Final', '# Reprog.', 'Responsable', 'Apoyos', 'Repuestos',
+      'Costo Repuestos', 'Costo Mano Obra', 'Costo Total', 'Notas'
+    ];
+    const thead = document.createElement('thead');
+    const filaEncabezado = document.createElement('tr');
+    encabezados.forEach(texto => {
+      const th = document.createElement('th');
+      th.textContent = texto;
+      filaEncabezado.appendChild(th);
+    });
+    thead.appendChild(filaEncabezado);
+
+    const tbody = document.createElement('tbody');
+    data.forEach(m => {
+      const fila = document.createElement('tr');
+      const valores = [
+        valorTabla(m.id), valorTabla(m.maquina_equipo), valorTabla(m.codigo),
+        formatearFechaAbsoluta(m.fecha_inicio), formatearFechaAbsoluta(m.fecha_final),
+        formatearFechaAbsoluta(m.fecha_ejecucion_inicio), formatearFechaAbsoluta(m.fecha_ejecucion_final),
+        formatearFechaAbsoluta(m.reprogramacion_inicio), formatearFechaAbsoluta(m.reprogramacion_final),
+        valorTabla(m.contador_reprogramaciones), valorTabla(m.responsable),
+        valorTabla(m.apoyos), valorTabla(m.repuestos_utilizados),
+        valorTabla(m.costo_repuestos), valorTabla(m.costo_mano_obra),
+        valorTabla(m.costo_total), valorTabla(m.notas)
+      ];
+      valores.forEach(valor => {
+        const td = document.createElement('td');
+        td.textContent = valor;
+        fila.appendChild(td);
+      });
+      tbody.appendChild(fila);
+    });
+    tabla.replaceChildren(thead, tbody);
   });

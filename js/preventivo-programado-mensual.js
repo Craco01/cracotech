@@ -87,15 +87,18 @@ function generarCalendarioMensual(mantenimientos, mes, anio) {
   const diasMes = new Date(anio, mes, 0).getDate();
   const primerDia = new Date(anio, mes - 1, 1);
   const primerDiaSemana = (primerDia.getDay() + 6) % 7;
-
-  let html = '<table><caption>Calendario ' + mes + '/' + anio + '</caption><tr>';
+  const tabla = document.createElement('table');
+  const caption = document.createElement('caption');
+  caption.textContent = `Calendario ${mes}/${anio}`;
+  tabla.appendChild(caption);
+  const encabezado = document.createElement('tr');
   const diasSemana = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
-  diasSemana.forEach(d => html += `<th>${d}</th>`);
-  html += '</tr><tr>';
-
-  for (let i = 0; i < primerDiaSemana; i++) {
-    html += '<td></td>';
-  }
+  diasSemana.forEach(dia => {
+    const th = document.createElement('th');
+    th.textContent = dia;
+    encabezado.appendChild(th);
+  });
+  tabla.appendChild(encabezado);
 
   const fechasConEventos = new Map();
 
@@ -112,37 +115,50 @@ function generarCalendarioMensual(mantenimientos, mes, anio) {
     });
   });
 
-  for (let d = 1; d <= diasMes; d++) {
-    const fecha = `${anio}-${String(mes).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-    const eventos = fechasConEventos.get(fecha) || [];
-    const estadoDominante = eventos.reduce((estadoMasFuerte, evento) => {
-      const estadoActual = obtenerEstadoMantenimientoMensual(evento, fecha);
-      return prioridadEstado(estadoActual) > prioridadEstado(estadoMasFuerte) ? estadoActual : estadoMasFuerte;
-    }, '');
-    const clase = eventos.length > 0 ? `evento ${estadoDominante}`.trim() : '';
+  const filas = Math.ceil((primerDiaSemana + diasMes) / 7);
+  for (let semana = 0; semana < filas; semana++) {
+    const fila = document.createElement('tr');
+    for (let diaSemana = 0; diaSemana < 7; diaSemana++) {
+      const dia = semana * 7 + diaSemana - primerDiaSemana + 1;
+      const celda = document.createElement('td');
+      if (dia < 1 || dia > diasMes) {
+        fila.appendChild(celda);
+        continue;
+      }
 
-    html += `<td class="${clase}"><div class="dia-contenido"><div class="dia-num">${d}</div>`;
+      const fecha = `${anio}-${String(mes).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+      const eventos = fechasConEventos.get(fecha) || [];
+      const estadoDominante = eventos.reduce((estadoMasFuerte, evento) => {
+        const estadoActual = obtenerEstadoMantenimientoMensual(evento, fecha);
+        return prioridadEstado(estadoActual) > prioridadEstado(estadoMasFuerte) ? estadoActual : estadoMasFuerte;
+      }, '');
+      celda.className = eventos.length > 0 ? `evento ${estadoDominante}`.trim() : '';
 
-    eventos.forEach(e => {
-      const estado = obtenerEstadoMantenimientoMensual(e, fecha);
-      html += `<div class="evento-item ${estado}">${e.maquina_equipo}<br><small>${e.codigo}</small></div>`;
-    });
+      const contenido = document.createElement('div');
+      const numero = document.createElement('div');
+      contenido.className = 'dia-contenido';
+      numero.className = 'dia-num';
+      numero.textContent = String(dia);
+      contenido.appendChild(numero);
 
-    html += '</div></td>';
+      eventos.forEach(evento => {
+        const estado = obtenerEstadoMantenimientoMensual(evento, fecha);
+        const item = document.createElement('div');
+        const codigo = document.createElement('small');
+        item.className = `evento-item ${estado}`;
+        item.append(document.createTextNode(String(evento.maquina_equipo ?? '')),
+          document.createElement('br'));
+        codigo.textContent = String(evento.codigo ?? '');
+        item.appendChild(codigo);
+        contenido.appendChild(item);
+      });
 
-    if ((d + primerDiaSemana) % 7 === 0 && d < diasMes) {
-      html += '</tr><tr>';
+      celda.appendChild(contenido);
+      fila.appendChild(celda);
     }
+    tabla.appendChild(fila);
   }
-
-  const celdasActuales = primerDiaSemana + diasMes;
-  const celdasFaltantes = (7 - (celdasActuales % 7)) % 7;
-  for (let i = 0; i < celdasFaltantes; i++) {
-    html += '<td></td>';
-  }
-
-  html += '</tr></table>';
-  document.getElementById('calendarioMensual').innerHTML = html;
+  document.getElementById('calendarioMensual').replaceChildren(tabla);
 }
 
 // cargar datos y permitir cambiar mes

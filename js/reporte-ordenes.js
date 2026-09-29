@@ -8,9 +8,11 @@ const monthGroups=rows=>group(rows,x=>x.date.slice(0,7)).sort((a,b)=>a[0].locale
 const priorityOrder=['Alta','Media','Baja'];
 const priorityLabel=value=>{const normalized=String(value||'Sin prioridad').trim().toLowerCase();if(normalized==='critica'||normalized==='crítica'||normalized==='urgente')return 'Crítica/Urgente';return normalized.replace(/^./,letter=>letter.toUpperCase())};
 const priorityGroups=rows=>{const totals=new Map(priorityOrder.map(priority=>[priority,0]));let criticalUrgent=0;rows.forEach(row=>{const priority=priorityLabel(row.priority);if(priority==='Crítica/Urgente')criticalUrgent++;else totals.set(priority,(totals.get(priority)||0)+1)});totals.set('Crítica/Urgente',criticalUrgent);return [...totals.entries()]};
+function escapeHtml(value){return String(value??'').replace(/[&<>"']/g,character=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]))}
 function normalizeOrder(order){
  const date=String(order.fecha_inicio||'').slice(0,10);
- return {id:order.id,date,sector:order.sector||'Sin sector',status:order.progreso||'Sin estado',priority:order.prioridad||'Sin prioridad',support:order.apoyo||'Sin apoyo',owner:order.responsable||'Sin responsable',machine:order.maquina_equipo||'Sin equipo',hours:Number(order.horas)||0,downtime:Number(order.horas_paro)||0,monthHours:Number(order.horas_mes)||0,cost:Number(order.total_costo)||0};
+ const text=value=>escapeHtml(value||'');
+ return {id:Number(order.id)||0,date:escapeHtml(date),sector:text(order.sector)||'Sin sector',status:text(order.progreso)||'Sin estado',priority:text(order.prioridad)||'Sin prioridad',support:text(order.apoyo)||'Sin apoyo',owner:text(order.responsable)||'Sin responsable',machine:text(order.maquina_equipo)||'Sin equipo',hours:Number(order.horas)||0,downtime:Number(order.horas_paro)||0,monthHours:Number(order.horas_mes)||0,cost:Number(order.total_costo)||0};
 }
 async function loadOrders(){
  if(!localStorage.getItem('token')){if(new URLSearchParams(window.location.search).has('embed')){$('#dashboard').innerHTML='<div class="empty session-required">Debe iniciar sesión para visualizar el reporte.</div>';return false}window.location.href='../index.html';return false}

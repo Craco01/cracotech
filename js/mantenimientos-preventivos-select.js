@@ -83,10 +83,14 @@ async function cargarSelectMantenimientosPreventivos(selectId = 'maquina') {
 
       resultados.forEach(item => {
         const option = document.createElement('li');
+        const descripcion = document.createElement('span');
+        const codigo = document.createElement('small');
         option.className = 'select-buscador-opcion';
         option.setAttribute('role', 'option');
         option.tabIndex = -1;
-        option.innerHTML = `<span>${etiqueta(item)}</span><small>${item.codigo || 'Sin código'}</small>`;
+        descripcion.textContent = etiqueta(item);
+        codigo.textContent = item.codigo || 'Sin código';
+        option.append(descripcion, codigo);
 
         option.addEventListener('mousedown', event => {
           event.preventDefault();
