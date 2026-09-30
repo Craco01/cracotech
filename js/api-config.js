@@ -34,10 +34,9 @@ function clearExpiredSession() {
     if (dashboard) dashboard.innerHTML = '<div class="empty session-required">Debe iniciar sesión para visualizar el reporte.</div>';
     return;
   }
-  if (!window.location.pathname.endsWith('/index.html') && window.location.pathname !== '/') {
-    window.location.href = '../index.html';
-  } else {
-    window.location.reload();
+  const currentPath = window.location.pathname;
+  if (!currentPath.endsWith('/upkeepmv.html')) {
+    window.location.href = currentPath.includes('/pages/') ? '../upkeepmv.html' : './upkeepmv.html';
   }
 }
 
