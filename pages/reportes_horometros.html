@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reportes de mantenimiento</title>
+  <link rel="stylesheet" href="../css/lista_solicitudes.css">
+  <link rel="icon" href="../img/Logo.png" type="image/png" sizes="32x32">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/reportes.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="../js/api-config.js"></script>
+</head>
+<body>
+  <main id="reportes-horometros-app"></main>
+
+  <template id="reporte-compresores">
+    <div class="report-container">
+      <h2>Mantenimiento crítico — Compresores</h2>
+      <div id="estado" class="status">Cargando...</div>
+      <div class="report-table-wrap"><table id="tablaReporte" class="report-table"><thead></thead><tbody></tbody></table><div id="vacio" class="empty" hidden>Sin datos para mostrar.</div></div>
+    </div>
+  </template>
+
+  <template id="reporte-generadores">
+    <div class="report-container">
+      <h2>Mantenimiento crítico — Grupos generadores</h2>
+      <div id="estado" class="status">Cargando...</div>
+      <div class="report-table-wrap"><table id="tablaReporte" class="report-table"><thead></thead><tbody></tbody></table><div id="vacio" class="empty" hidden>Sin datos para mostrar.</div></div>
+    </div>
+  </template>
+
+  <template id="reporte-datos">
+    <div class="report-container">
+      <h2>Reporte de Horómetros — Datos brutos</h2>
+      <div id="estado" class="status">Cargando...</div>
+      <div class="report-table-wrap"><table id="tablaReporte" class="report-table"><thead></thead><tbody></tbody></table><div id="vacio" class="empty" hidden>Sin datos para mostrar.</div></div>
+    </div>
+  </template>
+
+  <template id="reporte-turnos">
+    <div class="report-container">
+      <h2>Reporte de Horómetros — Horas trabajadas por turno</h2>
+      <div class="report-toolbar"><div id="filtrosReporte" class="report-filters" aria-label="Filtros del reporte"><label for="filtroMes">Mes: <select id="filtroMes"></select></label><label for="filtroAnio">Año: <select id="filtroAnio"></select></label></div></div>
+      <div id="estado" class="status">Cargando...</div>
+      <div class="report-table-wrap"><table id="tablaReporte" class="report-table"><thead></thead><tbody></tbody></table><div id="vacio" class="empty" hidden>Sin datos para mostrar.</div></div>
+    </div>
+  </template>
+
+  <script src="../js/reportes-horometros-selector.js"></script>
+  <script src="../js/site-layout.js"></script>
+  <script src="../js/login-modal.js"></script>
+  <script src="../js/nav-responsive.js"></script>
+</body>
+</html>

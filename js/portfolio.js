@@ -33,3 +33,10 @@ const observer = new IntersectionObserver((entries) => {
 }, { rootMargin: '-40% 0px -55% 0px' });
 
 sections.forEach(section => observer.observe(section));
+
+document.addEventListener('keydown', event => {
+  if (event.ctrlKey && event.altKey && !event.shiftKey && !event.metaKey && event.key.toLowerCase() === 'u') {
+    event.preventDefault();
+    document.getElementById('adminUsersShortcut').click();
+  }
+});

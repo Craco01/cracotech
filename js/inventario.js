@@ -182,7 +182,7 @@ document.getElementById("inventario-modal-form").addEventListener("submit", asyn
     cerrarInventarioModal();
   } catch (error) {
     console.error("Error guardando inventario:", error);
-    alert(error.message || "No se pudo actualizar el dato");
+    await window.siteDialog.alert(error.message || "No se pudo actualizar el dato");
   } finally {
     botonGuardar.disabled = false;
   }

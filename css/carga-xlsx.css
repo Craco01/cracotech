@@ -1,0 +1,46 @@
+:root{--bg:#eef1f5;--ink:#1b2430;--mut:#5b6675;--line:#d3d9e2;--card:rgba(255,255,255,.95);--ac:#0a6b0a;--bad:#b42318;--warn:#9a6700;--ok:#13795b}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:760px;margin:0 auto;padding:32px 20px 64px}
+h1{font-size:24px;margin:0 0 4px}
+.sub{margin:0 0 24px;color:var(--mut)}
+section{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:18px 20px;margin-bottom:16px}
+h2{font-size:16px;margin:0 0 12px}
+.drop{display:block;border:2px dashed var(--line);border-radius:8px;padding:28px;text-align:center;cursor:pointer;color:var(--mut)}
+.drop:hover,.drop.on{border-color:var(--ac);color:var(--ink)}
+.drop input{display:none}
+#campos-detalle{margin-top:14px}
+#campos-detalle summary{color:var(--ac);font-weight:600;cursor:pointer}
+.hint{color:var(--mut);font-size:14px}
+#campos ul{columns:2;column-gap:28px}
+#campos li{break-inside:avoid;margin-bottom:4px}
+.stats{display:flex;flex-wrap:wrap;gap:10px 28px}
+.stats b{display:block;font-size:22px}
+.stats span{color:var(--mut);font-size:13px}
+ul{margin:8px 0 0;padding-left:18px}
+.bad{color:var(--bad)}.warn{color:var(--warn)}.ok{color:var(--ok)}
+button{font:inherit;background:var(--ac);color:#fff;border:0;border-radius:6px;padding:10px 18px;cursor:pointer}
+button:disabled{background:#9aa5b1;cursor:not-allowed}
+button:focus-visible,label:focus-within{outline:2px solid var(--ac);outline-offset:2px}
+progress{width:100%;height:14px;margin:12px 0 6px}
+#log{font:13px/1.5 ui-monospace,Consolas,monospace;max-height:180px;overflow:auto;white-space:pre-wrap;color:var(--mut)}
+[hidden]{display:none!important}
+#masterKeyModal.login-modal{inset:0;width:100%;height:100dvh;min-height:0;padding:24px;overflow-y:auto;background:rgba(7,40,133,.48);backdrop-filter:blur(3px)}
+#masterKeyModal.login-modal.is-visible{display:grid;place-items:center}
+#masterKeyModal .login-modal-content{width:min(440px,100%);padding:28px;border:1px solid rgba(7,40,133,.18);border-top:3px solid #0a6b0a;border-radius:8px;background:rgba(245,245,245,.98);box-shadow:0 20px 56px rgba(7,40,133,.24);color:#1b2430}
+#masterKeyModal .master-key-heading{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;align-items:start;margin-bottom:22px}
+#masterKeyModal .master-key-icon{display:grid;place-items:center;width:44px;height:44px;border-radius:10px;background:#fff8db;color:var(--warn);font-size:18px}
+#masterKeyModal .master-key-heading h2{margin:0 30px 5px 0;padding:0;text-align:left;font-size:21px;line-height:1.25;color:#1b2430}
+#masterKeyModal .master-key-heading p{margin:0;color:#5b6675;font-size:14px;line-height:1.45}
+#masterKeyModal .login-modal-content label{margin-bottom:8px;color:#263342}
+#masterKeyModal .login-modal-content input{min-height:46px;margin:0;border:1px solid #aeb8c5;border-radius:6px;background:#fff}
+#masterKeyModal .login-modal-content input:focus{outline:3px solid rgba(10,107,10,.16);border-color:#0a6b0a}
+#masterKeyModal .master-key-actions{display:flex;gap:10px;margin-top:22px}
+#masterKeyModal .master-key-actions button{flex:1;width:auto;min-height:44px;margin:0;padding:10px 14px;border:1px solid transparent;border-radius:6px;font-size:14px;transition:background-color .15s ease,transform .15s ease}
+#masterKeyModal .master-key-actions .master-key-cancel{border-color:#cbd5e1;background:#e8edf2;color:#263342}
+#masterKeyModal .master-key-actions .master-key-cancel:hover{transform:none;background:#dce4ec;color:#1b2430}
+#masterKeyModal .master-key-actions .master-key-confirm{background:var(--ac);color:#fff}
+#masterKeyModal .master-key-actions .master-key-confirm:hover{transform:translateY(-1px);background:#075c24;color:#fff}
+#masterKeyModal .login-close{display:grid;place-items:center;top:12px;right:12px;width:32px;height:32px;min-height:32px;margin:0;padding:0;border:0;border-radius:6px;background:transparent;color:#637083;font-size:23px;line-height:1;box-shadow:none}
+#masterKeyModal .login-close:hover{transform:none;background:#eef2f6;color:#263342}
+@media(max-width:560px){#campos ul{columns:1}#masterKeyModal .login-modal-content{padding:24px 20px}#masterKeyModal .master-key-actions{flex-direction:column-reverse}}

@@ -1,6 +1,13 @@
-document.addEventListener('DOMContentLoaded', () => {
+function initAsignarMPP() {
   const form = document.getElementById('formAsignarMPP');
   if (!form) return;
+  if (form.dataset.initialized === 'true') return;
+  form.dataset.initialized = 'true';
+
+  window.cargarOpcionesEmpleados([
+    { id: 'responsable', placeholder: 'Asignar técnico' },
+    { id: 'apoyo', placeholder: 'Sin apoyo' }
+  ]).catch(error => console.error('Error cargando empleados para MPP:', error));
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -33,4 +40,11 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   });
-});
+}
+
+window.initAsignarMPP = initAsignarMPP;
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initAsignarMPP);
+} else {
+  initAsignarMPP();
+}

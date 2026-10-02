@@ -36,7 +36,7 @@ function clearExpiredSession() {
   }
   const currentPath = window.location.pathname;
   if (!currentPath.endsWith('/upkeepmv.html')) {
-    window.location.href = currentPath.includes('/pages/') ? '../upkeepmv.html' : './upkeepmv.html';
+    window.location.href = currentPath.includes('/pages/') ? './upkeepmv.html' : './pages/upkeepmv.html';
   }
 }
 

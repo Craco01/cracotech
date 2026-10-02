@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Administrar usuarios y empleados</title>
+  <link rel="stylesheet" href="../css/site-dialogs.css">
+  <link rel="stylesheet" href="../css/administrar-usuarios.css">
+</head>
+<body>
+<main>
+  <header>
+    <div><div class="eyebrow">Herramienta de administración</div><h1>Usuarios y empleados</h1><p class="subtle">Consulta y administra las cuentas y el personal de mantenimiento.</p></div>
+  </header>
+
+  <section class="panel" id="loginPanel">
+    <h2>Sesión de administración</h2>
+    <p class="subtle">Inicia sesión con una cuenta cuyo rol sea <strong>administrador</strong>.</p>
+    <div class="session">
+      <label>URL de la API<input id="apiBase" autocomplete="url"></label>
+      <label>Usuario<input id="loginUser" autocomplete="username"></label>
+      <label>Contraseña<input id="loginPassword" type="password" autocomplete="current-password"></label>
+    </div>
+    <div class="actions"><button id="loginButton">Iniciar sesión</button></div>
+    <div class="status" id="loginStatus" aria-live="polite"></div>
+  </section>
+
+  <section class="panel hidden" id="adminPanel">
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:start;flex-wrap:wrap"><div><h2>Cuenta y empleado</h2><p class="subtle">Una operación guarda ambos registros. El usuario de la cuenta se sincroniza con empleados.user.</p></div><button class="secondary" id="logoutButton">Cerrar sesión</button></div>
+    <form id="accountForm">
+      <div class="grid">
+        <label>Usuario<input id="username" maxlength="50" required autocomplete="off"></label>
+        <label>Rol<select id="role" required><option value="viewer">viewer</option><option value="editor">editor</option><option value="administrador">administrador</option></select></label>
+        <label>Contraseña <span class="subtle" id="passwordHint">Obligatoria; 3 a 9 caracteres alfanuméricos</span><input id="password" type="password" minlength="3" maxlength="9" pattern="[A-Za-z0-9]{3,9}" autocomplete="new-password" required></label>
+        <label>Confirmar contraseña<input id="passwordConfirm" type="password" minlength="3" maxlength="9" pattern="[A-Za-z0-9]{3,9}" autocomplete="new-password" required></label>
+        <label>Nombre y apellido<input id="employeeName" maxlength="255" required></label>
+        <label>CI<input id="employeeCi" type="number" step="1"></label>
+        <label>Legajo<input id="employeeLegajo" type="number" step="1"></label>
+        <label>Cargo<input id="employeeCargo" maxlength="100"></label>
+        <label>Salario<input id="employeeSalary" type="number" min="0" step="0.01"></label>
+      </div>
+      <div class="actions"><button id="saveButton" type="submit">Crear cuenta y empleado</button><button class="secondary" id="clearButton" type="button">Limpiar</button></div>
+    </form>
+    <div class="master"><label>Clave maestra requerida para cada operación<input id="masterPassword" type="password" autocomplete="off" placeholder="Se solicita nuevamente después de cada acción"></label></div>
+    <p class="selection-indicator hidden" id="accountSelection" aria-live="polite"><strong>Registro seleccionado</strong><span id="accountSelectionName"></span></p>
+    <div class="actions"><button id="loadButton" type="button">Actualizar listado</button><button id="resetPasswordOpen" class="secondary" type="button" disabled>Restablecer contraseña</button><button class="danger" id="deleteButton" type="button" disabled>Eliminar seleccionado</button></div>
+    <section class="reset-module hidden" id="resetPasswordPanel" aria-labelledby="resetPasswordTitle">
+      <h3 id="resetPasswordTitle">Restablecer contraseña</h3>
+      <p class="subtle" id="resetPasswordAccount"></p>
+      <form id="resetPasswordForm">
+        <div class="grid">
+          <label>Nueva contraseña<input id="resetPassword" type="password" minlength="3" maxlength="9" pattern="[A-Za-z0-9]{3,9}" autocomplete="new-password" required></label>
+          <label>Confirmar nueva contraseña<input id="resetPasswordConfirm" type="password" minlength="3" maxlength="9" pattern="[A-Za-z0-9]{3,9}" autocomplete="new-password" required></label>
+        </div>
+        <div class="actions"><button type="submit">Guardar nueva contraseña</button><button class="secondary" id="cancelPasswordReset" type="button">Cancelar</button></div>
+      </form>
+    </section>
+    <div class="status" id="adminStatus" aria-live="polite"></div>
+    <div class="table-wrap"><table><thead><tr><th>Usuario</th><th>Rol</th><th>Empleado</th><th>Cargo</th><th>Vínculo</th><th>Acción</th></tr></thead><tbody id="accountsBody"><tr><td colspan="6">Inicia sesión para cargar las cuentas y empleados.</td></tr></tbody></table></div>
+  </section>
+</main>
+<script src="../js/api-config.js"></script>
+<script src="../js/site-dialogs.js"></script>
+<script src="../js/administrar-usuarios.js"></script>
+</body>
+</html>

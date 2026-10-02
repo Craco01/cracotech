@@ -1,6 +1,6 @@
-body {
+#solicitudes-app {
   font-family: Arial, sans-serif;
-  background-color: #eef2f7;
+  background-color: transparent;
   margin: 0;
   padding: 20px;
 }
@@ -154,22 +154,24 @@ th, td {
 .modal-entrega {
   position: fixed;
   inset: 0;
-  z-index: 20;
+  z-index: 2000;
   display: grid;
   place-items: center;
   padding: 16px;
-  background: rgba(7, 40, 133, 0.35);
+  background: rgba(7, 40, 133, 0.48);
+  backdrop-filter: blur(3px);
 }
 .modal-entrega__contenido {
   width: min(620px, calc(100vw - 32px));
   box-sizing: border-box;
   padding: 26px;
-  border: 2px solid rgba(7, 40, 133, 0.7);
-  border-radius: 10px;
+  border: 1px solid rgba(7, 40, 133, 0.18);
+  border-top: 3px solid #0a6b0a;
+  border-radius: 8px;
   background: rgba(245, 245, 245, 0.98);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 20px 56px rgba(7, 40, 133, 0.24);
 }
-.modal-entrega__contenido h3 { margin: 0 0 10px; color: #072885; font-size: 1.35rem; }
+.modal-entrega__contenido h3 { margin: 0 0 10px; color: #072885; font-size: 1.2rem; }
 .modal-entrega__contenido p { margin: 0 0 22px; color: #334155; font-size: 15px; line-height: 1.45; }
 .modal-entrega__acciones { display: flex; justify-content: flex-start; gap: 8px; flex-wrap: nowrap; overflow-x: auto; }
 .modal-entrega__acciones button {
@@ -188,8 +190,8 @@ th, td {
 .modal-entrega__acciones button:focus-visible { outline: 3px solid rgba(15, 122, 50, 0.3); outline-offset: 2px; }
 #asignarSolicitud { order: 1; background: #0b3d91; }
 #cerrarSolicitud { order: 2; background: #0f7a32; }
-#reprogramarSolicitud { order: 3; background: #7357a8; }
-#cancelarEntrega { order: 4; border-color: #64748b; background: #e5e7eb; color: #1f2937; }
+#reprogramarSolicitud { order: 3; background: #072885; }
+#cancelarEntrega { order: 4; border-color: #cbd5e1; background: #e8edf2; color: #1f2937; }
 #imprimirEntrega { order: 1; background: #0f7a32; }
 .modal-entrega--pendiente #imprimirEntrega { order: 5; }
 #tablaOrdenes th, 

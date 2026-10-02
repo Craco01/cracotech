@@ -2,7 +2,9 @@
   if (document.body && document.body.hasAttribute('data-no-global-layout')) return;
 
   const isPagesDir = window.location.pathname.includes('/pages/');
-  const root = isPagesDir ? '../' : './';
+  const portalRoot = isPagesDir ? './' : './pages/';
+  const authorRoot = isPagesDir ? '../' : './';
+  const assetRoot = isPagesDir ? '../' : './';
 
   function buildLayoutHtml() {
     return `
@@ -13,21 +15,21 @@
           </button>
           <div class="nav-menu-wrap">
             <ul class="list-bar">
-              <li><a href="${root}upkeepmv.html">Inicio</a></li>
-              <li><a href="${root}upkeepmv.html#solicitudes">Solicitudes</a></li>
-              <li><a href="${root}upkeepmv.html#mpp">MPP</a></li>
-              <li><a href="${root}upkeepmv.html#informaciones">Informaciones</a></li>
-              <li><a href="${root}upkeepmv.html#form-adds">Formularios</a></li>
-              <li><a href="${root}upkeepmv.html#otros">Otros</a></li>
-              <li><a href="${root}upkeepmv.html#contacto">Contacto</a></li>
-              <li><a href="${root}index.html">Autor</a></li>
+              <li><a href="${portalRoot}upkeepmv.html">Inicio</a></li>
+              <li><a href="${portalRoot}upkeepmv.html#solicitudes">Solicitudes</a></li>
+              <li><a href="${portalRoot}upkeepmv.html#mpp">MPP</a></li>
+              <li><a href="${portalRoot}upkeepmv.html#informaciones">Informaciones</a></li>
+              <li><a href="${portalRoot}upkeepmv.html#form-adds">Formularios</a></li>
+              <li><a href="${portalRoot}upkeepmv.html#otros">Otros</a></li>
+              <li><a href="${portalRoot}upkeepmv.html#contacto">Contacto</a></li>
+              <li><a href="${authorRoot}index.html">Autor</a></li>
             </ul>
             <div id="nav-login"></div>
           </div>
         </nav>
 
         <div class="banner">
-          <div class="logo"><img height="150" width="150" src="${root}img/Logo.png" alt="logo metalurgica vera"></div>
+          <div class="logo"><img height="150" width="150" src="${assetRoot}img/Logo.png" alt="logo metalurgica vera"></div>
           <div class="hero">
             <h1>Mantenimiento Metalúrgica Vera S.A.E.</h1>
             <p>Garantizamos la confiabilidad, disponibilidad y eficiencia de los equipos e instalaciones industriales.</p>

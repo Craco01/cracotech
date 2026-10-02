@@ -1,6 +1,8 @@
-document.addEventListener('DOMContentLoaded', () => {
+function initMantenimientoCriticos() {
   const form = document.getElementById('mantenimientoCriticosForm');
   if (!form) return;
+  if (form.dataset.initialized === 'true') return;
+  form.dataset.initialized = 'true';
 
   const steps = Array.from(form.querySelectorAll('.form-step'));
   const progressItems = Array.from(form.querySelectorAll('.form-progress li'));
@@ -55,13 +57,20 @@ document.addEventListener('DOMContentLoaded', () => {
       form.reset();
       idempotencyKey = window.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`;
       showStep(0);
-      window.alert(data.duplicate ? 'Este registro ya había sido recibido.' : 'Mantenimiento crítico registrado correctamente.');
+      await window.siteDialog.alert(data.duplicate ? 'Este registro ya había sido recibido.' : 'Mantenimiento crítico registrado correctamente.');
     } catch (error) {
-      window.alert(error.message || 'No se pudo registrar el mantenimiento crítico.');
+      await window.siteDialog.alert(error.message || 'No se pudo registrar el mantenimiento crítico.');
     } finally {
       submitButton.disabled = false;
     }
   });
 
   showStep(0);
-});
+}
+
+window.initMantenimientoCriticos = initMantenimientoCriticos;
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initMantenimientoCriticos);
+} else {
+  initMantenimientoCriticos();
+}

@@ -142,7 +142,7 @@ function renderNav() {
     });
     document.getElementById('logoutDiv').addEventListener('click', () => {
       localStorage.removeItem('token'); localStorage.removeItem('username'); localStorage.removeItem('role');
-      form.reset(); window.location.reload();
+      form.reset(); window.location.href = './upkeepmv.html';
     });
     const changePasswordButton = document.getElementById('changePasswordButton');
     if (changePasswordButton) {

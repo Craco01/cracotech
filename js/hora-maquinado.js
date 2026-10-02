@@ -1,6 +1,8 @@
-document.addEventListener('DOMContentLoaded', () => {
+function initHoraMaquinado() {
   const form = document.getElementById('horasMaquinadoForm');
   if (!form) return;
+  if (form.dataset.initialized === 'true') return;
+  form.dataset.initialized = 'true';
 
   const steps = Array.from(form.querySelectorAll('.form-step'));
   const progressItems = Array.from(document.querySelectorAll('.form-progress li'));
@@ -64,13 +66,20 @@ document.addEventListener('DOMContentLoaded', () => {
       form.reset();
       idempotencyKey = window.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`;
       showStep(0);
-      window.alert(data.duplicate ? 'Este registro ya había sido recibido.' : 'Horómetros registrados correctamente.');
+      await window.siteDialog.alert(data.duplicate ? 'Este registro ya había sido recibido.' : 'Horómetros registrados correctamente.');
     } catch (error) {
-      window.alert(error.message || 'No se pudieron registrar los horómetros.');
+      await window.siteDialog.alert(error.message || 'No se pudieron registrar los horómetros.');
     } finally {
       submitButton.disabled = false;
     }
   });
 
   showStep(0);
-});
+}
+
+window.initHoraMaquinado = initHoraMaquinado;
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initHoraMaquinado);
+} else {
+  initHoraMaquinado();
+}
