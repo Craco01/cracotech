@@ -136,9 +136,15 @@ async function cargarSelectMantenimientosPreventivos(selectId = 'maquina') {
 
 function inicializarSelectMantenimientosPreventivos() {
   const select = document.getElementById('maquina');
-  if (select) {
+  if (select && select.dataset.initialized !== 'true') {
+    select.dataset.initialized = 'true';
     cargarSelectMantenimientosPreventivos('maquina');
   }
 }
 
-document.addEventListener('DOMContentLoaded', inicializarSelectMantenimientosPreventivos);
+window.inicializarSelectMantenimientosPreventivos = inicializarSelectMantenimientosPreventivos;
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', inicializarSelectMantenimientosPreventivos);
+} else {
+  inicializarSelectMantenimientosPreventivos();
+}

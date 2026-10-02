@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formularios de Solicitudes</title>
+  <link rel="icon" href="../img/Logo.png" type="image/png" sizes="32x32">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="../js/api-config.js"></script>
+  <link rel="stylesheet" href="../css/site-dialogs.css">
+  <script src="../js/site-dialogs.js"></script>
+</head>
+<body>
+  <div id="solicitudes-app" data-seccion="formularios"></div>
+
+  <template id="formularios-solicitud">
+    <main class="solicitud">
+      <div class="titulo"><h2>Registro de Solicitud de Mantenimiento</h2></div>
+      <form action="/api/ordenes" method="post">
+        <div>
+          <label for="maquina">Máquina/Equipo</label>
+          <select id="maquina" name="componente" required></select>
+        </div>
+        <label for="declarado-radio">¿Necesita agregar una descripción al nombre?  </label><input type="checkbox" id="declarado-radio" name="declarado-radio">
+        <div class="declarado">
+          <label for="declarado">Nombre Declarado *</label>
+          <input type="text" id="declarado" name="declarado" placeholder="*Solo completar si se selecciona servicio">
+        </div>
+        <div class="campo-ancho">
+          <label for="averia">Descripcion de la averia</label>
+          <textarea id="averia" name="averia" rows="5" placeholder="Describa la averia o el problema detectado" required></textarea>
+        </div>
+        <div>
+          <label for="solicitante">Solicitante</label>
+          <input type="text" id="solicitante" name="solicitante" placeholder="Nombre del solicitante" required>
+        </div>
+        <div>
+          <label for="contacto">Contacto de operador</label>
+          <small id="contacto-ayuda" class="field-description">Número de teléfono para reporte de reparación, no obligatorio.</small>
+          <input type="tel" id="contacto" name="contacto" inputmode="numeric" maxlength="10" pattern="09[6789][0-9]{7}" placeholder="Ejemplo: 0981456789" aria-describedby="contacto-ayuda">
+        </div>
+        <div>
+          <label for="sector">Sector</label>
+          <select id="sector" name="sector" required>
+            <option value="" disabled selected>--Asignar Sector--</option>
+            <option value="1">Mantenimiento</option>
+            <option value="2">Maquinado</option>
+            <option value="3">Armado</option>
+            <option value="4">Accesorios</option>
+            <option value="5">Herrería</option>
+            <option value="6">Pintura</option>
+            <option value="7">Logística</option>
+            <option value="8">Galvamax</option>
+            <option value="9">Administración</option>
+            <option value="10">Obras</option>
+          </select>
+        </div>
+        <div>
+          <label for="categoria">Categoria</label>
+          <select id="categoria" name="categoria" required>
+            <option value="1">Correctivo</option>
+            <option value="2">Preventivo</option>
+            <option value="3">Predictivo</option>
+          </select>
+        </div>
+        <div>
+          <label for="prioridad">Prioridad</label>
+          <select id="prioridad" name="prioridad">
+            <option value="">Automática</option>
+            <option value="Baja">Baja</option>
+            <option value="Media">Media</option>
+            <option value="Alta">Alta</option>
+            <option value="Crítica">Crítica</option>
+          </select>
+        </div>
+        <button type="submit">Enviar solicitud</button>
+      </form>
+    </main>
+  </template>
+
+  <template id="formularios-asignar">
+    <main class="solicitud">
+      <div class="titulo"><h2>Asignación de Solicitud de Mantenimiento</h2></div>
+      <form action="/api/ordenes/asignacion" method="post">
+        <div>
+          <label for="maquina">Solicitud/Maquina</label>
+          <select id="maquina" name="componente"></select>
+        </div>
+        <p id="info-averia" class="info-averia"></p>
+        <div>
+          <label for="responsable">Responsable</label>
+          <select id="responsable" name="responsable">
+            <option value="">Asignar técnico</option>
+          </select>
+        </div>
+        <div>
+          <label for="apoyo">Apoyo</label>
+          <select id="apoyo" name="apoyo">
+            <option value="">Sin apoyo</option>
+          </select>
+        </div>
+        <button type="submit">Asignar Técnico</button>
+      </form>
+    </main>
+  </template>
+
+  <template id="formularios-cierre">
+    <main class="solicitud">
+      <div class="titulo"><h2>Cierre de Solicitud de Mantenimiento</h2></div>
+      <form action="/api/ordenes/cierre" method="post">
+        <div>
+          <label for="maquina">Solicitud/Maquina</label>
+          <select id="maquina" name="id" required></select>
+        </div>
+        <p id="info-averia" class="info-averia"></p>
+        <div>
+          <label for="apoyo">Apoyo</label>
+          <select id="apoyo" name="apoyo">
+            <option value="">Sin apoyo</option>
+          </select>
+        </div>
+        <div class="campo-ancho">
+          <label for="reparación">Reparación Realizada</label>
+          <textarea id="reparación" name="reparacion" rows="5" placeholder="Describa la intervencion realizada o la reparación realizada" required></textarea>
+        </div>
+        <div class="campo-ancho">
+          <label for="tablaCostos">Costeo de Repuestos</label>
+          <table class="tabla-costos">
+            <thead><tr><th>Producto</th><th>Cantidad</th><th>Costo Unitario</th><th>Total</th><th>Acción</th></tr></thead>
+            <tbody id="tablaBody"></tbody>
+          </table>
+          <div id="resultado"><span id="costoTotal">0</span></div>
+          <input type="hidden" id="unidad_mo" name="unidad_mo" value="0">
+          <input type="hidden" id="costo_repuestos" name="costo_repuestos" value="0">
+        </div>
+        <datalist id="listaProductos"></datalist>
+        <div>
+          <label for="horas">Horas empleadas en la reparación</label>
+          <input type="number" name="horas" id="horas" max="300" min="1" step="1" inputmode="numeric" placeholder="Ej: 8" required>
+        </div>
+        <div>
+          <label for="tipo">Tipo</label>
+          <select id="tipo" name="clasificacion" required>
+            <option value="Electromecanico">Electromecanico</option>
+            <option value="Electrico">Electrico</option>
+            <option value="Mecanico">Mecanico</option>
+            <option value="Hidraulico/Neumatico">Hidraulico/Neumatico</option>
+            <option value="Eletronico">Eletronico</option>
+            <option value="Otros">Otros</option>
+          </select>
+        </div>
+        <div class="campo-ancho">
+          <label for="observacion">Observaciones</label>
+          <textarea id="observacion" name="notas" rows="5" placeholder="Deje aca las observacions que desee acotar"></textarea>
+        </div>
+        <button type="submit">Cerrar solicitud</button>
+      </form>
+    </main>
+  </template>
+
+  <template id="formularios-reprogramar">
+    <main class="solicitud">
+      <div class="titulo"><h2>Reprogramación de Solicitud de Mantenimiento</h2></div>
+      <form action="/api/ordenes/cierre" method="post" data-reprogramar="true">
+        <div>
+          <label for="maquina">Solicitud/Maquina</label>
+          <select id="maquina" name="id" required></select>
+        </div>
+        <p id="info-averia" class="info-averia"></p>
+        <div class="campo-ancho">
+          <label for="observacion">Motivo de reprogramación</label>
+          <textarea id="observacion" name="notas" rows="5" placeholder="Indique el motivo de la reprogramación"></textarea>
+        </div>
+        <button type="submit">Reprogramar solicitud</button>
+      </form>
+    </main>
+  </template>
+
+  <template id="formularios-modificar">
+    <main class="solicitud">
+      <div class="titulo"><h2>Modificar Solicitud de Mantenimiento</h2></div>
+      <form action="/api/ordenes/solicitud" method="post" data-modificacion="true">
+        <div>
+          <label for="ordenSeleccionada">Solicitud a modificar</label>
+          <select id="ordenSeleccionada" name="ordenSeleccionada"></select>
+        </div>
+        <input type="hidden" id="ordenId" name="orden_id" value="">
+        <div>
+          <label for="maquinaEquipo">Máquina/Equipo</label>
+          <select id="maquinaEquipo" name="codigo"></select>
+        </div>
+        <label for="declarado-radio">¿Necesita agregar una descripción al nombre?  </label><input type="checkbox" id="declarado-radio" name="declarado-radio">
+        <div class="declarado">
+          <label for="declarado">Nombre Declarado *</label>
+          <input type="text" id="declarado" name="nombre_declarado" placeholder="*Solo completar si se selecciona servicio">
+        </div>
+        <div class="campo-ancho">
+          <label for="averia">Descripcion de la averia</label>
+          <textarea id="averia" name="averia" rows="5" placeholder="Describa la averia o el problema detectado"></textarea>
+        </div>
+        <div>
+          <label for="solicitante">Solicitante</label>
+          <input type="text" id="solicitante" name="solicitado" placeholder="Nombre del solicitante">
+        </div>
+        <div>
+          <label for="sector">Sector</label>
+          <select id="sector" name="sector">
+            <option value="" disabled selected>--Asignar Sector--</option>
+            <option value="1">Mantenimiento</option>
+            <option value="2">Maquinado</option>
+            <option value="3">Armado</option>
+            <option value="4">Accesorios</option>
+            <option value="5">Herrería</option>
+            <option value="6">Pintura</option>
+            <option value="7">Logística</option>
+            <option value="8">Galvamax</option>
+            <option value="9">Administración</option>
+            <option value="10">Obras</option>
+          </select>
+        </div>
+        <div>
+          <label for="categoria">Categoria</label>
+          <select id="categoria" name="categoria">
+            <option value="1">Correctivo</option>
+            <option value="2">Preventivo</option>
+            <option value="3">Predictivo</option>
+          </select>
+        </div>
+        <button type="submit">Modificar solicitud</button>
+      </form>
+      <div id="confirmacionModificacion" class="login-modal" role="dialog" aria-modal="true" aria-labelledby="tituloConfirmacion" hidden>
+        <div class="login-modal-content">
+          <h2 id="tituloConfirmacion">¿Quieres registrar la modificación?</h2>
+          <p id="contadorConfirmacion">Podrás confirmar en 10 segundos.</p>
+          <button type="button" id="confirmarModificacion" disabled>SI</button>
+          <button type="button" id="cancelarModificacion">NO</button>
+        </div>
+      </div>
+    </main>
+  </template>
+
+  <template id="formularios-baja">
+    <main class="solicitud">
+      <div class="titulo"><h2>Formulario de solicitud de Baja de equipos</h2></div>
+      <form action="/api/ordenes/baja" method="post" id="bajaForm">
+        <div>
+          <label for="maquina">Solicitud/Maquina</label>
+          <select id="maquina" name="id" required></select>
+        </div>
+        <p id="info-averia" class="info-averia"></p>
+        <div class="campo-ancho">
+          <label for="notas">Motivo de la baja</label>
+          <textarea id="notas" name="notas" rows="5" placeholder="Describa la razón para dar de baja el equipo" required></textarea>
+        </div>
+        <button type="submit">Equipo para Baja</button>
+      </form>
+      <div id="masterKeyModal" class="login-modal" role="dialog" aria-modal="true" aria-labelledby="masterKeyTitulo" aria-hidden="true">
+        <div class="login-modal-content">
+          <button id="closeMasterKeyModal" class="login-close" type="button" aria-label="Cerrar">&times;</button>
+          <h2 id="masterKeyTitulo">Confirmar baja de equipo</h2>
+          <form id="masterKeyForm">
+            <label for="masterKey">Clave maestra</label>
+            <input type="password" id="masterKey" autocomplete="current-password" required>
+            <div id="masterKeyMensaje" role="alert" aria-live="polite"></div>
+            <button type="submit">Confirmar baja</button>
+            <button id="cancelMasterKey" type="button">Cancelar</button>
+          </form>
+        </div>
+      </div>
+    </main>
+  </template>
+
+  <script src="../js/site-layout.js"></script>
+  <script src="../js/login-modal.js"></script>
+  <script src="../js/nav-responsive.js"></script>
+  <script src="../js/empleados-options.js"></script>
+  <script src="../js/solicitudes.js"></script>
+</body>
+</html>

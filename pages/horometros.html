@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mantenimiento Metalúrgica Vera S.A.E.</title>
+  <link rel="icon" href="../img/Logo.png" type="image/png" sizes="32x32">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="../js/api-config.js"></script>
+</head>
+<body>
+  <main id="horometros-app"></main>
+
+  <template id="horometros-maquinado">
+    <div class="horas-maquinado__card">
+      <div class="horas-maquinado__heading">
+        <span class="horas-maquinado__icon" aria-hidden="true"><i class="fa-solid fa-gears"></i></span>
+        <div>
+          <h2>Registro de horas de máquinas</h2>
+          <p>Complete las horas acumuladas de cada equipo para registrar la jornada.</p>
+        </div>
+      </div>
+      <div class="form-progress" aria-label="Progreso del formulario">
+        <div class="form-progress__bar" aria-hidden="true"><span id="formProgressBar"></span></div>
+        <ol>
+          <li class="is-active"><span>1</span><strong>Línea Perfil Alma Llena</strong></li>
+          <li><span>2</span><strong>Accesorios y Pintura</strong></li>
+          <li><span>3</span><strong>Corte y Plegado</strong></li>
+        </ol>
+      </div>
+      <form id="horasMaquinadoForm" action="/api/horometros-maquinas" method="post" novalidate>
+        <section class="form-step is-active" data-step="1" aria-labelledby="step-one-title">
+          <div class="form-step__heading"><span>Paso 1 de 3</span><h3 id="step-one-title">Linea Perfil Alma LLena</h3></div>
+          <div class="machine-fields">
+            <div><label for="pantografo_gs4000">Pantógrafo GS 4000</label><input id="pantografo_gs4000" type="number" step="0.01" min="0" name="pantografo_gs4000" required></div>
+            <div><label for="procesador_placas_kaltenbach">Procesador de Placas Kaltenbach</label><input id="procesador_placas_kaltenbach" type="number" step="0.01" min="0" name="procesador_placas_kaltenbach" required></div>
+            <div><label for="pantografo_promax200">Pantógrafo PROMAX200</label><input id="pantografo_promax200" type="number" step="0.01" min="0" name="pantografo_promax200" required></div>
+            <div><label for="perforadora_calfran">Perforadora Calfran</label><input id="perforadora_calfran" type="number" step="0.01" min="0" name="perforadora_calfran" required></div>
+            <div><label for="punteadora_hg1500">Punteadora HG 1500</label><input id="punteadora_hg1500" type="number" step="0.01" min="0" name="punteadora_hg1500" required></div>
+            <div><label for="arco_sumergido_cabezal_1s">Arco sumergido (cabezal 1S)</label><input id="arco_sumergido_cabezal_1s" type="number" step="0.01" min="0" name="arco_sumergido_cabezal_1s" required></div>
+            <div><label for="arco_sumergido_cabezal_2n">Arco sumergido (cabezal 2N)</label><input id="arco_sumergido_cabezal_2n" type="number" step="0.01" min="0" name="arco_sumergido_cabezal_2n" required></div>
+            <div><label for="calibradora_perfiles_h">Calibradora de perfiles H</label><input id="calibradora_perfiles_h" type="number" step="0.01" min="0" name="calibradora_perfiles_h" required></div>
+            <div><label for="sierra_taladro_kaltenbach">Sierra Taladro Kaltenbach</label><input id="sierra_taladro_kaltenbach" type="number" step="0.01" min="0" name="sierra_taladro_kaltenbach" required></div>
+            <div><label for="sierra_taladro_ficep">Sierra Taladro Ficep</label><input id="sierra_taladro_ficep" type="number" step="0.01" min="0" name="sierra_taladro_ficep" required></div>
+          </div>
+          <div class="form-actions form-actions--end"><button class="form-button form-button--next" type="button" data-next>Siguiente <i class="fa-solid fa-arrow-right"></i></button></div>
+        </section>
+        <section class="form-step" data-step="2" aria-labelledby="step-two-title" hidden>
+          <div class="form-step__heading"><span>Paso 2 de 3</span><h3 id="step-two-title">Accesorios y Pintura</h3></div>
+          <div class="machine-fields">
+            <div><label for="roscadora_rosquinel">Roscadora Rosquinel (Nueva)</label><input id="roscadora_rosquinel" type="number" step="0.01" min="0" name="roscadora_rosquinel" required></div>
+            <div><label for="granalladora_automatica_kaltenbach">Granalladora Automática Kaltenbach</label><input id="granalladora_automatica_kaltenbach" type="number" step="0.01" min="0" name="granalladora_automatica_kaltenbach" required></div>
+            <div><label for="granalladora_manual">Granalladora Manual</label><input id="granalladora_manual" type="number" step="0.01" min="0" name="granalladora_manual" required></div>
+            <div><label for="cizalla_punzonadora_geka_microcrop36">Cizalla Punzonadora Geka Microcrop 36</label><input id="cizalla_punzonadora_geka_microcrop36" type="number" step="0.01" min="0" name="cizalla_punzonadora_geka_microcrop36" required></div>
+          </div>
+          <div class="form-actions"><button class="form-button form-button--back" type="button" data-previous><i class="fa-solid fa-arrow-left"></i> Anterior</button><button class="form-button form-button--next" type="button" data-next>Siguiente <i class="fa-solid fa-arrow-right"></i></button></div>
+        </section>
+        <section class="form-step" data-step="3" aria-labelledby="step-three-title" hidden>
+          <div class="form-step__heading"><span>Paso 3 de 3</span><h3 id="step-three-title">Corte y Plegado</h3></div>
+          <div class="machine-fields">
+            <div><label for="cizalla_punzonadora_angulos_ficep">Cizalla Punzonadora de Ángulos Ficep</label><input id="cizalla_punzonadora_angulos_ficep" type="number" step="0.01" min="0" name="cizalla_punzonadora_angulos_ficep" required></div>
+            <div><label for="cizalla_punzonadora_geka_hydracrop80">Cizalla Punzonadora Geka Hydracrop 80</label><input id="cizalla_punzonadora_geka_hydracrop80" type="number" step="0.01" min="0" name="cizalla_punzonadora_geka_hydracrop80" required></div>
+            <div><label for="plegadora_newton">Plegadora Newton</label><input id="plegadora_newton" type="number" step="0.01" min="0" name="plegadora_newton" required></div>
+            <div><label for="plegadora_ermarksan">Plegadora Ermarksan</label><input id="plegadora_ermarksan" type="number" step="0.01" min="0" name="plegadora_ermarksan" required></div>
+            <div><label for="guillotina_newton">Guillotina Newton</label><input id="guillotina_newton" type="number" step="0.01" min="0" name="guillotina_newton" required></div>
+            <div><label for="guillotina_ermarksan">Guillotina Ermarksan</label><input id="guillotina_ermarksan" type="number" step="0.01" min="0" name="guillotina_ermarksan" required></div>
+            <div><label for="guillotina_feysama">Guillotina Feysama (Española)</label><input id="guillotina_feysama" type="number" step="0.01" min="0" name="guillotina_feysama" required></div>
+            <div><label for="plegadora_feysama">Plegadora Feysama (Española)</label><input id="plegadora_feysama" type="number" step="0.01" min="0" name="plegadora_feysama" required></div>
+          </div>
+          <div class="form-actions"><button class="form-button form-button--back" type="button" data-previous><i class="fa-solid fa-arrow-left"></i> Anterior</button><button class="form-button form-button--submit" type="submit"><i class="fa-solid fa-floppy-disk"></i> Registrar</button></div>
+        </section>
+      </form>
+    </div>
+  </template>
+
+  <template id="horometros-criticos">
+    <div class="horas-maquinado__card">
+      <div class="horas-maquinado__heading"><span class="horas-maquinado__icon" aria-hidden="true"><i class="fa-solid fa-screwdriver-wrench"></i></span><div><h2>Registro de mantenimientos críticos</h2><p>Documente las lecturas y observaciones de los equipos críticos.</p></div></div>
+      <form id="mantenimientoCriticosForm" action="/api/mantenimientos-criticos" method="post" novalidate>
+        <div class="form-progress form-progress--two" aria-label="Progreso del formulario"><div class="form-progress__bar" aria-hidden="true"><span id="formProgressBar"></span></div><ol><li class="is-active"><span>1</span><strong>Grupos generadores</strong></li><li><span>2</span><strong>Compresores a tornillo</strong></li></ol></div>
+        <div class="registro-fields maintenance-type-select"><div><label for="tipo_mantenimiento">Tipo de mantenimiento</label><select id="tipo_mantenimiento" name="tipo_mantenimiento" required><option value="0">Mantenimiento Preventivo</option><option value="1">Mantenimiento Correctivo</option><option value="2">Otros</option></select></div></div>
+        <section class="form-step is-active" data-step="1" aria-labelledby="critical-step-one-title"><div class="form-step__heading"><span>Paso 1 de 2</span><h3 id="critical-step-one-title">Grupos generadores</h3></div><div class="basic-maintenance-note"><p><strong>Control básico:</strong> con el grupo detenido y frío, revise visualmente pérdidas de combustible, aceite o refrigerante; compruebe que no haya objetos, polvo excesivo ni obstrucciones alrededor de las rejillas.</p><p>Verifique en el tablero que no existan alarmas activas y registre cualquier ruido, vibración, olor o nivel anormal. No retire protecciones, no abra componentes eléctricos ni intervenga el equipo si detecta una fuga o condición insegura: informe al responsable.</p><p>Realice un arraque controlado del grupo generador por aproximadamente 10 a 15 minuntos</p></div><div class="machine-fields"><div><label for="horometro_generador_660">Horómetro Grupo Generador 660 kVA</label><input id="horometro_generador_660" type="number" step="0.01" min="0" name="horometro_generador_660" required></div><div><label for="hallazgos_generador_660">Hallazgos u observaciones Generador 660 kVA</label><textarea id="hallazgos_generador_660" name="hallazgos_generador_660" required></textarea></div><div><label for="horometro_generador_220">Horómetro Grupo Generador 220 kVA</label><input id="horometro_generador_220" type="number" step="0.01" min="0" name="horometro_generador_220" required></div><div><label for="hallazgos_generador_220">Hallazgos u observaciones Generador 220 kVA</label><textarea id="hallazgos_generador_220" name="hallazgos_generador_220" required></textarea></div></div><div class="form-actions form-actions--end"><button class="form-button form-button--next" type="button" data-next>Siguiente <i class="fa-solid fa-arrow-right"></i></button></div></section>
+        <section class="form-step" data-step="2" aria-labelledby="critical-step-two-title" hidden><div class="form-step__heading"><span>Paso 2 de 2</span><h3 id="critical-step-two-title">Compresores a tornillo</h3></div><div class="basic-maintenance-note"><p><strong>Control básico:</strong> mantenga el área limpia, ventilada y libre de materiales inflamables. Antes de operar, observe que no existan fugas de aceite o aire, mangueras dañadas, ruidos inusuales ni alarmas en el panel.</p><p>Revise únicamente los indicadores externos y el estado visible de filtros o rejillas; anote lecturas, vibraciones u olores anormales. No abra tapas, no manipule conexiones eléctricas ni líneas presurizadas. Ante temperatura, presión o ruido anormal, detenga el uso seguro del equipo y avise a mantenimiento.</p></div><div class="machine-fields"><div><label for="horometro_compresor_100hp">Horómetro Compresor 100 HP (Maquinado)</label><input id="horometro_compresor_100hp" type="number" step="0.01" min="0" name="horometro_compresor_100hp" required></div><div><label for="hallazgos_compresor_100hp">Hallazgos u observaciones Compresor 100 HP</label><textarea id="hallazgos_compresor_100hp" name="hallazgos_compresor_100hp" required></textarea></div><div><label for="horometro_compresor_75hp">Horómetro Compresor 75 HP (Pintura)</label><input id="horometro_compresor_75hp" type="number" step="0.01" min="0" name="horometro_compresor_75hp" required></div><div><label for="hallazgos_compresor_75hp">Hallazgos u observaciones Compresor 75 HP</label><textarea id="hallazgos_compresor_75hp" name="hallazgos_compresor_75hp" required></textarea></div></div><div class="form-actions"><button class="form-button form-button--back" type="button" data-previous><i class="fa-solid fa-arrow-left"></i> Anterior</button><button class="form-button form-button--submit" type="submit"><i class="fa-solid fa-floppy-disk"></i> Registrar</button></div></section>
+      </form>
+    </div>
+  </template>
+
+  <script src="../js/horometros-selector.js"></script>
+  <script src="../js/site-layout.js"></script>
+  <script src="../js/login-modal.js"></script>
+  <script src="../js/nav-responsive.js"></script>
+</body>
+</html>

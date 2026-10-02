@@ -84,8 +84,8 @@ masterKeyForm.addEventListener('submit', async event => {
       }
       return;
     }
-    alert(data.message || 'Orden dada de baja.');
-    window.location.href = '../pages/lista_solicitudes.html';
+    await window.siteDialog.alert(data.message || 'Orden dada de baja.');
+    window.top.location.href = 'reportes.html?vista=solicitudes';
   } catch (error) {
     masterKeyMessage.style.color = 'red';
     masterKeyMessage.textContent = error.message;

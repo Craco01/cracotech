@@ -2,6 +2,15 @@
   const form = document.querySelector('main form');
   const action = form?.getAttribute('action') || '';
   if (!form || !action.startsWith('/api/ordenes')) return;
+  if (action.endsWith('/asignacion')) {
+    window.cargarOpcionesEmpleados([
+      { id: 'responsable', placeholder: 'Asignar técnico' },
+      { id: 'apoyo', placeholder: 'Sin apoyo' }
+    ]).catch(error => console.error('Error cargando empleados para asignación:', error));
+  } else if (action.endsWith('/cierre') && form.dataset.reprogramar !== 'true') {
+    window.cargarOpcionesEmpleados([{ id: 'apoyo', placeholder: 'Sin apoyo' }])
+      .catch(error => console.error('Error cargando empleados para cierre:', error));
+  }
   if (action.endsWith('/cierre') && form.dataset.reprogramar !== 'true') return;
   if (form.dataset.submitHandlerBound === 'true') return;
   form.dataset.submitHandlerBound = 'true';
@@ -66,7 +75,7 @@
       return {
         id: selects[0].value,
         reparacion: form.querySelector('textarea')?.value || '',
-        apoyo: selectedText(selects[1]),
+        apoyo: selects[1].value,
         clasificacion: selectedText(selects[2]),
         notas: form.querySelectorAll('textarea')[1]?.value || '',
         horas: value('horas')
@@ -83,11 +92,11 @@
     event.preventDefault();
     if (isSubmitting) return;
 
-    if (localStorage.getItem('role') !== 'editor' || !token()) return window.alert('Debe iniciar sesion como editor.');
+    if (!['editor', 'administrador'].includes(localStorage.getItem('role')) || !token()) return window.siteDialog.alert('Debe iniciar sesión como editor o administrador.');
     const data = payload();
     if (!data) return;
-    if (action.endsWith('/asignacion') && !data.responsable) return window.alert('Seleccione un técnico responsable.');
-    if ((action.endsWith('/ordenes') && (!data.codigo || !data.maquina_equipo)) || (!action.endsWith('/ordenes') && !data.id)) return window.alert('Seleccione primero una opcion de la lista.');
+    if (action.endsWith('/asignacion') && !data.responsable) return window.siteDialog.alert('Seleccione un técnico responsable.');
+    if ((action.endsWith('/ordenes') && (!data.codigo || !data.maquina_equipo)) || (!action.endsWith('/ordenes') && !data.id)) return window.siteDialog.alert('Seleccione primero una opcion de la lista.');
 
     isSubmitting = true;
     const originalButtonText = submitButton ? submitButton.textContent : '';
@@ -108,13 +117,13 @@
         throw new Error(responseText || 'No se pudo interpretar la respuesta del servidor.');
       }
       if (!response.ok) throw new Error(result.detalle || result.error || 'No se pudo guardar');
-      window.alert(result.message || 'Operacion completada.');
+      await window.siteDialog.alert(result.message || 'Operacion completada.');
       if (action.endsWith('/ordenes') || action.endsWith('/cierre') || action.endsWith('/asignacion') || action.endsWith('/solicitud')) {
         form.reset();
-        window.location.href = 'lista_solicitudes.html';
+        window.top.location.href = 'reportes.html?vista=solicitudes';
       }
     } catch (error) {
-      window.alert(error.message);
+      await window.siteDialog.alert(error.message);
     } finally {
       isSubmitting = false;
       if (submitButton) {

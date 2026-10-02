@@ -1,5 +1,5 @@
 /* Configuración centralizada de la API para el frontend */
-const API_BASE_URL = 'https://api.cracotech.com';
+const API_BASE_URL = 'http://127.0.0.1:3000';
 
 const API_URL = (path) => {
   if (!path) return API_BASE_URL;
@@ -36,7 +36,7 @@ function clearExpiredSession() {
   }
   const currentPath = window.location.pathname;
   if (!currentPath.endsWith('/upkeepmv.html')) {
-    window.location.href = currentPath.includes('/pages/') ? '../upkeepmv.html' : './upkeepmv.html';
+    window.location.href = currentPath.includes('/pages/') ? './upkeepmv.html' : './pages/upkeepmv.html';
   }
 }
 

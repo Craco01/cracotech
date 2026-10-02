@@ -206,7 +206,7 @@ if (formularioCierre) {
         await calcularUnidadMO();
       } catch (error) {
         console.error('Error calculando unidad_mo:', error);
-      window.alert('Error al calcular unidad de MO');
+      await window.siteDialog.alert('Error al calcular unidad de MO');
         return;
       }
 
@@ -216,10 +216,7 @@ if (formularioCierre) {
       payload.notas = construirNotas();
       const selectApoyo = document.getElementById('apoyo');
 
-      // El item se usa para calcular el salario; en la orden se guarda el nombre visible.
-      payload.apoyo = selectApoyo?.value
-        ? selectApoyo.selectedOptions[0].text.trim()
-        : '';
+      payload.apoyo = selectApoyo?.value || '';
 
       const endpoint = action || '/api/ordenes/cierre';
 
@@ -244,19 +241,19 @@ if (formularioCierre) {
 
         if (!response.ok) {
           const errorMsg = data.detalle || data.error || 'No se pudo cerrar la orden';
-          alert('Error: ' + errorMsg);
+          await window.siteDialog.alert('Error: ' + errorMsg);
           return;
         }
 
-        alert('Orden cerrada exitosamente');
+        await window.siteDialog.alert('Orden cerrada exitosamente');
         if (endpoint.includes('/mantenimientos-preventivos/')) {
           window.location.reload();
         } else {
-          window.location.href = '../pages/lista_solicitudes.html';
+          window.top.location.href = 'reportes.html?vista=solicitudes';
         }
       } catch (error) {
         console.error('Error al cerrar orden:', error);
-        alert('Error al cerrar la orden: ' + error.message);
+        await window.siteDialog.alert('Error al cerrar la orden: ' + error.message);
       } finally {
         if (submitButton) {
           submitButton.disabled = false;
@@ -279,7 +276,7 @@ async function obtenerSalarioEmpleado(identificador) {
     const response = await API_FETCH(`/api/auth/empleados/${encodeURIComponent(identificador)}/salario`);
     if (!response.ok) throw new Error(`Error HTTP ${response.status}`);
     const data = await response.json();
-    return data.salario || 0;
+    return Number(data.salario) || 0;
   } catch (err) {
     console.error(`Error obteniendo salario de ${identificador}:`, err);
     return 0;
@@ -291,7 +288,7 @@ async function calcularUnidadMO() {
   // El responsable es el usuario logueado (desde token JWT, que es el username/user)
   const responsable = getUsernameFromLocalStorage();
   
-  // El apoyo es el nombre_apellido seleccionado en el select
+  // El apoyo se identifica por el id de empleados seleccionado.
   const itemApoyo = document.getElementById('apoyo').value;
 
   let salarioResponsable = 0;
@@ -304,7 +301,7 @@ async function calcularUnidadMO() {
 
   // Si apoyo dice "Sin apoyo", no buscar salario
   if (itemApoyo) {
-    // Buscar salario del apoyo por nombre_apellido
+    // El endpoint resuelve el id de empleado sin buscar por nombre.
     salarioApoyo = await obtenerSalarioEmpleado(itemApoyo);
   }
 

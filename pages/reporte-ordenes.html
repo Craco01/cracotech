@@ -36,6 +36,7 @@
           <button class="tab" data-page="indicadores" type="button">Indicadores</button>
           <button class="tab" data-page="sector" type="button">Por sector</button>
           <button class="tab" data-page="prioridad" type="button">Por prioridad</button>
+          <button class="tab" data-page="reprogramados" type="button">Reprogramados</button>
         </nav>
         <div id="dashboard" aria-live="polite">
           <section class="report-page active" data-page-section="resumen" aria-label="Resumen">
@@ -63,7 +64,16 @@
             <div class="dashboard"><div class="visual span-12" id="detalle-ordenes"><h3>Detalle de órdenes de mantenimiento</h3><div class="visual-content"></div></div></div>
           </section>
           <section class="report-page" data-page-section="indicadores" aria-label="Indicadores" hidden>
-            <div class="dashboard"><div class="visual span-12" id="indicadores-equipos"><h3>MTBR, MTTF y disponibilidad por equipo</h3><div class="visual-content"></div></div></div>
+            <div class="dashboard">
+              <div class="indicadores-promedios span-12" id="indicadores-promedios" aria-label="Promedios de indicadores"></div>
+              <div class="indicadores-leyenda span-12" aria-label="Leyenda de estados de indicadores">
+                <span><i class="indicador-color indicador-color--rojo"></i>Rojo: menor a 70%</span>
+                <span><i class="indicador-color indicador-color--amarillo"></i>Amarillo: de 70% a 85%</span>
+                <span><i class="indicador-color indicador-color--verde"></i>Verde: de 86% a 100%</span>
+                <span>Promedios calculados por entrada única máquina-mes.</span>
+              </div>
+              <div class="visual span-12" id="indicadores-equipos"><h3>MTBF, MTTR y disponibilidad por equipo</h3><div class="visual-content"></div></div>
+            </div>
           </section>
           <section class="report-page" data-page-section="sector" aria-label="Por sector" hidden>
             <div class="dashboard sector-dashboard">
@@ -75,6 +85,12 @@
             <div class="dashboard">
               <div class="visual span-12" id="prioridad-global"><h3>Órdenes por prioridad</h3><div class="visual-content"></div></div>
               <div class="priority-breakdown span-12" id="prioridad-desglose" aria-label="Distribución de progreso por prioridad"></div>
+            </div>
+          </section>
+          <section class="report-page" data-page-section="reprogramados" aria-label="Reprogramados" hidden>
+            <div class="dashboard">
+              <div class="kpis" id="reprogramados-kpis"></div>
+              <div class="visual span-12" id="reprogramados-tabla"><h3>Detalle de órdenes reprogramadas</h3><div class="visual-content"></div></div>
             </div>
           </section>
         </div>

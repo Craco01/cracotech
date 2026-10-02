@@ -1,6 +1,8 @@
-document.addEventListener('DOMContentLoaded', () => {
+function initReprogramarMPP() {
   const form = document.getElementById('formReprogramarMPP');
   if (!form) return;
+  if (form.dataset.initialized === 'true') return;
+  form.dataset.initialized = 'true';
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -33,4 +35,11 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   });
-});
+}
+
+window.initReprogramarMPP = initReprogramarMPP;
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initReprogramarMPP);
+} else {
+  initReprogramarMPP();
+}

@@ -1,21 +1,19 @@
 let data = [];
 
-// Usa la copia local cuando la página se abre con file://; por HTTP conserva el JSON como fuente.
-const dataPromise = Array.isArray(window.codigosData)
-  ? Promise.resolve(window.codigosData)
-  : fetch("../data/codigos.json").then(response => {
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
-      }
-      return response.json();
-    });
-
-dataPromise
-  .then(jsonData => {
-    data = jsonData;
+async function cargarProductos() {
+  try {
+    const response = await API_FETCH('/api/productos');
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+    data = await response.json();
     renderTable(data);
-  })
-  .catch(error => console.error("Error cargando JSON:", error));
+  } catch (error) {
+    console.error("Error cargando productos:", error);
+    const tableBody = document.getElementById("codigos-body");
+    tableBody.innerHTML = '<tr><td colspan="4">No se pudieron cargar los productos.</td></tr>';
+  }
+}
 
 // Renderizar tabla
 function renderTable(filteredData) {
@@ -25,7 +23,7 @@ function renderTable(filteredData) {
   filteredData.forEach(item => {
     const row = document.createElement("tr");
     const descripcion = item["Descripción"] ?? item.descripcion;
-    [item.codigo, descripcion].forEach(valor => {
+    [item.codigo, descripcion, item.unidad_medida, item.precio_compra].forEach(valor => {
       const celda = document.createElement('td');
       celda.textContent = valor === null || valor === undefined ? '' : String(valor);
       row.appendChild(celda);
@@ -44,11 +42,14 @@ document.getElementById("codigos-search").addEventListener("input", function () 
   const filtered = data.filter(item => {
     const codigo = String(item.codigo).toLowerCase();
     const descripcion = String(item["Descripción"] ?? item.descripcion).toLowerCase();
+    const unidad = String(item.unidad_medida ?? '').toLowerCase();
 
     return terms.every(term =>
-      codigo.includes(term) || descripcion.includes(term)
+      codigo.includes(term) || descripcion.includes(term) || unidad.includes(term)
     );
   });
 
   renderTable(filtered);
 });
+
+cargarProductos();

@@ -298,12 +298,12 @@ function abrirFormularioSolicitud(ruta) {
     id: String(filaSeleccionada.id),
     detalle: filaSeleccionada.maquina_equipo || filaSeleccionada.nombre_declarado || ''
   });
-  window.location.href = `../pages/${ruta}?${parametros.toString()}`;
+  window.top.location.href = `formularios.html?vista=${encodeURIComponent(ruta)}&${parametros.toString()}`;
 }
 
-asignarSolicitud.addEventListener('click', () => abrirFormularioSolicitud('asignar.html'));
-cerrarSolicitud.addEventListener('click', () => abrirFormularioSolicitud('cierre.html'));
-reprogramarSolicitud.addEventListener('click', () => abrirFormularioSolicitud('reprogramar.html'));
+asignarSolicitud.addEventListener('click', () => abrirFormularioSolicitud('asignar'));
+cerrarSolicitud.addEventListener('click', () => abrirFormularioSolicitud('cierre'));
+reprogramarSolicitud.addEventListener('click', () => abrirFormularioSolicitud('reprogramar'));
 
 // Ejecutar carga inicial
 cargarOrdenes();

@@ -48,7 +48,7 @@
       if (!response.ok) throw new Error(order.error || 'No se pudo cargar la solicitud.');
       cargarDetalle(order);
     } catch (error) {
-      window.alert(error.message);
+      await window.siteDialog.alert(error.message);
       limpiarFormulario();
     }
   }
@@ -133,10 +133,10 @@
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result.detalle || result.error || 'No se pudo registrar la modificación.');
-      window.alert(result.message || 'Solicitud modificada.');
-      window.location.href = 'lista_solicitudes.html';
+      await window.siteDialog.alert(result.message || 'Solicitud modificada.');
+      window.top.location.href = 'reportes.html?vista=solicitudes';
     } catch (error) {
-      window.alert(error.message);
+      await window.siteDialog.alert(error.message);
       cerrarConfirmacion(false);
       confirmar.disabled = false;
       cancelar.disabled = false;
@@ -146,9 +146,9 @@
   ordenSelect.addEventListener('change', () => {
     if (ordenSelect.value) cargarOrden(ordenSelect.value);
   });
-  form.addEventListener('submit', event => {
+  form.addEventListener('submit', async event => {
     event.preventDefault();
-    if (!ordenId.value) return window.alert('Seleccione primero una solicitud.');
+    if (!ordenId.value) return window.siteDialog.alert('Seleccione primero una solicitud.');
     abrirConfirmacion();
   });
   confirmar.addEventListener('click', registrarModificacion);

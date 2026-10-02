@@ -24,11 +24,20 @@ async function obtenerSalarioEmpleado(identificador) {
 async function calcularCostoManoObraMPP() {
   const horasInput = document.getElementById('horas');
   const horas = Number(horasInput?.value || 0);
-  const costo = Number.isFinite(horas) ? Math.max(0, horas) : 0;
+  const username = localStorage.getItem('username');
+  const apoyoId = document.getElementById('apoyo')?.value;
+  const [salarioResponsable, salarioApoyo] = await Promise.all([
+    obtenerSalarioEmpleado(username),
+    obtenerSalarioEmpleado(apoyoId)
+  ]);
+  const unidadMO = (salarioResponsable + salarioApoyo) / 240;
+  const costo = Number.isFinite(horas) ? Number((unidadMO * Math.max(0, horas)).toFixed(2)) : 0;
 
+  const hiddenUnidadMO = document.getElementById('unidad_mo');
+  if (hiddenUnidadMO) hiddenUnidadMO.value = unidadMO.toFixed(2);
   const hiddenCostoMO = document.getElementById('costo_mano_obra');
-  if (hiddenCostoMO) hiddenCostoMO.value = String(costo);
-  return Number(costo);
+  if (hiddenCostoMO) hiddenCostoMO.value = costo.toFixed(2);
+  return costo;
 }
 
 function construirRepuestosUtilizadosMPP() {
@@ -60,6 +69,9 @@ function prepararSubmitMPP() {
   const form = document.querySelector('form[action="/api/mantenimientos-preventivos/cierre"]');
   if (!form) return;
 
+  window.cargarOpcionesEmpleados([{ id: 'apoyo', placeholder: 'Sin apoyo' }])
+    .catch(error => console.error('Error cargando empleados para cierre MPP:', error));
+
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
 
@@ -81,6 +93,8 @@ function prepararSubmitMPP() {
       fecha_ejecucion_final: fechaFinal,
       costo_repuestos: costoRepuestos.toFixed(2),
       costo_mano_obra: costoMO.toFixed(2),
+      horas: Number(document.getElementById('horas')?.value || 0),
+      apoyos: document.getElementById('apoyo')?.value || null,
       repuestos_utilizados: construirRepuestosUtilizadosMPP(),
       notas: document.getElementById('observacion')?.value || ''
     };
@@ -97,7 +111,7 @@ function prepararSubmitMPP() {
         throw new Error(data.error || data.detalle || 'No se pudo cerrar el mantenimiento');
       }
 
-      window.mostrarMensajeMPP?.({
+      await window.mostrarMensajeMPP?.({
         titulo: 'Mantenimiento cerrado',
         texto: 'El mantenimiento preventivo se cerró correctamente.',
         redirigir: true,
@@ -105,7 +119,7 @@ function prepararSubmitMPP() {
       });
     } catch (error) {
       console.error('Error en cierre de mantenimiento preventivo:', error);
-      window.mostrarMensajeMPP?.({
+      await window.mostrarMensajeMPP?.({
         titulo: 'Error',
         texto: error.message || 'Error al cerrar el mantenimiento',
         redirigir: true,
@@ -120,6 +134,8 @@ function prepararSubmitMPP() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', prepararSubmitMPP);
+} else {
   prepararSubmitMPP();
-});
+}

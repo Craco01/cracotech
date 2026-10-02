@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cargar Excel a la base de datos</title>
+<link rel="stylesheet" href="../css/styles.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="../js/api-config.js"></script>
+<link rel="stylesheet" href="../css/site-dialogs.css">
+<script src="../js/site-dialogs.js"></script>
+<link rel="stylesheet" href="../css/carga-xlsx.css">
+</head>
+<body>
+<main>
+<h1>Cargar Excel a la base de datos</h1>
+<p class="sub">Subí el .xlsx, revisá la validación y enviá los datos a la API.</p>
+
+<section id="file-section">
+<h2>1. Archivo</h2>
+<label class="drop" id="drop">
+<input type="file" id="file" accept=".xlsx">
+<span id="fname">Elegí o arrastrá un archivo .xlsx</span>
+</label>
+</section>
+
+<section>
+<h2>2. Destino</h2>
+<p id="destino"></p>
+<details id="campos-detalle" hidden>
+<summary>Campos y validaciones del archivo</summary>
+<p class="hint">Todos los encabezados deben estar en la primera fila. Los campos opcionales pueden quedar vacíos; las columnas adicionales se ignoran.</p>
+<div id="campos"></div>
+</details>
+</section>
+
+<section id="res" hidden>
+<h2>3. Validación y carga</h2>
+<div class="stats" id="stats"></div>
+<div id="msgs"></div>
+<label id="skiprow" style="display:block;margin:14px 0" hidden>
+<input type="checkbox" id="skip"> Cargar solo las filas válidas e ignorar las que tienen errores</label>
+<button id="go" disabled style="margin-top:14px">Subir e insertar</button>
+<div id="prog" hidden>
+<progress id="bar" max="100" value="0"></progress>
+<div id="pct"></div>
+<div id="log"></div>
+</div>
+</section>
+</main>
+
+<div id="masterKeyModal" class="login-modal" role="dialog" aria-modal="true" aria-labelledby="masterKeyTitle" aria-hidden="true">
+	<div class="login-modal-content">
+		<button id="closeMasterKeyModal" class="login-close" type="button" aria-label="Cerrar">&times;</button>
+		<div class="master-key-heading">
+			<span class="master-key-icon" aria-hidden="true"><i class="fa-solid fa-triangle-exclamation"></i></span>
+			<div>
+				<h2 id="masterKeyTitle">Reemplazar inventario</h2>
+				<p>Se vaciará el inventario actual antes de cargar el archivo.</p>
+			</div>
+		</div>
+		<form id="masterKeyForm">
+			<label for="masterKey">Clave maestra</label>
+			<input type="password" id="masterKey" autocomplete="current-password" required>
+			<div id="masterKeyMensaje" role="alert" aria-live="polite"></div>
+			<div class="master-key-actions">
+				<button id="cancelMasterKey" class="master-key-cancel" type="button">Cancelar</button>
+				<button class="master-key-confirm" type="submit">Confirmar vaciado</button>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script src="../js/carga-xlsx.js"></script>
+<script src="../js/site-layout.js"></script>
+<script src="../js/login-modal.js"></script>
+<script src="../js/nav-responsive.js"></script>
+</body>
+</html>

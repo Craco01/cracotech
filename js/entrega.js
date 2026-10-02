@@ -90,7 +90,7 @@ async function imprimirEntrega() {
     mostrarEntrega(ordenActual, true);
     window.print();
   } catch (error) {
-    window.alert(error.message);
+    await window.siteDialog.alert(error.message);
   } finally {
     boton.disabled = false;
     boton.textContent = 'Imprimir / Guardar PDF';

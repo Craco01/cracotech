@@ -88,7 +88,7 @@ document.getElementById('btn-imprimir').addEventListener('click', () => {
 });
 
 function volverALista() {
-  window.location.href = 'modulo_solicitudes.html';
+  window.top.location.href = 'reportes.html?vista=informes';
 }
 
 document.getElementById('btn-volver').addEventListener('click', volverALista);
