@@ -20,7 +20,7 @@ Centralizar el acceso a:
 - CSS3
 - JavaScript vanilla
 - Fetch API
-- GitHub Pages para publicación estática
+- Servidor estático local para pruebas
 - Font Awesome, assets internos y contenido institucional
 
 ## Arquitectura
@@ -30,7 +30,7 @@ La estructura está pensada para funcionar como sitio público y de gestión, pe
 ```text
 frontend/
 ├── index.html                 # Portafolio público
-├── upkeepmv.html              # Portal de mantenimiento
+├── pages/upkeepmv.html        # Portal de mantenimiento
 ├── css/
 │   ├── portfolio.css
 ├── data/
@@ -42,14 +42,13 @@ frontend/
 │   └── portfolio.js
 ├── pages/
 ├── README.md
-├── .github/workflows/deploy-pages.yml
 └── ...
 ```
 
 ## Flujo principal
 
-1. GitHub Pages sirve el portafolio desde `index.html`.
-2. El portal de mantenimiento está disponible en [upkeepmv.html](upkeepmv.html).
+1. Un servidor estático local sirve la interfaz.
+2. El portal de mantenimiento está disponible en [pages/upkeepmv.html](pages/upkeepmv.html).
 3. En el portal, [js/api-config.js](js/api-config.js) centraliza la URL base de la API.
 4. El portal realiza llamadas a rutas bajo `/api/...` y el backend valida autenticación, roles y permisos.
 
@@ -61,15 +60,17 @@ Los componentes del flujo de login del portal están en:
 - [js/login-modal.js](js/login-modal.js)
 - [js/api-config.js](js/api-config.js)
 
-## Publicación
+## Ejecución local
 
-El sitio puede publicarse como una app estática en GitHub Pages. El workflow de despliegue está en:
-- [.github/workflows/deploy-pages.yml](.github/workflows/deploy-pages.yml)
+La API está configurada en [js/api-config.js](js/api-config.js) para conectarse a `http://127.0.0.1:3000`.
 
-La URL base configurada para las llamadas a la API es:
-- `https://api.cracotech.com`
+Desde este directorio, inicia un servidor estático para el frontend:
 
-Esto significa que, para que el frontend funcione en producción, el backend debe estar expuesto detrás de HTTPS en el subdominio `api` y el proxy correcto (Nginx o equivalente) debe redirigir `/api` hacia el servidor de Node.js.
+```powershell
+py -m http.server 5500
+```
+
+Abre `http://127.0.0.1:5500/pages/upkeepmv.html`. Para iniciar el backend y configurar MySQL, consulta el README de la carpeta `pruebas`.
 
 ## Consideraciones
 
@@ -88,7 +89,7 @@ El frontend se encuentra en una etapa funcional con varias pantallas y módulos 
 ## Mantenimiento
 
 Cuando se modifique la navegación, módulos o formularios del portal, conviene revisar:
-- [upkeepmv.html](upkeepmv.html)
+- [pages/upkeepmv.html](pages/upkeepmv.html)
 - [pages/](pages/)
 - [js/](js/)
 - [css/](css/)
