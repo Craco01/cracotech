@@ -14,8 +14,8 @@
   const contador = document.getElementById('contadorConfirmacion');
   const sectorNames = ['', 'Mantenimiento', 'Maquinado', 'Armado', 'Accesorios', 'Herrería', 'Pintura', 'Logística', 'Galvamax', 'Administración', 'Obras'];
   const categoryNames = ['', 'Correctivo', 'Preventivo', 'Predictivo'];
-  let ordenes = [];
   let timer;
+  const initialId = new URLSearchParams(window.location.search).get('id');
 
   function setSelectValue(id, value) {
     const element = document.getElementById(id);
@@ -63,28 +63,6 @@
       delete maquinaSelect.dataset.descripcion;
     }
     document.querySelectorAll('.select-buscador-input').forEach(input => { input.value = ''; });
-  }
-
-  async function cargarOrdenes() {
-    try {
-      const response = await API_FETCH('/api/ordenes');
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || 'No se pudieron cargar las solicitudes.');
-      ordenes = data
-        .filter(order => String(order.progreso || '').trim().toLowerCase() !== 'completado')
-        .sort((a, b) => Number(b.id) - Number(a.id));
-      ordenes.forEach(order => ordenSelect.add(new Option(
-        `${order.maquina_equipo || 'Sin máquina'}${order.nombre_declarado ? ` - ${order.nombre_declarado}` : ''}`,
-        order.id
-      )));
-      const initialId = new URLSearchParams(window.location.search).get('id');
-      if (initialId && ordenes.some(order => String(order.id) === initialId)) {
-        ordenSelect.value = initialId;
-        await cargarOrden(initialId);
-      }
-    } catch (error) {
-      console.error('Error cargando solicitudes:', error);
-    }
   }
 
   function abrirConfirmacion() {
@@ -160,5 +138,5 @@
     if (!modal.hidden && event.key === 'Escape') cerrarConfirmacion();
   });
 
-  cargarOrdenes();
+  if (initialId) cargarOrden(initialId);
 })();

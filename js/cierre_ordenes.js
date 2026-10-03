@@ -15,6 +15,7 @@ function crearSelectConBusqueda(selectId) {
   input.autocomplete = 'off';
   input.setAttribute('role', 'combobox');
   input.setAttribute('aria-expanded', 'false');
+  input.setAttribute('aria-autocomplete', 'list');
 
   const lista = document.createElement('ul');
   lista.className = 'select-buscador-lista';
@@ -32,28 +33,12 @@ function crearSelectConBusqueda(selectId) {
 
   let resultadosActuales = [];
   let indiceActivo = -1;
-  let datos = [];
-  const solicitudInicialId = new URLSearchParams(window.location.search).get('id');
-
-  async function cargarOrdenes() {
-    try {
-      const res = await API_FETCH('/api/ordenes');
-      let data = await res.json();
-
-      // Excluir los progresos que no deben mostrarse y ordenar descendente por id
-      const excluidos = ['Completado'];
-      if (!document.querySelector('form[data-modificacion="true"]')) excluidos.push('De baja');
-      datos = data
-        .filter(row => row.progreso && !excluidos.includes(row.progreso))
-        .sort((a, b) => b.id - a.id);
-      if (!document.querySelector('form[data-modificacion="true"]')) datos = datos.slice(0, 1500);
-
-      const solicitudInicial = datos.find(row => String(row.id) === String(solicitudInicialId));
-      if (solicitudInicial) seleccionar(solicitudInicial);
-    } catch (err) {
-      console.error("Error cargando ordenes:", err);
-    }
-  }
+  let solicitudBusqueda = 0;
+  let temporizadorBusqueda = null;
+  const parametrosIniciales = new URLSearchParams(window.location.search);
+  const solicitudInicialId = parametrosIniciales.get('id');
+  const detalleInicial = parametrosIniciales.get('detalle') || '';
+  const incluirInactivas = Boolean(document.querySelector('form[data-modificacion="true"]'));
 
   function abrirLista() {
     lista.classList.add('is-visible');
@@ -96,30 +81,42 @@ function crearSelectConBusqueda(selectId) {
       hiddenId.value = item.id;
     }
 
-    infoAveria.textContent = `Avería: ${item.averia || "No especificada"}`;
+    infoAveria.textContent = item.averia === undefined
+      ? 'Cargando detalles de la solicitud...'
+      : `Avería: ${item.averia || "No especificada"}`;
     cerrarLista();
     select.dispatchEvent(new Event('change', { bubbles: true }));
   }
 
   async function mostrarResultados(busqueda = '') {
-    if (!busqueda) {
-      lista.innerHTML = '';
+    const texto = busqueda.trim();
+    if (!texto) {
+      resultadosActuales = [];
       cerrarLista();
       return;
     }
 
+    const solicitudActual = ++solicitudBusqueda;
+    lista.replaceChildren();
+    const cargando = document.createElement('li');
+    cargando.className = 'select-buscador-vacio';
+    cargando.textContent = 'Buscando solicitudes...';
+    lista.appendChild(cargando);
+    abrirLista();
+
     try {
-      if (datos.length === 0) {
-        await cargarOrdenes();
-      }
+      const query = new URLSearchParams({
+        search: texto,
+        includeInactive: String(incluirInactivas)
+      });
+      const res = await API_FETCH(`/api/ordenes/buscar?${query.toString()}`);
+      if (!res.ok) throw new Error(`No se pudieron buscar las solicitudes (${res.status})`);
+      const data = await res.json();
+      if (!Array.isArray(data)) throw new Error('La respuesta de búsqueda no tiene el formato esperado.');
+      if (solicitudActual !== solicitudBusqueda) return;
 
-      resultadosActuales = datos.filter(item =>
-        (item.maquina_equipo || "").toLowerCase().includes(busqueda.toLowerCase()) ||
-        (item.nombre_declarado || "").toLowerCase().includes(busqueda.toLowerCase()) ||
-        String(item.id).includes(busqueda.trim())
-      ).slice(0, 60);
-
-      lista.innerHTML = '';
+      resultadosActuales = data;
+      lista.replaceChildren();
 
       if (resultadosActuales.length === 0) {
         const vacio = document.createElement('li');
@@ -156,20 +153,37 @@ function crearSelectConBusqueda(selectId) {
       marcarActivo();
     } catch (err) {
       console.error('Error al buscar solicitudes:', err);
+      if (solicitudActual !== solicitudBusqueda) return;
+      lista.replaceChildren();
+      const error = document.createElement('li');
+      const reintentar = document.createElement('button');
+      error.className = 'select-buscador-vacio';
+      error.textContent = 'No se pudo completar la búsqueda.';
+      reintentar.type = 'button';
+      reintentar.textContent = 'Reintentar';
+      reintentar.addEventListener('click', () => mostrarResultados(texto));
+      lista.append(error, reintentar);
+      abrirLista();
     }
   }
 
   input.addEventListener('input', () => {
+    clearTimeout(temporizadorBusqueda);
+    solicitudBusqueda++;
+    resultadosActuales = [];
+    lista.replaceChildren();
+    cerrarLista();
     select.value = '';
     const hiddenId = document.getElementById('ordenId');
     if (hiddenId) {
       hiddenId.value = '';
     }
-    mostrarResultados(input.value);
+    infoAveria.textContent = '';
+    temporizadorBusqueda = setTimeout(() => mostrarResultados(input.value), 250);
   });
 
   input.addEventListener('focus', () => {
-    mostrarResultados(input.value);
+    if (input.value.trim()) mostrarResultados(input.value);
   });
 
   input.addEventListener('keydown', event => {
@@ -205,11 +219,29 @@ function crearSelectConBusqueda(selectId) {
     }
   });
 
-  cargarOrdenes();
+  if (solicitudInicialId) {
+    const seleccionInicial = {
+      id: solicitudInicialId,
+      maquina_equipo: detalleInicial
+    };
+    seleccionar(seleccionInicial);
+    if (!incluirInactivas) API_FETCH(`/api/ordenes/${encodeURIComponent(solicitudInicialId)}`)
+      .then(async res => {
+        if (!res.ok) throw new Error(`No se pudieron cargar los detalles de la solicitud (${res.status})`);
+        const item = await res.json();
+        if (String(document.getElementById('ordenId')?.value) === String(solicitudInicialId)) {
+          seleccionar(item);
+        }
+      })
+      .catch(err => {
+        console.error('Error cargando la solicitud seleccionada:', err);
+        if (String(document.getElementById('ordenId')?.value) === String(solicitudInicialId)) {
+          infoAveria.textContent = 'No se pudieron cargar los detalles. Puede continuar e intentarlo al enviar.';
+        }
+      });
+  }
 }
 
 // Inicializar buscador
 const selectInicial = document.getElementById('ordenSeleccionada') ? 'ordenSeleccionada' : 'maquina';
 crearSelectConBusqueda(selectInicial);
-
-
