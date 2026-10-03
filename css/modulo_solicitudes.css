@@ -264,6 +264,37 @@ th, td {
 .solicitud-celda strong, .solicitud-row .solicitud-campo dd { display: block; color: #1e293b !important; font-size: 0.74rem; line-height: 1.05; overflow: hidden; text-overflow: clip; white-space: nowrap; }
 .solicitud-id { text-align: center; }
 
+.carpeta-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 10px 4px;
+  color: #334155;
+}
+
+.carpeta-pagination button,
+#listaEquipos > .equipo-carpeta .solicitudes-equipo > button {
+  min-width: 96px;
+  padding: 7px 12px;
+  border: 0;
+  border-radius: 5px;
+  color: #fff;
+  background: #2563eb;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.carpeta-pagination button:hover:not(:disabled),
+#listaEquipos > .equipo-carpeta .solicitudes-equipo > button:hover {
+  background: #1d4ed8;
+}
+
+.carpeta-pagination button:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+}
+
 @media (max-width: 1000px) {
   .solicitud-row {
     min-width: 0;

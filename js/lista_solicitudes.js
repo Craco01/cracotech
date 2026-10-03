@@ -1,10 +1,14 @@
 let datos = [];
-let ordenAsc = true;
+let ordenAsc = false;
 let columnaOrden = "id"; // columna inicial
-let ordenInicialDesc = true;
 let filaSeleccionadaId = null;
 let filaSeleccionada = null;
-const LIMITE_CARGA_INICIAL = 1500;
+const LIMITE_POR_PAGINA = 250;
+let paginaActual = 0;
+let totalOrdenes = 0;
+let busquedaActiva = '';
+let solicitudCarga = 0;
+let temporizadorBusqueda = null;
 
 const modalEntrega = document.getElementById('modalEntrega');
 const detalleEntrega = document.getElementById('detalleEntrega');
@@ -42,27 +46,65 @@ function cerrarModalEntrega() {
   modalEntrega.hidden = true;
 }
 
-// Cargar datos desde backend (solo ordenes)
-async function cargarOrdenes({ busqueda = '', limite = LIMITE_CARGA_INICIAL } = {}) {
+function renderPaginacion() {
+  const anterior = document.getElementById('paginaAnterior');
+  const siguiente = document.getElementById('paginaSiguiente');
+  const estado = document.getElementById('paginaEstado');
+  const totalPaginas = Math.ceil(totalOrdenes / LIMITE_POR_PAGINA);
+  const inicio = totalOrdenes === 0 ? 0 : paginaActual * LIMITE_POR_PAGINA + 1;
+  const fin = Math.min((paginaActual + 1) * LIMITE_POR_PAGINA, totalOrdenes);
+
+  estado.textContent = `Mostrando ${inicio}-${fin} de ${totalOrdenes} órdenes · Página ${totalPaginas === 0 ? 0 : paginaActual + 1} de ${totalPaginas}`;
+  anterior.disabled = paginaActual === 0;
+  siguiente.disabled = (paginaActual + 1) * LIMITE_POR_PAGINA >= totalOrdenes;
+}
+
+// Cargar datos desde el backend por páginas, sin descargar el conjunto completo.
+async function cargarOrdenes({ busqueda = busquedaActiva, pagina = paginaActual } = {}) {
+  const cargaActual = ++solicitudCarga;
+  paginaActual = pagina;
+  busquedaActiva = busqueda.trim();
+  const estado = document.getElementById('paginaEstado');
+  const anterior = document.getElementById('paginaAnterior');
+  const siguiente = document.getElementById('paginaSiguiente');
+  estado.textContent = 'Cargando órdenes...';
+  anterior.disabled = true;
+  siguiente.disabled = true;
+
   try {
     const parametros = new URLSearchParams();
-    if (busqueda.trim()) parametros.set('search', busqueda.trim());
-    if (!busqueda.trim()) parametros.set('limit', String(limite));
+    parametros.set('limit', String(LIMITE_POR_PAGINA));
+    parametros.set('offset', String(paginaActual * LIMITE_POR_PAGINA));
+    parametros.set('sortBy', columnaOrden);
+    parametros.set('sortOrder', ordenAsc ? 'asc' : 'desc');
+    if (busquedaActiva) parametros.set('search', busquedaActiva);
 
-    const res = await API_FETCH(`/api/ordenes?${parametros.toString()}`);
-    let data = await res.json();
+    const res = await API_FETCH(`/api/ordenes/paginadas?${parametros.toString()}`);
+    if (!res.ok) throw new Error(`No se pudieron cargar las órdenes (${res.status})`);
+    const result = await res.json();
+    if (!Array.isArray(result.rows) || !Number.isFinite(Number(result.total))) {
+      throw new Error('La respuesta de paginación de órdenes no tiene el formato esperado.');
+    }
+    if (cargaActual !== solicitudCarga) return;
 
-    datos = data.sort((a, b) => b.id - a.id);
+    datos = result.rows;
+    totalOrdenes = Number(result.total);
+    filaSeleccionadaId = null;
+    filaSeleccionada = null;
 
+    document.querySelectorAll("#tablaOrdenes th").forEach(th => {
+      th.classList.remove("asc", "desc");
+    });
+    document.querySelector(`th[data-col="${columnaOrden}"]`)?.classList.add(ordenAsc ? "asc" : "desc");
     renderTabla(datos);
-
-    // marcar encabezado ID con indicador ▼
-    const thId = document.querySelector('th[data-col="id"]');
-    if (thId) thId.classList.add("desc");
-    ordenAsc = false;
-    columnaOrden = "id";
+    renderPaginacion();
   } catch (err) {
     console.error("Error cargando ordenes:", err);
+    if (cargaActual === solicitudCarga) {
+      estado.textContent = 'No se pudieron cargar las órdenes. Intente nuevamente.';
+      anterior.disabled = true;
+      siguiente.disabled = true;
+    }
   }
 }
 
@@ -197,19 +239,9 @@ document.querySelectorAll("#tablaOrdenes th").forEach(th => {
       ordenAsc = true;
     }
 
-    datos.sort((a, b) => {
-      let valA = (a[col] || "").toString().toLowerCase();
-      let valB = (b[col] || "").toString().toLowerCase();
-
-      if (!isNaN(valA) && !isNaN(valB) && valA !== "" && valB !== "") {
-        return ordenAsc ? valA - valB : valB - valA;
-      } else {
-        return ordenAsc ? valA.localeCompare(valB) : valB.localeCompare(valA);
-      }
-    });
-
     th.classList.add(ordenAsc ? "asc" : "desc");
-    renderTabla(datos);
+    paginaActual = 0;
+    cargarOrdenes();
   });
 });
 
@@ -218,24 +250,40 @@ const buscador = document.getElementById("buscador");
 const buscarRegistros = document.getElementById("buscarRegistros");
 const refrescarRegistros = document.getElementById("refrescarRegistros");
 
-buscador.addEventListener("input", e => {
-  const palabras = e.target.value.toLowerCase().split(" ").filter(p => p);
-  const filtrados = datos.filter(row => {
-    const campos = `${row.codigo || ""} ${row.nombre_declarado || ""} ${row.maquina_equipo || ""}`.toLowerCase();
-    return palabras.every(p => campos.includes(p));
-  });
-  renderTabla(filtrados);
+buscador.addEventListener("input", event => {
+  clearTimeout(temporizadorBusqueda);
+  const busqueda = event.target.value;
+  temporizadorBusqueda = setTimeout(() => cargarOrdenes({ busqueda, pagina: 0 }), 300);
 });
 
-buscarRegistros.addEventListener("click", () => cargarOrdenes({ busqueda: buscador.value }));
+buscarRegistros.addEventListener("click", () => {
+  clearTimeout(temporizadorBusqueda);
+  cargarOrdenes({ busqueda: buscador.value, pagina: 0 });
+});
 
 refrescarRegistros.addEventListener("click", () => {
+  clearTimeout(temporizadorBusqueda);
   buscador.value = '';
-  cargarOrdenes();
+  columnaOrden = 'id';
+  ordenAsc = false;
+  cargarOrdenes({ busqueda: '', pagina: 0 });
 });
 
 buscador.addEventListener("keydown", event => {
-  if (event.key === "Enter") cargarOrdenes({ busqueda: buscador.value });
+  if (event.key === "Enter") {
+    clearTimeout(temporizadorBusqueda);
+    cargarOrdenes({ busqueda: buscador.value, pagina: 0 });
+  }
+});
+
+document.getElementById('paginaAnterior').addEventListener('click', () => {
+  if (paginaActual > 0) cargarOrdenes({ pagina: paginaActual - 1 });
+});
+
+document.getElementById('paginaSiguiente').addEventListener('click', () => {
+  if ((paginaActual + 1) * LIMITE_POR_PAGINA < totalOrdenes) {
+    cargarOrdenes({ pagina: paginaActual + 1 });
+  }
 });
 
 document.getElementById('cancelarEntrega').addEventListener('click', cerrarModalEntrega);

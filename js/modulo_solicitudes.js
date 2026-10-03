@@ -1,4 +1,6 @@
-let datos = [];
+let busquedaCarpetas = '';
+let cargaCarpetasId = 0;
+let temporizadorBusqueda = null;
 let filaSeleccionadaId = null;
 let filaSeleccionada = null;
 
@@ -68,27 +70,30 @@ function cerrarModalEntrega() {
   modalEntrega.hidden = true;
 }
 
-// Cargar datos desde backend (solo ordenes)
-async function cargarOrdenes() {
+async function cargarCarpetas(busqueda = busquedaCarpetas) {
+  const cargaActual = ++cargaCarpetasId;
+  busquedaCarpetas = busqueda.trim();
+  const lista = document.getElementById('listaEquipos');
+  lista.innerHTML = '<p class="lista-vacia">Cargando máquinas y equipos...</p>';
+
   try {
-    const res = await API_FETCH('/api/ordenes');
-    if (!res.ok) throw new Error(`No se pudieron cargar las órdenes (${res.status})`);
-    let data = await res.json();
-
-    // Ordenar por id descendente y limitar a 1500
-    datos = data.sort((a, b) => b.id - a.id);
-
-    renderLista(datos);
+    const parametros = new URLSearchParams();
+    if (busquedaCarpetas) parametros.set('search', busquedaCarpetas);
+    const res = await API_FETCH(`/api/ordenes/equipos?${parametros.toString()}`);
+    if (!res.ok) throw new Error(`No se pudieron cargar las carpetas (${res.status})`);
+    const carpetas = await res.json();
+    if (!Array.isArray(carpetas)) throw new Error('La respuesta de carpetas no tiene el formato esperado.');
+    if (cargaActual !== cargaCarpetasId) return;
+    renderLista(carpetas, busquedaCarpetas);
   } catch (err) {
-    console.error("Error cargando ordenes:", err);
-    const lista = document.getElementById('listaEquipos');
-    if (lista) {
-      lista.innerHTML = '<p class="lista-vacia">No se pudieron cargar las solicitudes. Inicie sesión nuevamente para consultar las máquinas y equipos.</p>';
-    }
-    const loginModal = document.getElementById('loginModal');
-    if (loginModal && !loginModal.classList.contains('is-visible')) {
-      loginModal.classList.add('is-visible');
-      document.getElementById('user')?.focus();
+    console.error('Error cargando carpetas de órdenes:', err);
+    if (cargaActual === cargaCarpetasId) {
+      lista.innerHTML = '<p class="lista-vacia">No se pudieron cargar las máquinas y equipos. Recargue la vista e inténtelo nuevamente.</p>';
+      const loginModal = document.getElementById('loginModal');
+      if (loginModal && !loginModal.classList.contains('is-visible')) {
+        loginModal.classList.add('is-visible');
+        document.getElementById('user')?.focus();
+      }
     }
   }
 }
@@ -227,32 +232,98 @@ function renderSolicitud(row) {
   return card;
 }
 
-function renderLista(data) {
-  const lista = document.getElementById('listaEquipos');
-  lista.innerHTML = '';
-  const grupos = new Map();
-  data.forEach(row => {
-    const equipo = String(row.maquina_equipo || row.nombre_declarado || 'Sin máquina/equipo').trim();
-    if (!grupos.has(equipo)) grupos.set(equipo, []);
-    grupos.get(equipo).push(row);
-  });
+const LIMITE_CARPETA = 250;
 
-  if (!grupos.size) {
+async function cargarPaginaCarpeta(carpeta, contenido, estado, pagina) {
+  const solicitudId = (estado.solicitudId || 0) + 1;
+  estado.solicitudId = solicitudId;
+  contenido.replaceChildren();
+  const cargando = document.createElement('p');
+  cargando.className = 'lista-vacia';
+  cargando.textContent = 'Cargando órdenes de esta máquina...';
+  contenido.appendChild(cargando);
+
+  try {
+    const parametros = new URLSearchParams({
+      equipo: carpeta.equipo,
+      limit: String(LIMITE_CARPETA),
+      offset: String(pagina * LIMITE_CARPETA)
+    });
+    if (carpeta.busqueda) parametros.set('search', carpeta.busqueda);
+    const res = await API_FETCH(`/api/ordenes/por-equipo?${parametros.toString()}`);
+    if (!res.ok) throw new Error(`No se pudieron cargar las órdenes (${res.status})`);
+    const result = await res.json();
+    if (!Array.isArray(result.rows) || !Number.isFinite(Number(result.total))) {
+      throw new Error('La respuesta de órdenes de la carpeta no tiene el formato esperado.');
+    }
+    if (solicitudId !== estado.solicitudId) return;
+
+    estado.pagina = pagina;
+    estado.total = Number(result.total);
+    estado.cargada = true;
+    contenido.replaceChildren();
+    if (!result.rows.length) {
+      const vacio = document.createElement('p');
+      vacio.className = 'lista-vacia';
+      vacio.textContent = 'No hay solicitudes para mostrar.';
+      contenido.appendChild(vacio);
+    } else {
+      result.rows.forEach(row => contenido.appendChild(renderSolicitud(row)));
+    }
+
+    const totalPaginas = Math.ceil(estado.total / LIMITE_CARPETA);
+    if (totalPaginas > 1) {
+      const navegacion = document.createElement('nav');
+      const resumen = document.createElement('span');
+      const anterior = document.createElement('button');
+      const siguiente = document.createElement('button');
+      navegacion.className = 'carpeta-pagination';
+      navegacion.setAttribute('aria-label', `Paginación de ${carpeta.equipo}`);
+      resumen.setAttribute('aria-live', 'polite');
+      resumen.textContent = `Página ${pagina + 1} de ${totalPaginas} · ${estado.total} solicitudes`;
+      anterior.type = 'button';
+      anterior.textContent = 'Anterior';
+      anterior.disabled = pagina === 0;
+      siguiente.type = 'button';
+      siguiente.textContent = 'Siguiente';
+      siguiente.disabled = (pagina + 1) * LIMITE_CARPETA >= estado.total;
+      anterior.addEventListener('click', () => cargarPaginaCarpeta(carpeta, contenido, estado, pagina - 1));
+      siguiente.addEventListener('click', () => cargarPaginaCarpeta(carpeta, contenido, estado, pagina + 1));
+      navegacion.append(anterior, resumen, siguiente);
+      contenido.appendChild(navegacion);
+    }
+  } catch (err) {
+    console.error(`Error cargando órdenes de ${carpeta.equipo}:`, err);
+    if (solicitudId !== estado.solicitudId) return;
+    contenido.replaceChildren();
+    const mensaje = document.createElement('p');
+    const reintentar = document.createElement('button');
+    mensaje.className = 'lista-vacia';
+    mensaje.textContent = 'No se pudieron cargar las órdenes de esta máquina.';
+    reintentar.type = 'button';
+    reintentar.textContent = 'Reintentar';
+    reintentar.addEventListener('click', () => cargarPaginaCarpeta(carpeta, contenido, estado, pagina));
+    contenido.append(mensaje, reintentar);
+  }
+}
+
+function renderLista(data, busqueda = '') {
+  const lista = document.getElementById('listaEquipos');
+  lista.replaceChildren();
+  if (!data.length) {
     lista.innerHTML = '<p class="lista-vacia">No hay solicitudes para mostrar.</p>';
     return;
   }
 
-  const gruposOrdenados = [...grupos.entries()].sort(([equipoA, solicitudesA], [equipoB, solicitudesB]) => {
-    return solicitudesB.length - solicitudesA.length || equipoA.localeCompare(equipoB);
-  });
-
-  gruposOrdenados.forEach(([equipo, solicitudes]) => {
+  data.forEach(({ equipo, total }) => {
     const carpeta = document.createElement('details');
     const summary = document.createElement('summary');
     const icono = document.createElement('span');
     const nombre = document.createElement('span');
     const contador = document.createElement('span');
     const contenido = document.createElement('div');
+    const carpetaData = { equipo, busqueda };
+    const estado = { cargada: false, pagina: 0, total: Number(total) };
     carpeta.className = 'equipo-carpeta';
     carpeta.open = false;
     icono.className = 'carpeta-icono';
@@ -260,23 +331,26 @@ function renderLista(data) {
     nombre.className = 'equipo-nombre';
     nombre.textContent = equipo;
     contador.className = 'equipo-contador';
-    contador.textContent = `${solicitudes.length} solicitud${solicitudes.length === 1 ? '' : 'es'}`;
+    contador.textContent = `${total} solicitud${Number(total) === 1 ? '' : 'es'}`;
     summary.append(icono, nombre, contador);
     contenido.className = 'solicitudes-equipo';
+    const instruccion = document.createElement('p');
+    instruccion.className = 'lista-vacia';
+    instruccion.textContent = 'Abra la carpeta para cargar sus órdenes.';
+    contenido.appendChild(instruccion);
     carpeta.append(summary, contenido);
-    solicitudes.forEach(row => contenido.appendChild(renderSolicitud(row)));
+    carpeta.addEventListener('toggle', () => {
+      if (carpeta.open && !estado.cargada) {
+        cargarPaginaCarpeta(carpetaData, contenido, estado, estado.pagina);
+      }
+    });
     lista.appendChild(carpeta);
   });
 }
 
-// Buscador dinámico
-document.getElementById("buscador").addEventListener("input", e => {
-  const palabras = e.target.value.toLowerCase().split(" ").filter(p => p);
-  const filtrados = datos.filter(row => {
-    const campos = `${row.codigo || ""} ${row.nombre_declarado || ""} ${row.maquina_equipo || ""}`.toLowerCase();
-    return palabras.every(p => campos.includes(p));
-  });
-  renderLista(filtrados);
+document.getElementById('buscador').addEventListener('input', event => {
+  clearTimeout(temporizadorBusqueda);
+  temporizadorBusqueda = setTimeout(() => cargarCarpetas(event.target.value), 250);
 });
 
 document.getElementById('cancelarEntrega').addEventListener('click', cerrarModalEntrega);
@@ -305,5 +379,5 @@ asignarSolicitud.addEventListener('click', () => abrirFormularioSolicitud('asign
 cerrarSolicitud.addEventListener('click', () => abrirFormularioSolicitud('cierre'));
 reprogramarSolicitud.addEventListener('click', () => abrirFormularioSolicitud('reprogramar'));
 
-// Ejecutar carga inicial
-cargarOrdenes();
+// Cargar inicialmente solo los nombres y totales de las carpetas.
+cargarCarpetas();
