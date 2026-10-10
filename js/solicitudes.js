@@ -38,15 +38,16 @@
     informes: '../css/modulo_solicitudes.css',
     habilitaciones: '../css/habilitaciones.css'
   };
-  if (hojasEstilo[vista]) {
-    const hojaEstilo = document.createElement('link');
-    hojaEstilo.rel = 'stylesheet';
-    hojaEstilo.href = hojasEstilo[vista];
-    document.head.appendChild(hojaEstilo);
+  function cargarHojaEstilo(ruta) {
+    return new Promise((resolve, reject) => {
+      const hojaEstilo = document.createElement('link');
+      hojaEstilo.rel = 'stylesheet';
+      hojaEstilo.href = ruta;
+      hojaEstilo.onload = resolve;
+      hojaEstilo.onerror = () => reject(new Error(`No se pudo cargar la hoja de estilo ${ruta}`));
+      document.head.appendChild(hojaEstilo);
+    });
   }
-
-  app.replaceChildren(plantilla.content.cloneNode(true));
-  document.title = `${vista[0].toUpperCase()}${vista.slice(1)} | Solicitudes de Mantenimiento`;
 
   async function cargarControladores() {
     for (const archivo of vistas[vista]) {
@@ -60,11 +61,39 @@
     }
   }
 
-  cargarControladores().catch(error => {
-    console.error(error);
-    const mensaje = document.createElement('p');
-    mensaje.className = 'error-carga-vista';
-    mensaje.textContent = 'No se pudo cargar esta vista. Recargue la página e inténtelo de nuevo.';
-    app.appendChild(mensaje);
-  });
+  async function iniciarVista() {
+    app.setAttribute('aria-busy', 'true');
+    const cargando = document.createElement('p');
+    cargando.setAttribute('role', 'status');
+    cargando.textContent = 'Cargando vista...';
+    app.replaceChildren(cargando);
+
+    try {
+      if (hojasEstilo[vista]) await cargarHojaEstilo(hojasEstilo[vista]);
+    } catch (error) {
+      console.error(error);
+      const mensaje = document.createElement('p');
+      mensaje.className = 'error-carga-vista';
+      mensaje.textContent = 'No se pudo cargar esta vista. Recargue la página e inténtelo de nuevo.';
+      app.replaceChildren(mensaje);
+      app.removeAttribute('aria-busy');
+      return;
+    }
+
+    app.replaceChildren(plantilla.content.cloneNode(true));
+    document.title = `${vista[0].toUpperCase()}${vista.slice(1)} | Solicitudes de Mantenimiento`;
+    try {
+      await cargarControladores();
+    } catch (error) {
+      console.error(error);
+      const mensaje = document.createElement('p');
+      mensaje.className = 'error-carga-vista';
+      mensaje.textContent = 'No se pudo cargar esta vista. Recargue la página e inténtelo de nuevo.';
+      app.appendChild(mensaje);
+    } finally {
+      app.removeAttribute('aria-busy');
+    }
+  }
+
+  iniciarVista();
 })();

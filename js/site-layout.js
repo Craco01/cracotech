@@ -29,7 +29,7 @@
         </nav>
 
         <div class="banner">
-          <div class="logo"><img height="150" width="150" src="${assetRoot}img/Logo.png" alt="logo metalurgica vera"></div>
+          <div class="logo"><img height="150" width="150" src="${assetRoot}img/Logo.png" alt="logo metalurgica vera" decoding="async" fetchpriority="low"></div>
           <div class="hero">
             <h1>Mantenimiento Metalúrgica Vera S.A.E.</h1>
             <p>Garantizamos la confiabilidad, disponibilidad y eficiencia de los equipos e instalaciones industriales.</p>
