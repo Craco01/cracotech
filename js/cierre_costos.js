@@ -531,15 +531,6 @@ if (formularioCierre) {
         submitButton.textContent = 'Cerrando...';
       }
 
-      // Calcular costo_mo basado en salarios
-      try {
-        await calcularUnidadMO();
-      } catch (error) {
-        console.error('Error calculando unidad_mo:', error);
-      await window.siteDialog.alert('Error al calcular unidad de MO');
-        return;
-      }
-
       // Enviar formulario por AJAX
       const formData = new FormData(e.target);
       const payload = Object.fromEntries(formData);
@@ -592,51 +583,6 @@ if (formularioCierre) {
       }
     });
   }
-}
-
-// Obtener usuario logueado del localStorage
-function getUsernameFromLocalStorage() {
-  return localStorage.getItem('username');
-}
-
-// Obtener salario de un empleado por username o nombre
-async function obtenerSalarioEmpleado(identificador) {
-  if (!identificador) return 0;
-  try {
-    const response = await API_FETCH(`/api/auth/empleados/${encodeURIComponent(identificador)}/salario`);
-    if (!response.ok) throw new Error(`Error HTTP ${response.status}`);
-    const data = await response.json();
-    return Number(data.salario) || 0;
-  } catch (err) {
-    console.error(`Error obteniendo salario de ${identificador}:`, err);
-    return 0;
-  }
-}
-
-// Calcular unidad_mo
-async function calcularUnidadMO() {
-  // El responsable es el usuario logueado (desde token JWT, que es el username/user)
-  const responsable = getUsernameFromLocalStorage();
-  
-  // El apoyo se identifica por el id de empleados seleccionado.
-  const itemApoyo = document.getElementById('apoyo').value;
-
-  let salarioResponsable = 0;
-  let salarioApoyo = 0;
-
-  if (responsable) {
-    // Buscar salario del responsable por username
-    salarioResponsable = await obtenerSalarioEmpleado(responsable);
-  }
-
-  // Si apoyo dice "Sin apoyo", no buscar salario
-  if (itemApoyo) {
-    // El endpoint resuelve el id de empleado sin buscar por nombre.
-    salarioApoyo = await obtenerSalarioEmpleado(itemApoyo);
-  }
-
-  const unidadMO = (salarioResponsable + salarioApoyo) / 240;
-  document.getElementById('unidad_mo').value = unidadMO.toFixed(2);
 }
 
 // Inicializar
