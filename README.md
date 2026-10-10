@@ -2,8 +2,6 @@
 
 Este repositorio contiene el portafolio público de CracoTech y el portal web de mantenimiento industrial para Metalúrgica Vera S.A.E. El portal consume la API REST del backend mediante JavaScript fetch.
 
-Este directorio contiene la interfaz web del sistema de mantenimiento para Metalúrgica Vera S.A.E. La aplicación está construida como un frontend estático y consume la API REST del backend mediante JavaScript fetch.
-
 ## Objetivo
 
 Centralizar el acceso a:
@@ -25,7 +23,7 @@ Centralizar el acceso a:
 
 ## Arquitectura
 
-La estructura está pensada para funcionar como sitio público y de gestión, pero la información sensible y la lógica de negocio se mantienen en el backend.
+Este repositorio contiene el sitio estático que se publica en GitHub Pages. La interfaz consume la API del backend; no guarda credenciales de base de datos ni implementa permisos de negocio.
 
 ```text
 frontend/
@@ -47,10 +45,10 @@ frontend/
 
 ## Flujo principal
 
-1. Un servidor estático local sirve la interfaz.
+1. El workflow `.github/workflows/deploy-pages.yml` publica el sitio en GitHub Pages al actualizar `main` o al ejecutarse manualmente desde GitHub Actions.
 2. El portal de mantenimiento está disponible en [pages/upkeepmv.html](pages/upkeepmv.html).
-3. En el portal, [js/api-config.js](js/api-config.js) centraliza la URL base de la API.
-4. El portal realiza llamadas a rutas bajo `/api/...` y el backend valida autenticación, roles y permisos.
+3. [js/api-config.js](js/api-config.js) centraliza la URL base de la API productiva.
+4. El backend está en el repositorio independiente `upkeepmv_backend` y se actualiza manualmente en AWS Lightsail.
 
 ## Autenticación
 
@@ -62,15 +60,17 @@ Los componentes del flujo de login del portal están en:
 
 ## Ejecución local
 
-La API está configurada en [js/api-config.js](js/api-config.js) para conectarse a `http://127.0.0.1:3000`.
-
 Desde este directorio, inicia un servidor estático para el frontend:
 
 ```powershell
 py -m http.server 5500
 ```
 
-Abre `http://127.0.0.1:5500/pages/upkeepmv.html`. Para iniciar el backend y configurar MySQL, consulta el README de la carpeta `pruebas`.
+Abre `http://127.0.0.1:5500/pages/upkeepmv.html`. En este repositorio, [js/api-config.js](js/api-config.js) apunta al API HTTPS de producción; por tanto, la interfaz local seguirá consultando el backend productivo. Las pruebas locales integrales deben ejecutarse en el directorio independiente `pruebas`, con su propia configuración local y sin copiar su `.env` a este repositorio.
+
+## Publicación
+
+No se publica durante las pruebas locales. Para publicar, sube los cambios revisados a `main` y verifica el workflow de GitHub Pages. Los cambios del backend no se publican con ese workflow: se despliegan manualmente en AWS Lightsail siguiendo la guía del repositorio backend, después de respaldar la base y aplicar las migraciones requeridas.
 
 ## Consideraciones
 

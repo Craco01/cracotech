@@ -1,5 +1,10 @@
 let data = [];
 
+const cargaProductos = document.getElementById("codigos-admin-actions");
+if (cargaProductos && localStorage.getItem("role") === "administrador") {
+  cargaProductos.hidden = false;
+}
+
 async function cargarProductos() {
   try {
     const response = await API_FETCH('/api/productos');
@@ -34,18 +39,12 @@ function renderTable(filteredData) {
 
 // Filtrar datos dinámicamente
 document.getElementById("codigos-search").addEventListener("input", function () {
-  let searchValue = this.value.toLowerCase().trim();
-
-  // Elimina % y divide en palabras
-  let terms = searchValue.replace(/%/g, " ").split(/\s+/).filter(Boolean);
-
   const filtered = data.filter(item => {
-    const codigo = String(item.codigo).toLowerCase();
-    const descripcion = String(item["Descripción"] ?? item.descripcion).toLowerCase();
-    const unidad = String(item.unidad_medida ?? '').toLowerCase();
-
-    return terms.every(term =>
-      codigo.includes(term) || descripcion.includes(term) || unidad.includes(term)
+    return SEARCH_UTILS.matches(
+      this.value,
+      item.codigo,
+      item["Descripción"] ?? item.descripcion,
+      item.unidad_medida
     );
   });
 

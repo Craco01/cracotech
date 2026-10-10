@@ -24,6 +24,7 @@ button:disabled{background:#9aa5b1;cursor:not-allowed}
 button:focus-visible,label:focus-within{outline:2px solid var(--ac);outline-offset:2px}
 progress{width:100%;height:14px;margin:12px 0 6px}
 #log{font:13px/1.5 ui-monospace,Consolas,monospace;max-height:180px;overflow:auto;white-space:pre-wrap;color:var(--mut)}
+.back-button{margin-bottom:18px;background:#526170}
 [hidden]{display:none!important}
 #masterKeyModal.login-modal{inset:0;width:100%;height:100dvh;min-height:0;padding:24px;overflow-y:auto;background:rgba(7,40,133,.48);backdrop-filter:blur(3px)}
 #masterKeyModal.login-modal.is-visible{display:grid;place-items:center}

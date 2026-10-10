@@ -32,6 +32,19 @@ const CONFIG = {
         { ...dec("CantidadFisica", 18, 2), header: "Cantidad Física" },
         { ...txt("Ubicacion", 100), header: "Ubicación" }
       ]
+    },
+    productos: {
+      nombre: "productos",
+      insertUrl: "/api/productos/bulk",
+      truncateUrl: "/api/productos/truncate",
+      truncate: true,
+      columnas: [
+        { name: "codigo", type: "int", min: -2147483648, max: 2147483647, strictInteger: true, required: true, clave: true },
+        txt("descripcion", 255, true),
+        txt("unidad_medida", 20, true),
+        dec("precio_compra", 20, 2, true),
+        { ...fec("fecha_adquisicion", false), defecto: "2009-03-06" }
+      ]
     }
   }
 };
@@ -44,10 +57,10 @@ const state = { rows: [], malas: 0, faltan: [], data: null };
 const destinoId = new URLSearchParams(window.location.search).get("tabla");
 const destino = Object.prototype.hasOwnProperty.call(CONFIG.tablas, destinoId) ? CONFIG.tablas[destinoId] : null;
 const tabla = () => destino;
-const inventoryAdminRequired = Boolean(destino?.truncate && localStorage.getItem('role') !== 'administrador');
+const adminRequired = Boolean(destino?.truncate && localStorage.getItem('role') !== 'administrador');
 
-if (inventoryAdminRequired) {
-  $("destino").textContent = "La carga completa de inventario requiere una cuenta administrador.";
+if (adminRequired) {
+  $("destino").textContent = `La carga completa de ${destino.nombre} requiere una cuenta administrador.`;
   $("destino").className = "bad";
   $("file-section").hidden = true;
   $("res").hidden = true;
@@ -55,14 +68,21 @@ if (inventoryAdminRequired) {
   $("destino").textContent = "Mantenimientos preventivos. Agrega filas sin borrar los datos existentes.";
 } else if (destinoId === "inventario" && destino) {
   $("destino").textContent = "Inventario. Vacía la tabla antes de volver a cargarla completa.";
+} else if (destinoId === "productos" && destino) {
+  $("destino").textContent = "Productos. Reemplaza la tabla completa; fecha_adquisicion usa 2009-03-06 si queda vacía.";
 } else {
-  $("destino").textContent = "Destino no válido. Abrí esta página desde el módulo de mantenimiento preventivo o inventario.";
+  $("destino").textContent = "Destino no válido. Abrí esta página desde el módulo correspondiente.";
   $("destino").className = "bad";
   $("file-section").hidden = true;
 }
 
-$("campos-detalle").hidden = !destino || inventoryAdminRequired;
-if (destino && !inventoryAdminRequired) {
+if (destino?.truncate) {
+  $("masterKeyTitle").textContent = `Reemplazar ${destino.nombre}`;
+  $("masterKeyDescription").textContent = `Se vaciará ${destino.nombre} antes de cargar el archivo.`;
+}
+
+$("campos-detalle").hidden = !destino || adminRequired;
+if (destino && !adminRequired) {
   const lista = document.createElement("ul");
   destino.columnas.forEach(c => {
     const item = document.createElement("li");
@@ -74,6 +94,11 @@ if (destino && !inventoryAdminRequired) {
   });
   $("campos").replaceChildren(lista);
 }
+
+document.getElementById("volver").addEventListener("click", () => {
+  if (window.history.length > 1) window.history.back();
+  else window.location.href = "./reportes.html?vista=codigos";
+});
 
 /* --- Selección de archivo --- */
 $("file").addEventListener("change", e => e.target.files[0] && leer(e.target.files[0]));
@@ -121,14 +146,18 @@ function convertir(v, c) {
     return c.max && s.length > c.max ? { err: `supera los ${c.max} caracteres` } : { v: s };
   }
   if (c.type === "date") {
-    if (v instanceof Date && !isNaN(v)) return { v: `${v.getFullYear()}-${p2(v.getMonth() + 1)}-${p2(v.getDate())}` };
+    if (v instanceof Date && !isNaN(v)) return { v: v.toISOString().slice(0, 10) };
     const s = String(v).trim(), m = s.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})$/);
-    if (m) return { v: `${m[3]}-${p2(m[2])}-${p2(m[1])}` };
-    if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return { v: s };
+    const iso = m ? `${m[3]}-${p2(m[2])}-${p2(m[1])}` : s;
+    if (/^\d{4}-\d{2}-\d{2}$/.test(iso)) {
+      const date = new Date(`${iso}T00:00:00.000Z`);
+      if (!Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === iso) return { v: iso };
+    }
     return { err: `fecha no válida (${s})` };
   }
   let n = aNumero(v), adj = 0;
   if (Number.isNaN(n)) return { err: `"${v}" no es un número` };
+  if (c.type === "int" && c.strictInteger && !Number.isInteger(n)) return { err: `"${v}" debe ser un número entero` };
   if (c.type === "int" && !Number.isInteger(n)) { n = CONFIG.enteros === "truncar" ? Math.trunc(n) : Math.round(n); adj = 1; }
   if (c.type === "decimal") {
     const [p, sc] = c.dec;

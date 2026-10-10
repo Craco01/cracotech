@@ -25,6 +25,28 @@ const API_URL = (path) => {
 
 const API_JSON_HEADERS = { 'Content-Type': 'application/json' };
 
+window.SEARCH_UTILS = {
+  tokens(query) {
+    return String(query || '')
+      .replace(/%/g, ' ')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLocaleLowerCase('es')
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean);
+  },
+  matches(query, ...fields) {
+    const terms = this.tokens(query);
+    if (!terms.length) return true;
+    const values = fields.map(value => String(value ?? '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLocaleLowerCase('es'));
+    return terms.every(term => values.some(value => value.includes(term)));
+  }
+};
+
 function clearExpiredSession() {
   localStorage.removeItem('token');
   localStorage.removeItem('username');

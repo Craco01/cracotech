@@ -14,6 +14,27 @@
   border-radius: 5px;
 }
 
+.codigos-upload-button {
+  display: block;
+  width: fit-content;
+  margin: 0 auto 12px;
+  padding: 9px 16px;
+  border-radius: 5px;
+  background: #007acc;
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.codigos-upload-button:hover,
+.codigos-upload-button:focus-visible {
+  background: #005fa3;
+}
+
+#codigos-admin-actions {
+  text-align: center;
+}
+
 #codigos-table-wrap {
   width: min(75%, 1100px);
   height: 75vh;

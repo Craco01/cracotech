@@ -1975,12 +1975,50 @@ padding: 0 0 20px 0;
 .tabla-costos {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
   margin-bottom: 20px;
   background: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
-  overflow: hidden;
+  overflow: visible;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.solicitud-habilitacion {
+  display: flex;
+  width: min(82vw, 1100px);
+  min-height: 76vh;
+  padding: 24px clamp(16px, 3vw, 40px);
+  flex-direction: column;
+}
+
+.solicitud-habilitacion form {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.solicitud-habilitacion form > button[type="submit"] {
+  align-self: flex-start;
+  margin-top: auto;
+}
+
+.tabla-costos .col-producto { width: 41%; }
+.tabla-costos .col-cantidad { width: 13%; }
+.tabla-costos .col-costo,
+.tabla-costos .col-total { width: 18%; }
+.tabla-costos .col-accion { width: 10%; }
+
+.producto-buscador {
+  min-width: 0;
+}
+
+.tabla-costos .producto-buscador .select-buscador-input {
+  text-align: left;
+}
+
+.producto-buscador .select-buscador-lista {
+  z-index: 1100;
 }
 
 .tabla-costos thead {
@@ -2054,6 +2092,43 @@ padding: 0 0 20px 0;
   color: #0a6b0a;
   font-weight: bold;
   font-size: 0.95em;
+}
+
+.habilitacion-comparacion {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  width: min(100%, 760px);
+  margin: 12px auto 24px;
+}
+
+.habilitacion-comparacion > div {
+  display: flex;
+  min-height: 74px;
+  padding: 10px 12px;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  border: 1px solid #d3d9e2;
+  border-radius: 6px;
+  background: #f7f9fb;
+  text-align: center;
+}
+
+.habilitacion-comparacion > div > span {
+  color: #008b95;
+  font-size: 13px;
+}
+
+.habilitacion-comparacion output {
+  color: #0a6b0a;
+  font-weight: 700;
+}
+
+@media (max-width: 640px) {
+  .habilitacion-comparacion {
+    grid-template-columns: 1fr;
+  }
 }
 
 

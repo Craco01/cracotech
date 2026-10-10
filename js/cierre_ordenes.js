@@ -2,6 +2,7 @@ function crearSelectConBusqueda(selectId) {
   const select = document.getElementById(selectId);
   if (!select) return;
 
+  const habilitacionForm = select.closest('form[data-habilitacion="true"]');
   select.innerHTML = '<option value="">Seleccione una solicitud</option>';
   select.classList.add('select-buscador-original');
 
@@ -30,6 +31,14 @@ function crearSelectConBusqueda(selectId) {
   contenedor.appendChild(lista);
   select.insertAdjacentElement('afterend', contenedor);
   contenedor.insertAdjacentElement('afterend', infoAveria);
+  if (habilitacionForm && select.required) {
+    select.required = false;
+    input.required = true;
+    input.setCustomValidity('Seleccione una solicitud de la lista.');
+    select.addEventListener('change', () => {
+      input.setCustomValidity(select.value ? '' : 'Seleccione una solicitud de la lista.');
+    });
+  }
 
   let resultadosActuales = [];
   let indiceActivo = -1;
@@ -74,6 +83,11 @@ function crearSelectConBusqueda(selectId) {
     select.innerHTML = "";
     const etiqueta = etiquetaSolicitud(item);
     select.add(new Option(etiqueta, String(item.id), true, true));
+    if (item.codigo !== undefined && item.codigo !== null) {
+      select.dataset.codigo = String(item.codigo);
+    } else {
+      delete select.dataset.codigo;
+    }
     input.value = etiqueta;
 
     const hiddenId = document.getElementById('ordenId');
@@ -109,6 +123,9 @@ function crearSelectConBusqueda(selectId) {
         search: texto,
         includeInactive: String(incluirInactivas)
       });
+      if (document.querySelector('form[data-habilitacion="true"]')) {
+        query.set('includeProductCode', 'true');
+      }
       const res = await API_FETCH(`/api/ordenes/buscar?${query.toString()}`);
       if (!res.ok) throw new Error(`No se pudieron buscar las solicitudes (${res.status})`);
       const data = await res.json();
@@ -174,11 +191,15 @@ function crearSelectConBusqueda(selectId) {
     lista.replaceChildren();
     cerrarLista();
     select.value = '';
+    delete select.dataset.codigo;
     const hiddenId = document.getElementById('ordenId');
     if (hiddenId) {
       hiddenId.value = '';
     }
     infoAveria.textContent = '';
+    if (document.querySelector('form[data-habilitacion="true"]')) {
+      select.dispatchEvent(new Event('change', { bubbles: true }));
+    }
     temporizadorBusqueda = setTimeout(() => mostrarResultados(input.value), 250);
   });
 

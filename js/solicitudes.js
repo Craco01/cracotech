@@ -3,7 +3,8 @@
     formularios: {
       solicitud: ['codigo_maquina.js', 'formularios.js'],
       asignar: ['cierre_ordenes.js', 'formularios.js'],
-      cierre: ['cierre_ordenes.js', 'cierre_costos.js', 'formularios.js'],
+      cierre: ['cierre_ordenes.js', 'formularios.js'],
+      habilitacion: ['cierre_ordenes.js', 'cierre_costos.js'],
       reprogramar: ['cierre_ordenes.js', 'formularios.js'],
       modificar: ['cierre_ordenes.js', 'codigo_maquina.js', 'modificar.js', 'formularios.js'],
       baja: ['cierre_ordenes.js', 'baja_ordenes.js']
@@ -11,7 +12,8 @@
     reportes: {
       codigos: ['codigos.js'],
       solicitudes: ['lista_solicitudes.js'],
-      informes: ['modulo_solicitudes.js']
+      informes: ['modulo_solicitudes.js'],
+      habilitaciones: ['seguimiento-habilitaciones.js']
     }
   };
 
@@ -33,7 +35,8 @@
   const hojasEstilo = {
     codigos: '../css/codigos.css',
     solicitudes: '../css/lista_solicitudes.css',
-    informes: '../css/modulo_solicitudes.css'
+    informes: '../css/modulo_solicitudes.css',
+    habilitaciones: '../css/habilitaciones.css'
   };
   if (hojasEstilo[vista]) {
     const hojaEstilo = document.createElement('link');

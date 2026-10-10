@@ -124,17 +124,6 @@
           <label for="reparación">Reparación Realizada</label>
           <textarea id="reparación" name="reparacion" rows="5" placeholder="Describa la intervencion realizada o la reparación realizada" required></textarea>
         </div>
-        <div class="campo-ancho">
-          <label for="tablaCostos">Costeo de Repuestos</label>
-          <table class="tabla-costos">
-            <thead><tr><th>Producto</th><th>Cantidad</th><th>Costo Unitario</th><th>Total</th><th>Acción</th></tr></thead>
-            <tbody id="tablaBody"></tbody>
-          </table>
-          <div id="resultado"><span id="costoTotal">0</span></div>
-          <input type="hidden" id="unidad_mo" name="unidad_mo" value="0">
-          <input type="hidden" id="costo_repuestos" name="costo_repuestos" value="0">
-        </div>
-        <datalist id="listaProductos"></datalist>
         <div>
           <label for="horas">Horas empleadas en la reparación</label>
           <input type="number" name="horas" id="horas" max="300" min="1" step="1" inputmode="numeric" placeholder="Ej: 8" required>
@@ -155,6 +144,51 @@
           <textarea id="observacion" name="notas" rows="5" placeholder="Deje aca las observacions que desee acotar"></textarea>
         </div>
         <button type="submit">Cerrar solicitud</button>
+      </form>
+    </main>
+  </template>
+
+  <template id="formularios-habilitacion">
+    <main class="solicitud solicitud-habilitacion">
+      <div class="titulo"><h2>Solicitar habilitación</h2></div>
+      <form action="/api/ordenes/habilitacion" method="post" data-habilitacion="true">
+        <div>
+          <label for="maquina">Solicitud/Máquina</label>
+          <select id="maquina" name="id" required></select>
+        </div>
+        <p id="info-averia" class="info-averia"></p>
+        <div class="campo-ancho">
+          <label for="tablaCostos">Costeo de repuestos</label>
+          <table id="tablaCostos" class="tabla-costos">
+            <colgroup>
+              <col class="col-producto">
+              <col class="col-cantidad">
+              <col class="col-costo">
+              <col class="col-total">
+              <col class="col-accion">
+            </colgroup>
+            <thead><tr><th>Producto</th><th>Cantidad</th><th>Costo unitario</th><th>Total</th><th>Acción</th></tr></thead>
+            <tbody id="tablaBody"></tbody>
+          </table>
+          <div id="resultado"><span id="costoTotal">0</span></div>
+          <input type="hidden" id="costo_repuestos" name="costo_repuestos" value="0">
+          <p id="habilitacionCosteoEstado" aria-live="polite">Seleccione una solicitud para comprobar si ya tiene un costeo.</p>
+          <div class="habilitacion-comparacion" aria-live="polite">
+            <div>
+              <span>Producto</span>
+              <output id="valorProductoSolicitud">0</output>
+            </div>
+            <div>
+              <span>Repuesto</span>
+              <output id="costoRepuestosComparacion">0</output>
+            </div>
+            <div>
+              <span>% costo</span>
+              <output id="porcentajeProductoRepuestos">0%</output>
+            </div>
+          </div>
+        </div>
+        <button type="submit" disabled>Solicitar habilitación</button>
       </form>
     </main>
   </template>

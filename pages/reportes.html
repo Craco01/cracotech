@@ -6,15 +6,20 @@
   <title>Reportes de Solicitudes</title>
   <link rel="icon" href="../img/Logo.png" type="image/png" sizes="32x32">
   <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/site-dialogs.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script src="../js/api-config.js"></script>
+  <script src="../js/site-dialogs.js"></script>
 </head>
 <body>
   <div id="solicitudes-app" data-seccion="reportes"></div>
 
   <template id="reportes-codigos">
     <h2 id="codigos-title">Código de Máquinas</h2>
-    <input type="text" id="codigos-search" placeholder="Buscar...">
+    <div id="codigos-admin-actions" hidden>
+      <a class="codigos-upload-button" href="./carga-xlsx.html?tabla=productos">Cargar Excel de productos</a>
+    </div>
+    <input type="text" id="codigos-search" placeholder="Buscar términos (espacios o %) por código, descripción o unidad...">
     <div id="codigos-table-wrap">
       <table id="codigos-table">
         <thead><tr><th>Código</th><th>Descripción</th><th>Unidad</th><th>Precio de compra</th></tr></thead>
@@ -82,6 +87,40 @@
         <div class="modal-entrega__acciones">
           <button id="asignarSolicitud" type="button" hidden>Asignar personal</button><button id="cerrarSolicitud" type="button" hidden>Cerrar solicitud</button><button id="reprogramarSolicitud" type="button" hidden>Reprogramar</button><button id="cancelarEntrega" type="button">Cancelar</button><button id="imprimirEntrega" type="button">Imprimir entrega</button>
         </div>
+      </div>
+    </div>
+  </template>
+
+  <template id="reportes-habilitaciones">
+    <div class="container">
+      <h2>Seguimiento de solicitudes de habilitación</h2>
+      <p id="habilitacionesEstado" aria-live="polite">Cargando solicitudes...</p>
+      <div class="table-scroll">
+        <table id="tablaHabilitaciones">
+          <colgroup>
+            <col class="habilitaciones-col-id">
+            <col class="habilitaciones-col-maquina">
+            <col class="habilitaciones-col-nombre">
+            <col class="habilitaciones-col-averia">
+            <col class="habilitaciones-col-responsable">
+            <col class="habilitaciones-col-costeo">
+            <col class="habilitaciones-col-estado">
+            <col class="habilitaciones-col-accion">
+          </colgroup>
+          <thead>
+            <tr>
+              <th>ID de orden</th>
+              <th>Máquina/Equipo</th>
+              <th>Nombre declarado</th>
+              <th>Avería</th>
+              <th>Responsable</th>
+              <th>Repuestos y costeo</th>
+              <th>Habilitado</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody id="habilitacionesBody"></tbody>
+        </table>
       </div>
     </div>
   </template>
