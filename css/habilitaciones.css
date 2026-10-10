@@ -1,3 +1,22 @@
+#habilitacionesReporte {
+  box-sizing: border-box;
+  width: 95%;
+  margin: 24px auto;
+  padding: 20px;
+  border-radius: 8px;
+  background: #f8fafc;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+#habilitacionesTablaContenedor {
+  margin: 16px 0;
+  padding: 10px;
+  overflow: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+}
+
 #tablaHabilitaciones {
   width: 100%;
   min-width: 980px;
@@ -47,7 +66,7 @@
 #tablaHabilitaciones tr > :last-child { border-right: 0; }
 #tablaHabilitaciones tbody tr:last-child td { border-bottom: 0; }
 #tablaHabilitaciones tbody tr:nth-child(even) td { background: #f6f8fb; }
-#tablaHabilitaciones tbody tr:hover td { background: #edf3fa; }
+#tablaHabilitaciones tbody tr:hover td { background: rgba(34, 197, 94, 0.16); }
 
 #tablaHabilitaciones .habilitaciones-repuestos {
   display: grid;
@@ -115,6 +134,11 @@
 }
 
 @media (max-width: 760px) {
+  #habilitacionesReporte {
+    width: calc(100% - 24px);
+    padding: 12px;
+  }
+
   #tablaHabilitaciones .habilitaciones-comparacion {
     grid-template-columns: 1fr;
   }
