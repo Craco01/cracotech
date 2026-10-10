@@ -82,7 +82,8 @@ function renderPaginacionCarpetas() {
   const inicio = totalCarpetas === 0 ? 0 : paginaCarpetas * LIMITE_CARPETAS + 1;
   const fin = Math.min((paginaCarpetas + 1) * LIMITE_CARPETAS, totalCarpetas);
 
-  estado.textContent = `Mostrando ${inicio}-${fin} de ${totalCarpetas} máquinas/equipos · Página ${totalPaginas === 0 ? 0 : paginaCarpetas + 1} de ${totalPaginas}`;
+  estado.textContent = `${totalPaginas === 0 ? 0 : paginaCarpetas + 1}/${totalPaginas}`;
+  estado.setAttribute('aria-label', `Página ${totalPaginas === 0 ? 0 : paginaCarpetas + 1} de ${totalPaginas}; mostrando ${inicio}-${fin} de ${totalCarpetas} máquinas/equipos`);
   anterior.disabled = paginaCarpetas === 0;
   siguiente.disabled = (paginaCarpetas + 1) * LIMITE_CARPETAS >= totalCarpetas;
 }
@@ -307,10 +308,12 @@ async function cargarPaginaCarpeta(carpeta, contenido, estado, pagina) {
       const resumen = document.createElement('span');
       const anterior = document.createElement('button');
       const siguiente = document.createElement('button');
-      navegacion.className = 'carpeta-pagination';
+      navegacion.className = 'carpeta-pagination report-pagination';
       navegacion.setAttribute('aria-label', `Paginación de ${carpeta.equipo}`);
+      resumen.className = 'pagination-status';
       resumen.setAttribute('aria-live', 'polite');
-      resumen.textContent = `Página ${pagina + 1} de ${totalPaginas} · ${estado.total} solicitudes`;
+      resumen.setAttribute('aria-label', `Página ${pagina + 1} de ${totalPaginas}; ${estado.total} solicitudes`);
+      resumen.textContent = `${pagina + 1}/${totalPaginas}`;
       anterior.type = 'button';
       anterior.textContent = 'Anterior';
       anterior.disabled = pagina === 0;

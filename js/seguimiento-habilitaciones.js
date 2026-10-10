@@ -177,7 +177,8 @@
     const totalPages = Math.ceil(totalRows / PAGE_SIZE);
     const start = totalRows === 0 ? 0 : currentPage * PAGE_SIZE + 1;
     const end = Math.min((currentPage + 1) * PAGE_SIZE, totalRows);
-    pageState.textContent = `Mostrando ${start}-${end} de ${totalRows} solicitudes · Página ${totalPages === 0 ? 0 : currentPage + 1} de ${totalPages}`;
+    pageState.textContent = `${totalPages === 0 ? 0 : currentPage + 1}/${totalPages}`;
+    pageState.setAttribute('aria-label', `Página ${totalPages === 0 ? 0 : currentPage + 1} de ${totalPages}; mostrando ${start}-${end} de ${totalRows} solicitudes`);
     previousButton.disabled = currentPage === 0;
     nextButton.disabled = (currentPage + 1) * PAGE_SIZE >= totalRows;
   }
@@ -210,6 +211,7 @@
         ? `${totalRows} solicitudes de habilitación.`
         : 'No hay solicitudes de habilitación registradas.';
       renderPaginacion();
+      document.querySelector('#tablaHabilitaciones').closest('.table-scroll').scrollTop = 0;
     } catch (error) {
       if (currentRequest === requestId) {
         state.textContent = error.message;

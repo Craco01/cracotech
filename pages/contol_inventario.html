@@ -7,6 +7,7 @@
         <link rel="icon" href="../img/Logo.png" type="image/png" sizes="32x32">
         <link rel="stylesheet" href="../css/styles.css">
         <link rel="stylesheet" href="../css/inventario.css">
+        <link rel="stylesheet" href="../css/report-pagination.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="../js/api-config.js"></script>
     <link rel="stylesheet" href="../css/site-dialogs.css">
@@ -40,9 +41,9 @@
           </table>
         </div>
 
-        <nav id="inventario-pagination" aria-label="Paginación del inventario">
+        <nav id="inventario-pagination" class="report-pagination" aria-label="Paginación del inventario">
           <button id="inventario-prev" type="button" disabled>Anterior</button>
-          <span id="inventario-page-status" aria-live="polite">0/0</span>
+          <span id="inventario-page-status" class="pagination-status" aria-live="polite">0/0</span>
           <button id="inventario-next" type="button" disabled>Siguiente</button>
         </nav>
 

@@ -54,7 +54,8 @@ function renderPaginacion() {
   const inicio = totalOrdenes === 0 ? 0 : paginaActual * LIMITE_POR_PAGINA + 1;
   const fin = Math.min((paginaActual + 1) * LIMITE_POR_PAGINA, totalOrdenes);
 
-  estado.textContent = `Mostrando ${inicio}-${fin} de ${totalOrdenes} órdenes · Página ${totalPaginas === 0 ? 0 : paginaActual + 1} de ${totalPaginas}`;
+  estado.textContent = `${totalPaginas === 0 ? 0 : paginaActual + 1}/${totalPaginas}`;
+  estado.setAttribute('aria-label', `Página ${totalPaginas === 0 ? 0 : paginaActual + 1} de ${totalPaginas}; mostrando ${inicio}-${fin} de ${totalOrdenes} órdenes`);
   anterior.disabled = paginaActual === 0;
   siguiente.disabled = (paginaActual + 1) * LIMITE_POR_PAGINA >= totalOrdenes;
 }
@@ -98,6 +99,7 @@ async function cargarOrdenes({ busqueda = busquedaActiva, pagina = paginaActual 
     document.querySelector(`th[data-col="${columnaOrden}"]`)?.classList.add(ordenAsc ? "asc" : "desc");
     renderTabla(datos);
     renderPaginacion();
+    document.querySelector('.table-scroll').scrollTop = 0;
   } catch (err) {
     console.error("Error cargando ordenes:", err);
     if (cargaActual === solicitudCarga) {

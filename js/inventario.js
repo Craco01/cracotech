@@ -41,6 +41,7 @@ async function cargarInventario({ busqueda = busquedaActiva, pagina = paginaActu
     totalInventario = Number(result.total);
     actualizarVistaInventario();
     renderPaginacionInventario();
+    document.getElementById("inventario-table-wrap").scrollTop = 0;
   } catch (error) {
     if (cargaActual === solicitudCarga) {
       estado.textContent = "Error";

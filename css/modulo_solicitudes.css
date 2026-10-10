@@ -268,26 +268,36 @@ th, td {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 8px;
   padding: 10px 4px;
   color: #334155;
 }
 
 .carpeta-pagination button,
 #listaEquipos > .equipo-carpeta .solicitudes-equipo > button {
-  min-width: 96px;
-  padding: 7px 12px;
+  min-width: 82px;
+  padding: 6px 10px;
   border: 0;
   border-radius: 5px;
   color: #fff;
-  background: #2563eb;
+  background: #007acc;
   cursor: pointer;
+  font-size: 0.85rem;
   font-weight: 600;
 }
 
 .carpeta-pagination button:hover:not(:disabled),
 #listaEquipos > .equipo-carpeta .solicitudes-equipo > button:hover {
-  background: #1d4ed8;
+  background: #005f99;
+}
+
+.carpeta-pagination .pagination-status {
+  display: inline-block;
+  min-width: 38px;
+  color: inherit;
+  font-size: 0.85rem;
+  line-height: 1.2;
+  text-align: center;
 }
 
 .carpeta-pagination button:disabled {
