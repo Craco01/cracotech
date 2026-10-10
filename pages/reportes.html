@@ -77,6 +77,11 @@
       <h2>Informe de Órdenes de Mantenimiento por Maquina</h2>
       <input type="text" id="buscador" placeholder="Buscar por código, nombre o máquina/equipo...">
       <div id="listaEquipos" class="lista-equipos" aria-live="polite"></div>
+      <nav id="equiposPagination" class="carpeta-pagination" aria-label="Paginación de máquinas y equipos">
+        <button id="equiposPaginaAnterior" type="button" disabled>Anterior</button>
+        <span id="equiposPaginaEstado" aria-live="polite">Cargando máquinas y equipos...</span>
+        <button id="equiposPaginaSiguiente" type="button" disabled>Siguiente</button>
+      </nav>
       <div class="leyenda-estados" aria-label="Estados de las solicitudes">
         <span><i class="indicador-estado indicador-pendiente"></i>Pendiente</span><span><i class="indicador-estado indicador-asignado"></i>Asignada</span><span><i class="indicador-estado indicador-vencido"></i>Vencida</span><span><i class="indicador-estado indicador-completado"></i>Completada</span><span><i class="indicador-estado indicador-retraso"></i>Con retraso</span><span><i class="indicador-estado indicador-reprogramado"></i>Reprogramada</span><span><i class="indicador-estado indicador-baja"></i>De baja</span>
       </div>
@@ -94,6 +99,7 @@
   <template id="reportes-habilitaciones">
     <div class="container">
       <h2>Seguimiento de solicitudes de habilitación</h2>
+      <input type="search" id="habilitacionesBuscador" placeholder="Buscar por código, nombre, máquina/equipo o responsable...">
       <p id="habilitacionesEstado" aria-live="polite">Cargando solicitudes...</p>
       <div class="table-scroll">
         <table id="tablaHabilitaciones">
@@ -122,6 +128,11 @@
           <tbody id="habilitacionesBody"></tbody>
         </table>
       </div>
+      <nav id="habilitacionesPagination" class="ordenes-pagination" aria-label="Paginación de solicitudes de habilitación">
+        <button id="habilitacionesPaginaAnterior" type="button" disabled>Anterior</button>
+        <span id="habilitacionesPaginaEstado" aria-live="polite">Cargando solicitudes...</span>
+        <button id="habilitacionesPaginaSiguiente" type="button" disabled>Siguiente</button>
+      </nav>
     </div>
   </template>
 

@@ -3,17 +3,50 @@ let filaEnEdicion = null;
 let campoEnEdicion = null;
 let columnaOrden = null;
 let direccionOrden = "asc";
+const LIMITE_POR_PAGINA = 120;
+let paginaActual = 0;
+let totalInventario = 0;
+let busquedaActiva = "";
+let solicitudCarga = 0;
+let temporizadorBusqueda = null;
 const columnasNumericas = new Set(["StockF9", "CantidadFisica", "Diferencia"]);
-const collatorInventario = new Intl.Collator("es", { numeric: true, sensitivity: "base" });
 
-async function cargarInventario() {
+async function cargarInventario({ busqueda = busquedaActiva, pagina = paginaActual } = {}) {
+  const cargaActual = ++solicitudCarga;
+  busquedaActiva = busqueda.trim();
+  paginaActual = pagina;
+  const estado = document.getElementById("inventario-page-status");
+  const anterior = document.getElementById("inventario-prev");
+  const siguiente = document.getElementById("inventario-next");
+  estado.textContent = "…";
+  anterior.disabled = true;
+  siguiente.disabled = true;
+
   try {
-    const res = await API_FETCH("/api/inventario");
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    inventarioData = await res.json();
+    const parametros = new URLSearchParams({
+      limit: String(LIMITE_POR_PAGINA),
+      offset: String(paginaActual * LIMITE_POR_PAGINA),
+      sortBy: columnaOrden || "Codigo",
+      sortOrder: direccionOrden
+    });
+    if (busquedaActiva) parametros.set("search", busquedaActiva);
+    const res = await API_FETCH(`/api/inventario/paginadas?${parametros.toString()}`);
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.detalle || result.error || `HTTP ${res.status}`);
+    if (!Array.isArray(result.rows) || !Number.isFinite(Number(result.total))) {
+      throw new Error("La respuesta de paginación del inventario no tiene el formato esperado.");
+    }
+    if (cargaActual !== solicitudCarga) return;
+    inventarioData = result.rows;
+    totalInventario = Number(result.total);
     actualizarVistaInventario();
+    renderPaginacionInventario();
   } catch (error) {
-    console.error("Error cargando inventario:", error);
+    if (cargaActual === solicitudCarga) {
+      estado.textContent = "Error";
+      console.error("Error cargando inventario:", error);
+      window.siteDialog.alert(error.message || "No se pudo cargar el inventario");
+    }
   }
 }
 
@@ -58,34 +91,6 @@ function renderInventarioTable(items) {
   });
 }
 
-// Filtrar datos dinámicamente
-function obtenerInventarioVisible() {
-  const searchValue = document.getElementById("inventario-search").value.toLowerCase().trim();
-  const terms = searchValue.replace(/%/g, " ").split(/\s+/).filter(Boolean);
-
-  const filtered = inventarioData.filter(item => {
-    const codigo = String(item.Codigo).toLowerCase();
-    const producto = String(item.Producto).toLowerCase();
-
-    return terms.every(term =>
-      codigo.includes(term) || producto.includes(term)
-    );
-  });
-
-  if (!columnaOrden) return filtered;
-  return [...filtered].sort((a, b) => {
-    const valorA = a[columnaOrden];
-    const valorB = b[columnaOrden];
-    if (valorA == null && valorB == null) return 0;
-    if (valorA == null) return 1;
-    if (valorB == null) return -1;
-    const comparacion = columnasNumericas.has(columnaOrden)
-      ? Number(valorA) - Number(valorB)
-      : collatorInventario.compare(String(valorA), String(valorB));
-    return direccionOrden === "asc" ? comparacion : -comparacion;
-  });
-}
-
 function obtenerClaseDiferencia(diferencia) {
   if (diferencia === null || diferencia === undefined || diferencia === "") return "";
   const valor = Number(diferencia);
@@ -96,12 +101,22 @@ function obtenerClaseDiferencia(diferencia) {
 }
 
 function actualizarVistaInventario() {
-  renderInventarioTable(obtenerInventarioVisible());
+  renderInventarioTable(inventarioData);
   document.querySelectorAll(".inventario-sort").forEach(button => {
     const activa = button.dataset.sort === columnaOrden;
     button.closest("th").setAttribute("aria-sort", activa ? (direccionOrden === "asc" ? "ascending" : "descending") : "none");
     button.querySelector("span").textContent = activa ? (direccionOrden === "asc" ? "▲" : "▼") : "";
   });
+}
+
+function renderPaginacionInventario() {
+  const totalPaginas = Math.ceil(totalInventario / LIMITE_POR_PAGINA);
+  const estado = document.getElementById("inventario-page-status");
+  const anterior = document.getElementById("inventario-prev");
+  const siguiente = document.getElementById("inventario-next");
+  estado.textContent = `${totalPaginas === 0 ? 0 : paginaActual + 1}/${totalPaginas}`;
+  anterior.disabled = paginaActual === 0;
+  siguiente.disabled = (paginaActual + 1) * LIMITE_POR_PAGINA >= totalInventario;
 }
 
 function configurarEncabezadosOrdenables() {
@@ -118,7 +133,7 @@ function configurarEncabezadosOrdenables() {
       const nuevaColumna = button.dataset.sort;
       direccionOrden = columnaOrden === nuevaColumna && direccionOrden === "asc" ? "desc" : "asc";
       columnaOrden = nuevaColumna;
-      actualizarVistaInventario();
+      cargarInventario({ pagina: 0 });
     });
     th.replaceChildren(button);
     th.setAttribute("scope", "col");
@@ -126,7 +141,20 @@ function configurarEncabezadosOrdenables() {
   });
 }
 
-document.getElementById("inventario-search").addEventListener("input", actualizarVistaInventario);
+document.getElementById("inventario-search").addEventListener("input", event => {
+  clearTimeout(temporizadorBusqueda);
+  const busqueda = event.target.value;
+  temporizadorBusqueda = setTimeout(() => cargarInventario({ busqueda, pagina: 0 }), 300);
+});
+
+document.getElementById("inventario-prev").addEventListener("click", () => {
+  if (paginaActual > 0) cargarInventario({ pagina: paginaActual - 1 });
+});
+document.getElementById("inventario-next").addEventListener("click", () => {
+  if ((paginaActual + 1) * LIMITE_POR_PAGINA < totalInventario) {
+    cargarInventario({ pagina: paginaActual + 1 });
+  }
+});
 
 // Todos los campos editables se actualizan desde su modal.
 document.getElementById("inventario-body").addEventListener("click", function (event) {
@@ -175,11 +203,9 @@ document.getElementById("inventario-modal-form").addEventListener("submit", asyn
   const botonGuardar = document.getElementById("inventario-modal-save");
   botonGuardar.disabled = true;
   try {
-    const actualizado = await guardarCampo(filaEnEdicion.Codigo, campoEnEdicion, nuevoValor);
-    Object.assign(filaEnEdicion, actualizado);
-    actualizarVistaInventario();
-
+    await guardarCampo(filaEnEdicion.Codigo, campoEnEdicion, nuevoValor);
     cerrarInventarioModal();
+    await cargarInventario();
   } catch (error) {
     console.error("Error guardando inventario:", error);
     await window.siteDialog.alert(error.message || "No se pudo actualizar el dato");

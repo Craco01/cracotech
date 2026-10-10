@@ -1,7 +1,17 @@
 (() => {
   const body = document.getElementById('habilitacionesBody');
   const state = document.getElementById('habilitacionesEstado');
-  if (!body || !state) return;
+  const searchInput = document.getElementById('habilitacionesBuscador');
+  const pageState = document.getElementById('habilitacionesPaginaEstado');
+  const previousButton = document.getElementById('habilitacionesPaginaAnterior');
+  const nextButton = document.getElementById('habilitacionesPaginaSiguiente');
+  if (!body || !state || !searchInput || !pageState || !previousButton || !nextButton) return;
+  const PAGE_SIZE = 120;
+  let currentPage = 0;
+  let totalRows = 0;
+  let activeSearch = '';
+  let requestId = 0;
+  let searchTimer = null;
 
   function formatoNumero(value) {
     const numero = Number(value);
@@ -163,23 +173,64 @@
     return row;
   }
 
-  async function cargarHabilitaciones() {
+  function renderPaginacion() {
+    const totalPages = Math.ceil(totalRows / PAGE_SIZE);
+    const start = totalRows === 0 ? 0 : currentPage * PAGE_SIZE + 1;
+    const end = Math.min((currentPage + 1) * PAGE_SIZE, totalRows);
+    pageState.textContent = `Mostrando ${start}-${end} de ${totalRows} solicitudes · Página ${totalPages === 0 ? 0 : currentPage + 1} de ${totalPages}`;
+    previousButton.disabled = currentPage === 0;
+    nextButton.disabled = (currentPage + 1) * PAGE_SIZE >= totalRows;
+  }
+
+  async function cargarHabilitaciones({ search = activeSearch, page = currentPage } = {}) {
+    const currentRequest = ++requestId;
+    activeSearch = search.trim();
+    currentPage = page;
     state.textContent = 'Cargando solicitudes...';
     body.replaceChildren();
+    pageState.textContent = 'Cargando solicitudes...';
+    previousButton.disabled = true;
+    nextButton.disabled = true;
     try {
-      const response = await API_FETCH('/api/ordenes/habilitaciones');
+      const params = new URLSearchParams({
+        limit: String(PAGE_SIZE),
+        offset: String(currentPage * PAGE_SIZE)
+      });
+      if (activeSearch) params.set('search', activeSearch);
+      const response = await API_FETCH(`/api/ordenes/habilitaciones/paginadas?${params.toString()}`);
       const data = await response.json();
       if (!response.ok) throw new Error(data.detalle || data.error || 'No se pudieron cargar las solicitudes.');
-      if (!Array.isArray(data)) throw new Error('La respuesta de solicitudes no tiene el formato esperado.');
-      body.append(...data.map(crearFila));
-      state.textContent = data.length
-        ? `${data.length} solicitudes de habilitación.`
+      if (!Array.isArray(data.rows) || !Number.isFinite(Number(data.total))) {
+        throw new Error('La respuesta de solicitudes no tiene el formato esperado.');
+      }
+      if (currentRequest !== requestId) return;
+      totalRows = Number(data.total);
+      body.append(...data.rows.map(crearFila));
+      state.textContent = data.rows.length
+        ? `${totalRows} solicitudes de habilitación.`
         : 'No hay solicitudes de habilitación registradas.';
+      renderPaginacion();
     } catch (error) {
-      state.textContent = error.message;
-      console.error('Error cargando solicitudes de habilitación:', error);
+      if (currentRequest === requestId) {
+        state.textContent = error.message;
+        pageState.textContent = 'No se pudieron cargar las solicitudes.';
+        console.error('Error cargando solicitudes de habilitación:', error);
+      }
     }
   }
+
+  searchInput.addEventListener('input', () => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => cargarHabilitaciones({ search: searchInput.value, page: 0 }), 300);
+  });
+  previousButton.addEventListener('click', () => {
+    if (currentPage > 0) cargarHabilitaciones({ page: currentPage - 1 });
+  });
+  nextButton.addEventListener('click', () => {
+    if ((currentPage + 1) * PAGE_SIZE < totalRows) {
+      cargarHabilitaciones({ page: currentPage + 1 });
+    }
+  });
 
   cargarHabilitaciones();
 })();

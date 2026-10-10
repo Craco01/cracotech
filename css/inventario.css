@@ -14,6 +14,31 @@
   border-radius: 5px;
 }
 
+#inventario-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: min(90%, 1300px);
+  margin: -26px auto 36px;
+  color: #fff;
+  font-weight: 700;
+}
+
+#inventario-pagination button {
+  min-width: 100px;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 4px;
+  color: #fff;
+  background: #007acc;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+#inventario-pagination button:hover:not(:disabled) { background: #005f99; }
+#inventario-pagination button:disabled { background: #94a3b8; cursor: not-allowed; }
+
 .inventario-reportes-actions {
   width: 80%;
   margin: 0 auto 10px;

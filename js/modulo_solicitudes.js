@@ -1,6 +1,10 @@
 let busquedaCarpetas = '';
 let cargaCarpetasId = 0;
 let temporizadorBusqueda = null;
+const LIMITE_CARPETAS = 120;
+const LIMITE_CARPETA = 120;
+let paginaCarpetas = 0;
+let totalCarpetas = 0;
 let filaSeleccionadaId = null;
 let filaSeleccionada = null;
 
@@ -70,25 +74,53 @@ function cerrarModalEntrega() {
   modalEntrega.hidden = true;
 }
 
-async function cargarCarpetas(busqueda = busquedaCarpetas) {
+function renderPaginacionCarpetas() {
+  const anterior = document.getElementById('equiposPaginaAnterior');
+  const siguiente = document.getElementById('equiposPaginaSiguiente');
+  const estado = document.getElementById('equiposPaginaEstado');
+  const totalPaginas = Math.ceil(totalCarpetas / LIMITE_CARPETAS);
+  const inicio = totalCarpetas === 0 ? 0 : paginaCarpetas * LIMITE_CARPETAS + 1;
+  const fin = Math.min((paginaCarpetas + 1) * LIMITE_CARPETAS, totalCarpetas);
+
+  estado.textContent = `Mostrando ${inicio}-${fin} de ${totalCarpetas} máquinas/equipos · Página ${totalPaginas === 0 ? 0 : paginaCarpetas + 1} de ${totalPaginas}`;
+  anterior.disabled = paginaCarpetas === 0;
+  siguiente.disabled = (paginaCarpetas + 1) * LIMITE_CARPETAS >= totalCarpetas;
+}
+
+async function cargarCarpetas(busqueda = busquedaCarpetas, pagina = 0) {
   const cargaActual = ++cargaCarpetasId;
   busquedaCarpetas = busqueda.trim();
+  paginaCarpetas = pagina;
   const lista = document.getElementById('listaEquipos');
+  const estado = document.getElementById('equiposPaginaEstado');
+  const anterior = document.getElementById('equiposPaginaAnterior');
+  const siguiente = document.getElementById('equiposPaginaSiguiente');
   lista.innerHTML = '<p class="lista-vacia">Cargando máquinas y equipos...</p>';
+  estado.textContent = 'Cargando máquinas y equipos...';
+  anterior.disabled = true;
+  siguiente.disabled = true;
 
   try {
-    const parametros = new URLSearchParams();
+    const parametros = new URLSearchParams({
+      limit: String(LIMITE_CARPETAS),
+      offset: String(paginaCarpetas * LIMITE_CARPETAS)
+    });
     if (busquedaCarpetas) parametros.set('search', busquedaCarpetas);
-    const res = await API_FETCH(`/api/ordenes/equipos?${parametros.toString()}`);
+    const res = await API_FETCH(`/api/ordenes/equipos/paginados?${parametros.toString()}`);
     if (!res.ok) throw new Error(`No se pudieron cargar las carpetas (${res.status})`);
-    const carpetas = await res.json();
-    if (!Array.isArray(carpetas)) throw new Error('La respuesta de carpetas no tiene el formato esperado.');
+    const result = await res.json();
+    if (!Array.isArray(result.rows) || !Number.isFinite(Number(result.total))) {
+      throw new Error('La respuesta de carpetas no tiene el formato esperado.');
+    }
     if (cargaActual !== cargaCarpetasId) return;
-    renderLista(carpetas, busquedaCarpetas);
+    totalCarpetas = Number(result.total);
+    renderLista(result.rows, busquedaCarpetas);
+    renderPaginacionCarpetas();
   } catch (err) {
     console.error('Error cargando carpetas de órdenes:', err);
     if (cargaActual === cargaCarpetasId) {
       lista.innerHTML = '<p class="lista-vacia">No se pudieron cargar las máquinas y equipos. Recargue la vista e inténtelo nuevamente.</p>';
+      estado.textContent = 'No se pudieron cargar las máquinas y equipos.';
       const loginModal = document.getElementById('loginModal');
       if (loginModal && !loginModal.classList.contains('is-visible')) {
         loginModal.classList.add('is-visible');
@@ -232,8 +264,6 @@ function renderSolicitud(row) {
   return card;
 }
 
-const LIMITE_CARPETA = 250;
-
 async function cargarPaginaCarpeta(carpeta, contenido, estado, pagina) {
   const solicitudId = (estado.solicitudId || 0) + 1;
   estado.solicitudId = solicitudId;
@@ -351,6 +381,15 @@ function renderLista(data, busqueda = '') {
 document.getElementById('buscador').addEventListener('input', event => {
   clearTimeout(temporizadorBusqueda);
   temporizadorBusqueda = setTimeout(() => cargarCarpetas(event.target.value), 250);
+});
+
+document.getElementById('equiposPaginaAnterior').addEventListener('click', () => {
+  if (paginaCarpetas > 0) cargarCarpetas(busquedaCarpetas, paginaCarpetas - 1);
+});
+document.getElementById('equiposPaginaSiguiente').addEventListener('click', () => {
+  if ((paginaCarpetas + 1) * LIMITE_CARPETAS < totalCarpetas) {
+    cargarCarpetas(busquedaCarpetas, paginaCarpetas + 1);
+  }
 });
 
 document.getElementById('cancelarEntrega').addEventListener('click', cerrarModalEntrega);
