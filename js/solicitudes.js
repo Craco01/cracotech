@@ -3,7 +3,7 @@
     formularios: {
       solicitud: ['codigo_maquina.js', 'formularios.js'],
       asignar: ['cierre_ordenes.js', 'formularios.js'],
-      cierre: ['cierre_ordenes.js', 'formularios.js'],
+      cierre: ['cierre_ordenes.js', 'formularios.js', 'cierre_costos.js'],
       habilitacion: ['cierre_ordenes.js', 'cierre_costos.js'],
       reprogramar: ['cierre_ordenes.js', 'formularios.js'],
       modificar: ['cierre_ordenes.js', 'codigo_maquina.js', 'modificar.js', 'formularios.js'],
