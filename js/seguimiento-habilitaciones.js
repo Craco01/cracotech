@@ -226,10 +226,14 @@
     searchTimer = setTimeout(() => cargarHabilitaciones({ search: searchInput.value, page: 0 }), 300);
   });
   previousButton.addEventListener('click', () => {
-    if (currentPage > 0) cargarHabilitaciones({ page: currentPage - 1 });
+    if (currentPage > 0) {
+      document.querySelector('#tablaHabilitaciones').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      cargarHabilitaciones({ page: currentPage - 1 });
+    }
   });
   nextButton.addEventListener('click', () => {
     if ((currentPage + 1) * PAGE_SIZE < totalRows) {
+      document.querySelector('#tablaHabilitaciones').scrollIntoView({ behavior: 'smooth', block: 'start' });
       cargarHabilitaciones({ page: currentPage + 1 });
     }
   });

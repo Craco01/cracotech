@@ -279,11 +279,15 @@ buscador.addEventListener("keydown", event => {
 });
 
 document.getElementById('paginaAnterior').addEventListener('click', () => {
-  if (paginaActual > 0) cargarOrdenes({ pagina: paginaActual - 1 });
+  if (paginaActual > 0) {
+    document.querySelector('#tablaOrdenes').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    cargarOrdenes({ pagina: paginaActual - 1 });
+  }
 });
 
 document.getElementById('paginaSiguiente').addEventListener('click', () => {
   if ((paginaActual + 1) * LIMITE_POR_PAGINA < totalOrdenes) {
+    document.querySelector('#tablaOrdenes').scrollIntoView({ behavior: 'smooth', block: 'start' });
     cargarOrdenes({ pagina: paginaActual + 1 });
   }
 });

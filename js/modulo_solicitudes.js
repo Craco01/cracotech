@@ -387,10 +387,14 @@ document.getElementById('buscador').addEventListener('input', event => {
 });
 
 document.getElementById('equiposPaginaAnterior').addEventListener('click', () => {
-  if (paginaCarpetas > 0) cargarCarpetas(busquedaCarpetas, paginaCarpetas - 1);
+  if (paginaCarpetas > 0) {
+    document.getElementById('listaEquipos').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    cargarCarpetas(busquedaCarpetas, paginaCarpetas - 1);
+  }
 });
 document.getElementById('equiposPaginaSiguiente').addEventListener('click', () => {
   if ((paginaCarpetas + 1) * LIMITE_CARPETAS < totalCarpetas) {
+    document.getElementById('listaEquipos').scrollIntoView({ behavior: 'smooth', block: 'start' });
     cargarCarpetas(busquedaCarpetas, paginaCarpetas + 1);
   }
 });

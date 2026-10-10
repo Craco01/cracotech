@@ -70,12 +70,14 @@ document.getElementById("codigos-prev").addEventListener("click", () => {
   if (paginaActual > 0) {
     paginaActual -= 1;
     actualizarVista();
+    document.getElementById("codigos-table-wrap").scrollIntoView({ behavior: "smooth", block: "start" });
   }
 });
 document.getElementById("codigos-next").addEventListener("click", () => {
   if ((paginaActual + 1) * LIMITE_POR_PAGINA < resultados.length) {
     paginaActual += 1;
     actualizarVista();
+    document.getElementById("codigos-table-wrap").scrollIntoView({ behavior: "smooth", block: "start" });
   }
 });
 

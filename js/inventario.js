@@ -149,10 +149,14 @@ document.getElementById("inventario-search").addEventListener("input", event => 
 });
 
 document.getElementById("inventario-prev").addEventListener("click", () => {
-  if (paginaActual > 0) cargarInventario({ pagina: paginaActual - 1 });
+  if (paginaActual > 0) {
+    document.getElementById("inventario-table-wrap").scrollIntoView({ behavior: "smooth", block: "start" });
+    cargarInventario({ pagina: paginaActual - 1 });
+  }
 });
 document.getElementById("inventario-next").addEventListener("click", () => {
   if ((paginaActual + 1) * LIMITE_POR_PAGINA < totalInventario) {
+    document.getElementById("inventario-table-wrap").scrollIntoView({ behavior: "smooth", block: "start" });
     cargarInventario({ pagina: paginaActual + 1 });
   }
 });
