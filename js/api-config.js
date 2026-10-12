@@ -58,6 +58,24 @@ function clearExpiredSession() {
   }
   const currentPath = window.location.pathname;
   if (!currentPath.endsWith('/upkeepmv.html')) {
+    const currentPage = currentPath.split('/').pop();
+    if (currentPath.includes('/pages/') && [
+      'formularios.html',
+      'reportes.html',
+      'carga-xlsx.html',
+      'vista_mpp.html',
+      'mpp.html',
+      'indicador_mpp.html',
+      'reporte-ordenes.html',
+      'reportes_horometros.html'
+    ].includes(currentPage)) {
+      const returnTo = `${currentPath}${window.location.search}${window.location.hash}`;
+      const loginUrl = new URL('./upkeepmv.html', window.location.href);
+      loginUrl.searchParams.set('loginRequired', '1');
+      loginUrl.searchParams.set('returnTo', returnTo);
+      window.location.href = loginUrl.href;
+      return;
+    }
     window.location.href = currentPath.includes('/pages/') ? './upkeepmv.html' : './pages/upkeepmv.html';
   }
 }

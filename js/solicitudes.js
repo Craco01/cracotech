@@ -1,4 +1,6 @@
 (() => {
+  if (window.__authRedirecting) return;
+
   const controladores = {
     formularios: {
       solicitud: ['codigo_maquina.js', 'formularios.js'],

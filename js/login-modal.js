@@ -90,6 +90,7 @@ function openPasswordModal() {
 function closeLoginModal() {
   loginModal.classList.remove('is-visible');
   form.reset();
+  sessionStorage.removeItem('postLoginRedirect');
 }
 const fetchOriginal = window.fetch.bind(window);
 window.fetch = (url, options = {}) => {
@@ -179,6 +180,27 @@ form.addEventListener('submit', async event => {
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'No se pudo iniciar sesi\u00f3n');
     localStorage.setItem('token', data.token); localStorage.setItem('role', data.role); localStorage.setItem('username', document.getElementById('user').value);
+    const redirect = sessionStorage.getItem('postLoginRedirect');
+    if (redirect) {
+      sessionStorage.removeItem('postLoginRedirect');
+      const target = new URL(redirect, window.location.href);
+      const protectedPages = [
+        'formularios.html',
+        'reportes.html',
+        'carga-xlsx.html',
+        'vista_mpp.html',
+        'mpp.html',
+        'indicador_mpp.html',
+        'reporte-ordenes.html',
+        'reportes_horometros.html'
+      ];
+      if (target.origin === window.location.origin &&
+          target.pathname.includes('/pages/') &&
+          protectedPages.includes(target.pathname.split('/').pop())) {
+        window.location.replace(target.href);
+        return;
+      }
+    }
     window.location.reload();
   } catch (error) { mensaje.textContent = `Error: ${error.message}`; mensaje.style.color = 'red'; }
 });

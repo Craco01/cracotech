@@ -211,11 +211,12 @@
 
                 <div class="datos-container">
                     <h3>Vista previa del Panel de Mantenimiento</h3>
+                    <p class="session-required" hidden>Inicie sesión para visualizar el panel de mantenimiento.</p>
                     <iframe class="Datos"
                         title="Resumen de órdenes de mantenimiento"
                         width="720"
                         height="480"
-                        src="./reporte-ordenes.html?embed=1"
+                        data-protected-src="./reporte-ordenes.html?embed=1"
                         frameborder="0"
                         allowFullScreen="true">Panel de Mantenimiento
                     </iframe>
@@ -405,6 +406,7 @@
 
 <script src="../js/site-layout.js"></script>
 <script src="../js/login-modal.js"></script>
+<script src="../js/session-guard.js"></script>
 <script src="../js/nav-responsive.js"></script>
 </body>
 </html>
