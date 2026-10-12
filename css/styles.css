@@ -2125,6 +2125,10 @@ padding: 0 0 20px 0;
   font-weight: 700;
 }
 
+.habilitacion-comparacion output.habilitaciones-porcentaje--bajo { color: #16803c; }
+.habilitacion-comparacion output.habilitaciones-porcentaje--medio { color: #a66a00; }
+.habilitacion-comparacion output.habilitaciones-porcentaje--alto { color: #c62828; }
+
 @media (max-width: 640px) {
   .habilitacion-comparacion {
     grid-template-columns: 1fr;

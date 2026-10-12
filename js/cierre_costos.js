@@ -306,7 +306,21 @@ function actualizarComparacionProducto() {
 
   if (valorEl) valorEl.textContent = formatearNumero(valor);
   if (costoEl) costoEl.textContent = formatearNumero(costo);
-  if (porcentajeEl) porcentajeEl.textContent = `${formatearNumero(porcentaje)}%`;
+  if (porcentajeEl) {
+    porcentajeEl.textContent = `${formatearNumero(porcentaje)}%`;
+    porcentajeEl.classList.remove(
+      'habilitaciones-porcentaje--bajo',
+      'habilitaciones-porcentaje--medio',
+      'habilitaciones-porcentaje--alto'
+    );
+    porcentajeEl.classList.add(
+      porcentaje < 50
+        ? 'habilitaciones-porcentaje--bajo'
+        : porcentaje < 66
+          ? 'habilitaciones-porcentaje--medio'
+          : 'habilitaciones-porcentaje--alto'
+    );
+  }
 }
 
 async function cargarCosteoGuardado() {
