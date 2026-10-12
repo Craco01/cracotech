@@ -139,10 +139,10 @@ th, td {
 #tablaOrdenes tbody tr.estado-pendiente { background-color: #c7dcf5 !important; }
 #tablaOrdenes tbody tr.estado-asignado { background-color: #7fa9d6 !important; }
 #tablaOrdenes tbody tr.estado-vencido { background-color: #e8b6b6 !important; }
-#tablaOrdenes tbody tr.estado-completado-plazo { background-color: #a8d5b3 !important; }
-#tablaOrdenes tbody tr.estado-completado-retraso { background-color: #e5bd96 !important; }
+#tablaOrdenes tbody tr.estado-completado-plazo { background-color: rgba(168, 213, 179, 0.72) !important; }
+#tablaOrdenes tbody tr.estado-completado-retraso { background-color: rgba(85, 107, 47, 0.45) !important; }
 #tablaOrdenes tbody tr.estado-baja { background-color: #c7ced8 !important; color: #475569; }
-#tablaOrdenes tbody tr.estado-reprogramado { background-color: #c4b8dc !important; }
+#tablaOrdenes tbody tr.estado-reprogramado { background-color: rgba(255, 235, 59, 0.45) !important; }
 
 #tablaOrdenes tbody tr.fila-seleccionada {
   outline: 3px solid #072885;
