@@ -178,7 +178,17 @@ form.addEventListener('submit', async event => {
   try {
     const res = await API_FETCH('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: document.getElementById('user').value, password: document.getElementById('password').value }) });
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'No se pudo iniciar sesi\u00f3n');
+    if (!res.ok) {
+      if (res.status === 401) {
+        mensaje.textContent = 'Credenciales incorrectas';
+      } else {
+        const codigoError = data.code ?? data.codigo ?? res.status;
+        const detalle = data.error ? `: ${data.error}` : '';
+        mensaje.textContent = `Error del servidor (código ${codigoError})${detalle}`;
+      }
+      mensaje.style.color = 'red';
+      return;
+    }
     localStorage.setItem('token', data.token); localStorage.setItem('role', data.role); localStorage.setItem('username', document.getElementById('user').value);
     const redirect = sessionStorage.getItem('postLoginRedirect');
     if (redirect) {
@@ -202,6 +212,9 @@ form.addEventListener('submit', async event => {
       }
     }
     window.location.reload();
-  } catch (error) { mensaje.textContent = `Error: ${error.message}`; mensaje.style.color = 'red'; }
+  } catch (error) {
+    mensaje.textContent = error instanceof TypeError ? 'Error de conexión' : `Error: ${error.message}`;
+    mensaje.style.color = 'red';
+  }
 });
 renderNav();
