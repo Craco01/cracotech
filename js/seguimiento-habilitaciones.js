@@ -62,11 +62,18 @@
       costeo.productos.forEach(producto => {
         const item = document.createElement('div');
         const nombre = document.createElement('strong');
+        const detalle = document.createElement('div');
+        const cantidad = document.createElement('span');
         const importe = document.createElement('span');
         item.className = 'habilitaciones-repuesto';
+        detalle.className = 'habilitaciones-repuesto-detalle';
         nombre.textContent = `${producto.codigo} - ${producto.descripcion}`;
-        importe.textContent = `${producto.cantidad} × ${formatoNumero(producto.costo_unitario)} = ${formatoNumero(producto.total)}`;
-        item.append(nombre, importe);
+        cantidad.className = 'habilitaciones-cantidad';
+        cantidad.textContent = `${formatoNumero(producto.cantidad)} unidades`;
+        importe.className = 'habilitaciones-importe';
+        importe.textContent = `× ${formatoNumero(producto.costo_unitario)} = ${formatoNumero(producto.total)}`;
+        detalle.append(cantidad, importe);
+        item.append(nombre, detalle);
         lista.appendChild(item);
       });
       cell.appendChild(lista);

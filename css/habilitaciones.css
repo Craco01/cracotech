@@ -78,6 +78,7 @@
   min-width: 0;
   padding: 6px 8px;
   flex-direction: column;
+  align-items: flex-start;
   gap: 3px;
   border: 1px solid #b8c6d8;
   border-radius: 5px;
@@ -86,9 +87,25 @@
 
 #tablaHabilitaciones .habilitaciones-repuesto strong,
 #tablaHabilitaciones .habilitaciones-repuesto span {
+  color: #334155;
   font-size: 12px;
   line-height: 1.3;
   overflow-wrap: anywhere;
+}
+
+#tablaHabilitaciones .habilitaciones-repuesto .habilitaciones-cantidad {
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: #dbeafe;
+  color: #1d4ed8;
+  font-weight: 700;
+}
+
+#tablaHabilitaciones .habilitaciones-repuesto-detalle {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
 #tablaHabilitaciones .habilitaciones-comparacion {
