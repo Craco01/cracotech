@@ -70,7 +70,7 @@ main{margin-left:220px;}
 .sheet{
   position:relative;
   padding:80px 64px;
-  max-width:900px;
+  width:100%;
   border-bottom:1px solid var(--line);
 }
 .sheet::before,.sheet::after{
