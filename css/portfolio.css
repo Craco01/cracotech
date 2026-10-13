@@ -64,7 +64,12 @@ p{margin:0 0 1em;}
   border:none;width:42px;height:42px;font-size:1.2rem;cursor:pointer;
 }
 
-main{margin-left:220px;}
+main{
+  display:grid;
+  grid-template-columns:80%;
+  justify-content:center;
+  margin-left:220px;
+}
 
 /* sheets */
 .sheet{
@@ -95,10 +100,10 @@ main{margin-left:220px;}
 }
 
 .hero h1{font-size:clamp(2.4rem,6vw,4.4rem);}
-.lede{max-width:52ch;font-size:1.1rem;color:var(--ink);}
+.lede{font-size:1.1rem;color:var(--ink);}
 .role{display:flex;align-items:center;gap:16px;color:var(--steel);font-family:'IBM Plex Mono';font-size:.85rem;}
 .hero-logo{display:block;width:108px;height:61px;object-fit:contain;flex:none;}
-.lede-small{max-width:60ch;color:var(--steel);}
+.lede-small{color:var(--steel);}
 
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:40px;}
 
@@ -172,8 +177,8 @@ main{margin-left:220px;}
   .index{transform:translateX(-100%);transition:transform .2s;}
   .index.open{transform:translateX(0);}
   .nav-toggle{display:block;}
-  main{margin-left:0;}
-  .sheet{padding:64px 24px 48px;}
+  main{display:block;margin-left:0;}
+  .sheet{width:100%;padding:64px 24px 48px;}
   .grid-2,.panel-grid{grid-template-columns:1fr;}
   .brand-logo{width:144px;height:81px;}
   .role{align-items:flex-start;flex-direction:column;gap:8px;}
