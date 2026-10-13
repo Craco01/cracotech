@@ -8,7 +8,8 @@
     'mpp.html',
     'indicador_mpp.html',
     'reporte-ordenes.html',
-    'reportes_horometros.html'
+    'reportes_horometros.html',
+    'horometros.html'
   ]);
   const currentPath = window.location.pathname;
   const currentPage = currentPath.split('/').pop();
@@ -72,7 +73,7 @@
     }
   }
 
-  document.querySelectorAll('#solicitudes a[href], #mpp a[href], #informaciones a[href]').forEach((link) => {
+  document.querySelectorAll('#solicitudes a[href], #mpp a[href], #informaciones a[href], #form-adds a[href]').forEach((link) => {
     link.addEventListener('click', (event) => {
       if (localStorage.getItem('token')) return;
       const target = getProtectedTarget(link.href);
