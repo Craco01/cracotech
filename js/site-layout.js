@@ -1,8 +1,12 @@
 (function () {
   if (document.body && document.body.hasAttribute('data-no-global-layout')) return;
 
-  const maintenanceRoot = '/mantenimiento/';
-  const assetRoot = '/';
+  // Resuelve las rutas desde la ubicación de este script, sin depender de la raíz del servidor.
+  const scriptUrl = document.currentScript?.src ||
+    Array.from(document.scripts).map((script) => script.src).find((src) => /\/js\/site-layout\.js(\?|#|$)/.test(src));
+  const siteRoot = scriptUrl ? new URL('../', scriptUrl) : new URL('/', window.location.origin);
+  const maintenanceRoot = new URL('mantenimiento/', siteRoot).pathname;
+  const assetRoot = siteRoot.pathname;
 
   function buildLayoutHtml() {
     return `
