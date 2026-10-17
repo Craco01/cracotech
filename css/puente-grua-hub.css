@@ -5,12 +5,15 @@
   margin: 22px auto;
   padding: clamp(24px, 5vw, 52px);
   width: min(1120px, calc(100% - 32px));
-  border: 1px solid rgba(7, 40, 133, .2);
-  border-top: 5px solid #0f7a32;
-  border-radius: 18px;
-  background: rgba(248, 250, 252, .32);
-  box-shadow: 0 16px 38px rgba(15, 23, 42, .18);
-  color: #14233f;
+  scroll-margin-top: 72px;
+  border: 1px solid rgba(255, 255, 255, .2);
+  border-top: 5px solid #31d07a;
+  border-radius: 24px;
+  background: linear-gradient(145deg, rgba(10, 27, 66, .78), rgba(10, 27, 66, .52));
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 18px 44px rgba(2, 10, 30, .4);
+  color: #fff;
 }
 
 .puente-grua-hub::after {
@@ -20,9 +23,9 @@
   bottom: -115px;
   width: 310px;
   height: 310px;
-  border: 1px solid rgba(7, 40, 133, .1);
+  border: 1px solid rgba(255, 255, 255, .08);
   border-radius: 50%;
-  box-shadow: 0 0 0 28px rgba(7, 40, 133, .025), 0 0 0 58px rgba(15, 122, 50, .025);
+  box-shadow: 0 0 0 28px rgba(255, 255, 255, .02), 0 0 0 58px rgba(49, 208, 122, .03);
   content: "";
 }
 
@@ -34,7 +37,7 @@
 .puente-grua-hub__ceja {
   display: inline-block;
   margin-bottom: 10px;
-  color: #0f7a32;
+  color: #31d07a;
   font-size: .76rem;
   font-weight: 800;
   letter-spacing: .16em;
@@ -42,7 +45,7 @@
 
 .puente-grua-hub__encabezado h2 {
   margin: 0 0 10px;
-  color: #072885;
+  color: #fff;
   font-size: clamp(1.55rem, 3.4vw, 2.4rem);
   line-height: 1.15;
   text-align: left;
@@ -51,7 +54,7 @@
 .puente-grua-hub__encabezado p {
   margin: 0;
   max-width: 62ch;
-  color: #475569;
+  color: #dbe7ff;
   font-size: 1rem;
   line-height: 1.6;
 }
@@ -69,35 +72,34 @@
   gap: 16px;
   min-height: 116px;
   padding: 20px;
-  border: 1px solid rgba(7, 40, 133, .17);
-  border-radius: 15px;
-  background: rgba(255, 255, 255, .92);
-  color: #14233f;
+  border: 0;
+  border-radius: 16px;
   text-align: left;
   text-decoration: none;
-  box-shadow: 0 5px 14px rgba(15, 23, 42, .07);
-  transition: transform .18s ease, background-color .18s ease, border-color .18s ease, box-shadow .18s ease;
+  box-shadow: 0 8px 20px rgba(2, 10, 30, .3);
+  transition: transform .18s ease, filter .18s ease, box-shadow .18s ease;
 }
 
 .puente-grua-hub .puente-grua-hub__card--formulario {
-  background: #ffd6a5;
+  background: #31d07a;
+  color: #082a1b;
 }
 
 .puente-grua-hub .puente-grua-hub__card--reportes {
-  background: #cfe8ff;
+  background: #1f56d9;
+  color: #fff;
 }
 
 .puente-grua-hub__card:hover,
 .puente-grua-hub__card:focus-visible {
   transform: translateY(-3px);
-  border-color: rgba(15, 122, 50, .52);
-  background: #fff;
-  box-shadow: 0 12px 26px rgba(7, 40, 133, .14);
+  filter: brightness(1.07);
+  box-shadow: 0 14px 28px rgba(2, 10, 30, .4);
   outline: none;
 }
 
 .puente-grua-hub__card:focus-visible {
-  box-shadow: 0 0 0 3px #fbbf24, 0 12px 26px rgba(7, 40, 133, .14);
+  box-shadow: 0 0 0 3px #fff, 0 14px 28px rgba(2, 10, 30, .4);
 }
 
 .puente-grua-hub__icono {
@@ -105,15 +107,15 @@
   width: 54px;
   height: 54px;
   place-items: center;
-  border: 1px solid rgba(7, 40, 133, .12);
   border-radius: 14px;
-  background: linear-gradient(145deg, #0f7a32, #1d8a1d);
-  color: #fff;
+  background: #0a1b42;
+  color: #31d07a;
   font-size: 1.3rem;
 }
 
 .puente-grua-hub__card--reportes .puente-grua-hub__icono {
-  background: linear-gradient(145deg, #072885, #2563eb);
+  background: #fff;
+  color: #1f56d9;
 }
 
 .puente-grua-hub__contenido {
@@ -122,19 +124,23 @@
 }
 
 .puente-grua-hub__contenido strong {
-  color: #072885;
+  color: inherit;
   font-size: 1.02rem;
 }
 
 .puente-grua-hub__contenido > span {
-  color: #475569;
+  color: inherit;
   font-size: .88rem;
   line-height: 1.45;
 }
 
 .puente-grua-hub__flecha {
-  color: #0f7a32;
+  color: inherit;
   transition: transform .18s ease;
+}
+
+.puente-grua-hub__card--reportes .puente-grua-hub__flecha {
+  color: #31d07a;
 }
 
 .puente-grua-hub__card:hover .puente-grua-hub__flecha {
@@ -146,8 +152,12 @@
   align-items: center;
   gap: 8px;
   margin-top: 22px;
-  color: #475569;
+  color: #fff;
   font-size: .8rem;
+}
+
+.puente-grua-hub__pie i {
+  color: #31d07a;
 }
 
 @media (max-width: 680px) {

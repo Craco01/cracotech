@@ -78,7 +78,7 @@
     }
   }
 
-  document.querySelectorAll('#puente-grua a[href]').forEach((link) => {
+  document.querySelectorAll('#fr172 a[href]').forEach((link) => {
     link.addEventListener('click', (event) => {
       const target = getProtectedTarget(link.href);
       if (!target) return;
