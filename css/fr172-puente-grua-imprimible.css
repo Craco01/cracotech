@@ -117,7 +117,7 @@ tr.enc th { text-align: center; font: 600 4.8pt/1.05 var(--sans); background: #f
   border: solid var(--azul); border-width: 0 .4mm .4mm 0; transform: rotate(40deg);
 }
 .subr { color: var(--tinta); font-weight: 400; border-bottom: .2mm solid #94a3b8; padding: 0 2mm; }
-.sin-dato { font-weight: 400; color: #64748b; }
+.sin-dato { font-weight: 400; color: #64748b; }
 
 /* ---- Firmas ---- */
 .legal { padding: .8mm 1.2mm; font: 500 4.7pt/1.15 var(--sans); color: #475569; text-align: justify; }
