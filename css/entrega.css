@@ -189,6 +189,8 @@ body {
   margin-top: 100px;
 }
 .sign-line {
+  position: relative;
+  min-height: 50px;
   border-top: 1px solid #374151;
   margin-top: 20px;
   padding-top: 3px;
@@ -197,6 +199,27 @@ body {
   color: #374151;
   text-align: center;
 }
+
+.signatory-details {
+  display: block;
+  margin-top: 2px;
+  color: #374151;
+  font-size: 8px;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.delivery-signature {
+  position: absolute;
+  bottom: calc(100% + 3px);
+  left: 50%;
+  width: min(100%, 240px);
+  height: 64px;
+  transform: translateX(-50%);
+  overflow: visible;
+}
+
+.delivery-signature[hidden] { display: none; }
 
 .doc-footer {
   margin-top: 6px;

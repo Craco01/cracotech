@@ -410,7 +410,11 @@ document.addEventListener('keydown', event => {
 
 imprimirEntrega.addEventListener('click', async () => {
   if (!filaSeleccionada) return;
-  window.location.href = `/mantenimiento/entrega/?id=${encodeURIComponent(filaSeleccionada.id)}`;
+  modalEntrega.hidden = true;
+  window.abrirModalFirmasEntrega(filaSeleccionada.id, () => {
+    modalEntrega.hidden = false;
+    imprimirEntrega.focus();
+  });
 });
 
 function abrirFormularioSolicitud(ruta) {
