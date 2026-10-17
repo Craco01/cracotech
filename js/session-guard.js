@@ -28,7 +28,9 @@
 
   function isProtectedPath(pathname) {
     const maintenanceRoute = maintenanceRouteName(pathname);
-    return Boolean(maintenanceRoute && protectedMaintenanceRoutes.has(maintenanceRoute));
+    return pathname === '/administrar-usuarios/' ||
+      pathname === '/administrar-usuarios' ||
+      Boolean(maintenanceRoute && protectedMaintenanceRoutes.has(maintenanceRoute));
   }
 
   function requiresEditor(pathname) {

@@ -226,6 +226,7 @@ form.addEventListener('submit', async event => {
       if (target.origin === window.location.origin &&
           ((target.pathname.includes('/pages/') &&
             protectedPages.includes(target.pathname.split('/').pop())) ||
+           /^\/administrar-usuarios\/?$/.test(target.pathname) ||
            protectedMaintenanceRoutes.has(maintenanceRoute))) {
         window.location.replace(target.href);
         return;

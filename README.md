@@ -28,6 +28,8 @@ Este repositorio contiene el sitio estático que se publica en GitHub Pages. La 
 ```text
 frontend/
 ├── index.html                 # Portafolio público
+├── administrar-usuarios/       # Administración con ruta limpia
+│   └── index.html
 ├── mantenimiento/             # Rutas limpias del portal de mantenimiento
 │   ├── index.html              # Inicio del portal
 │   ├── formularios/index.html
@@ -49,10 +51,11 @@ frontend/
 ## Flujo principal
 
 1. El workflow `.github/workflows/deploy-pages.yml` publica el sitio en GitHub Pages al actualizar `main` o al ejecutarse manualmente desde GitHub Actions.
-2. El acceso principal al portal es [mantenimiento/](mantenimiento/); sus módulos usan rutas limpias, por ejemplo `/mantenimiento/reportes/`.
+2. El acceso principal desde la portada es [mantenimiento/](mantenimiento/); sus módulos usan rutas limpias, por ejemplo `/mantenimiento/reportes/`.
 3. `pages/` se conserva como respaldo de las páginas anteriores; la navegación principal ya no depende de esa carpeta.
-4. [js/api-config.js](js/api-config.js) centraliza la URL base de la API productiva.
-5. El backend está en el repositorio independiente `upkeepmv_backend` y se actualiza manualmente en AWS Lightsail.
+4. La administración de usuarios también está disponible en `/administrar-usuarios/`; el atajo de teclado `Ctrl+Alt+U` abre esa ruta.
+5. [js/api-config.js](js/api-config.js) centraliza la URL base de la API productiva.
+6. El backend está en el repositorio independiente `upkeepmv_backend` y se actualiza manualmente en AWS Lightsail.
 
 ## Autenticación
 

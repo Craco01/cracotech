@@ -8,7 +8,6 @@
   const maintenanceRoot = isMaintenanceRoute
     ? isMaintenanceHome ? './' : '../'
     : './mantenimiento/';
-  const authorRoot = isMaintenanceRoute ? '../../' : './';
   const assetRoot = isMaintenanceRoute ? '../../' : './';
 
   function buildLayoutHtml() {
@@ -27,7 +26,7 @@
               <li><a href="${maintenanceRoot}#form-adds">Formularios</a></li>
               <li><a href="${maintenanceRoot}#otros">Otros</a></li>
               <li><a href="${maintenanceRoot}#contacto">Contacto</a></li>
-              <li><a href="${authorRoot}index.html">Autor</a></li>
+              <li><a href="/">Autor</a></li>
             </ul>
             <div id="nav-login"></div>
           </div>
