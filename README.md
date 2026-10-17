@@ -34,7 +34,7 @@ frontend/
 │   ├── index.html              # Inicio del portal
 │   ├── formularios/index.html
 │   └── ...
-├── pages/                      # Respaldo de las páginas HTML anteriores
+├── pages_bak/                  # Respaldo de las páginas HTML anteriores (renombrada desde pages/)
 ├── css/
 │   ├── portfolio.css
 ├── data/
@@ -52,7 +52,7 @@ frontend/
 
 1. El workflow `.github/workflows/deploy-pages.yml` publica el sitio en GitHub Pages al actualizar `main` o al ejecutarse manualmente desde GitHub Actions.
 2. El acceso principal desde la portada es [mantenimiento/](mantenimiento/); sus módulos usan rutas limpias, por ejemplo `/mantenimiento/reportes/`.
-3. `pages/` se conserva como respaldo de las páginas anteriores; la navegación principal ya no depende de esa carpeta.
+3. `pages_bak/` se conserva como respaldo de las páginas anteriores; la navegación principal ya no depende de esa carpeta.
 4. La administración de usuarios también está disponible en `/administrar-usuarios/`; el atajo de teclado `Ctrl+Alt+U` abre esa ruta.
 5. [js/api-config.js](js/api-config.js) centraliza la URL base de la API productiva.
 6. El backend está en el repositorio independiente `upkeepmv_backend` y se actualiza manualmente en AWS Lightsail.
@@ -97,7 +97,7 @@ El frontend se encuentra en una etapa funcional con varias pantallas y módulos 
 
 Cuando se modifique la navegación, módulos o formularios del portal, conviene revisar:
 - [mantenimiento/](mantenimiento/)
-- [pages/](pages/) (respaldo)
+- [pages_bak/](pages_bak/) (respaldo)
 - [js/](js/)
 - [css/](css/)
 

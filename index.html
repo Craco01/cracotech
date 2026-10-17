@@ -10,6 +10,18 @@
 
   <meta name="description" content="Portfolio profesional de Cristhian Redes: mantenimiento industrial, electromecánica, automatización industrial y desarrollo de software aplicado a operaciones.">
 
+  <link rel="canonical" href="https://cracotech.com/">
+  <meta name="theme-color" content="#1a1a1a">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_PY">
+  <meta property="og:site_name" content="CracoTech">
+  <meta property="og:url" content="https://cracotech.com/">
+  <meta property="og:title" content="Cristhian Redes — Mantenimiento Industrial, Automatización y Software">
+  <meta property="og:description" content="Más de 10 años en mantenimiento industrial y desarrollo de sistemas de gestión: plataforma Mantenimiento MV, automatización y electromecánica.">
+  <meta property="og:image" content="https://cracotech.com/img/Logo.png">
+  <meta property="og:image:alt" content="Logotipo CracoTech">
+  <meta name="twitter:card" content="summary">
+
   <link rel="stylesheet" href="./css/portfolio.css">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -71,6 +83,12 @@
         <a href="#habilidades" data-i="06">Habilidades</a>
       </li>
 
+      <!-- Habilitar junto con la sección #formacion
+      <li>
+        <a href="#formacion" data-i="07">Formación</a>
+      </li>
+      -->
+
       <li>
         <a href="#contacto" data-i="07">Contacto</a>
       </li>
@@ -115,6 +133,16 @@
           alt="Logotipo Cracovec">
         <span>Cristhian Redes — Ñemby, Paraguay</span>
       </div>
+
+      <p class="hero-facts">
+        +10 años en mantenimiento industrial · Sistema propio de gestión
+        implementado en planta
+      </p>
+
+      <p>
+        <a class="cta" href="#cracotech">Ver Mantenimiento MV</a>
+        <a class="cta" href="#contacto">Contactar</a>
+      </p>
 
     </section>
 
@@ -194,13 +222,15 @@
 
           <p>
             Metalúrgica Vera S.A.E.
+            <small>(antes Metalúrgica Vera S.R.L., por cambio de razón social)</small>
           </p>
 
-          <p>
-            Supervisión de actividades de mantenimiento, coordinación
-            de personal técnico, planificación de intervenciones y
-            seguimiento de trabajos preventivos y correctivos.
-          </p>
+          <ul>
+            <li>Supervisión del área de mantenimiento y coordinación del personal técnico.</li>
+            <li>Diseño, desarrollo e implementación de la plataforma Mantenimiento MV, con acompañamiento del área de TI.</li>
+            <li>Planificación y seguimiento de trabajos preventivos y correctivos.</li>
+            <!-- Agregar indicadores: % cumplimiento del plan preventivo, órdenes gestionadas, personal supervisado, equipos a cargo -->
+          </ul>
 
         </li>
 
@@ -219,12 +249,11 @@
             Metalúrgica Vera S.R.L.
           </p>
 
-          <p>
-            Coordinación de actividades de mantenimiento y
-            automatización de procesos. Implementación de herramientas
-            de diagnóstico y análisis para mejorar la identificación
-            y resolución de fallas.
-          </p>
+          <ul>
+            <li>Coordinación de las actividades de mantenimiento y automatización de procesos.</li>
+            <li>Implementación de herramientas de diagnóstico y análisis para identificar y resolver fallas con mayor rapidez.</li>
+            <!-- Agregar resultado medible (ej. reducción de tiempo de respuesta) -->
+          </ul>
 
         </li>
 
@@ -243,11 +272,11 @@
             Bebidas del Paraguay S.A.
           </p>
 
-          <p>
-            Mantenimiento preventivo y correctivo en líneas
-            automatizadas, implementación de TPM y 5S, y gestión
-            mediante SAP S/4HANA.
-          </p>
+          <ul>
+            <li>Mantenimiento preventivo y correctivo en líneas automatizadas.</li>
+            <li>Implementación de TPM y 5S.</li>
+            <li>Gestión del mantenimiento mediante SAP S/4HANA.</li>
+          </ul>
 
         </li>
 
@@ -264,13 +293,13 @@
 
           <p>
             GGC Electromecánica — Profesional independiente
+            <small>(en paralelo a los cargos en relación de dependencia)</small>
           </p>
 
-          <p>
-            Diagnóstico, asistencia técnica y resolución de problemas
-            relacionados con sistemas eléctricos, electromecánicos
-            y de automatización.
-          </p>
+          <ul>
+            <li>Diagnóstico y asistencia técnica en sistemas eléctricos, electromecánicos y de automatización.</li>
+            <li>Resolución de problemas para clientes de forma independiente.</li>
+          </ul>
 
         </li>
 
@@ -289,11 +318,10 @@
             Metalúrgica Vera S.R.L.
           </p>
 
-          <p>
-            Gestión y coordinación de actividades de mantenimiento
-            preventivo y correctivo, planificación de trabajos y
-            seguimiento de equipos e instalaciones.
-          </p>
+          <ul>
+            <li>Gestión y coordinación del mantenimiento preventivo y correctivo.</li>
+            <li>Planificación de trabajos y seguimiento de equipos e instalaciones.</li>
+          </ul>
 
         </li>
 
@@ -312,11 +340,10 @@
             Metalúrgica Vera S.R.L.
           </p>
 
-          <p>
-            Mantenimiento eléctrico industrial, diagnóstico de fallas,
-            reparación de instalaciones y asistencia en sistemas
-            electromecánicos y de automatización.
-          </p>
+          <ul>
+            <li>Mantenimiento eléctrico industrial y diagnóstico de fallas.</li>
+            <li>Reparación de instalaciones y asistencia en sistemas electromecánicos y de automatización.</li>
+          </ul>
 
         </li>
 
@@ -431,6 +458,38 @@
 
       </div>
 
+      <p class="lede-small">
+        El sistema fue diseñado, desarrollado e implementado con el acompañamiento del área de TI de la empresa.
+         Debido a que contiene información interna de carácter operativo, el acceso está restringido y requiere 
+         iniciar sesión.
+      </p>
+
+      <h3 class="sub-h">Arquitectura</h3>
+
+      <ul class="arch-list">
+        <li><strong>Frontend:</strong> HTML, CSS y JavaScript sin frameworks, publicado en GitHub Pages.</li>
+        <li><strong>Backend:</strong> Node.js sobre una VM Debian en AWS.</li>
+        <li><strong>Dominio y DNS:</strong> Cloudflare.</li>
+        <li><strong>Respaldo institucional:</strong> Microsoft Lists, con tableros en Power BI y automatización con Power Automate.</li>
+        <li><strong>Sincronización:</strong> WSL2 con Ubuntu, que sincroniza los paquetes entre el servidor y Office 365 (complementa el respaldo).</li>
+        <li><strong>Notificaciones:</strong> mensajería instantánea desarrollada en Python.</li>
+      </ul>
+
+      <pre class="arch-diagram" role="img" aria-label="Diagrama de arquitectura: usuario, frontend, backend, respaldo en Microsoft Lists, Power BI y notificaciones; sincronización servidor y Office 365 mediante WSL2">Usuario → Frontend (GitHub Pages) → Backend (Node.js · AWS Debian)
+                                         │
+                                         ├─→ Respaldo: Microsoft Lists → Power BI / Power Automate
+                                         ├─→ Notificaciones (Python)
+                                         └─⇄ WSL2 Ubuntu ⇄ Office 365 (sincronización)</pre>
+
+      <!-- Sección "Resultados": descomentar y completar con datos reales
+      <h3 class="sub-h">Resultados</h3>
+      <ul class="arch-list">
+        <li>Órdenes gestionadas: [dato]</li>
+        <li>Cumplimiento del plan preventivo: [dato]%</li>
+        <li>Tiempo de respuesta: [dato]</li>
+        <li>Usuarios activos: [dato]</li>
+      </ul>
+      -->
 
       <a
         class="cta"
@@ -463,28 +522,63 @@
         <div class="panel" tabindex="0">
 
           <span class="pcode">
+            PROY·06
+          </span>
+          <span class="estado estado-propuesta">PROPUESTA</span>
+
+          <h3>
+            Tablero de pruebas — BDP
+          </h3>
+
+          <p>
+            Propuesta de diseño de un tablero destinado a pruebas
+            y diagnóstico de sistemas asociados a una línea de
+            embotellado de Bebidas del Paraguay S.A.
+          </p>
+
+          <div class="proyecto-detalles">
+            <h4>Objetivo</h4>
+            <p>Proponer un tablero para probar y diagnosticar sistemas de una línea de embotellado.</p>
+            <h4>Qué hice</h4>
+            <ul>
+              <li>Desarrollo de la propuesta de diseño.</li>
+            </ul>
+            <h4>Resultado</h4>
+            <p>Propuesta de tablero para pruebas y diagnóstico; no corresponde presentarlo como construido.</p>
+            <p class="proyecto-herramientas"><strong>Tipo:</strong> Propuesta · Tableros eléctricos</p>
+          </div>
+
+        </div>
+
+
+        <div class="panel" tabindex="0">
+
+          <span class="pcode">
             PROY·01
           </span>
+          <span class="estado estado-prototipo">PROTOTIPADO · 1.ª ETAPA</span>
 
           <h3>
             Desbobinador de chapa
           </h3>
 
           <p>
-            Diseño y modelado tridimensional de un desbobinador
-            industrial, orientado al estudio de su configuración
-            mecánica y composición estructural.
+            La primera etapa del desbobinador industrial fue
+            prototipada. Luego se trabajó en una nueva propuesta
+            de diseño y composición estructural.
           </p>
 
           <div class="proyecto-detalles">
             <h4>Objetivo</h4>
-            <p>Estudiar cómo se organiza un desbobinador de chapa y proponer una versión mejorada del diseño inicial.</p>
+            <p>Desarrollar un desbobinador de chapa por etapas, partiendo de un primer prototipo y explorando una mejora de diseño.</p>
             <h4>Qué hice</h4>
             <ul>
               <li>Modelado 3D de las piezas y del ensamblaje completo.</li>
-              <li>Primera versión del equipo (modelo inicial).</li>
-              <li>Segunda iteración con una propuesta de diseño nueva.</li>
+              <li>Prototipo de la primera etapa del equipo.</li>
+              <li>Segunda iteración con una nueva propuesta de diseño.</li>
             </ul>
+            <h4>Resultado</h4>
+            <p>Primera etapa prototipada; la siguiente iteración quedó como propuesta de diseño.</p>
             <p class="proyecto-herramientas"><strong>Herramientas:</strong> Onshape · Modelado 3D</p>
             <div class="proyecto-enlaces">
               <a href="https://cad.onshape.com/documents/b748f2f7e7d1948e758749c7/w/0841e43bb50daa1c4d52e246/e/71e7572d4ea1030f39576cb9" target="_blank" rel="noopener noreferrer">Ver modelo inicial ↗</a>
@@ -500,13 +594,14 @@
           <span class="pcode">
             PROY·02
           </span>
+          <span class="estado estado-impl">IMPLEMENTADO</span>
 
           <h3>
             Centrifugadora de galvanizado
           </h3>
 
           <p>
-            Modelado tridimensional de una centrifugadora destinada
+            Diseño e implementación de una centrifugadora destinada
             al proceso de galvanizado por inmersión, considerando la
             disposición general de sus componentes.
           </p>
@@ -519,6 +614,8 @@
               <li>Modelado de las piezas y del conjunto.</li>
               <li>Distribución general de los componentes del equipo.</li>
             </ul>
+            <h4>Resultado</h4>
+            <p>Centrifugadora implementada.</p>
             <p class="proyecto-herramientas"><strong>Herramientas:</strong> Onshape · Modelado 3D</p>
             <div class="proyecto-enlaces">
               <a href="https://cad.onshape.com/documents/77c9f93a3a71b7dfe81df7dc/w/aaa7118ffa3bf76ab102a92d/e/d4884ff1be700d2d09f6dab5" target="_blank" rel="noopener noreferrer">Ver modelo ↗</a>
@@ -533,6 +630,7 @@
           <span class="pcode">
             PROY·03
           </span>
+          <span class="estado estado-sim">SIMULADO</span>
 
           <h3>
             Finales de carrera ultrasónicos
@@ -566,13 +664,14 @@
           <span class="pcode">
             PROY·04
           </span>
+          <span class="estado estado-sim">SIMULADO</span>
 
           <h3>
             Portón corredizo automático
           </h3>
 
           <p>
-            Diseño e implementación de un sistema de automatización
+            Diseño y simulación de un sistema de automatización
             para portón corredizo utilizando Arduino Uno como
             controlador.
           </p>
@@ -599,13 +698,14 @@
           <span class="pcode">
             PROY·05
           </span>
+          <span class="estado estado-impl">IMPLEMENTADO</span>
 
           <h3>
             Lavarropas automático
           </h3>
 
           <p>
-            Desarrollo de un sistema de control para automatizar
+            Implementación de un sistema de control para automatizar
             las distintas etapas del ciclo de funcionamiento de
             un lavarropas mediante Arduino Uno.
           </p>
@@ -615,9 +715,11 @@
             <p>Automatizar el ciclo completo de un lavarropas, controlando cada etapa en secuencia.</p>
             <h4>Qué hice</h4>
             <ul>
-              <li>Circuito y programa de control en Arduino Uno.</li>
+              <li>Implementación del circuito y del programa de control en Arduino Uno.</li>
               <li>Secuenciación de las etapas del ciclo.</li>
             </ul>
+            <h4>Resultado</h4>
+            <p>Sistema de control de lavarropas implementado.</p>
             <p class="proyecto-herramientas"><strong>Herramientas:</strong> Tinkercad · Arduino Uno</p>
             <div class="proyecto-enlaces">
               <a href="https://www.tinkercad.com/things/fOJ8gLYtcFP-aojoheiha-petei?sharecode=BQB0WZ_gcxmwJOioeRsjArdzvYmujBTox6qpho1j8WI" target="_blank" rel="noopener noreferrer">Abrir en Tinkercad ↗</a>
@@ -626,35 +728,6 @@
 
         </div>
 
-
-        <div class="panel" tabindex="0">
-
-          <span class="pcode">
-            PROY·06
-          </span>
-
-          <h3>
-            Tablero de pruebas — BDP
-          </h3>
-
-          <p>
-            Diseño y construcción de un tablero destinado a pruebas
-            y diagnóstico de sistemas asociados a una línea de
-            embotellado de Bebidas del Paraguay S.A.
-          </p>
-
-          <div class="proyecto-detalles">
-            <h4>Objetivo</h4>
-            <p>Contar con un tablero para probar y diagnosticar sistemas de una línea de embotellado.</p>
-            <h4>Qué hice</h4>
-            <ul>
-              <li>Diseño del tablero.</li>
-              <li>Construcción y puesta a punto.</li>
-            </ul>
-            <p class="proyecto-herramientas"><strong>Herramientas:</strong> Proyecto real · Tableros eléctricos</p>
-          </div>
-
-        </div>
 
       </div>
 
@@ -704,6 +777,7 @@
         <span class="pcode">
           CAD·01
         </span>
+        <span class="estado estado-conc">CONCEPTUAL</span>
 
         <h3>
           Puente grúa con aparejo de cadena
@@ -757,12 +831,12 @@
       </h2>
 
 
-      <div class="grid-2">
+      <div class="grid-2 grid-3">
 
         <div>
 
           <h3>
-            Industrial
+            Mantenimiento y automatización
           </h3>
 
           <ul class="skill-list">
@@ -795,6 +869,10 @@
               Gestión y supervisión de mantenimiento
             </li>
 
+            <li>
+              Automatización de procesos
+            </li>
+
           </ul>
 
         </div>
@@ -803,48 +881,62 @@
         <div>
 
           <h3>
-            Digital
+            Desarrollo y datos
           </h3>
 
           <ul class="skill-list">
 
-            <li>
-              Python
-            </li>
+            <li>JavaScript, Node.js</li>
+            <li>Python</li>
+            <li>SQL y bases de datos</li>
+            <li>Desarrollo web (HTML, CSS)</li>
+            <li>C++</li>
+            <li>Power BI, Power Automate, Microsoft Lists, Office 365</li>
+            <li>Diseño y desarrollo de sistemas de gestión</li>
+            <li>Inbound Marketing — HubSpot</li>
 
-            <li>
-              SQL
-            </li>
+          </ul>
 
-            <li>
-              C++
-            </li>
+        </div>
 
-            <li>
-              Desarrollo web
-            </li>
 
-            <li>
-              Diseño y desarrollo de sistemas de gestión
-            </li>
+        <div>
 
-            <li>
-              Bases de datos
-            </li>
+          <h3>
+            Infraestructura
+          </h3>
 
-            <li>
-              Automatización de procesos
-            </li>
+          <ul class="skill-list">
 
-            <li>
-              Inbound Marketing — HubSpot
-            </li>
+            <li>Amazon Web Services (AWS)</li>
+            <li>Cloudflare</li>
+            <li>Linux: Debian, WSL2 / Ubuntu</li>
+            <li>GitHub, GitHub Pages</li>
 
           </ul>
 
         </div>
 
       </div>
+
+    </section>
+
+
+    <!-- Sección Formación: quitar `hidden`, completar y habilitar el enlace del índice -->
+    <section id="formacion" class="sheet" hidden>
+
+      <p class="tblock">
+        HOJA 07 · FORMACIÓN
+      </p>
+
+      <h2>
+        Formación y certificaciones
+      </h2>
+
+      <ul class="skill-list">
+        <li>[Estudio formal] — [Entidad], [Año]</li>
+        <li>[Curso / certificación: SAP, TPM, 5S, PLC, SQL, HubSpot] — [Entidad], [Año]</li>
+      </ul>
 
     </section>
 
