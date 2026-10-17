@@ -470,16 +470,23 @@
         <li><strong>Frontend:</strong> HTML, CSS y JavaScript sin frameworks, publicado en GitHub Pages.</li>
         <li><strong>Backend:</strong> Node.js sobre una VM Debian en AWS.</li>
         <li><strong>Dominio y DNS:</strong> Cloudflare.</li>
-        <li><strong>Respaldo institucional:</strong> Microsoft Lists, con tableros en Power BI y automatización con Power Automate.</li>
-        <li><strong>Sincronización:</strong> WSL2 con Ubuntu, que sincroniza los paquetes entre el servidor y Office 365 (complementa el respaldo).</li>
-        <li><strong>Notificaciones:</strong> mensajería instantánea desarrollada en Python.</li>
+        <li><strong>Sincronización de archivos:</strong> en el equipo de producción, un flujo en WSL2 con Ubuntu sincroniza incrementalmente los archivos de inserción y actualización con la carpeta sincronizada de OneDrive.</li>
+        <li><strong>Integración con Microsoft 365:</strong> Power Automate procesa los archivos sincronizados y crea elementos en una lista de SharePoint; los datos de la lista generan archivos JSON para procesos posteriores.</li>
+        <li><strong>Automatización:</strong> procesos en Python y Selenium consumen los JSON para ejecutar tareas de notificación.</li>
+        <li><strong>Reportes:</strong> Power BI utiliza los datos operativos disponibles en Microsoft Lists.</li>
       </ul>
 
-      <pre class="arch-diagram" role="img" aria-label="Diagrama de arquitectura: usuario, frontend, backend, respaldo en Microsoft Lists, Power BI y notificaciones; sincronización servidor y Office 365 mediante WSL2">Usuario → Frontend (GitHub Pages) → Backend (Node.js · AWS Debian)
-                                         │
-                                         ├─→ Respaldo: Microsoft Lists → Power BI / Power Automate
-                                         ├─→ Notificaciones (Python)
-                                         └─⇄ WSL2 Ubuntu ⇄ Office 365 (sincronización)</pre>
+      <pre class="arch-diagram" role="img" aria-label="Diagrama de arquitectura: frontend, API backend, MySQL, archivos sincronizados incrementalmente con OneDrive en el equipo de producción, Power Automate, lista de SharePoint, reportes Power BI y automatización Python/Selenium">Usuario → Frontend (GitHub Pages) → API (Node.js · AWS Debian) → MySQL
+                                      │
+                                      └─→ Archivos de inserción/actualización
+                                             ↓
+                          Flujo WSL2 Ubuntu en equipo de producción
+                                             ⇅
+                                  Carpeta sincronizada de OneDrive
+                                             ↓
+                              Power Automate → Lista de SharePoint
+                                                  ├─→ Power BI (reportes)
+                                                  └─→ JSON → Python + Selenium (automatización)</pre>
 
       <!-- Sección "Resultados": descomentar y completar con datos reales
       <h3 class="sub-h">Resultados</h3>
