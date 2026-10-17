@@ -459,34 +459,24 @@
       </div>
 
       <p class="lede-small">
-        El sistema fue diseñado, desarrollado e implementado con el acompañamiento del área de TI de la empresa.
-         Debido a que contiene información interna de carácter operativo, el acceso está restringido y requiere 
-         iniciar sesión.
+        Plataforma de gestión de mantenimiento desarrollada con el acompañamiento del área de TI
+        para apoyar procesos e información operativa de la organización.
       </p>
 
-      <h3 class="sub-h">Arquitectura</h3>
+      <h3 class="sub-h">Plataforma e integraciones</h3>
 
       <ul class="arch-list">
-        <li><strong>Frontend:</strong> HTML, CSS y JavaScript sin frameworks, publicado en GitHub Pages.</li>
-        <li><strong>Backend:</strong> Node.js sobre una VM Debian en AWS.</li>
-        <li><strong>Dominio y DNS:</strong> Cloudflare.</li>
-        <li><strong>Sincronización de archivos:</strong> en el equipo de producción, un flujo en WSL2 con Ubuntu sincroniza incrementalmente los archivos de inserción y actualización con la carpeta sincronizada de OneDrive.</li>
-        <li><strong>Integración con Microsoft 365:</strong> Power Automate procesa los archivos sincronizados y crea elementos en una lista de SharePoint; los datos de la lista generan archivos JSON para procesos posteriores.</li>
-        <li><strong>Automatización:</strong> procesos en Python y Selenium consumen los JSON para ejecutar tareas de notificación.</li>
-        <li><strong>Reportes:</strong> Power BI utiliza los datos operativos disponibles en Microsoft Lists.</li>
+        <li><strong>Plataforma web:</strong> herramientas digitales para la gestión de procesos de mantenimiento.</li>
+        <li><strong>Gestión de información:</strong> datos operativos organizados para apoyar el seguimiento y la toma de decisiones.</li>
+        <li><strong>Integración:</strong> servicios de Microsoft 365 para colaborar, organizar información y consultar reportes.</li>
+        <li><strong>Automatización:</strong> flujos que reducen tareas manuales y mantienen la información coordinada entre herramientas.</li>
       </ul>
 
-      <pre class="arch-diagram" role="img" aria-label="Diagrama de arquitectura: frontend, API backend, MySQL, archivos sincronizados incrementalmente con OneDrive en el equipo de producción, Power Automate, lista de SharePoint, reportes Power BI y automatización Python/Selenium">Usuario → Frontend (GitHub Pages) → API (Node.js · AWS Debian) → MySQL
-                                      │
-                                      └─→ Archivos de inserción/actualización
-                                             ↓
-                          Flujo WSL2 Ubuntu en equipo de producción
-                                             ⇅
-                                  Carpeta sincronizada de OneDrive
-                                             ↓
-                              Power Automate → Lista de SharePoint
-                                                  ├─→ Power BI (reportes)
-                                                  └─→ JSON → Python + Selenium (automatización)</pre>
+      <pre class="arch-diagram" role="img" aria-label="Diagrama general: usuarios interactúan con una plataforma de gestión de mantenimiento, que se integra con herramientas de colaboración, automatización y análisis de información">Usuarios → Plataforma de gestión de mantenimiento
+                         │
+                         ├─→ Gestión y seguimiento de información operativa
+                         └─→ Herramientas de colaboración y análisis
+                                  (ecosistema Microsoft 365)</pre>
 
       <!-- Sección "Resultados": descomentar y completar con datos reales
       <h3 class="sub-h">Resultados</h3>
@@ -903,7 +893,7 @@
             <li>Python</li>
             <li>SQL y bases de datos (MySQL)</li>
             <li>API REST con Express</li>
-            <li>Autenticación y seguridad: JWT, roles, bcrypt</li>
+            <li>Autenticación segura y control de acceso</li>
             <li>Pruebas automatizadas (Node.js)</li>
             <li>Importación y procesamiento de Excel (XLSX)</li>
             <li>Desarrollo web (HTML, CSS)</li>
@@ -925,12 +915,10 @@
 
           <ul class="skill-list">
 
-            <li>Amazon Web Services (AWS)</li>
-            <li>Cloudflare</li>
-            <li>Linux: Debian, WSL2 / Ubuntu</li>
-            <li>GitHub, GitHub Pages</li>
-            <li>CI/CD con GitHub Actions</li>
-            <li>HTTPS y certificados (Certbot), servicios systemd</li>
+            <li>Servicios en la nube y gestión de dominios</li>
+            <li>Administración de entornos Linux</li>
+            <li>Git y publicación web</li>
+            <li>Automatización de despliegues</li>
 
           </ul>
 
