@@ -1,5 +1,6 @@
 /* Reporte: horas trabajadas por turno */
 (function () {
+  const currentScriptUrl = document.currentScript.src;
   const ENDPOINT = "/api/reportes/horometros/turnos";
 
   const machines = [
@@ -97,7 +98,7 @@
     return rows;
   }
 
-  const s=document.createElement("script"); s.src="../js/reporte-utils.js";
+  const s=document.createElement("script"); s.src=new URL("reporte-utils.js", currentScriptUrl).href;
   s.onload=()=>ReportUtils.init({endpoint:ENDPOINT,columns,transform,filterRows,setupFilters,showTotals:true});
   document.head.appendChild(s);
 })();

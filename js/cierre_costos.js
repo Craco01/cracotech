@@ -517,7 +517,7 @@ if (formularioHabilitacion) {
           ? 'Los nuevos productos se agregaron al costeo. El total se recalculó y el estado volvió a No habilitado.'
           : 'Solicitud de habilitación registrada exitosamente.'
       );
-      window.top.location.href = 'reportes.html?vista=habilitaciones';
+      window.top.location.href = '/mantenimiento/reportes/?vista=habilitaciones';
     } catch (error) {
       console.error('Error al solicitar habilitación:', error);
       await window.siteDialog.alert(`Error al solicitar habilitación: ${error.message}`);
@@ -584,7 +584,7 @@ if (formularioCierre) {
         if (endpoint.includes('/mantenimientos-preventivos/')) {
           window.location.reload();
         } else {
-          window.top.location.href = 'reportes.html?vista=solicitudes';
+          window.top.location.href = '/mantenimiento/reportes/?vista=solicitudes';
         }
       } catch (error) {
         console.error('Error al cerrar orden:', error);

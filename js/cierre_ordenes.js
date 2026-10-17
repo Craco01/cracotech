@@ -43,10 +43,12 @@ function crearSelectConBusqueda(selectId) {
   let resultadosActuales = [];
   let indiceActivo = -1;
   let solicitudBusqueda = 0;
+  let solicitudDetalle = 0;
   let temporizadorBusqueda = null;
   const parametrosIniciales = new URLSearchParams(window.location.search);
   const solicitudInicialId = parametrosIniciales.get('id');
   const detalleInicial = parametrosIniciales.get('detalle') || '';
+  const averiaInicial = parametrosIniciales.get('averia');
   const incluirInactivas = Boolean(document.querySelector('form[data-modificacion="true"]'));
 
   function abrirLista() {
@@ -95,9 +97,27 @@ function crearSelectConBusqueda(selectId) {
       hiddenId.value = item.id;
     }
 
-    infoAveria.textContent = item.averia === undefined
-      ? 'Cargando detalles de la solicitud...'
-      : `Avería: ${item.averia || "No especificada"}`;
+    const solicitudActual = ++solicitudDetalle;
+    if (item.averia === undefined) {
+      infoAveria.textContent = 'Cargando detalles de la solicitud...';
+      API_FETCH(`/api/ordenes/${encodeURIComponent(item.id)}`)
+        .then(async res => {
+          if (!res.ok) throw new Error(`No se pudieron cargar los detalles de la solicitud (${res.status})`);
+          const detalle = await res.json();
+          if (solicitudActual !== solicitudDetalle ||
+              String(select.value) !== String(item.id)) return;
+          infoAveria.textContent = `Avería: ${detalle.averia || "No especificada"}`;
+        })
+        .catch(error => {
+          console.error('Error cargando los detalles de la solicitud:', error);
+          if (solicitudActual === solicitudDetalle &&
+              String(select.value) === String(item.id)) {
+            infoAveria.textContent = 'No se pudieron cargar los detalles de la solicitud.';
+          }
+        });
+    } else {
+      infoAveria.textContent = `Avería: ${item.averia || "No especificada"}`;
+    }
     cerrarLista();
     select.dispatchEvent(new Event('change', { bubbles: true }));
   }
@@ -196,6 +216,7 @@ function crearSelectConBusqueda(selectId) {
     if (hiddenId) {
       hiddenId.value = '';
     }
+    solicitudDetalle++;
     infoAveria.textContent = '';
     if (document.querySelector('form[data-habilitacion="true"]')) {
       select.dispatchEvent(new Event('change', { bubbles: true }));
@@ -241,25 +262,11 @@ function crearSelectConBusqueda(selectId) {
   });
 
   if (solicitudInicialId) {
-    const seleccionInicial = {
+    seleccionar({
       id: solicitudInicialId,
-      maquina_equipo: detalleInicial
-    };
-    seleccionar(seleccionInicial);
-    if (!incluirInactivas) API_FETCH(`/api/ordenes/${encodeURIComponent(solicitudInicialId)}`)
-      .then(async res => {
-        if (!res.ok) throw new Error(`No se pudieron cargar los detalles de la solicitud (${res.status})`);
-        const item = await res.json();
-        if (String(document.getElementById('ordenId')?.value) === String(solicitudInicialId)) {
-          seleccionar(item);
-        }
-      })
-      .catch(err => {
-        console.error('Error cargando la solicitud seleccionada:', err);
-        if (String(document.getElementById('ordenId')?.value) === String(solicitudInicialId)) {
-          infoAveria.textContent = 'No se pudieron cargar los detalles. Puede continuar e intentarlo al enviar.';
-        }
-      });
+      maquina_equipo: detalleInicial,
+      ...(averiaInicial !== null ? { averia: averiaInicial } : {})
+    });
   }
 }
 

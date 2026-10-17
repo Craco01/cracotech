@@ -1,0 +1,88 @@
+.firmas-entrega-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 11000;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(7, 40, 133, .5);
+  backdrop-filter: blur(3px);
+}
+
+.firmas-entrega-modal[hidden] { display: none; }
+
+.firmas-entrega-modal__panel {
+  width: min(520px, 100%);
+  padding: 24px;
+  border: 1px solid #d5dce5;
+  border-top: 3px solid #0a6b0a;
+  border-radius: 8px;
+  background: #f8fafc;
+  box-shadow: 0 20px 56px rgba(7, 40, 133, .24);
+  color: #1b2430;
+}
+
+.firmas-entrega-modal__panel h2 {
+  margin: 0 0 8px;
+  color: #072885;
+  font-size: 20px;
+}
+
+.firmas-entrega-modal__detalle,
+.firmas-entrega-modal__estado {
+  color: #334155;
+  line-height: 1.5;
+}
+
+.firmas-entrega-modal__qr {
+  width: 236px;
+  min-height: 236px;
+  margin: 16px auto;
+  padding: 8px;
+  background: #fff;
+  text-align: center;
+}
+
+.firmas-entrega-modal__qr img,
+.firmas-entrega-modal__qr canvas { max-width: 100%; }
+
+.firmas-entrega-modal__firmar {
+  display: block;
+  width: fit-content;
+  margin: 0 auto 18px;
+  color: #075c24;
+  font-weight: 700;
+  text-align: center;
+}
+
+.firmas-entrega-modal__acciones {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.firmas-entrega-modal__acciones button {
+  min-height: 40px;
+  padding: 9px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.firmas-entrega-modal__principal {
+  border-color: #0a6b0a !important;
+  background: #0a6b0a;
+  color: #fff;
+}
+
+.firmas-entrega-modal__secundario { background: #e8edf2; color: #263342; }
+.firmas-entrega-modal__acciones button:disabled { cursor: wait; opacity: .65; }
+
+@media (max-width: 480px) {
+  .firmas-entrega-modal__panel { padding: 20px; }
+  .firmas-entrega-modal__acciones { flex-direction: column-reverse; }
+  .firmas-entrega-modal__acciones button { width: 100%; }
+}

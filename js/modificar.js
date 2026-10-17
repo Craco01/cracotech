@@ -112,7 +112,7 @@
       const result = await response.json();
       if (!response.ok) throw new Error(result.detalle || result.error || 'No se pudo registrar la modificación.');
       await window.siteDialog.alert(result.message || 'Solicitud modificada.');
-      window.top.location.href = 'reportes.html?vista=solicitudes';
+      window.top.location.href = '../reportes/?vista=solicitudes';
     } catch (error) {
       await window.siteDialog.alert(error.message);
       cerrarConfirmacion(false);

@@ -1,28 +1,50 @@
 (() => {
   const redirectStorageKey = 'postLoginRedirect';
-  const protectedPages = new Set([
-    'formularios.html',
-    'reportes.html',
-    'carga-xlsx.html',
-    'vista_mpp.html',
-    'mpp.html',
-    'indicador_mpp.html',
-    'reporte-ordenes.html',
-    'reportes_horometros.html',
-    'horometros.html'
+  const protectedMaintenanceRoutes = new Set([
+    'administrar-usuarios',
+    'carga-xlsx',
+    'formularios',
+    'fr172-puente-grua-formulario',
+    'fr172-puente-grua-imprimible',
+    'horometros',
+    'indicadores-mpp',
+    'inventario',
+    'mpp',
+    'reportes',
+    'reportes-horometros',
+    'reportes-ordenes',
+    'vista-mpp'
+  ]);
+  const editorMaintenanceRoutes = new Set([
+    'fr172-puente-grua-formulario'
   ]);
   const currentPath = window.location.pathname;
-  const currentPage = currentPath.split('/').pop();
   const loginModal = document.getElementById('loginModal');
+
+  function maintenanceRouteName(pathname) {
+    if (!pathname.startsWith('/mantenimiento/')) return null;
+    return pathname.slice('/mantenimiento/'.length).split('/')[0];
+  }
+
+  function isProtectedPath(pathname) {
+    const maintenanceRoute = maintenanceRouteName(pathname);
+    return Boolean(maintenanceRoute && protectedMaintenanceRoutes.has(maintenanceRoute));
+  }
+
+  function requiresEditor(pathname) {
+    return editorMaintenanceRoutes.has(maintenanceRouteName(pathname));
+  }
+
+  function canEdit() {
+    return ['editor', 'administrador'].includes(localStorage.getItem('role'));
+  }
 
   function getProtectedTarget(value) {
     if (!value) return null;
     try {
       const target = new URL(value, window.location.href);
-      const page = target.pathname.split('/').pop();
       if (target.origin !== window.location.origin ||
-          !target.pathname.includes('/pages/') ||
-          !protectedPages.has(page)) return null;
+          !isProtectedPath(target.pathname)) return null;
       return `${target.pathname}${target.search}${target.hash}`;
     } catch {
       return null;
@@ -37,30 +59,50 @@
 
   function redirectToLogin(target) {
     window.__authRedirecting = true;
-    const loginUrl = new URL('./upkeepmv.html', window.location.href);
+    const loginUrl = new URL('/mantenimiento/', window.location.origin);
     loginUrl.searchParams.set('loginRequired', '1');
     loginUrl.searchParams.set('returnTo', target);
     window.location.replace(loginUrl.href);
   }
 
-  if (protectedPages.has(currentPage) && currentPath.includes('/pages/')) {
+  if (isProtectedPath(currentPath)) {
     if (!localStorage.getItem('token')) {
       redirectToLogin(`${currentPath}${window.location.search}${window.location.hash}`);
       return;
     }
-  }
-
-  if (!currentPath.endsWith('/upkeepmv.html')) return;
-
-  const params = new URLSearchParams(window.location.search);
-  const requestedTarget = getProtectedTarget(params.get('returnTo'));
-  if (params.get('loginRequired') === '1' && requestedTarget) {
-    if (localStorage.getItem('token')) {
-      window.location.replace(requestedTarget);
+    if (requiresEditor(currentPath) && !canEdit()) {
+      window.location.replace('/mantenimiento/reportes/?vista=fr172&accessDenied=1');
       return;
     }
-    sessionStorage.setItem(redirectStorageKey, requestedTarget);
-    showLoginModal();
+  }
+
+  document.querySelectorAll('#puente-grua a[href]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      const target = getProtectedTarget(link.href);
+      if (!target) return;
+      if (localStorage.getItem('token')) {
+        if (!requiresEditor(new URL(target, window.location.href).pathname) || canEdit()) return;
+        event.preventDefault();
+        window.location.assign('/mantenimiento/reportes/?vista=fr172&accessDenied=1');
+        return;
+      }
+      event.preventDefault();
+      redirectToLogin(target);
+    });
+  });
+
+  const isLoginPage = /^\/mantenimiento\/?$/.test(currentPath);
+  if (isLoginPage) {
+    const params = new URLSearchParams(window.location.search);
+    const requestedTarget = getProtectedTarget(params.get('returnTo'));
+    if (params.get('loginRequired') === '1' && requestedTarget) {
+      if (localStorage.getItem('token')) {
+        window.location.replace(requestedTarget);
+        return;
+      }
+      sessionStorage.setItem(redirectStorageKey, requestedTarget);
+      showLoginModal();
+    }
   }
 
   const dashboardFrame = document.querySelector('#informaciones iframe[data-protected-src]');
@@ -73,6 +115,8 @@
     }
   }
 
+  if (!isLoginPage) return;
+
   document.querySelectorAll('#solicitudes a[href], #mpp a[href], #informaciones a[href], #form-adds a[href]').forEach((link) => {
     link.addEventListener('click', (event) => {
       if (localStorage.getItem('token')) return;
@@ -83,4 +127,5 @@
       showLoginModal();
     });
   });
+
 })();

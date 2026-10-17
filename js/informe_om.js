@@ -88,7 +88,7 @@ document.getElementById('btn-imprimir').addEventListener('click', () => {
 });
 
 function volverALista() {
-  window.top.location.href = 'reportes.html?vista=informes';
+  window.top.location.href = '../reportes/?vista=informes';
 }
 
 document.getElementById('btn-volver').addEventListener('click', volverALista);

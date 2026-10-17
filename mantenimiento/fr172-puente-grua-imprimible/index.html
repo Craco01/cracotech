@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FR-172 Ficha de entrega y recepción de trabajo puente grúa</title>
+  <link rel="stylesheet" href="../../css/fr172-puente-grua-imprimible.css">
+</head>
+<body data-no-global-layout>
+
+<div class="barra no-print">
+  <a id="b-volver" href="../reportes/?vista=fr172" class="b">Volver a reportes</a>
+  <button type="button" id="b-imprimir" class="b prim">Imprimir</button>
+  <p>Vista a tamaño real: A4 vertical, márgenes de 10 mm y escala de impresión al 100 %.</p>
+</div>
+
+<div class="pliego">
+<main class="hoja">
+
+  <table class="cab">
+    <colgroup><col style="width:31%"><col style="width:37.6%"><col style="width:31.4%"></colgroup>
+    <tr>
+      <td class="logo-celda">
+        <img src="../../img/Logo MV Vertical SAE.png" alt="logo MVSAE">
+        <span class="razon"><b>METALURGICA <i>V</i>ERA S.A.E.</b><small>TECNOLOGÍA Y SEGURIDAD</small></span>
+      </td>
+      <td class="titulo">FICHA DE ENTREGA Y RECEPCIÓN DE TRABAJO<br>PUENTE GRÚA</td>
+      <td class="cod"><div>Código: FR-172</div><div>Rev.:00</div></td>
+    </tr>
+  </table>
+  <div class="franja"></div>
+
+  <table class="g4">
+    <colgroup><col style="width:17%"><col style="width:33%"><col style="width:18%"><col style="width:32%"></colgroup>
+    <tr><th>N° de Orden de Trabajo/Servicio</th><td data-f="ot"></td><th>Fecha</th><td data-f="fecha" data-tipo="fecha"></td></tr>
+    <tr><th>Cliente / Empresa</th><td data-f="cliente"></td><th>Lugar / Planta</th><td data-f="lugar"></td></tr>
+    <tr><th>Técnico responsable</th><td data-f="tecnico"></td><th>Contacto del cliente</th><td data-f="contacto"></td></tr>
+  </table>
+
+  <div class="seccion">1. IDENTIFICACIÓN DEL EQUIPO</div>
+  <table class="g4">
+    <colgroup><col style="width:17%"><col style="width:33%"><col style="width:18%"><col style="width:32%"></colgroup>
+    <tr><th>Tipo de polipasto</th><td data-f="tipo_polipasto"></td><th>Capacidad nominal</th><td data-f="capacidad"></td></tr>
+    <tr><th>Marca / Fabricante</th><td data-f="marca"></td><th>Modelo</th><td data-f="modelo"></td></tr>
+    <tr><th>N° de Puente Grúa</th><td data-f="n_puente"></td><th>Tensión / Alimentación</th><td data-f="tension"></td></tr>
+    <tr><th>Altura / Luz / Recorrido</th><td data-f="altura"></td><th>Observaciones de identificación</th><td data-f="obs_ident"></td></tr>
+  </table>
+
+  <div class="seccion">2. TIPO Y ALCANCE DEL TRABAJO</div>
+  <table class="g4">
+    <colgroup><col style="width:17%"><col style="width:33%"><col style="width:18%"><col style="width:32%"></colgroup>
+    <tr><th>Tipo de trabajo</th><td data-f="tipo_trabajo"></td><th>Fecha inicio</th><td data-f="fecha_inicio" data-tipo="fecha"></td></tr>
+    <tr><th>Fecha finalización</th><td data-f="fecha_fin" data-tipo="fecha"></td><th>Horas de trabajo</th><td data-f="horas"></td></tr>
+    <tr class="alto"><th>Descripción / motivo del servicio</th><td colspan="3" class="texto" data-f="descripcion"></td></tr>
+  </table>
+
+  <div class="seccion">3. TRABAJOS REALIZADOS</div>
+  <table class="t3">
+    <colgroup><col style="width:4.5%"><col style="width:45.5%"><col style="width:18%"><col style="width:32%"></colgroup>
+    <thead><tr class="enc"><th>Ítem</th><th>Actividad / Trabajo realizado</th><th>Estado</th><th>Observaciones / mediciones / piezas reemplazadas</th></tr></thead>
+    <tbody id="filas-trabajos"></tbody>
+  </table>
+
+  <div class="seccion">4. VERIFICACIONES Y PRUEBAS DEL EQUIPO</div>
+  <table class="t4">
+    <colgroup><col style="width:68%"><col style="width:15.6%"><col style="width:16.4%"></colgroup>
+    <thead><tr class="enc"><th>Punto de verificación</th><th>Estado</th><th>Observaciones</th></tr></thead>
+    <tbody id="filas-verif"></tbody>
+  </table>
+
+  <div class="seccion">5. MATERIALES, REPUESTOS Y COMPONENTES UTILIZADOS</div>
+  <table class="t5">
+    <colgroup><col style="width:4.5%"><col style="width:26%"><col style="width:19.5%"><col style="width:18%"><col style="width:15.5%"><col style="width:16.5%"></colgroup>
+    <thead><tr class="enc"><th>Ítem</th><th>Descripción</th><th>Cantidad</th><th>Unidad</th><th>N° de parte / referencia</th><th>Observaciones</th></tr></thead>
+    <tbody id="filas-materiales"></tbody>
+  </table>
+
+  <div class="seccion">6. CONDICIONES DEL EQUIPO AL FINALIZAR EL SERVICIO</div>
+  <table class="g4">
+    <colgroup><col style="width:17%"><col style="width:33%"><col style="width:18%"><col style="width:32%"></colgroup>
+    <tr><th>Estado final del equipo</th><td data-f="estado_final"></td><th>Equipo entregado operativo</th><td data-f="entregado_operativo"></td></tr>
+    <tr class="alto"><th>Pendientes / recomendaciones</th><td colspan="3" class="texto" data-f="pendientes"></td></tr>
+    <tr class="alto"><th>Observaciones adicionales</th><td colspan="3" class="texto" data-f="obs_adic"></td></tr>
+  </table>
+
+  <div class="seccion">7. DOCUMENTACIÓN / ANEXOS ENTREGADOS</div>
+  <table class="t8">
+    <colgroup><col style="width:50%"><col style="width:50%"></colgroup>
+    <tbody id="filas-docs"></tbody>
+  </table>
+
+  <div class="seccion">8. RECEPCIÓN Y CONFORMIDAD DEL CLIENTE</div>
+  <table class="g4 recep">
+    <colgroup><col style="width:17%"><col style="width:33%"><col style="width:18%"><col style="width:32%"></colgroup>
+    <tr><td colspan="4" class="legal">El cliente declara haber recibido el equipo/trabajo indicado en esta ficha y haber sido informado sobre los trabajos realizados, las pruebas efectuadas y, cuando corresponda, las observaciones o pendientes indicados. La firma acredita la recepción y conformidad con el servicio ejecutado, sin perjuicio de las observaciones expresamente consignadas en este documento.</td></tr>
+    <tr><th class="gris">Conformidad del cliente</th><td data-f="conformidad"></td><th class="gris">Fecha de recepción</th><td data-f="fecha_recepcion" data-tipo="fecha"></td></tr>
+    <tr class="medio"><th class="gris">Nombre y apellido</th><td data-f="nombre"></td><th class="gris">Cargo</th><td data-f="cargo"></td></tr>
+    <tr class="firma">
+      <td id="firma-cliente" class="firma-lado" colspan="2"><span class="firma-label">Firma / sello del cliente</span></td>
+      <td id="firma-tecnico" class="firma-lado" colspan="2"><span class="firma-label">Firma del técnico</span></td>
+    </tr>
+  </table>
+
+</main>
+</div>
+
+<script src="../../js/api-config.js"></script>
+<script src="../../js/fr172-puente-grua-datos.js"></script>
+<script src="../../js/signature-pad.js"></script>
+<script src="../../js/fr172-puente-grua-imprimible.js"></script>
+<script src="../../js/session-guard.js"></script>
+</body>
+</html>

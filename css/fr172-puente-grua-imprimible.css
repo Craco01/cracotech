@@ -1,0 +1,148 @@
+/* FR-172: ficha compacta, limpia y preparada para una hoja A4. */
+:root {
+  --fila: 3mm;
+  --borde: .2mm solid #cbd5e1;
+  --azul: #1d4f91;
+  --verde: #5a9e2f;
+  --tinta: #17365f;
+  --muted: #75849a;
+  --margen-impresion: 10mm;
+  --margen-vista: 10mm;
+  --serif: Cambria, Georgia, 'Times New Roman', serif;
+  --sans: Calibri, Carlito, Arial, sans-serif;
+}
+@page { size: A4 portrait; margin: 10mm; }
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body { margin: 0; background: #e5e7eb; color: #172033; font: 5.8pt/1.12 var(--sans); }
+
+/* ---- Acciones de pantalla ---- */
+.barra {
+  position: sticky; top: 0; z-index: 5; display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .75rem;
+  padding: .6rem 1rem; background: var(--azul); color: #fff; font: 14px/1.3 var(--sans);
+  border-bottom: 4px solid var(--verde);
+}
+.barra p { margin: 0; font-size: 12px; opacity: .9; flex: 1 1 18rem; }
+.b {
+  font: 600 14px var(--sans); padding: .45rem .9rem; color: #fff; text-decoration: none; cursor: pointer;
+  background: transparent; border: 1px solid #fff; border-radius: 3px;
+}
+.b:hover { background: rgba(255, 255, 255, .15); }
+.b.prim { background: var(--verde); border-color: var(--verde); }
+.b:focus-visible { outline: 3px solid #f2b705; outline-offset: 1px; }
+
+.pliego { overflow-x: auto; padding: 6mm 3mm; }
+.hoja {
+  display: flex; flex-direction: column; width: 190mm; height: 277mm; margin: 0 auto; padding: 0;
+  background: #fff; border: .25mm solid #d5dce7; border-radius: 1.5mm;
+  box-shadow: 0 2px 14px rgba(15, 23, 42, .16);
+}
+.hoja > table, .hoja > .seccion { flex: 0 0 auto; }
+.hoja > .recep { flex: 1 0 auto; }
+.hoja > * + * { margin-top: -.2mm; }
+
+/* La vista en pantalla representa el papel A4 y deja visibles los márgenes reales. */
+@media screen {
+  .pliego {
+    position: relative; width: 210mm; min-height: 297mm;
+    margin: 8mm auto; padding: var(--margen-vista); overflow: visible;
+    background: #fff; box-shadow: 0 2px 14px rgba(15, 23, 42, .2);
+  }
+  .pliego::before {
+    position: absolute; inset: var(--margen-vista); border: .28mm dashed #7f8da8; box-shadow: inset 0 0 0 .3mm rgba(127, 141, 168, .18);
+    background: rgba(148, 163, 184, .05); content: ""; pointer-events: none;
+  }
+  .pliego::after {
+    position: absolute; right: var(--margen-vista); bottom: 1.5mm;
+    color: #75849a; content: "PAPEL A4 · 210 × 297 mm · MARGEN 10 mm";
+    font: 4.5pt var(--sans); letter-spacing: .04em;
+  }
+  .hoja { margin: 0; box-shadow: none; }
+}
+
+/* ---- Cuadrículas y campos ---- */
+table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+th, td {
+  border: var(--borde); padding: 0 1.1mm; height: var(--fila);
+  vertical-align: middle; text-align: left; overflow: hidden; overflow-wrap: anywhere;
+}
+th { color: #65758b; font-size: 4.8pt; font-weight: 600; background: #f8fafc; }
+td { color: var(--tinta); font-size: 5.9pt; font-weight: 600; }
+.c, th.c { text-align: center; }
+.texto { white-space: pre-wrap; vertical-align: top; padding-top: .6mm; }
+tr.alto th, tr.alto td { height: 7mm; }
+tr.medio th, tr.medio td { height: 4.5mm; }
+tr.firma { height: 32mm; }
+tr.firma td { height: 32mm; padding: 1mm 2.5mm; }
+.recep tr.firma, .recep tr.firma td { height: 100%; }
+.gris, th.gris { background: #f8fafc; }
+
+/* ---- Identidad de la ficha ---- */
+.cab td { height: 14mm; padding: 0 1.5mm; border-bottom: .45mm solid var(--azul); }
+.logo-celda { vertical-align: middle; white-space: nowrap; }
+.logo-celda img { height: 9mm; width: auto; vertical-align: middle; margin-right: 1.2mm; }
+.razon { display: inline-flex; flex-direction: column; vertical-align: middle; line-height: 1.1; color: var(--azul); }
+.razon b { font: 700 6.5pt var(--sans); letter-spacing: .01em; }
+.razon i { font-style: normal; color: var(--verde); }
+.razon small { margin-top: .5mm; font-size: 4.1pt; letter-spacing: .08em; color: #64748b; }
+.titulo { text-align: center; font: 700 7pt/1.15 var(--sans); color: var(--azul); }
+.cod { padding: 0; }
+.cod div {
+  height: 6.8mm; padding: 0 1.5mm; display: flex; align-items: center; justify-content: flex-end;
+  font: 700 6pt var(--sans); color: var(--azul); text-align: right;
+}
+.cod div + div { height: 5.5mm; border-top: var(--borde); color: #64748b; font-size: 5pt; }
+.franja { height: 1.2mm; background: linear-gradient(90deg, var(--azul) 0 82%, var(--verde) 82%); }
+
+/* ---- Secciones y tablas de detalle ---- */
+.seccion {
+  min-height: 3mm; padding: .45mm 1.2mm .45mm 1.5mm;
+  border: var(--borde); border-left: .8mm solid var(--verde);
+  background: #f3f6fa; color: var(--azul);
+  font: 700 5.7pt/1.1 var(--sans); letter-spacing: .015em;
+}
+tr.enc th { text-align: center; font: 600 4.8pt/1.05 var(--sans); background: #f8fafc; }
+.t3 tbody th, .t5 tbody th { text-align: center; }
+.t4 tbody th { font-weight: 600; }
+.t3 td, .t4 td, .t5 td { font-weight: 400; }
+.t8 th { background: #f8fafc; font-weight: 600; }
+
+/* ---- Casillas y anexos ---- */
+.caja {
+  display: inline-block; width: 2.1mm; height: 2.1mm; margin-right: 1mm; vertical-align: -.35mm;
+  border: .2mm solid #64748b; background: #fff; position: relative;
+}
+.caja.on::after {
+  content: ''; position: absolute; left: .25mm; top: -.1mm; width: 1mm; height: 1.7mm;
+  border: solid var(--azul); border-width: 0 .4mm .4mm 0; transform: rotate(40deg);
+}
+.subr { color: var(--tinta); font-weight: 400; border-bottom: .2mm solid #94a3b8; padding: 0 2mm; }
+.sin-dato { font-weight: 400; color: #64748b; }
+
+/* ---- Firmas ---- */
+.legal { padding: .8mm 1.2mm; font: 500 4.7pt/1.15 var(--sans); color: #475569; text-align: justify; }
+.firma-lado { position: relative; vertical-align: bottom; text-align: center; }
+.firma-label {
+  display: block; min-height: 3mm; padding-top: .7mm;
+  border-top: .2mm solid #64748b; color: #475569; font-size: 4.8pt; font-weight: 500;
+}
+svg.sello {
+  display: block; width: 100%; height: 11mm; max-width: 100%; margin: 0 auto;
+  fill: none; stroke: #16233a; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round;
+}
+.error-impresion { margin: 1rem auto; max-width: 200mm; padding: .75rem; background: #fff4d6; color: #713f12; }
+
+@media (max-width: 680px) {
+  .hoja { transform-origin: top left; }
+  .pliego { padding: 4mm 2mm; }
+}
+
+/* ---- Impresión A4 ---- */
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; }
+  .pliego { width: 190mm; height: 277mm; margin: 0 auto; padding: 0; overflow: visible; }
+  .pliego::before, .pliego::after { display: none; }
+  .hoja { width: 190mm; border: .2mm solid #cbd5e1; border-radius: 1mm; box-shadow: none; }
+  table, .seccion { break-inside: avoid; page-break-inside: avoid; }
+}

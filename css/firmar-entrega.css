@@ -1,0 +1,153 @@
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 20px;
+  background: #e8edf2;
+  color: #1f2937;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.firma-page {
+  width: min(760px, 100%);
+  margin: 0 auto;
+  padding: clamp(18px, 4vw, 36px);
+  border: 1px solid #d5dce5;
+  border-top: 4px solid #0a6b0a;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, .12);
+}
+
+.firma-header__eyebrow {
+  margin: 0 0 6px;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.firma-header h1 { margin: 0 0 8px; color: #072885; font-size: clamp(22px, 5vw, 30px); }
+.firma-header p:last-child { margin: 0 0 20px; color: #475569; }
+.firma-estado { min-height: 24px; color: #334155; line-height: 1.5; }
+.firma-campo {
+  margin: 20px 0;
+  padding: 16px;
+  border: 1px solid #bfdbfe;
+  border-left: 5px solid #2563eb;
+  border-radius: 8px;
+  background: #f8fbff;
+}
+.firma-campo#campoMantenimiento {
+  border-color: #bbf7d0;
+  border-left-color: #15803d;
+  background: #f7fcf8;
+}
+.firma-campo[hidden], #formFirmas[hidden], .firma-finalizada[hidden] { display: none; }
+
+.firma-operador-datos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 14px 0 18px;
+}
+
+.firma-operador-datos label { display: grid; gap: 6px; font-weight: 700; }
+.firma-operador-datos input {
+  width: 100%;
+  min-height: 42px;
+  padding: 8px 10px;
+  border: 1px solid #94a3b8;
+  border-radius: 6px;
+  font: inherit;
+  font-weight: 400;
+}
+
+.firma-campo__titulo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+
+.firma-campo__titulo > div { min-width: 0; }
+.firma-campo__titulo label { display: block; }
+.firma-campo__titulo p {
+  margin: 5px 0 0;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 400;
+}
+.firma-campo__rol {
+  display: inline-block;
+  margin-bottom: 5px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: #dbeafe;
+  color: #1d4ed8;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.firma-campo__rol--mantenimiento {
+  background: #dcfce7;
+  color: #166534;
+}
+.firma-campo__titulo--firma { margin: 0 0 8px; }
+
+.firma-campo__titulo button,
+.firma-guardar,
+.firma-finalizada button {
+  min-height: 42px;
+  padding: 9px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.firma-campo__titulo button { background: #f1f5f9; color: #334155; }
+.firma-campo .signature-pad {
+  display: block;
+  width: 100%;
+  height: clamp(150px, 40vw, 240px);
+  border: 1px solid #94a3b8;
+  border-radius: 6px;
+  background: #fff;
+  touch-action: none;
+}
+
+.firma-trazo {
+  fill: none;
+  stroke: #172554;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.firma-campo .signature-pad:focus-visible,
+button:focus-visible,
+a:focus-visible { outline: 3px solid rgba(10, 107, 10, .3); outline-offset: 2px; }
+
+.firma-guardar {
+  width: 100%;
+  border-color: #0a6b0a;
+  background: #0a6b0a;
+  color: #fff;
+}
+
+.firma-guardar:disabled { cursor: wait; opacity: .7; }
+.firma-finalizada { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+.firma-finalizada button { background: #e8edf2; color: #263342; }
+.firma-finalizada a { color: #075c24; font-weight: 700; }
+
+@media (max-width: 520px) {
+  body { padding: 10px; }
+  .firma-operador-datos { grid-template-columns: minmax(0, 1fr); }
+  .firma-campo { padding: 12px; }
+  .firma-campo__titulo--firma { align-items: flex-start; flex-direction: column; }
+  .firma-campo__titulo--firma button { width: 100%; }
+}

@@ -1,21 +1,23 @@
 (() => {
   if (window.__authRedirecting) return;
 
+  const currentScriptUrl = document.currentScript.src;
   const controladores = {
     formularios: {
       solicitud: ['codigo_maquina.js', 'formularios.js'],
-      asignar: ['cierre_ordenes.js', 'formularios.js'],
-      cierre: ['cierre_ordenes.js', 'formularios.js', 'cierre_costos.js'],
-      habilitacion: ['cierre_ordenes.js', 'cierre_costos.js'],
-      reprogramar: ['cierre_ordenes.js', 'formularios.js'],
-      modificar: ['cierre_ordenes.js', 'codigo_maquina.js', 'modificar.js', 'formularios.js'],
-      baja: ['cierre_ordenes.js', 'baja_ordenes.js']
+      asignar: ['cierre_ordenes.js?v=20261016-2', 'formularios.js'],
+      cierre: ['cierre_ordenes.js?v=20261016-2', 'formularios.js', 'cierre_costos.js'],
+      habilitacion: ['cierre_ordenes.js?v=20261016-2', 'cierre_costos.js'],
+      reprogramar: ['cierre_ordenes.js?v=20261016-2', 'formularios.js'],
+      modificar: ['cierre_ordenes.js?v=20261016-2', 'codigo_maquina.js', 'modificar.js', 'formularios.js'],
+      baja: ['cierre_ordenes.js?v=20261016-2', 'baja_ordenes.js']
     },
     reportes: {
       codigos: ['codigos.js'],
-      solicitudes: ['lista_solicitudes.js'],
-      informes: ['modulo_solicitudes.js'],
-      habilitaciones: ['seguimiento-habilitaciones.js']
+      solicitudes: ['firmas-entrega.js', 'lista_solicitudes.js?v=20261016-2'],
+      habilitaciones: ['seguimiento-habilitaciones.js'],
+      informes: ['firmas-entrega.js', 'modulo_solicitudes.js'],
+      fr172: ['reportes-fr172.js']
     }
   };
 
@@ -30,23 +32,24 @@
   const plantilla = document.getElementById(`${seccion}-${vista}`);
 
   if (!vistas || !vistas[vista] || !plantilla) {
-    window.location.replace('./upkeepmv.html#solicitudes');
+    window.location.replace('/mantenimiento/#solicitudes');
     return;
   }
 
   const hojasEstilo = {
-    codigos: '../css/codigos.css',
-    solicitudes: '../css/lista_solicitudes.css',
-    informes: '../css/modulo_solicitudes.css',
-    habilitaciones: '../css/habilitaciones.css'
+    codigos: ['codigos.css'],
+    solicitudes: ['lista_solicitudes.css', 'firmas-entrega.css'],
+    habilitaciones: ['lista_solicitudes.css', 'habilitaciones.css'],
+    informes: ['modulo_solicitudes.css', 'firmas-entrega.css'],
+    fr172: ['lista_solicitudes.css', 'reportes-fr172.css']
   };
-  function cargarHojaEstilo(ruta) {
+  function cargarHojaEstilo(nombre) {
     return new Promise((resolve, reject) => {
       const hojaEstilo = document.createElement('link');
       hojaEstilo.rel = 'stylesheet';
-      hojaEstilo.href = ruta;
+      hojaEstilo.href = new URL(`../css/${nombre}`, currentScriptUrl).href;
       hojaEstilo.onload = resolve;
-      hojaEstilo.onerror = () => reject(new Error(`No se pudo cargar la hoja de estilo ${ruta}`));
+      hojaEstilo.onerror = () => reject(new Error(`No se pudo cargar la hoja de estilo ${nombre}`));
       document.head.appendChild(hojaEstilo);
     });
   }
@@ -55,7 +58,7 @@
     for (const archivo of vistas[vista]) {
       await new Promise((resolve, reject) => {
         const script = document.createElement('script');
-        script.src = `../js/${archivo}`;
+        script.src = new URL(archivo, currentScriptUrl).href;
         script.onload = resolve;
         script.onerror = () => reject(new Error(`No se pudo cargar ${archivo}`));
         document.body.appendChild(script);
@@ -71,7 +74,10 @@
     app.replaceChildren(cargando);
 
     try {
-      if (hojasEstilo[vista]) await cargarHojaEstilo(hojasEstilo[vista]);
+      const hojas = hojasEstilo[vista]
+        ? (Array.isArray(hojasEstilo[vista]) ? hojasEstilo[vista] : [hojasEstilo[vista]])
+        : [];
+      for (const hoja of hojas) await cargarHojaEstilo(hoja);
     } catch (error) {
       console.error(error);
       const mensaje = document.createElement('p');

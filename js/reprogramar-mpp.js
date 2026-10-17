@@ -22,7 +22,7 @@ function initReprogramarMPP() {
         titulo: 'Reprogramación exitosa',
         texto: 'La reprogramación del mantenimiento se guardó correctamente.',
         redirigir: true,
-        destino: './vista_mpp.html'
+        destino: '/mantenimiento/vista-mpp/'
       });
       form.reset();
     } catch (error) {
@@ -31,7 +31,7 @@ function initReprogramarMPP() {
         titulo: 'Error',
         texto: error.message || 'Error al reprogramar el mantenimiento',
         redirigir: true,
-        destino: './vista_mpp.html'
+        destino: '/mantenimiento/vista-mpp/'
       });
     }
   });

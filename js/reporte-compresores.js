@@ -1,5 +1,6 @@
 /* Reporte: mantenimiento_criticos - compresores */
 (function () {
+  const currentScriptUrl = document.currentScript.src;
   const ENDPOINT = "/api/reportes/mantenimientos-criticos/compresores";
   const columns = [
     {key:"id",label:"ID",number:true},
@@ -11,7 +12,7 @@
     {key:"horometro_compresor_75hp",label:"Horómetro compresor 75 HP",number:true},
     {key:"hallazgos_compresor_75hp",label:"Hallazgos compresor 75 HP"},
   ];
-  const s=document.createElement("script"); s.src="../js/reporte-utils.js";
+  const s=document.createElement("script"); s.src=new URL("reporte-utils.js", currentScriptUrl).href;
   s.onload=()=>ReportUtils.init({endpoint:ENDPOINT,columns});
   document.head.appendChild(s);
 })();

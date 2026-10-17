@@ -1,10 +1,15 @@
 (function () {
   if (document.body && document.body.hasAttribute('data-no-global-layout')) return;
 
-  const isPagesDir = window.location.pathname.includes('/pages/');
-  const portalRoot = isPagesDir ? './' : './pages/';
-  const authorRoot = isPagesDir ? '../' : './';
-  const assetRoot = isPagesDir ? '../' : './';
+  const currentPath = window.location.pathname;
+  const isMaintenanceRoute = currentPath.includes('/mantenimiento/');
+  const isMaintenanceHome = /^\/mantenimiento\/?$/.test(currentPath) ||
+    currentPath === '/mantenimiento/index.html';
+  const maintenanceRoot = isMaintenanceRoute
+    ? isMaintenanceHome ? './' : '../'
+    : './mantenimiento/';
+  const authorRoot = isMaintenanceRoute ? '../../' : './';
+  const assetRoot = isMaintenanceRoute ? '../../' : './';
 
   function buildLayoutHtml() {
     return `
@@ -15,13 +20,13 @@
           </button>
           <div class="nav-menu-wrap">
             <ul class="list-bar">
-              <li><a href="${portalRoot}upkeepmv.html">Inicio</a></li>
-              <li><a href="${portalRoot}upkeepmv.html#solicitudes">Solicitudes</a></li>
-              <li><a href="${portalRoot}upkeepmv.html#mpp">MPP</a></li>
-              <li><a href="${portalRoot}upkeepmv.html#informaciones">Informaciones</a></li>
-              <li><a href="${portalRoot}upkeepmv.html#form-adds">Formularios</a></li>
-              <li><a href="${portalRoot}upkeepmv.html#otros">Otros</a></li>
-              <li><a href="${portalRoot}upkeepmv.html#contacto">Contacto</a></li>
+              <li><a href="${maintenanceRoot}">Inicio</a></li>
+              <li><a href="${maintenanceRoot}#solicitudes">Solicitudes</a></li>
+              <li><a href="${maintenanceRoot}#mpp">MPP</a></li>
+              <li><a href="${maintenanceRoot}#informaciones">Informaciones</a></li>
+              <li><a href="${maintenanceRoot}#form-adds">Formularios</a></li>
+              <li><a href="${maintenanceRoot}#otros">Otros</a></li>
+              <li><a href="${maintenanceRoot}#contacto">Contacto</a></li>
               <li><a href="${authorRoot}index.html">Autor</a></li>
             </ul>
             <div id="nav-login"></div>

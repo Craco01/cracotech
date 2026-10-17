@@ -28,7 +28,11 @@ Este repositorio contiene el sitio estático que se publica en GitHub Pages. La 
 ```text
 frontend/
 ├── index.html                 # Portafolio público
-├── pages/upkeepmv.html        # Portal de mantenimiento
+├── mantenimiento/             # Rutas limpias del portal de mantenimiento
+│   ├── index.html              # Inicio del portal
+│   ├── formularios/index.html
+│   └── ...
+├── pages/                      # Respaldo de las páginas HTML anteriores
 ├── css/
 │   ├── portfolio.css
 ├── data/
@@ -38,7 +42,6 @@ frontend/
 ├── js/
 │   ├── api-config.js
 │   └── portfolio.js
-├── pages/
 ├── README.md
 └── ...
 ```
@@ -46,9 +49,10 @@ frontend/
 ## Flujo principal
 
 1. El workflow `.github/workflows/deploy-pages.yml` publica el sitio en GitHub Pages al actualizar `main` o al ejecutarse manualmente desde GitHub Actions.
-2. El portal de mantenimiento está disponible en [pages/upkeepmv.html](pages/upkeepmv.html).
-3. [js/api-config.js](js/api-config.js) centraliza la URL base de la API productiva.
-4. El backend está en el repositorio independiente `upkeepmv_backend` y se actualiza manualmente en AWS Lightsail.
+2. El acceso principal al portal es [mantenimiento/](mantenimiento/); sus módulos usan rutas limpias, por ejemplo `/mantenimiento/reportes/`.
+3. `pages/` se conserva como respaldo de las páginas anteriores; la navegación principal ya no depende de esa carpeta.
+4. [js/api-config.js](js/api-config.js) centraliza la URL base de la API productiva.
+5. El backend está en el repositorio independiente `upkeepmv_backend` y se actualiza manualmente en AWS Lightsail.
 
 ## Autenticación
 
@@ -66,7 +70,7 @@ Desde este directorio, inicia un servidor estático para el frontend:
 py -m http.server 5500
 ```
 
-Abre `http://127.0.0.1:5500/pages/upkeepmv.html`. En este repositorio, [js/api-config.js](js/api-config.js) apunta al API HTTPS de producción; por tanto, la interfaz local seguirá consultando el backend productivo. Las pruebas locales integrales deben ejecutarse en el directorio independiente `pruebas`, con su propia configuración local y sin copiar su `.env` a este repositorio.
+Abre `http://127.0.0.1:5500/mantenimiento/`. En este repositorio, [js/api-config.js](js/api-config.js) apunta al API HTTPS de producción; por tanto, la interfaz local seguirá consultando el backend productivo. Las pruebas locales integrales deben ejecutarse en el directorio independiente `pruebas`, con su propia configuración local y sin copiar su `.env` a este repositorio.
 
 ## Publicación
 
@@ -89,8 +93,8 @@ El frontend se encuentra en una etapa funcional con varias pantallas y módulos 
 ## Mantenimiento
 
 Cuando se modifique la navegación, módulos o formularios del portal, conviene revisar:
-- [pages/upkeepmv.html](pages/upkeepmv.html)
-- [pages/](pages/)
+- [mantenimiento/](mantenimiento/)
+- [pages/](pages/) (respaldo)
 - [js/](js/)
 - [css/](css/)
 

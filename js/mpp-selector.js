@@ -1,4 +1,5 @@
 (() => {
+  const currentScriptUrl = document.currentScript.src;
   const vistas = {
     asignar: {
       template: 'mpp-asignar',
@@ -31,7 +32,7 @@
   function cargarScript(indice) {
     if (indice >= configuracion.scripts.length) return;
     const script = document.createElement('script');
-    script.src = `../js/${configuracion.scripts[indice]}`;
+    script.src = new URL(configuracion.scripts[indice], currentScriptUrl).href;
     script.onload = () => cargarScript(indice + 1);
     script.onerror = () => console.error(`No se pudo cargar ${configuracion.scripts[indice]}`);
     document.body.appendChild(script);

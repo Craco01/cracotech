@@ -1,5 +1,6 @@
 /* Reporte: mantenimiento_criticos - grupos generadores */
 (function () {
+  const currentScriptUrl = document.currentScript.src;
   const ENDPOINT = "/api/reportes/mantenimientos-criticos/generadores";
   const columns = [
     {key:"id",label:"ID",number:true},
@@ -11,7 +12,7 @@
     {key:"horometro_generador_220",label:"Horómetro generador 220",number:true},
     {key:"hallazgos_generador_220",label:"Hallazgos generador 220"},
   ];
-  const s=document.createElement("script"); s.src="../js/reporte-utils.js";
+  const s=document.createElement("script"); s.src=new URL("reporte-utils.js", currentScriptUrl).href;
   s.onload=()=>ReportUtils.init({endpoint:ENDPOINT,columns});
   document.head.appendChild(s);
 })();

@@ -1,5 +1,6 @@
 /* Reporte: horometro_maquinas - datos brutos */
 (function () {
+  const currentScriptUrl = document.currentScript.src;
   const ENDPOINT = "/api/reportes/horometros/datos";
   const columns = [
     {key:"id",label:"ID",number:true},
@@ -30,7 +31,7 @@
     {key:"plegadora_feysama",label:"Plegadora Feysama",number:true},
   ];
   const loadUtils = () => {
-    const s=document.createElement("script"); s.src="../js/reporte-utils.js";
+    const s=document.createElement("script"); s.src=new URL("reporte-utils.js", currentScriptUrl).href;
     s.onload=()=>ReportUtils.init({endpoint:ENDPOINT,columns});
     document.head.appendChild(s);
   };

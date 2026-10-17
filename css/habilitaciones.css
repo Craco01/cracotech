@@ -8,6 +8,25 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
+#habilitacionesBuscador {
+  box-sizing: border-box;
+  display: block;
+  width: min(100%, 520px);
+  min-height: 42px;
+  margin: 18px 0 12px;
+  padding: 10px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #fff;
+  color: #1e293b;
+  font: inherit;
+}
+
+#habilitacionesBuscador:focus {
+  border-color: #007bff;
+  outline: 2px solid rgba(0, 123, 255, 0.18);
+}
+
 #habilitacionesTablaContenedor {
   margin: 16px 0;
   padding: 10px;
@@ -25,15 +44,6 @@
   border: 1px solid #aab7c6;
   table-layout: fixed;
   font-size: 14px;
-}
-
-#habilitacionesBuscador {
-  box-sizing: border-box;
-  width: 100%;
-  margin: 12px 0;
-  padding: 10px;
-  border: 1px solid #cbd5e1;
-  border-radius: 4px;
 }
 
 #tablaHabilitaciones .habilitaciones-col-id { width: 6%; }

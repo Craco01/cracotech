@@ -302,16 +302,18 @@ document.addEventListener('keydown', event => {
 
 imprimirEntrega.addEventListener('click', async () => {
   if (!filaSeleccionada) return;
-  window.location.href = `entrega.html?id=${encodeURIComponent(filaSeleccionada.id)}`;
+  window.location.href = `/mantenimiento/entrega/?id=${encodeURIComponent(filaSeleccionada.id)}`;
 });
 
 function abrirFormularioSolicitud(ruta) {
   if (!filaSeleccionada) return;
   const parametros = new URLSearchParams({
     id: String(filaSeleccionada.id),
-    detalle: filaSeleccionada.maquina_equipo || filaSeleccionada.nombre_declarado || ''
+    detalle: filaSeleccionada.maquina_equipo || filaSeleccionada.nombre_declarado || '',
+    averia: filaSeleccionada.averia || ''
   });
-  window.top.location.href = `formularios.html?vista=${encodeURIComponent(ruta)}&${parametros.toString()}`;
+  const formularioRoute = `../formularios/?vista=${encodeURIComponent(ruta)}&${parametros.toString()}`;
+  window.top.location.href = formularioRoute;
 }
 
 asignarSolicitud.addEventListener('click', () => abrirFormularioSolicitud('asignar'));

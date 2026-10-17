@@ -51,7 +51,8 @@ function abrirInforme(row) {
     codigo: 'FR-014',
     rev: '00'
   });
-  window.location.href = `informe_om.html?${parametros.toString()}`;
+  const route = `../informe-om/?${parametros.toString()}`;
+  window.location.href = route;
 }
 
 function abrirModalEntrega() {
@@ -409,7 +410,7 @@ document.addEventListener('keydown', event => {
 
 imprimirEntrega.addEventListener('click', async () => {
   if (!filaSeleccionada) return;
-  window.location.href = `../pages/entrega.html?id=${encodeURIComponent(filaSeleccionada.id)}`;
+  window.location.href = `/mantenimiento/entrega/?id=${encodeURIComponent(filaSeleccionada.id)}`;
 });
 
 function abrirFormularioSolicitud(ruta) {
@@ -418,7 +419,8 @@ function abrirFormularioSolicitud(ruta) {
     id: String(filaSeleccionada.id),
     detalle: filaSeleccionada.maquina_equipo || filaSeleccionada.nombre_declarado || ''
   });
-  window.top.location.href = `formularios.html?vista=${encodeURIComponent(ruta)}&${parametros.toString()}`;
+  const formularioRoute = `../formularios/?vista=${encodeURIComponent(ruta)}&${parametros.toString()}`;
+  window.top.location.href = formularioRoute;
 }
 
 asignarSolicitud.addEventListener('click', () => abrirFormularioSolicitud('asignar'));

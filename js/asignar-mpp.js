@@ -27,7 +27,7 @@ function initAsignarMPP() {
         titulo: 'Asignación exitosa',
         texto: 'El mantenimiento preventivo fue asignado correctamente.',
         redirigir: true,
-        destino: './vista_mpp.html'
+        destino: '/mantenimiento/vista-mpp/'
       });
       form.reset();
     } catch (error) {
@@ -36,7 +36,7 @@ function initAsignarMPP() {
         titulo: 'Error',
         texto: error.message || 'Error al asignar el mantenimiento',
         redirigir: true,
-        destino: './vista_mpp.html'
+        destino: '/mantenimiento/vista-mpp/'
       });
     }
   });

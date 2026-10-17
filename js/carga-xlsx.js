@@ -97,7 +97,7 @@ if (destino && !adminRequired) {
 
 document.getElementById("volver").addEventListener("click", () => {
   if (window.history.length > 1) window.history.back();
-  else window.location.href = "./reportes.html?vista=codigos";
+  else window.location.href = "../reportes/?vista=codigos";
 });
 
 /* --- Selección de archivo --- */

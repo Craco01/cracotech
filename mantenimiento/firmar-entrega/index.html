@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>Firmar entrega de mantenimiento</title>
+  <link rel="stylesheet" href="../../css/firmar-entrega.css">
+  <script src="../../js/api-config.js"></script>
+</head>
+<body>
+  <main class="firma-page">
+    <header class="firma-header">
+      <p class="firma-header__eyebrow">Orden de mantenimiento</p>
+      <h1>Firmas de entrega</h1>
+      <p id="firmaDetalle">Validando el enlace de firma...</p>
+    </header>
+
+    <p id="firmaEstado" class="firma-estado" role="status" aria-live="polite"></p>
+    <form id="formFirmas" hidden>
+      <section class="firma-campo" id="campoMantenimiento" hidden>
+        <div class="firma-campo__titulo">
+          <div>
+            <span class="firma-campo__rol firma-campo__rol--mantenimiento">Responsable</span>
+            <label for="canvasMantenimiento">Responsable de mantenimiento</label>
+            <p>Firma de la persona identificada por la sesión iniciada.</p>
+          </div>
+          <button type="button" data-limpiar="mantenimiento">Borrar firma</button>
+        </div>
+        <svg id="canvasMantenimiento" class="signature-pad" viewBox="0 0 600 220" aria-label="Área de firma del responsable de mantenimiento" tabindex="0"></svg>
+      </section>
+      <section class="firma-campo" id="campoOperador" hidden>
+        <div class="firma-campo__titulo">
+          <div>
+            <span class="firma-campo__rol firma-campo__rol--operador">Operador</span>
+            <p>Complete la identificación de quien recibe y firma.</p>
+          </div>
+        </div>
+        <div class="firma-operador-datos">
+          <label>Nombre y apellido
+            <input id="operadorNombre" name="operador_nombre" type="text" maxlength="200" autocomplete="name" required>
+          </label>
+          <label>CI
+            <input id="operadorCi" name="operador_ci" type="text" maxlength="20" inputmode="numeric" autocomplete="off" placeholder="Ej.: 1.234.567" required>
+          </label>
+        </div>
+        <div class="firma-campo__titulo firma-campo__titulo--firma">
+          <label for="canvasOperador">Firma del operador</label>
+          <button type="button" data-limpiar="operador">Borrar firma</button>
+        </div>
+        <svg id="canvasOperador" class="signature-pad" viewBox="0 0 600 220" aria-label="Área de firma del operador" tabindex="0"></svg>
+      </section>
+      <button class="firma-guardar" id="guardarFirmas" type="submit">Guardar firmas</button>
+    </form>
+    <div id="firmaFinalizada" class="firma-finalizada" hidden>
+      <button id="cerrarPestana" type="button">Cerrar esta pestaña</button>
+      <a href="../reportes/?vista=solicitudes">Volver a reportes</a>
+    </div>
+  </main>
+  <script src="../../js/signature-pad.js"></script>
+  <script src="../../js/firmar-entrega.js"></script>
+</body>
+</html>

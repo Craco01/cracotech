@@ -120,7 +120,7 @@
       await window.siteDialog.alert(result.message || 'Operacion completada.');
       if (action.endsWith('/ordenes') || action.endsWith('/cierre') || action.endsWith('/asignacion') || action.endsWith('/solicitud')) {
         form.reset();
-        window.top.location.href = 'reportes.html?vista=solicitudes';
+        window.top.location.href = '../reportes/?vista=solicitudes';
       }
     } catch (error) {
       await window.siteDialog.alert(error.message);

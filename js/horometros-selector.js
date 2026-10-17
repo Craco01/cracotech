@@ -1,4 +1,5 @@
 (() => {
+  const currentScriptUrl = document.currentScript.src;
   const vistas = {
     maquinado: {
       template: 'horometros-maquinado',
@@ -25,6 +26,6 @@
   document.title = `${configuracion.title} | Mantenimiento Metalúrgica Vera S.A.E.`;
 
   const script = document.createElement('script');
-  script.src = `../js/${configuracion.script}`;
+  script.src = new URL(configuracion.script, currentScriptUrl).href;
   document.body.appendChild(script);
 })();

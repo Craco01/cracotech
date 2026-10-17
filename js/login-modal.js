@@ -143,7 +143,10 @@ function renderNav() {
     });
     document.getElementById('logoutDiv').addEventListener('click', () => {
       localStorage.removeItem('token'); localStorage.removeItem('username'); localStorage.removeItem('role');
-      form.reset(); window.location.href = './upkeepmv.html';
+      form.reset();
+      window.location.href = window.location.pathname.startsWith('/mantenimiento/')
+        ? '/mantenimiento/'
+        : window.location.pathname.includes('/pages/') ? './upkeepmv.html' : '/mantenimiento/';
     });
     const changePasswordButton = document.getElementById('changePasswordButton');
     if (changePasswordButton) {
@@ -204,9 +207,26 @@ form.addEventListener('submit', async event => {
         'reporte-ordenes.html',
         'reportes_horometros.html'
       ];
+      const protectedMaintenanceRoutes = new Set([
+        'administrar-usuarios',
+        'carga-xlsx',
+        'formularios',
+        'fr172-puente-grua-formulario',
+        'fr172-puente-grua-imprimible',
+        'horometros',
+        'indicadores-mpp',
+        'inventario',
+        'mpp',
+        'reportes',
+        'reportes-horometros',
+        'reportes-ordenes',
+        'vista-mpp'
+      ]);
+      const maintenanceRoute = target.pathname.match(/^\/mantenimiento\/([^/]+)\/?$/)?.[1];
       if (target.origin === window.location.origin &&
-          target.pathname.includes('/pages/') &&
-          protectedPages.includes(target.pathname.split('/').pop())) {
+          ((target.pathname.includes('/pages/') &&
+            protectedPages.includes(target.pathname.split('/').pop())) ||
+           protectedMaintenanceRoutes.has(maintenanceRoute))) {
         window.location.replace(target.href);
         return;
       }

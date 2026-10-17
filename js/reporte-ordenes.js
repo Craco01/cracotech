@@ -15,7 +15,7 @@ function normalizeOrder(order){
  return {id:Number(order.id)||0,date:escapeHtml(date),sector:text(order.sector)||'Sin sector',status:text(order.progreso)||'Sin estado',priority:text(order.prioridad)||'Sin prioridad',support:text(order.apoyo)||'Sin apoyo',owner:text(order.responsable)||'Sin responsable',machine:text(order.maquina_equipo)||'Sin equipo',category:text(order.categoria)||'Correctivo',fault:text(order.averia)||'Sin avería',notes:text(order.notas)||'Sin nota',hours:Number(order.horas)||0,downtime:Number(order.horas_paro)||0,monthHours:Number(order.horas_mes)||0,cost:Number(order.total_costo)||0};
 }
 async function loadOrders(){
- if(!localStorage.getItem('token')){if(new URLSearchParams(window.location.search).has('embed')){$('#dashboard').innerHTML='<div class="empty session-required">Debe iniciar sesión para visualizar el reporte.</div>';return false}window.location.href='./upkeepmv.html';return false}
+ if(!localStorage.getItem('token')){if(new URLSearchParams(window.location.search).has('embed')){$('#dashboard').innerHTML='<div class="empty session-required">Debe iniciar sesión para visualizar el reporte.</div>';return false}const loginUrl=new URL('/mantenimiento/',window.location.origin);loginUrl.searchParams.set('loginRequired','1');loginUrl.searchParams.set('returnTo',`${location.pathname}${location.search}${location.hash}`);window.location.replace(loginUrl.href);return false}
  try{
   const response=await API_FETCH('/api/ordenes');
   if(!response.ok) throw new Error(`No se pudieron cargar las órdenes (${response.status})`);

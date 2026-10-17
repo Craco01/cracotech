@@ -115,7 +115,7 @@ function prepararSubmitMPP() {
         titulo: 'Mantenimiento cerrado',
         texto: 'El mantenimiento preventivo se cerró correctamente.',
         redirigir: true,
-        destino: './vista_mpp.html'
+        destino: '/mantenimiento/vista-mpp/'
       });
     } catch (error) {
       console.error('Error en cierre de mantenimiento preventivo:', error);
@@ -123,7 +123,7 @@ function prepararSubmitMPP() {
         titulo: 'Error',
         texto: error.message || 'Error al cerrar el mantenimiento',
         redirigir: true,
-        destino: './vista_mpp.html'
+        destino: '/mantenimiento/vista-mpp/'
       });
     } finally {
       if (submitButton) {
