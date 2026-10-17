@@ -1,14 +1,8 @@
 (function () {
   if (document.body && document.body.hasAttribute('data-no-global-layout')) return;
 
-  const currentPath = window.location.pathname;
-  const isMaintenanceRoute = currentPath.includes('/mantenimiento/');
-  const isMaintenanceHome = /^\/mantenimiento\/?$/.test(currentPath) ||
-    currentPath === '/mantenimiento/index.html';
-  const maintenanceRoot = isMaintenanceRoute
-    ? isMaintenanceHome ? './' : '../'
-    : './mantenimiento/';
-  const assetRoot = isMaintenanceRoute ? '../../' : './';
+  const maintenanceRoot = '/mantenimiento/';
+  const assetRoot = '/';
 
   function buildLayoutHtml() {
     return `
