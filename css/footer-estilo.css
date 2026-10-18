@@ -6,7 +6,7 @@
     align-items: flex-start;
     background-color: #0a3c91;
     color: #fff;
-    padding: 20px;
+    padding: 14px 20px;
     margin: 0;
     font-family: "Segoe UI", Arial, sans-serif;
     width: 100%;
@@ -19,7 +19,7 @@
     font-size: clamp(20px, 2.5vw, 28px);
     text-align: center;
     margin: 0;
-    margin-bottom: 10px;
+    margin-bottom: 6px;
 }
 
 .footer-contacto address {
@@ -38,7 +38,7 @@
 .footer-contacto li {
     display: block;
     gap: 8px;
-    margin-bottom: 10px;
+    margin-bottom: 6px;
     font-size: clamp(14px, 2vw, 16px);
     overflow-wrap: anywhere;
 }
@@ -76,12 +76,15 @@
     margin: 0;
     margin-left: 60px;
     padding: 0;
+    width: 420px;
     max-width: 100%;
     box-sizing: border-box;
 }
 .mapa iframe {
     width: 100%;
-    max-width: 480px;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    max-width: 420px;
     box-sizing: border-box;
 }
 .mapa-description {
