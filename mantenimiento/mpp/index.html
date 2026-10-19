@@ -34,15 +34,15 @@
         <div><label for="maquina">Mantenimiento</label><select id="maquina" name="id" required></select></div>
         <div><label for="fecha_inicio">Seleccione la fecha de inicio de trabajos:</label><input class="fecha-reprogramacion" type="date" id="fecha_inicio" name="ejecucion_inicio" required></div>
         <div class="campo-ancho">
-          <label for="tablaCostos">Costeo de Repuestos</label>
-          <table class="tabla-costos"><thead><tr><th>Producto</th><th>Cantidad</th><th>Costo Unitario</th><th>Total</th><th>Acción</th></tr></thead><tbody id="tablaBody"></tbody></table>
+          <h3>Costeo de repuestos</h3>
+          <table class="tabla-costos" aria-label="Costos de repuestos"><thead><tr><th scope="col">Producto</th><th scope="col">Cantidad</th><th scope="col">Costo unitario</th><th scope="col">Total</th><th scope="col">Acción</th></tr></thead><tbody id="tablaBody"></tbody></table>
           <div id="resultado"><span id="costoTotal">0</span></div>
           <input type="hidden" id="unidad_mo" name="unidad_mo" value="0"><input type="hidden" id="costo_repuestos" name="costo_repuestos" value="0"><input type="hidden" id="costo_mano_obra" name="costo_mano_obra" value="0">
         </div>
         <datalist id="listaProductos"></datalist>
         <div><label for="horas">Horas empleadas en la reparación</label><input type="number" name="horas" id="horas" max="300" min="1" step="1" inputmode="numeric" placeholder="Ej: 8" required></div>
         <div><label for="apoyo">Apoyo</label><select id="apoyo" name="apoyos"><option value="">Sin apoyo</option></select></div>
-        <div class="campo-ancho"><label for="observavcion">Observaciones</label><textarea id="observacion" name="notas" rows="5" placeholder="Deje aca las observacions que desee acotar"></textarea></div>
+        <div class="campo-ancho"><label for="observacion">Observaciones</label><textarea id="observacion" name="notas" rows="5" placeholder="Escriba aquí cualquier observación relevante."></textarea></div>
         <button type="submit">Cerrar Mantenimiento Preventivo</button>
       </form>
     </div>
@@ -56,7 +56,7 @@
         <div><label for="fecha_rep">Seleccione la fecha de reprogramación:</label><input class="fecha-reprogramacion" type="date" id="fecha_rep" name="reprogramacion_inicio" required></div>
         <div><label for="motivo_reprogramacion">Motivo de reprogramación</label><textarea id="motivo_reprogramacion" name="motivo_reprogramacion" rows="4" required></textarea></div>
         <div><label for="solicitante_reprogramacion">Solicitante de la reprogramación</label><input type="text" id="solicitante_reprogramacion" name="solicitante_reprogramacion" required></div>
-        <div><label for="comunicado_reprogramacion">Como fue comunicada la reprogramación</label><input type="text" id="comunicado_reprogramacion" name="comunicado_reprogramacion" placeholder="Ejemplo: Por correo/Por mensaje de Whatsapp" required></div>
+        <div><label for="comunicado_reprogramacion">¿Cómo se comunicó la reprogramación?</label><input type="text" id="comunicado_reprogramacion" name="comunicado_reprogramacion" placeholder="Ej.: por correo electrónico o WhatsApp" required></div>
         <button type="submit">Reprogramar Mantenimiento</button>
       </form>
     </div>

@@ -90,6 +90,14 @@
   outline: none;
 }
 
+.inventario-sort:focus-visible,
+.inventario-input:focus-visible,
+#inventario-search:focus-visible,
+#inventario-modal-close:focus-visible {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+}
+
 .inventario-sort span { min-width: 0.8em; }
 
 #inventario-table td.inventario-diferencia--negativa {
@@ -119,7 +127,6 @@
 .inventario-input:hover,
 .inventario-input:focus {
   border-color: #007acc;
-  outline: none;
 }
 
 /* Abre el modal para actualizar el valor */
@@ -157,6 +164,9 @@
   position: absolute;
   top: 8px;
   right: 14px;
+  border: 0;
+  padding: 4px 8px;
+  background: transparent;
   font-size: 22px;
   cursor: pointer;
   color: #555;

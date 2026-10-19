@@ -2,7 +2,7 @@
   const select = document.getElementById(selectId);
   if (!select) return;
 
-  select.innerHTML = '<option value="">Seleccione una maquina/equipo</option>';
+  select.innerHTML = '<option value="">Seleccione una máquina o equipo</option>';
   select.classList.add('select-buscador-original');
 
   const contenedor = document.createElement('div');
@@ -11,14 +11,18 @@
   const input = document.createElement('input');
   input.type = 'text';
   input.className = 'select-buscador-input';
-  input.placeholder = 'Buscar maquina/equipo...';
+  input.placeholder = 'Buscar máquina/equipo…';
+  input.setAttribute('aria-label', select.parentElement?.querySelector('label')?.textContent.trim() || 'Buscar máquina o equipo');
   input.autocomplete = 'off';
   input.setAttribute('role', 'combobox');
   input.setAttribute('aria-expanded', 'false');
+  input.setAttribute('aria-autocomplete', 'list');
 
   const lista = document.createElement('ul');
   lista.className = 'select-buscador-lista';
+  lista.id = `opciones-${selectId}`;
   lista.setAttribute('role', 'listbox');
+  input.setAttribute('aria-controls', lista.id);
 
   contenedor.appendChild(input);
   contenedor.appendChild(lista);

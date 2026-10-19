@@ -16,13 +16,17 @@ async function cargarSelectMantenimientosPreventivos(selectId = 'maquina') {
   const input = document.createElement('input');
   input.type = 'text';
   input.className = 'select-buscador-input';
-  input.placeholder = 'Buscar mantenimiento...';
+  input.placeholder = 'Buscar mantenimiento…';
+  input.setAttribute('aria-label', select.parentElement?.querySelector('label')?.textContent.trim() || 'Buscar mantenimiento');
   input.autocomplete = 'off';
   input.setAttribute('role', 'combobox');
   input.setAttribute('aria-expanded', 'false');
+  input.setAttribute('aria-autocomplete', 'list');
+  input.setAttribute('aria-controls', `opciones-${selectId}`);
 
   const lista = document.createElement('ul');
   lista.className = 'select-buscador-lista';
+  lista.id = `opciones-${selectId}`;
   lista.setAttribute('role', 'listbox');
 
   contenedor.appendChild(input);

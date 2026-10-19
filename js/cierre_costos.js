@@ -60,6 +60,7 @@ function crearBuscador(onSelect) {
   buscador.type = 'text';
   buscador.className = 'select-buscador-input';
   buscador.placeholder = 'Buscar términos de producto...';
+  buscador.setAttribute('aria-label', 'Buscar repuestos por código o descripción');
   buscador.autocomplete = 'off';
   buscador.setAttribute('role', 'combobox');
   buscador.setAttribute('aria-autocomplete', 'list');

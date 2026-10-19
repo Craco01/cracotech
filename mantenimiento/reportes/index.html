@@ -20,7 +20,7 @@
     <div id="codigos-admin-actions" hidden>
       <a class="codigos-upload-button" href="../carga-xlsx/?tabla=productos">Cargar Excel de productos</a>
     </div>
-    <input type="text" id="codigos-search" placeholder="Buscar términos (espacios o %) por código, descripción o unidad...">
+    <input type="search" id="codigos-search" aria-label="Buscar productos por código, descripción o unidad" placeholder="Buscar por código, descripción o unidad…">
     <div id="codigos-table-wrap">
       <table id="codigos-table">
         <thead><tr><th>Código</th><th>Descripción</th><th>Unidad</th><th>Precio de compra</th></tr></thead>
@@ -47,12 +47,12 @@
     <div class="container">
       <h2>Órdenes de Mantenimiento</h2>
       <div class="buscador-acciones">
-        <input type="text" id="buscador" placeholder="Buscar por código, nombre o máquina/equipo...">
+        <input type="search" id="buscador" aria-label="Buscar órdenes por código, nombre o máquina o equipo" placeholder="Buscar por código, nombre o máquina/equipo…">
         <button type="button" id="buscarRegistros">Buscar en registros</button>
-        <button type="button" id="refrescarRegistros" title="Limpiar búsqueda y cargar los registros recientes">Refresh</button>
+        <button type="button" id="refrescarRegistros" title="Limpiar la búsqueda y cargar los registros recientes">Limpiar búsqueda y actualizar</button>
       </div>
       <div class="table-scroll">
-        <table id="tablaOrdenes">
+        <table id="tablaOrdenes" aria-label="Registro de órdenes de mantenimiento">
           <thead><tr>
             <th data-col="id">ID</th><th data-col="NE">NE</th><th data-col="codigo">Código</th><th data-col="maquina_equipo">Máquina/Equipo</th><th data-col="nombre_declarado">Nombre Declarado</th><th data-col="averia">Avería</th><th data-col="prioridad">Prioridad</th><th data-col="solicitado">Solicitado</th><th data-col="sector">Sector</th><th data-col="registrado">Registrado</th><th data-col="fecha_inicio">Fecha Inicio</th><th data-col="fecha_vencimiento">Fecha Vencimiento</th><th data-col="fecha_final">Fecha Final</th><th data-col="fecha_entrega">Fecha Entrega</th><th data-col="reparacion">Reparación</th><th data-col="responsable">Responsable</th><th data-col="apoyo">Apoyo</th><th data-col="categoria">Categoría</th><th data-col="clasificacion">Clasificación</th><th data-col="costo_repuestos">Costo Repuestos</th><th data-col="unidad_mo">Unidad MO</th><th data-col="horas">Horas</th><th data-col="total_mo">Total MO</th><th data-col="total_costo">Total Costo</th><th data-col="notas">Notas</th><th data-col="progreso">Progreso</th><th data-col="estado_ejecucion">Estado ejecución</th><th data-col="carga">Carga</th><th data-col="horas_paro">Horas Paro</th><th data-col="horas_mes">Horas Mes</th>
           </tr></thead>
@@ -80,8 +80,8 @@
 
   <template id="reportes-informes">
     <div class="container">
-      <h2>Informe de Órdenes de Mantenimiento por Maquina</h2>
-      <input type="text" id="buscador" placeholder="Buscar por código, nombre o máquina/equipo...">
+      <h2>Informe de órdenes de mantenimiento por máquina o equipo</h2>
+      <input type="search" id="buscador" aria-label="Buscar equipos por código, nombre o máquina o equipo" placeholder="Buscar por código, nombre o máquina/equipo…">
       <div id="listaEquipos" class="lista-equipos" aria-live="polite"></div>
       <nav id="equiposPagination" class="report-pagination" aria-label="Paginación de máquinas y equipos">
         <button id="equiposPaginaAnterior" type="button" disabled>Anterior</button>
@@ -105,7 +105,7 @@
   <template id="reportes-habilitaciones">
     <div id="habilitacionesReporte" class="container">
       <h2>Seguimiento de solicitudes de habilitación</h2>
-      <input type="search" id="habilitacionesBuscador" placeholder="Buscar por código, nombre, máquina/equipo o responsable...">
+      <input type="search" id="habilitacionesBuscador" aria-label="Buscar habilitaciones por código, nombre, máquina, equipo o responsable" placeholder="Buscar por código, nombre, máquina/equipo o responsable…">
       <p id="habilitacionesEstado" aria-live="polite">Cargando solicitudes...</p>
       <div id="habilitacionesTablaContenedor" class="table-scroll">
         <table id="tablaHabilitaciones">

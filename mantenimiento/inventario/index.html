@@ -19,20 +19,20 @@
           <a class="inventario-reportes-button" href="../reporte-inventario/">Imprimir reporte</a>
           <a class="inventario-reportes-button" href="../carga-xlsx/?tabla=inventario">Cargar inventario</a>
         </div>
-        <input type="text" id="inventario-search" placeholder="Buscar por código o producto...">
+        <input type="search" id="inventario-search" aria-label="Buscar en el inventario por código o producto" placeholder="Buscar por código o producto…">
 
         <div id="inventario-table-wrap">
-          <table id="inventario-table">
+          <table id="inventario-table" aria-label="Inventario de productos y cantidades">
             <thead>
               <tr>
-                <th>Código</th>
-                <th>Producto</th>
-                <th>UM</th>
-                <th>Stock F9</th>
-                <th>Diferencia</th>
-                <th>Cantidad Física</th>
-                <th>Ubicación</th>
-                <th>Observación</th>
+                <th scope="col">Código</th>
+                <th scope="col">Producto</th>
+                <th scope="col">UM</th>
+                <th scope="col">Stock F9</th>
+                <th scope="col">Diferencia</th>
+                <th scope="col">Cantidad física</th>
+                <th scope="col">Ubicación</th>
+                <th scope="col">Observación</th>
               </tr>
             </thead>
             <tbody id="inventario-body">
@@ -47,9 +47,9 @@
           <button id="inventario-next" type="button" disabled>Siguiente</button>
         </nav>
 
-        <div id="inventario-modal">
+        <div id="inventario-modal" role="dialog" aria-modal="true" aria-labelledby="inventario-modal-title" aria-describedby="inventario-modal-info" aria-hidden="true">
           <div id="inventario-modal-content">
-            <span id="inventario-modal-close">&times;</span>
+            <button type="button" id="inventario-modal-close" aria-label="Cerrar ventana de actualización">&times;</button>
             <h3 id="inventario-modal-title">Actualizar dato</h3>
             <p id="inventario-modal-info"></p>
             <form id="inventario-modal-form">

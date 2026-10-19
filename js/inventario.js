@@ -9,6 +9,7 @@ let totalInventario = 0;
 let busquedaActiva = "";
 let solicitudCarga = 0;
 let temporizadorBusqueda = null;
+let controlInventarioActivo = null;
 const columnasNumericas = new Set(["StockF9", "CantidadFisica", "Diferencia"]);
 
 async function cargarInventario({ busqueda = busquedaActiva, pagina = paginaActual } = {}) {
@@ -76,6 +77,14 @@ function renderInventarioTable(items) {
       input.dataset.etiqueta = etiqueta;
       input.value = valor === null || valor === undefined ? '' : String(valor);
       input.readOnly = true;
+      input.setAttribute('role', 'button');
+      input.setAttribute('aria-label', `Actualizar ${etiqueta} de ${item.Producto || item.Codigo}`);
+      input.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          input.click();
+        }
+      });
       celda.appendChild(input);
       row.appendChild(celda);
     };
@@ -172,6 +181,7 @@ document.getElementById("inventario-body").addEventListener("click", function (e
   const item = inventarioData.find(i => String(i.Codigo) === String(codigo));
   if (!item) return;
 
+  controlInventarioActivo = input;
   filaEnEdicion = item;
   campoEnEdicion = campo;
 
@@ -182,7 +192,9 @@ document.getElementById("inventario-body").addEventListener("click", function (e
   document.getElementById("inventario-modal-input").type = campo === "CantidadFisica" ? "number" : "text";
   document.getElementById("inventario-modal-input").step = campo === "CantidadFisica" ? "any" : "";
 
-  document.getElementById("inventario-modal").style.display = "flex";
+  const modal = document.getElementById("inventario-modal");
+  modal.style.display = "flex";
+  modal.setAttribute('aria-hidden', 'false');
   document.getElementById("inventario-modal-input").focus();
 });
 
@@ -225,9 +237,18 @@ document.getElementById("inventario-modal-cancel").addEventListener("click", cer
 document.getElementById("inventario-modal").addEventListener("click", function (event) {
   if (event.target === this) cerrarInventarioModal();
 });
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && document.getElementById('inventario-modal').style.display === 'flex') {
+    cerrarInventarioModal();
+  }
+});
 
 function cerrarInventarioModal() {
-  document.getElementById("inventario-modal").style.display = "none";
+  const modal = document.getElementById("inventario-modal");
+  modal.style.display = "none";
+  modal.setAttribute('aria-hidden', 'true');
   filaEnEdicion = null;
   campoEnEdicion = null;
+  controlInventarioActivo?.focus();
+  controlInventarioActivo = null;
 }

@@ -3,6 +3,24 @@ const loginModal = document.getElementById('loginModal');
 const closeModal = document.getElementById('closeLoginModal');
 const form = document.getElementById('loginForm');
 const mensaje = document.getElementById('loginMensaje');
+let loginTrigger = null;
+let passwordTrigger = null;
+
+function containModalFocus(modal, event) {
+  if (event.key !== 'Tab') return;
+  const items = [...modal.querySelectorAll('a[href], button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])')]
+    .filter(item => item.offsetParent !== null);
+  if (!items.length) return;
+  const first = items[0];
+  const last = items[items.length - 1];
+  if (event.shiftKey && (document.activeElement === first || !modal.contains(document.activeElement))) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && (document.activeElement === last || !modal.contains(document.activeElement))) {
+    event.preventDefault();
+    first.focus();
+  }
+}
 
 function getPasswordModal() {
   let modal = document.getElementById('changePasswordModal');
@@ -11,12 +29,13 @@ function getPasswordModal() {
   modal = document.createElement('div');
   modal.id = 'changePasswordModal';
   modal.className = 'login-modal';
+  modal.setAttribute('aria-hidden', 'true');
   modal.setAttribute('role', 'dialog');
   modal.setAttribute('aria-modal', 'true');
   modal.setAttribute('aria-labelledby', 'changePasswordTitle');
   modal.innerHTML = `
     <div class="login-modal-content">
-      <span class="login-close" role="button" tabindex="0" aria-label="Cerrar">&times;</span>
+      <button type="button" class="login-close" aria-label="Cerrar ventana de cambio de contraseña">&times;</button>
       <h2 id="changePasswordTitle">Cambiar contraseña</h2>
       <form id="changePasswordForm">
         <label for="currentPassword">Contraseña actual:</label>
@@ -40,17 +59,17 @@ function getPasswordModal() {
   const passwordMessage = modal.querySelector('#changePasswordMessage');
   const close = () => {
     modal.classList.remove('is-visible');
+    modal.setAttribute('aria-hidden', 'true');
     passwordForm.reset();
     passwordMessage.textContent = '';
+    passwordTrigger?.focus();
   };
   modal.querySelector('.login-close').addEventListener('click', close);
-  modal.querySelector('.login-close').addEventListener('keydown', (event) => {
-    if (event.key === 'Enter' || event.key === ' ') close();
-  });
   modal.querySelector('.password-cancel').addEventListener('click', close);
   modal.addEventListener('click', (event) => {
     if (event.target === modal) close();
   });
+  modal.addEventListener('keydown', event => containModalFocus(modal, event));
   passwordForm.addEventListener('submit', async (event) => {
     event.preventDefault();
     const currentPassword = passwordForm.currentPassword.value;
@@ -83,14 +102,19 @@ function getPasswordModal() {
 
 function openPasswordModal() {
   const modal = getPasswordModal();
+  passwordTrigger = document.getElementById('navUserToggle');
   modal.classList.add('is-visible');
+  modal.setAttribute('aria-hidden', 'false');
   modal.querySelector('#currentPassword').focus();
 }
 
 function closeLoginModal() {
   loginModal.classList.remove('is-visible');
+  loginModal.setAttribute('aria-hidden', 'true');
   form.reset();
   sessionStorage.removeItem('postLoginRedirect');
+  loginTrigger?.setAttribute('aria-expanded', 'false');
+  loginTrigger?.focus();
 }
 const fetchOriginal = window.fetch.bind(window);
 window.fetch = (url, options = {}) => {
@@ -121,15 +145,15 @@ function renderNav() {
   const role = localStorage.getItem('role');
   if (token && username) {
     const changePasswordItem = role !== 'viewer'
-      ? '<li role="none"><button type="button" id="changePasswordButton" class="nav-user-item" role="menuitem">Cambiar contrase\u00f1a</button></li>'
+      ? '<li><button type="button" id="changePasswordButton" class="nav-user-item">Cambiar contrase\u00f1a</button></li>'
       : '';
     navLogin.innerHTML = `
       <div class="nav-user-menu">
-        <button type="button" class="nav-user-toggle" id="navUserToggle" aria-haspopup="true" aria-expanded="false">
+        <button type="button" class="nav-user-toggle" id="navUserToggle" aria-haspopup="true" aria-controls="navUserDropdown" aria-expanded="false">
           <span class="nav-user-icon">&#128100;</span><span class="nav-user-name">${escapeHtml(username)}</span><span class="nav-user-caret">&#9662;</span>
         </button>
-        <ul class="nav-user-dropdown" id="navUserDropdown" role="menu">
-          <li role="none"><button type="button" id="logoutDiv" class="nav-user-item" role="menuitem">Cerrar sesi\u00f3n</button></li>
+        <ul class="nav-user-dropdown" id="navUserDropdown">
+          <li><button type="button" id="logoutDiv" class="nav-user-item">Cerrar sesi\u00f3n</button></li>
           ${changePasswordItem}
         </ul>
       </div>
@@ -156,14 +180,18 @@ function renderNav() {
       });
     }
   } else {
-    navLogin.innerHTML = '<div id="loginDiv" class="nav-btn">Login</div>';
+    navLogin.innerHTML = '<button type="button" id="loginDiv" class="nav-btn" aria-haspopup="dialog" aria-controls="loginModal" aria-expanded="false">Iniciar sesión</button>';
     document.getElementById('loginDiv').addEventListener('click', () => {
+      loginTrigger = document.getElementById('loginDiv');
       loginModal.classList.add('is-visible');
+      loginModal.setAttribute('aria-hidden', 'false');
+      loginTrigger.setAttribute('aria-expanded', 'true');
       document.getElementById('user').focus();
     });
   }
 }
 closeModal.addEventListener('click', closeLoginModal);
+loginModal.addEventListener('keydown', event => containModalFocus(loginModal, event));
 loginModal.addEventListener('click', event => {
   if (event.target === loginModal) closeLoginModal();
 });

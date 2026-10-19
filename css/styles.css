@@ -270,6 +270,14 @@ header {
     height: 100%;
     box-sizing: border-box;
 }
+
+.whatsapp-float {
+    border: 0;
+    padding: 0;
+    background: transparent;
+    cursor: pointer;
+    font: inherit;
+}
 .list-bar li:hover,
 #nav-login:hover {
     background-color: rgba(255, 255, 255, 0.16);
@@ -1966,9 +1974,27 @@ padding: 0 0 20px 0;
   position: absolute;
   right: 12px;
   top: 8px;
+  border: 0;
+  padding: 4px 8px;
+  background: transparent;
   font-size: 24px;
   cursor: pointer;
     color: #072885;
+}
+
+.login-modal-content .login-close {
+  width: auto;
+  min-height: 0;
+  margin: 0;
+  padding: 4px 8px;
+  border: 0;
+  background: transparent;
+  color: #072885;
+}
+
+.login-modal-content .login-close:hover {
+  background: transparent;
+  transform: none;
 }
 
 /* Estilos para la tabla de costos */
@@ -2273,6 +2299,7 @@ padding: 0 0 20px 0;
     cursor: pointer;
     border: 1px solid rgba(255, 255, 255, 0.2);
     line-height: 1;
+    font: inherit;
 }
 
 .nav-btn#loginDiv,
@@ -2287,4 +2314,24 @@ padding: 0 0 20px 0;
 }
 #logoutDiv.nav-btn:hover {
     background-color: darkgreen;
+}
+
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+    outline: 3px solid #005fcc;
+    outline-offset: 2px;
+}
+
+.nav-bar :where(a, button):focus-visible {
+    outline-color: #ffbf47;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
 }

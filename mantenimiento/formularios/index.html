@@ -22,22 +22,22 @@
           <label for="maquina">Máquina/Equipo</label>
           <select id="maquina" name="componente" required></select>
         </div>
-        <label for="declarado-radio">¿Necesita agregar una descripción al nombre?  </label><input type="checkbox" id="declarado-radio" name="declarado-radio">
+        <label for="declarado-radio">¿Desea especificar un nombre para el servicio?</label><input type="checkbox" id="declarado-radio" name="declarado-radio">
         <div class="declarado">
-          <label for="declarado">Nombre Declarado *</label>
-          <input type="text" id="declarado" name="declarado" placeholder="*Solo completar si se selecciona servicio">
+          <label for="declarado">Nombre para el servicio (opcional)</label>
+          <input type="text" id="declarado" name="declarado" placeholder="Complete solo si seleccionó servicio">
         </div>
         <div class="campo-ancho">
-          <label for="averia">Descripcion de la averia</label>
-          <textarea id="averia" name="averia" rows="5" placeholder="Describa la averia o el problema detectado" required></textarea>
+          <label for="averia">Descripción de la avería</label>
+          <textarea id="averia" name="averia" rows="5" placeholder="Describa la avería o el problema detectado" required></textarea>
         </div>
         <div>
           <label for="solicitante">Solicitante</label>
           <input type="text" id="solicitante" name="solicitante" placeholder="Nombre del solicitante" required>
         </div>
         <div>
-          <label for="contacto">Contacto de operador</label>
-          <small id="contacto-ayuda" class="field-description">Número de teléfono para reporte de reparación, no obligatorio.</small>
+          <label for="contacto">Teléfono de contacto del operador</label>
+          <small id="contacto-ayuda" class="field-description">Opcional. Ingrese un número de teléfono para comunicar el avance de la reparación.</small>
           <input type="tel" id="contacto" name="contacto" inputmode="numeric" maxlength="10" pattern="09[6789][0-9]{7}" placeholder="Ejemplo: 0981456789" aria-describedby="contacto-ayuda">
         </div>
         <div>
@@ -57,7 +57,7 @@
           </select>
         </div>
         <div>
-          <label for="categoria">Categoria</label>
+          <label for="categoria">Categoría</label>
           <select id="categoria" name="categoria" required>
             <option value="1">Correctivo</option>
             <option value="2">Preventivo</option>
@@ -84,7 +84,7 @@
       <div class="titulo"><h2>Asignación de Solicitud de Mantenimiento</h2></div>
       <form action="/api/ordenes/asignacion" method="post">
         <div>
-          <label for="maquina">Solicitud/Maquina</label>
+          <label for="maquina">Solicitud o máquina/equipo</label>
           <select id="maquina" name="componente"></select>
         </div>
         <p id="info-averia" class="info-averia"></p>
@@ -110,7 +110,7 @@
       <div class="titulo"><h2>Cierre de Solicitud de Mantenimiento</h2></div>
       <form action="/api/ordenes/cierre" method="post">
         <div>
-          <label for="maquina">Solicitud/Maquina</label>
+          <label for="maquina">Solicitud o máquina/equipo</label>
           <select id="maquina" name="id" required></select>
         </div>
         <p id="info-averia" class="info-averia"></p>
@@ -121,8 +121,8 @@
           </select>
         </div>
         <div class="campo-ancho">
-          <label for="reparación">Reparación Realizada</label>
-          <textarea id="reparación" name="reparacion" rows="5" placeholder="Describa la intervencion realizada o la reparación realizada" required></textarea>
+          <label for="reparacion">Descripción de la reparación</label>
+          <textarea id="reparacion" name="reparacion" rows="5" placeholder="Describa la intervención realizada." required></textarea>
         </div>
         <div>
           <label for="horas">Horas empleadas en la reparación</label>
@@ -131,17 +131,17 @@
         <div>
           <label for="tipo">Tipo</label>
           <select id="tipo" name="clasificacion" required>
-            <option value="Electromecanico">Electromecanico</option>
-            <option value="Electrico">Electrico</option>
-            <option value="Mecanico">Mecanico</option>
-            <option value="Hidraulico/Neumatico">Hidraulico/Neumatico</option>
-            <option value="Eletronico">Eletronico</option>
+            <option value="Electromecanico">Electromecánico</option>
+            <option value="Electrico">Eléctrico</option>
+            <option value="Mecanico">Mecánico</option>
+            <option value="Hidraulico/Neumatico">Hidráulico/neumático</option>
+            <option value="Eletronico">Electrónico</option>
             <option value="Otros">Otros</option>
           </select>
         </div>
         <div class="campo-ancho">
           <label for="observacion">Observaciones</label>
-          <textarea id="observacion" name="notas" rows="5" placeholder="Deje aca las observacions que desee acotar"></textarea>
+          <textarea id="observacion" name="notas" rows="5" placeholder="Escriba aquí cualquier observación relevante."></textarea>
         </div>
         <button type="submit">Cerrar solicitud</button>
       </form>
@@ -153,13 +153,13 @@
       <div class="titulo"><h2>Solicitar habilitación</h2></div>
       <form action="/api/ordenes/habilitacion" method="post" data-habilitacion="true">
         <div>
-          <label for="maquina">Solicitud/Máquina</label>
+          <label for="maquina">Solicitud o máquina/equipo</label>
           <select id="maquina" name="id" required></select>
         </div>
         <p id="info-averia" class="info-averia"></p>
         <div class="campo-ancho">
-          <label for="tablaCostos">Costeo de repuestos</label>
-          <table id="tablaCostos" class="tabla-costos">
+          <h3 id="costeoTitle">Costeo de repuestos</h3>
+          <table id="tablaCostos" class="tabla-costos" aria-labelledby="costeoTitle">
             <colgroup>
               <col class="col-producto">
               <col class="col-cantidad">
@@ -167,7 +167,7 @@
               <col class="col-total">
               <col class="col-accion">
             </colgroup>
-            <thead><tr><th>Producto</th><th>Cantidad</th><th>Costo unitario</th><th>Total</th><th>Acción</th></tr></thead>
+            <thead><tr><th scope="col">Producto</th><th scope="col">Cantidad</th><th scope="col">Costo unitario</th><th scope="col">Total</th><th scope="col">Acción</th></tr></thead>
             <tbody id="tablaBody"></tbody>
           </table>
           <div id="resultado"><span id="costoTotal">0</span></div>
@@ -198,7 +198,7 @@
       <div class="titulo"><h2>Reprogramación de Solicitud de Mantenimiento</h2></div>
       <form action="/api/ordenes/cierre" method="post" data-reprogramar="true">
         <div>
-          <label for="maquina">Solicitud/Maquina</label>
+          <label for="maquina">Solicitud o máquina/equipo</label>
           <select id="maquina" name="id" required></select>
         </div>
         <p id="info-averia" class="info-averia"></p>
@@ -224,14 +224,14 @@
           <label for="maquinaEquipo">Máquina/Equipo</label>
           <select id="maquinaEquipo" name="codigo"></select>
         </div>
-        <label for="declarado-radio">¿Necesita agregar una descripción al nombre?  </label><input type="checkbox" id="declarado-radio" name="declarado-radio">
+        <label for="declarado-radio">¿Desea especificar un nombre para el servicio?</label><input type="checkbox" id="declarado-radio" name="declarado-radio">
         <div class="declarado">
-          <label for="declarado">Nombre Declarado *</label>
-          <input type="text" id="declarado" name="nombre_declarado" placeholder="*Solo completar si se selecciona servicio">
+          <label for="declarado">Nombre para el servicio (opcional)</label>
+          <input type="text" id="declarado" name="nombre_declarado" placeholder="Complete solo si seleccionó servicio">
         </div>
         <div class="campo-ancho">
-          <label for="averia">Descripcion de la averia</label>
-          <textarea id="averia" name="averia" rows="5" placeholder="Describa la averia o el problema detectado"></textarea>
+          <label for="averia">Descripción de la avería</label>
+          <textarea id="averia" name="averia" rows="5" placeholder="Describa la avería o el problema detectado"></textarea>
         </div>
         <div>
           <label for="solicitante">Solicitante</label>
@@ -254,7 +254,7 @@
           </select>
         </div>
         <div>
-          <label for="categoria">Categoria</label>
+          <label for="categoria">Categoría</label>
           <select id="categoria" name="categoria">
             <option value="1">Correctivo</option>
             <option value="2">Preventivo</option>
@@ -263,12 +263,12 @@
         </div>
         <button type="submit">Modificar solicitud</button>
       </form>
-      <div id="confirmacionModificacion" class="login-modal" role="dialog" aria-modal="true" aria-labelledby="tituloConfirmacion" hidden>
+      <div id="confirmacionModificacion" class="login-modal" role="dialog" aria-modal="true" aria-labelledby="tituloConfirmacion" aria-hidden="true" hidden>
         <div class="login-modal-content">
           <h2 id="tituloConfirmacion">¿Quieres registrar la modificación?</h2>
           <p id="contadorConfirmacion">Podrás confirmar en 10 segundos.</p>
-          <button type="button" id="confirmarModificacion" disabled>SI</button>
-          <button type="button" id="cancelarModificacion">NO</button>
+          <button type="button" id="confirmarModificacion" disabled>Sí, registrar</button>
+          <button type="button" id="cancelarModificacion">Cancelar</button>
         </div>
       </div>
     </main>
@@ -279,7 +279,7 @@
       <div class="titulo"><h2>Formulario de solicitud de Baja de equipos</h2></div>
       <form action="/api/ordenes/baja" method="post" id="bajaForm">
         <div>
-          <label for="maquina">Solicitud/Maquina</label>
+          <label for="maquina">Solicitud o máquina/equipo</label>
           <select id="maquina" name="id" required></select>
         </div>
         <p id="info-averia" class="info-averia"></p>
@@ -287,7 +287,7 @@
           <label for="notas">Motivo de la baja</label>
           <textarea id="notas" name="notas" rows="5" placeholder="Describa la razón para dar de baja el equipo" required></textarea>
         </div>
-        <button type="submit">Equipo para Baja</button>
+        <button type="submit">Dar de baja el equipo</button>
       </form>
       <div id="masterKeyModal" class="login-modal" role="dialog" aria-modal="true" aria-labelledby="masterKeyTitulo" aria-hidden="true">
         <div class="login-modal-content">

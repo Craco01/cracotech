@@ -15,6 +15,7 @@
   const sectorNames = ['', 'Mantenimiento', 'Maquinado', 'Armado', 'Accesorios', 'Herrería', 'Pintura', 'Logística', 'Galvamax', 'Administración', 'Obras'];
   const categoryNames = ['', 'Correctivo', 'Preventivo', 'Predictivo'];
   let timer;
+  let triggerConfirmacion = null;
   const initialId = new URLSearchParams(window.location.search).get('id');
 
   function setSelectValue(id, value) {
@@ -71,6 +72,8 @@
     contador.textContent = `Podrás confirmar en ${segundos} segundos.`;
     modal.hidden = false;
     modal.classList.add('is-visible');
+    modal.setAttribute('aria-hidden', 'false');
+    cancelar.focus();
     clearInterval(timer);
     timer = setInterval(() => {
       segundos -= 1;
@@ -86,6 +89,9 @@
     clearInterval(timer);
     modal.hidden = true;
     modal.classList.remove('is-visible');
+    modal.setAttribute('aria-hidden', 'true');
+    triggerConfirmacion?.focus();
+    triggerConfirmacion = null;
     if (limpiar) limpiarFormulario();
   }
 
@@ -127,6 +133,7 @@
   form.addEventListener('submit', async event => {
     event.preventDefault();
     if (!ordenId.value) return window.siteDialog.alert('Seleccione primero una solicitud.');
+    triggerConfirmacion = event.submitter || document.activeElement;
     abrirConfirmacion();
   });
   confirmar.addEventListener('click', registrarModificacion);
@@ -136,6 +143,15 @@
   });
   document.addEventListener('keydown', event => {
     if (!modal.hidden && event.key === 'Escape') cerrarConfirmacion();
+    if (modal.hidden || event.key !== 'Tab') return;
+    const elements = [confirmar, cancelar].filter(element => !element.disabled);
+    if (event.shiftKey && document.activeElement === elements[0]) {
+      event.preventDefault();
+      elements.at(-1)?.focus();
+    } else if (!event.shiftKey && document.activeElement === elements.at(-1)) {
+      event.preventDefault();
+      elements[0]?.focus();
+    }
   });
 
   if (initialId) cargarOrden(initialId);

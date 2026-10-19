@@ -199,3 +199,7 @@ svg { display: block; width: 100%; height: 100%; overflow: visible; }
   .summary-dashboard .visual { min-height: 235px; }
   .summary-dashboard .visual-content { height: 180px; }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .report-page { animation: none; }
+}

@@ -91,7 +91,11 @@
 .report-table th button:hover,
 .report-table th button:focus-visible {
   color: #a8e6ff;
-  outline: none;
+}
+
+.report-table th button:focus-visible {
+  outline: 3px solid #ffbf47;
+  outline-offset: 2px;
 }
 
 .report-table tbody tr:nth-child(even) {

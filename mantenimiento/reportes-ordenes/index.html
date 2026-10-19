@@ -19,7 +19,7 @@
         <label>Mes<select id="monthFilter"><option value="Todos">Todos</option></select></label>
         <label>Progreso<select id="statusFilter"><option value="Todos">Todos</option></select></label>
         <label>Prioridad<select id="priorityFilter"><option value="Todos">Todos</option></select></label>
-        <p id="filterCount" class="filter-count"></p>
+        <p id="filterCount" class="filter-count" role="status" aria-live="polite"></p>
       </aside>
       <section class="report">
         <div class="report-toolbar">
@@ -38,7 +38,7 @@
           <button class="tab" data-page="prioridad" type="button">Por prioridad</button>
           <button class="tab" data-page="reprogramados" type="button">Reprogramados</button>
         </nav>
-        <div id="dashboard" aria-live="polite">
+        <div id="dashboard">
           <section class="report-page active" data-page-section="resumen" aria-label="Resumen">
             <div class="dashboard summary-dashboard">
               <div class="kpis" id="resumen-kpis"></div>
