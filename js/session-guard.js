@@ -56,7 +56,9 @@
   function showLoginModal() {
     if (!loginModal) return;
     loginModal.classList.add('is-visible');
-    document.getElementById('user')?.focus();
+    // El login puede abrirse automáticamente al volver desde una ruta protegida.
+    // Evita que el foco del campo aplique scroll a la página de fondo.
+    document.getElementById('user')?.focus({ preventScroll: true });
   }
 
   function redirectToLogin(target) {
