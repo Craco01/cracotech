@@ -125,6 +125,7 @@
     qr.hidden = false;
     link.hidden = false;
     verify.hidden = false;
+    verify.disabled = false;
     proceed.hidden = true;
     status.textContent = 'Falta al menos una firma. Este QR vence en 30 minutos. Escanéelo o abra el formulario en este dispositivo.';
 
