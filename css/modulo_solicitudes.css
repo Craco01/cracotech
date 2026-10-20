@@ -68,9 +68,9 @@ h2 {
 .indicador-pendiente { background: #c7dcf5; }
 .indicador-asignado { background: #7fa9d6; }
 .indicador-vencido { background: #e8b6b6; }
-.indicador-completado { background: #a8d5b3; }
-.indicador-retraso { background: #e5bd96; }
-.indicador-reprogramado { background: #c4b8dc; }
+.indicador-completado { background: #c1e1c9; }
+.indicador-retraso { background: #b3bda1; }
+.indicador-reprogramado { background: #fff6a7; }
 .indicador-baja { background: #c7ced8; }
 
 #tablaOrdenes {
