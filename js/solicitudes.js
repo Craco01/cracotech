@@ -14,9 +14,9 @@
     },
     reportes: {
       codigos: ['codigos.js'],
-      solicitudes: ['firmas-entrega.js?v=20261017-1', 'lista_solicitudes.js?v=20261017-1'],
+      solicitudes: ['firmas-entrega.js?v=20261020-1', 'lista_solicitudes.js?v=20261017-1'],
       habilitaciones: ['seguimiento-habilitaciones.js'],
-      informes: ['firmas-entrega.js?v=20261017-1', 'modulo_solicitudes.js?v=20261017-1'],
+      informes: ['firmas-entrega.js?v=20261020-1', 'modulo_solicitudes.js?v=20261017-1'],
       fr172: ['reportes-fr172.js']
     }
   };

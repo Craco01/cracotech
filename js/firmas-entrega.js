@@ -5,6 +5,33 @@
   let modal;
   let qrLibrary;
   let modalAttempt = 0;
+  let statusPollTimer = null;
+  let statusPollInFlight = false;
+
+  function detenerVerificacionAutomatica() {
+    if (statusPollTimer) clearInterval(statusPollTimer);
+    statusPollTimer = null;
+    statusPollInFlight = false;
+  }
+
+  function iniciarVerificacionAutomatica(id, attempt) {
+    detenerVerificacionAutomatica();
+    statusPollTimer = setInterval(async () => {
+      if (attempt !== modalAttempt || modal.hidden || statusPollInFlight) return;
+      statusPollInFlight = true;
+      try {
+        const response = await API_FETCH(tokenApi(id), { cache: 'no-store' });
+        const result = await jsonResponse(response, 'No se pudieron consultar las firmas.');
+        if (attempt === modalAttempt && result.operador_firmado && result.mantenimiento_firmado) {
+          mostrarFirmasCompletas();
+        }
+      } catch {
+        // Se reintenta en el siguiente intervalo sin interrumpir el formulario QR.
+      } finally {
+        statusPollInFlight = false;
+      }
+    }, 2500);
+  }
 
   function cargarQrLibrary() {
     if (window.QRCode) return Promise.resolve();
@@ -69,6 +96,7 @@
 
     cancel.addEventListener('click', () => {
       modalAttempt++;
+      detenerVerificacionAutomatica();
       modal.hidden = true;
       modal.onCancel?.();
       modal.onCancel = null;
@@ -96,6 +124,7 @@
   }
 
   function mostrarFirmasCompletas() {
+    detenerVerificacionAutomatica();
     const { status, verify, proceed, qr, link } = modal.parts;
     status.textContent = 'Las firmas del operador y de mantenimiento están completas.';
     qr.hidden = true;
@@ -129,6 +158,7 @@
     proceed.hidden = true;
     status.textContent = 'Falta al menos una firma. Este QR vence en 30 minutos. Escanéelo o abra el formulario en este dispositivo.';
 
+    iniciarVerificacionAutomatica(id, attempt);
     try {
       await cargarQrLibrary();
       if (attempt !== modalAttempt) return;
@@ -146,14 +176,14 @@
     verify.disabled = true;
     status.textContent = 'Verificando firmas...';
     try {
-      const response = await API_FETCH(tokenApi(id));
+      const response = await API_FETCH(tokenApi(id), { cache: 'no-store' });
       const result = await jsonResponse(response, 'No se pudieron consultar las firmas.');
       if (attempt !== modalAttempt) return;
       if (result.operador_firmado && result.mantenimiento_firmado) {
         mostrarFirmasCompletas();
         return;
       }
-      await generarQr(id, attempt);
+      status.textContent = 'Las firmas aún están pendientes. El QR sigue activo y se volverá a verificar automáticamente.';
     } catch (error) {
       if (attempt === modalAttempt) status.textContent = error.message;
     } finally {
@@ -163,6 +193,7 @@
 
   async function abrirModalFirmasEntrega(id, onCancel) {
     const current = ensureModal();
+    detenerVerificacionAutomatica();
     const attempt = ++modalAttempt;
     const { detail, status, qr, link, verify, proceed } = current.parts;
     current.orderId = id;
