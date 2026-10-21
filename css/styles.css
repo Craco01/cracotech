@@ -475,9 +475,9 @@ header {
 .technical-cards {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 12px;
-    width: min(96%, 1100px);
-    margin: 16px auto 0;
+    gap: clamp(14px, 2vw, 24px);
+    width: min(calc(100% - clamp(32px, 6vw, 80px)), 1100px);
+    margin: clamp(32px, 5vw, 56px) auto 0;
 }
 .technical-card {
     display: flex;
@@ -504,6 +504,7 @@ header {
     flex: 0 0 72px;
     width: 100%;
     height: 140px;
+    border-radius: 6px;
     object-fit: cover;
     object-position: center;
 }

@@ -1,3 +1,28 @@
+/* Tarjetas de Información Técnica: conserva la imagen y aumenta el espacio interior. */
+.technical-card {
+    padding: 20px;
+}
+
+.technical-card span {
+    font-size: 16px;
+}
+
+.technical-cards {
+    grid-template-columns: repeat(auto-fill, minmax(292px, 1fr));
+    width: min(calc(100% - 32px), 1280px);
+    gap: clamp(18px, 2.5vw, 28px);
+    overflow: visible;
+}
+
+.technical-card img {
+    display: block;
+    flex: 0 0 140px;
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    object-position: center;
+}
+
 @media (max-width: 760px) {
     #solicitudes .solicitudes-group .form-container {
         display: grid;
@@ -27,22 +52,22 @@
     }
 
     .technical-cards {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(292px, 1fr));
         width: calc(100% - 24px);
-        gap: 12px;
+        gap: 18px;
         margin: 12px auto 0;
         overflow: visible;
     }
 
     .technical-card {
         min-height: 0;
-        padding: 8px;
+        padding: 20px;
     }
 
-    .technical-card img {
-        flex-basis: auto;
-        height: clamp(120px, 30vw, 180px);
+    .technical-card span {
+        font-size: 16px;
     }
+
 }
 
 @media (max-width: 420px) {
@@ -62,7 +87,8 @@
         width: min(100% - 24px, 360px);
     }
 
-    .technical-card img {
-        height: 190px;
+    .technical-card {
+        padding: 20px;
     }
+
 }

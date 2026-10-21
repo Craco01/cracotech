@@ -5,7 +5,7 @@
   box-sizing: border-box;
   margin: 16px auto;
   padding: clamp(18px, 3vw, 32px);
-  width: min(1000px, calc(100% - 32px));
+  width: 90%;
   scroll-margin-top: 72px;
   border: 1px solid rgba(255, 255, 255, .2);
   border-top: 5px solid #31d07a;
@@ -31,7 +31,7 @@
 }
 
 .puente-grua-hub__encabezado {
-  max-width: 620px;
+  max-width: 820px;
   margin-bottom: 18px;
 }
 
@@ -63,14 +63,14 @@
 .puente-grua-hub__acciones {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  gap: clamp(12px, 2vw, 24px);
 }
 
 .puente-grua-hub__card {
   display: grid;
-  grid-template-columns: 48px minmax(0, 1fr) 20px;
+  grid-template-columns: 54px minmax(0, 1fr) 24px;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
   min-height: 92px;
   padding: 15px;
   border: 0;
@@ -136,6 +136,9 @@
 }
 
 .puente-grua-hub__flecha {
+  display: grid;
+  place-items: center;
+  font-size: 1.1rem;
   color: inherit;
   transition: transform .18s ease;
 }
@@ -162,12 +165,16 @@
 }
 
 @media (max-width: 680px) {
+  .puente-grua-hub {
+    width: calc(100% - 24px);
+  }
+
   .puente-grua-hub__acciones {
     grid-template-columns: 1fr;
   }
 
   .puente-grua-hub__card {
-    grid-template-columns: 46px minmax(0, 1fr) 18px;
+    grid-template-columns: 54px minmax(0, 1fr) 24px;
     gap: 12px;
     min-height: 100px;
     padding: 15px;
