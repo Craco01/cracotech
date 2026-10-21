@@ -1,0 +1,68 @@
+@media (max-width: 760px) {
+    #solicitudes .solicitudes-group .form-container {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        padding: 14px 12px;
+    }
+
+    #solicitudes .solicitudes-group .item-formularios,
+    #solicitudes .solicitudes-group--reportes .item-formularios {
+        width: 100%;
+        height: auto;
+        min-height: 170px;
+        padding: 14px 10px;
+        box-sizing: border-box;
+    }
+
+    #solicitudes .solicitudes-group .item-formularios p,
+    #solicitudes .solicitudes-group--reportes .item-formularios p {
+        font-size: clamp(15px, 2.6vw, 19px);
+        line-height: 1.2;
+    }
+
+    #solicitudes .solicitudes-group .item-formularios span,
+    #solicitudes .solicitudes-group--reportes .item-formularios span {
+        font-size: clamp(2.4rem, 7vw, 3rem);
+    }
+
+    .technical-cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: calc(100% - 24px);
+        gap: 12px;
+        margin: 12px auto 0;
+        overflow: visible;
+    }
+
+    .technical-card {
+        min-height: 0;
+        padding: 8px;
+    }
+
+    .technical-card img {
+        flex-basis: auto;
+        height: clamp(120px, 30vw, 180px);
+    }
+}
+
+@media (max-width: 420px) {
+    #solicitudes .solicitudes-group .form-container {
+        gap: 10px;
+        padding-inline: 10px;
+    }
+
+    #solicitudes .solicitudes-group .item-formularios,
+    #solicitudes .solicitudes-group--reportes .item-formularios {
+        min-height: 150px;
+        padding: 12px 8px;
+    }
+
+    .technical-cards {
+        grid-template-columns: minmax(0, 1fr);
+        width: min(100% - 24px, 360px);
+    }
+
+    .technical-card img {
+        height: 190px;
+    }
+}
