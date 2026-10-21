@@ -5,8 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Mantenimiento Metalúrgica Vera S.A.E.</title>
         <link rel="icon" href="../img/Logo.png" type="image/png" sizes="32x32">
-        <link rel="stylesheet" href="../css/styles.css">
-        <link rel="stylesheet" href="../css/puente-grua-hub.css?v=3">
+        <link rel="stylesheet" href="../css/styles.css?v=20261021-solicitudes-height">
+        <link rel="stylesheet" href="../css/puente-grua-hub.css?v=4">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
         <link rel="stylesheet" href="../css/footer-estilo.css">
     <script src="../js/api-config.js"></script>
@@ -14,120 +14,72 @@
     <body>
         <!--<hr>-->
 
-        <main class="inicio" id="inicio">
-            <h2>Servicios disponibles.</h2>
-
-            <div class="principal">
-                <!-- 1 -->
-                <figure class="card">
-                    <a href="#solicitudes" ><img height="120" width="200" src="../img/solicitudes.webp" alt="Solicitud de mantenimiento"></a>
-                    <figcaption>Solicitudes de Mantenimiento</figcaption>
-                </figure>
-                <!--1.1-->
-                <figure class="card">
-                    <a href="#mpp" ><img height="120" width="200" src="../img/mpp.png" alt="Mantenimiento Preventivo Programado"></a>
-                    <figcaption>Mantenimiento Preventivo Programado</figcaption>
-                </figure>
-
-                <!-- 2 -->
-                <figure class="card">
-                    <a href="#informaciones" > <img height="120" width="200" src="../img/informes.webp"  alt="Informes y reportes"></a>
-                    <figcaption>Informaciones Útiles y Reportes</figcaption>
-                </figure>
-
-                <!-- 3 -->
-                <figure class="card">
-                    <a href="#form-adds" ><img height="120" width="200" src="../img/formularios.webp" alt="Formularios adicionales"> </a>
-                    <figcaption>Formularios Adicionales</figcaption>
-                </figure>
-
-                <!-- 4 -->
-                <figure class="card">
-                    <a href="./visor-pdf/?grupo=grupo4" ><img height="120" width="200" src="../img/puente_grua.webp"  alt="Puente grúa"></a>
-                    <figcaption>Información sobre Puente Grúa</figcaption>
-                </figure>
-
-                <!-- 5 -->
-                <figure class="card">
-                    <a href="./visor-pdf/?grupo=grupo1"><img height="120" width="200" src="../img/equipos.png"  alt="Equipos de soldadura"></a>
-                    <figcaption>Datos Técnicos Equipos de Soldar</figcaption>
-                </figure>
-
-                <!-- 6 -->
-                <figure class="card">
-                    <a href="./visor-pdf/?grupo=grupo2"><img height="120" width="200" src="../img/herramienta.png"  alt="Herramientas eléctricas"></a>
-                    <figcaption>Datos Técnicos Herramientas Eléctricas</figcaption>
-                </figure>
-
-                <!-- 7 -->
-                <figure class="card">
-                    <a href="./visor-pdf/?grupo=grupo3"><img height="120" width="200" src="../img/mvande3.png"  alt="Material de examen"> </a>
-                    <figcaption>Materiales sobre Electricidad</figcaption>
-                </figure>
-
-                <!-- 8 -->
-                <figure class="card">
-                    <a href="./inventario/" ><img height="120" width="200" src="../img/inventario.png" alt="Control de inventario"></a>
-                    <figcaption>Control de Inventario</figcaption>
-                </figure>
-            </div>
-
-        </main>
-
-        <hr>
-
-        <section id="solicitudes">
+<section id="solicitudes">
             <h2 id="solicitudes-title">Solicitudes de Mantenimiento</h2>
 
             <div class="solicitudes-description">
-                <div class="form-container">
-                    <div class="item-formularios">
+                <div class="solicitudes-group">
+                    <h3>Formularios</h3>
+                    <div class="form-container">
+                                                <div class="item-formularios">
                     <a href="./formularios/?vista=solicitud"><p><span>📝</span> Crear solicitud</p></a>
                 </div>
-
-                <div class="item-formularios">
-                    <a href="./formularios/?vista=asignar"><p><span>👷‍♂️</span> Asignar técnicos</p></a>
-                </div>
-
-                <div class="item-formularios">
+                        <div class="item-formularios">
                     <a href="./formularios/?vista=cierre"><p><span>✅</span> Cerrar solicitudes</p></a>
                 </div>
-
-                <div class="item-formularios">
-                    <a href="./formularios/?vista=habilitacion"><p><span>💰</span> Solicitar habilitación</p></a>
-                </div>
-
-                <div class="item-formularios">
+                        <div class="item-formularios">
                     <a href="./formularios/?vista=reprogramar"><p><span>🔄</span> Reprogramar solicitudes</p></a>
                 </div>
-
-                <div class="item-formularios">
+                        <div class="item-formularios">
+                    <a href="./formularios/?vista=habilitacion"><p><span>💰</span> Solicitar habilitación</p></a>
+                </div>
+                        <div class="item-formularios">
+                    <a href="./formularios/?vista=asignar"><p><span>👷‍♂️</span> Asignar técnicos</p></a>
+                </div>
+                        <div class="item-formularios">
                     <a href="./formularios/?vista=modificar"><p><span>💻</span> Modificar solicitud</p></a>
                 </div>
-
-                <div class="item-formularios">
-                    <a href="./reportes/?vista=codigos"><p><span>📑</span> Código de Máquinas</p></a>
+                        <div class="item-formularios">
+                    <a href="./formularios/?vista=baja"><p><span>🛑</span> Dar de baja equipos</p></a>
                 </div>
 
-                <div class="item-formularios">
+                    </div>
+                </div>
+                <div class="solicitudes-group solicitudes-group--reportes">
+                    <h3>Reportes</h3>
+                    <div class="form-container">
+                                                <div class="item-formularios">
                     <a href="./reportes/?vista=solicitudes" ><p><span>📋</span> Ver solicitudes</p></a>
                 </div>
-                <div class="item-formularios">
+                        <div class="item-formularios">
                     <a href="./reportes/?vista=habilitaciones"><p><span>🧾</span> Habilitaciones</p></a>
                 </div>
-                <div class="item-formularios">
+                        <div class="item-formularios">
                     <a href="./reportes/?vista=informes"><p><span>📁</span> Ver informes digitales</p></a>
                 </div>
-                <div class="item-formularios">
-                    <a href="./formularios/?vista=baja"><p><span>🛑</span> Dar de baja equipos</p></a>
+                        <div class="item-formularios">
+                    <a href="./reportes/?vista=codigos"><p><span>📑</span> Código de Máquinas</p></a>
+                </div>
+                    
+                    </div>
                 </div>
             </div>
 
         </section>
 
-        <hr>
+        <section class="technical-info" id="informacion-tecnica" aria-labelledby="informacion-tecnica-title">
+            <h2 id="informacion-tecnica-title">Informaci&#243;n T&#233;cnica</h2>
+            <div class="technical-cards">
+                <a class="technical-card" href="./visor-pdf/?grupo=grupo4"><img src="../img/puente_grua.webp" alt="Puente grúa"><span>Información sobre Puente Grúa</span></a>
+                <a class="technical-card" href="./visor-pdf/?grupo=grupo1"><img src="../img/equipos.png" alt="Equipos de soldadura"><span>Datos Técnicos Equipos de Soldar</span></a>
+                <a class="technical-card" href="./visor-pdf/?grupo=grupo2"><img src="../img/herramienta.png" alt="Herramientas eléctricas"><span>Datos Técnicos Herramientas Eléctricas</span></a>
+                <a class="technical-card" href="./visor-pdf/?grupo=grupo3"><img src="../img/mvande3.png" alt="Material de examen"><span>Materiales sobre Electricidad</span></a>
+            </div>
+        </section>
 
-        <section id="fr172" class="puente-grua-hub" aria-labelledby="puente-grua-title">
+<hr>
+
+<section id="fr172" class="puente-grua-hub" aria-labelledby="puente-grua-title">
             <div class="puente-grua-hub__encabezado">
                 <span class="puente-grua-hub__ceja">SERVICIO TÉCNICO · FR-172</span>
                 <h2 id="puente-grua-title">Centro de asistencia de puente grúa</h2>
@@ -224,14 +176,15 @@
             </div>
         </section>
 
-        <hr>
+<hr>
 
         <section class="informaciones" id="informaciones">
             <div class="title-informaciones">
-                <h2>Informaciones Útiles</h2>
-                <p>(Todos los vinculos de esta sección se abren en una nueva ventana)</p>
+                <h2>Paneles de Mantenimiento</h2>
             </div>
             <div class="informaciones-container">
+            
+
                 <ol class="option-list">
                     <li><a href="./reportes-ordenes/"><i class="fa-solid fa-wrench"></i> Panel de Mantenimiento</a></li>
                     <li><a href="https://mvaceros.sharepoint.com/sites/SISTEMADETICKETPEDIDOS-LOGISTICAMV/Lists/SISTEMA%20TICKET%20%20LOGISTICA/AllItems.aspx?e=3%3Ad9f93b3ebd32486fa6ba6edb8d07b9b3&sharingv2=true&fromShare=true&at=9&CT=1743844213698&OR=OWA%2DNT%2DMail&CID=5d3ef917%2D5f01%2Dd2a5%2Dcaf8%2Da0387112bbce" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-truck"></i>Pedidos de Logística</a></li>
@@ -259,94 +212,45 @@
 
         <hr>
 
-        <section class="form-adds" id="form-adds">
-            <div class="formularios-timeline">
-                <h2>📑 Formularios Adicionales y Solicitudes</h2>
-                <ul class="timeline">
-                    <li>
-                        <a href="./horometros/?vista=maquinado"><div class="content">
-                            <h3>Registro de Horómetros de Máquinas</h3>
-                            <p>Control y seguimiento de equipos.</p>
-                        </div></a>
-                    </li>
-                    <li>
-                        <a href="./horometros/?vista=criticos"><div class="content">
-                            <h3>Registro de Horómetros Compresores y Generadores</h3>
-                            <p>Monitoreo de horas de servicio.</p>
-                        </div></a>
-                    </li>
-                    <li>
-                        <a href="./formulario-simple/?src=https://forms.office.com/pages/responsepage.aspx?id=NZva7YvtyUWWTKbrPuRyG1V57RwX81VLkJJXgmMnoMxUQ0tUQ0RPUllLMkhQREYxVVNZUDQ5V1BGQi4u&route=shorturl"><div class="content">
-                            <h3>Ticket de Pedidos Logística</h3>
-                            <p>Solicitudes de materiales y suministros.</p>
-                        </div></a>
-                    </li>
-                    <li>
-                        <a href="./formulario-simple/?src=https://forms.office.com/pages/responsepage.aspx?id=NZva7YvtyUWWTKbrPuRyG7laUpBIOjJIv4R4MpPr2n5UOEY5VEFFV0cyOUdGVlY3QkZXTUYzNEdVUC4u"><div class="content">
-                            <h3>Ticket de Informática - TI</h3>
-                            <p>Soporte técnico y requerimientos.</p>
-                        </div></a>
-                    </li>
-                </ul>
-            </div>
-        </section>
+<section class="form-adds" id="form-adds">
+                        <div class="formularios-timeline">
+                            <h2>&#128209; Formularios Adicionales y Solicitudes</h2>
+                            <ul class="timeline">
+                                <li>
+                                    <a href="./horometros/?vista=maquinado"><div class="content">
+                                        <h3>Registro de Horómetros de Máquinas</h3>
+                                        <p>Control y seguimiento de equipos.</p>
+                                    </div></a>
+                                </li>
+                                <li>
+                                    <a href="./horometros/?vista=criticos"><div class="content">
+                                        <h3>Registro de Horómetros Compresores y Generadores</h3>
+                                        <p>Monitoreo de horas de servicio.</p>
+                                    </div></a>
+                                </li>
+                                <li>
+                                    <a href="./formulario-simple/?src=https://forms.office.com/pages/responsepage.aspx?id=NZva7YvtyUWWTKbrPuRyG1V57RwX81VLkJJXgmMnoMxUQ0tUQ0RPUllLMkhQREYxVVNZUDQ5V1BGQi4u&route=shorturl"><div class="content">
+                                        <h3>Ticket de Pedidos Logística</h3>
+                                        <p>Solicitudes de materiales y suministros.</p>
+                                    </div></a>
+                                </li>
+                                <li>
+                                    <a href="./formulario-simple/?src=https://forms.office.com/pages/responsepage.aspx?id=NZva7YvtyUWWTKbrPuRyG7laUpBIOjJIv4R4MpPr2n5UOEY5VEFFV0cyOUdGVlY3QkZXTUYzNEdVUC4u"><div class="content">
+                                        <h3>Ticket de Informática - TI</h3>
+                                        <p>Soporte técnico y requerimientos.</p>
+                                    </div></a>
+                                </li>
+                                <li>
+                                    <a href="./inventario/"><div class="content">
+                                        <h3>Control de Inventario</h3>
+                                        <p>Administraci&oacute;n y consulta del inventario de mantenimiento.</p>
+                                    </div></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </section>
 
-        <hr>
-
-        <section class="otros" id="otros">
-            <h2>Otros Proyectos</h2>
-
-            <div class="video-otros">
-                <div Class="video-container">
-                    <iframe title="Animación del proyecto desbobinador de chapa" src="https://drive.google.com/file/d/1I_pJN12CTtoR_SQI5AvYBqD036TkrbkP/preview"
-                     width="1080"
-                     height="720"
-                     frameborder="0"
-                     scrolling="no"
-                     allowfullscreen>
-                    </iframe>
-                </div>
-                <div class="video-description">
-                    <h3>Proyecto Desbobinador de Chapa</h3>
-                    <p>El proyecto consiste en el diseño y la simulación de un desbobinador de chapa, desarrollado mediante modelado 3D para representar
-                        su estructura, componentes principales y funcionamiento básico. El modelo permite visualizar el proceso de desenrollado de la bobina
-                        y el movimiento de los diferentes elementos mecánicos involucrados en la alimentación continua del material.</p>
-                    <p>La animación muestra la rotación controlada de la bobina y el comportamiento general del sistema durante su operación, permitiendo
-                        analizar aspectos como la estabilidad estructural, la transmisión de movimiento y la correcta disposición de los componentes.
-                        Esta simulación facilita la validación del diseño, la identificación de posibles interferencias y la optimización de la solución
-                        antes de su fabricación, reduciendo tiempos de desarrollo y costos asociados.</p>
-                    <p>El prototipo fue concebido como una herramienta de estudio y evaluación para procesos de manipulación y alimentación de chapa,
-                        contribuyendo a mejorar la eficiencia operativa, la seguridad de funcionamiento y la confiabilidad del sistema en aplicaciones
-                        industriales.
-                    </p>
-                </div>
-            </div>
-
-            <div class="video-otros2">
-                <div Class="video-container2">
-                    <iframe title="Animación de la centrifugadora para piezas galvanizadas" src="https://drive.google.com/file/d/13FDGC7X2nj18fcrW-Nu4kvJO4qdm1dsQ/preview"
-                     width="1080"
-                     height="720"
-                     frameborder="0"
-                     scrolling="no"
-                     allowfullscreen>
-                    </iframe>
-                </div>
-                <div class="video-description2">
-                    <h3>Proyecto Centrifugadora para Piezas Galvanizadas por Inmersión en Caliente</h3>
-                    <p>El proyecto consiste en el diseño y la simulación de una centrifugadora para piezas galvanizadas por inmersión en caliente en zinc,
-                        desarrollada mediante modelado 3D para representar su estructura, componentes principales y funcionamiento básico. El modelo permite
-                        visualizar el proceso de rotación de la canasta centrifugadora, utilizada para eliminar el exceso de zinc fundido adherido a las piezas
-                        después de su extracción del baño de galvanizado.</p>
-                    <p>La animación muestra el movimiento de giro del conjunto, permitiendo analizar aspectos como la distribución de cargas, la estabilidad
-                        estructural y el comportamiento mecánico del sistema durante la operación. Esta simulación facilita la validación del diseño, la detección
-                        temprana de posibles interferencias y la optimización de los componentes antes de su fabricación, reduciendo costos y tiempos de desarrollo.</p>
-                    <p>El prototipo fue concebido como una herramienta de estudio y evaluación del proceso de centrifugado, contribuyendo a mejorar la calidad del
-                        recubrimiento, la uniformidad de la capa de zinc y la eficiencia operativa del sistema de galvanizado.
-                    </p>
-                </div>
-            </div>
-        </section>
+        
 
         <!-- Botón flotante de WhatsApp -->
         <button type="button" class="whatsapp-float" id="waButton" aria-label="Elegir contacto por WhatsApp" aria-haspopup="dialog" aria-controls="waModal" aria-expanded="false">

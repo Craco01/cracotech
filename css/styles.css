@@ -459,19 +459,92 @@ header {
     color: black;
     font-weight: bold;
 }
-/* Estilos para el separador */
-hr {
-    margin: 0;
-    border: none;              
-    height: 80px;               
-    /*background-color: #1b4bcf*/ 
+
+
+.technical-info {
+    width: 100%;
+    padding: 0 0 24px;
+    box-sizing: border-box;
 }
+.technical-info h2 {
+    margin: 8px 20px 10px;
+    padding-top: 0;
+    color: rgba(245, 245, 245, 0.678);
+    font: clamp(24px, 3vw, 32px) sans-serif;
+}
+.technical-cards {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    width: min(96%, 1100px);
+    margin: 16px auto 0;
+}
+.technical-card {
+    display: flex;
+    min-width: 0;
+    min-height: 128px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    padding: 10px 8px;
+    box-sizing: border-box;
+    border: 1px solid #070707;
+    border-radius: 9px;
+    background-color: lightgreen;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.16);
+    color: #070707;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 160ms ease, transform 160ms ease;
+}
+.technical-card img {
+    display: block;
+    flex: 0 0 72px;
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    object-position: center;
+}
+.technical-card span {
+    color: #000;
+    font-size: 13px;
+    line-height: 1.2;
+}
+.technical-card:link,
+.technical-card:visited,
+.technical-card:hover,
+.technical-card:active,
+.technical-card:focus-visible {
+    background-color: lightgreen;
+    border-color: darkgreen;
+    box-shadow: 0 0 0 3px darkgreen, 0 4px 10px rgba(0, 0, 0, 0.3);
+    color: #000;
+    transform: translateY(-2px);
+}
+.technical-card:focus-visible { outline: 3px solid lightgreen; outline-offset: 2px; }
+@media (max-width: 760px) {
+    .technical-cards {
+        grid-template-columns: repeat(4, minmax(180px, 1fr));
+        width: 96%;
+        overflow-x: auto;
+        padding: 0 0 8px;
+    }
+    .technical-card { min-height: 116px; padding: 8px 6px; }
+    .technical-card img { height: 140px; flex-basis: 140px; }
+    .technical-card span { font-size: 12px; }
+}
+
+/* Estilos para el separador */
+hr { margin: 0; border: none; height: 80px; }
+
 /* Sección de solicitudes */
 #solicitudes,
 #mpp,
 #informaciones,
 #form-adds,
-#otros,
+#proyectos,
 #contacto {
     scroll-margin-top: 72px;
 }
@@ -479,14 +552,15 @@ hr {
 #solicitudes {
     margin: 0;
     width: 100%;
-    height: 100%;
-    padding-bottom: 40px;
+    height: auto;
+    padding-bottom: 0;
     box-sizing: border-box;
     color: #f1f5f9;
 }
+
 #solicitudes-title {
     margin: 0;
-    padding-top: 50px;
+    padding-top: 8px;
     font-size: clamp(22px, 3vw, 32px);
     margin-left: 20px;
     text-align: left;
@@ -846,6 +920,35 @@ hr {
     }
 }
 
+.solicitudes-group + .solicitudes-group { margin-top: 8px; }
+.solicitudes-group .form-container {
+    gap: 18px;
+    padding: 22px 0;
+}
+.solicitudes-group .item-formularios {
+    width: 180px;
+    height: 205px;
+    padding: 18px;
+    box-sizing: border-box;
+}
+.solicitudes-group .item-formularios p {
+    margin-top: 10px;
+    font-size: 1.35em;
+    line-height: 1.2;
+}
+.solicitudes-group .item-formularios span { font-size: 3em; }
+.solicitudes-group--reportes .item-formularios {
+    width: 205px;
+    height: 230px;
+}
+.solicitudes-group--reportes .item-formularios p { font-size: 1.45em; }
+.solicitudes-group--reportes .item-formularios span { font-size: 3.3em; }
+
+.solicitudes-group h3 {
+    margin: 8px 24px 0;
+    color: #e2e8f0;
+    font: 600 clamp(18px, 2.2vw, 24px) 'Segoe UI', Roboto, sans-serif;
+}
 .form-container {
     display: flex;
     flex-wrap: wrap;
@@ -1257,13 +1360,14 @@ font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     box-shadow: 0 4px 8px rgba(0,0,0,0.5);
 }
 
+
 @media (max-width: 480px) {
     .principal {
-        grid-template-columns: 1fr;
-        justify-items: center;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        justify-items: stretch;
         margin: 20px auto;
         padding: 10px;
-        width: 100%;
+        width: 94%;
         box-sizing: border-box;
     }
     .formularios-timeline h2 {
