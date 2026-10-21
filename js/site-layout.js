@@ -19,10 +19,10 @@
             <ul class="list-bar">
               <li><a href="${maintenanceRoot}">Inicio</a></li>
               <li><a href="${maintenanceRoot}#solicitudes">Solicitudes</a></li>
-              <li><a href="${maintenanceRoot}#informacion-tecnica">Informaci&#243;n T&#233;cnica</a></li>
+              <li><a href="${maintenanceRoot}#informacion-tecnica">Informaci&#243;n</a></li>
               <li><a href="${maintenanceRoot}#fr172">FR-172</a></li>
               <li><a href="${maintenanceRoot}#mpp">MPP</a></li>
-              <li><a href="${maintenanceRoot}#informaciones">Paneles de Mantenimiento</a></li>
+              <li><a href="${maintenanceRoot}#informaciones">Panel</a></li>
               <li><a href="${maintenanceRoot}#form-adds">Formularios</a></li>
               <li><a href="${maintenanceRoot}proyectos/">Proyectos</a></li>
               <li><a href="${maintenanceRoot}#contacto">Contacto</a></li>
