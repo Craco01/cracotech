@@ -211,7 +211,7 @@ main{
   main{display:block;margin-left:0;}
   .sheet{width:100%;padding:64px 24px 48px;}
   .grid-2,.grid-3,.panel-grid{grid-template-columns:1fr;}
-  .results-dashboard{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .results-dashboard{grid-template-columns:repeat(2,minmax(0,1fr));max-width:100%;}
   .brand-logo{width:144px;height:81px;}
   .role{align-items:flex-start;flex-direction:column;gap:8px;}
 }
