@@ -136,7 +136,8 @@
   };
 
   function actualizarModoEdicion() {
-    const soloLectura = !tieneSesion || !puedeEditar || cargandoFicha;
+    const finalizadaBloqueada = estadoFicha === 'finalizada' && rol !== 'administrador';
+    const soloLectura = !tieneSesion || !puedeEditar || cargandoFicha || finalizadaBloqueada;
     $$('input, select, textarea, button[data-fila], button[data-borrar-firma]', form)
       .forEach(el => { el.disabled = soloLectura; });
     $$('button[data-fila][data-delta="1"]', form).forEach(el => {
@@ -150,7 +151,8 @@
       svg.setAttribute('aria-disabled', String(soloLectura));
     });
     $('#btn-finalizar-ficha').hidden = soloLectura;
-    $('#btn-finalizar-ficha').textContent = requestedId
+    $('#btn-guardar-borrador').hidden = soloLectura;
+    $('#btn-finalizar-ficha').textContent = estadoFicha === 'finalizada'
       ? 'Guardar cambios y ver ficha imprimible'
       : 'Finalizar ficha de asistencia';
     aviso.textContent = estadoFicha === 'finalizada' ? 'Ficha finalizada' : 'Borrador';
@@ -180,18 +182,23 @@
   function programarGuardado() {
     if (!tieneSesion || !puedeEditar) return;
     clearTimeout(temporizador);
-    aviso.textContent = 'Guardando…';
     FR172.guardar(est);
+    if (estadoFicha === 'finalizada') {
+      aviso.textContent = 'Ficha finalizada: cambios sin guardar';
+      return;
+    }
+    aviso.textContent = 'Guardando…';
     temporizador = setTimeout(() => guardarYa().catch(error => {
       aviso.textContent = `Error al guardar: ${error.message}`;
     }), 500);
   }
 
-  function guardarYa() {
+  function guardarYa({ comoBorrador = false } = {}) {
     clearTimeout(temporizador);
     FR172.guardar(est);
     if (!tieneSesion || !puedeEditar) return Promise.reject(new Error('Se requiere sesión de editor o administrador.'));
     const payload = contenidoParaGuardar();
+    if (comoBorrador && estadoFicha === 'finalizada') payload.estado = 'borrador';
     colaGuardado = colaGuardado.catch(() => {}).then(async () => {
       const response = await API_FETCH(idFicha
         ? `/api/fr172-puente-grua/${idFicha}`
@@ -202,11 +209,9 @@
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || 'No se pudo guardar la ficha.');
-      if (!idFicha) {
-        idFicha = result.id;
-        estadoFicha = result.estado;
-        history.replaceState(null, '', `${location.pathname}?id=${idFicha}`);
-      }
+      if (!idFicha) history.replaceState(null, '', `${location.pathname}?id=${result.id}`);
+      idFicha = result.id;
+      estadoFicha = result.estado;
       const hora = new Date().toLocaleTimeString('es-PY', { hour: '2-digit', minute: '2-digit' });
       aviso.textContent = `Guardado en servidor a las ${hora}`;
       return idFicha;
@@ -281,12 +286,46 @@
     renderizarFicha();
   }
 
+  const camposRecepcion = [
+    ['conformidad', 'conformidad del cliente'],
+    ['fecha_recepcion', 'fecha de recepción'],
+    ['nombre', 'nombre y apellido'],
+    ['cargo', 'cargo']
+  ];
+
+  function faltantesRecepcion() {
+    const faltan = camposRecepcion
+      .filter(([nombre]) => !String(est[nombre] ?? '').trim())
+      .map(([, etiqueta]) => etiqueta);
+    if (!signaturePads.cliente.hasSignature()) faltan.push('firma del cliente');
+    return faltan;
+  }
+
   form.addEventListener('submit', async event => {
     event.preventDefault();
-    const boton = $('#btn-finalizar-ficha');
-    boton.disabled = true;
+    const finalizar = event.submitter?.id !== 'btn-guardar-borrador';
+    const botones = [$('#btn-finalizar-ficha'), $('#btn-guardar-borrador')];
+    const habilitar = () => botones.forEach(b => { b.disabled = !tieneSesion || !puedeEditar; });
+
+    if (finalizar) {
+      const faltan = faltantesRecepcion();
+      if (faltan.length) {
+        aviso.textContent = 'Complete el apartado 8 para finalizar.';
+        await window.siteDialog.alert(`Para finalizar la ficha complete el apartado 8: ${faltan.join(', ')}.`);
+        return;
+      }
+    }
+
+    botones.forEach(b => { b.disabled = true; });
     try {
-      const id = await guardarYa();
+      const id = await guardarYa({ comoBorrador: !finalizar });
+      if (!finalizar) {
+        actualizarModoEdicion();
+        aviso.textContent = 'Borrador guardado';
+        await window.siteDialog.alert('Borrador guardado.');
+        habilitar();
+        return;
+      }
       const response = await API_FETCH(`/api/fr172-puente-grua/${id}/finalizar`, { method: 'POST' });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || 'No se pudo finalizar la ficha.');
@@ -294,8 +333,8 @@
       const printableRoute = '../fr172-puente-grua-imprimible/';
       location.href = `${printableRoute}?id=${encodeURIComponent(id)}`;
     } catch (error) {
-      aviso.textContent = `Error al finalizar: ${error.message}`;
-      boton.disabled = !tieneSesion || !puedeEditar;
+      aviso.textContent = `Error al ${finalizar ? 'finalizar' : 'guardar el borrador'}: ${error.message}`;
+      habilitar();
     }
   });
 
