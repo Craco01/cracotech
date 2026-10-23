@@ -26,8 +26,13 @@
     return pathname.slice('/mantenimiento/'.length).split('/')[0];
   }
 
-  function isProtectedPath(pathname) {
+  const protectedViewerGroups = new Set(['grupo4']);
+
+  function isProtectedPath(pathname, search = '') {
     const maintenanceRoute = maintenanceRouteName(pathname);
+    if (maintenanceRoute === 'visor-pdf') {
+      return protectedViewerGroups.has(new URLSearchParams(search).get('grupo'));
+    }
     return pathname === '/administrar-usuarios/' ||
       pathname === '/administrar-usuarios' ||
       Boolean(maintenanceRoute && protectedMaintenanceRoutes.has(maintenanceRoute));
@@ -46,7 +51,7 @@
     try {
       const target = new URL(value, window.location.href);
       if (target.origin !== window.location.origin ||
-          !isProtectedPath(target.pathname)) return null;
+          !isProtectedPath(target.pathname, target.search)) return null;
       return `${target.pathname}${target.search}${target.hash}`;
     } catch {
       return null;
@@ -69,7 +74,7 @@
     window.location.replace(loginUrl.href);
   }
 
-  if (isProtectedPath(currentPath)) {
+  if (isProtectedPath(currentPath, window.location.search)) {
     if (!localStorage.getItem('token')) {
       redirectToLogin(`${currentPath}${window.location.search}${window.location.hash}`);
       return;
@@ -80,7 +85,9 @@
     }
   }
 
-  document.querySelectorAll('#fr172 a[href]').forEach((link) => {
+  const isLoginPage = /^\/mantenimiento\/?$/.test(currentPath);
+
+  document.querySelectorAll('#fr172 a[href], #informacion-tecnica a[href]').forEach((link) => {
     link.addEventListener('click', (event) => {
       const target = getProtectedTarget(link.href);
       if (!target) return;
@@ -91,11 +98,15 @@
         return;
       }
       event.preventDefault();
+      if (isLoginPage) {
+        // Abre el login en el mismo lugar, sin recargar ni mover el scroll.
+        sessionStorage.setItem(redirectStorageKey, target);
+        showLoginModal();
+        return;
+      }
       redirectToLogin(target);
     });
   });
-
-  const isLoginPage = /^\/mantenimiento\/?$/.test(currentPath);
   if (isLoginPage) {
     const params = new URLSearchParams(window.location.search);
     const requestedTarget = getProtectedTarget(params.get('returnTo'));

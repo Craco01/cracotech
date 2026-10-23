@@ -255,7 +255,8 @@ form.addEventListener('submit', async event => {
           ((target.pathname.includes('/pages/') &&
             protectedPages.includes(target.pathname.split('/').pop())) ||
            /^\/administrar-usuarios\/?$/.test(target.pathname) ||
-           protectedMaintenanceRoutes.has(maintenanceRoute))) {
+           protectedMaintenanceRoutes.has(maintenanceRoute) ||
+           (maintenanceRoute === 'visor-pdf' && target.searchParams.get('grupo') === 'grupo4'))) {
         window.location.replace(target.href);
         return;
       }
