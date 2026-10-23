@@ -1,6 +1,6 @@
-/* Tarjetas de Información Técnica: conserva la imagen y aumenta el espacio interior. */
+/* Tarjetas de Información Técnica: imágenes y texto con medidas uniformes. */
 .technical-card {
-    padding: 20px;
+    padding: 14px;
 }
 
 .technical-card span {
@@ -8,8 +8,8 @@
 }
 
 .technical-cards {
-    grid-template-columns: repeat(auto-fill, minmax(292px, 1fr));
-    width: min(calc(100% - 32px), 1280px);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+    width: min(calc(100% - 32px), 1200px);
     gap: clamp(18px, 2.5vw, 28px);
     overflow: visible;
 }
@@ -52,16 +52,16 @@
     }
 
     .technical-cards {
-        grid-template-columns: repeat(auto-fill, minmax(292px, 1fr));
-        width: calc(100% - 24px);
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+        width: min(calc(100% - 24px), 640px);
         gap: 18px;
         margin: 12px auto 0;
         overflow: visible;
     }
 
     .technical-card {
-        min-height: 0;
-        padding: 20px;
+        min-height: 210px;
+        padding: 14px;
     }
 
     .technical-card span {
@@ -88,7 +88,7 @@
     }
 
     .technical-card {
-        padding: 20px;
+        padding: 14px;
     }
 
 }

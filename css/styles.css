@@ -482,59 +482,67 @@ header {
 .technical-card {
     display: flex;
     min-width: 0;
-    min-height: 128px;
+    min-height: 220px;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    gap: 8px;
-    padding: 10px 8px;
+    gap: 14px;
+    padding: 14px;
     box-sizing: border-box;
-    border: 1px solid #070707;
-    border-radius: 9px;
-    background-color: lightgreen;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.68);
+    border-radius: 14px;
+    background: lightgreen;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
     color: #070707;
     font-weight: 700;
     text-align: center;
     text-decoration: none;
-    transition: background-color 160ms ease, transform 160ms ease;
+    transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
 }
 .technical-card img {
     display: block;
-    flex: 0 0 72px;
+    flex: 0 0 140px;
     width: 100%;
     height: 140px;
-    border-radius: 6px;
+    border-radius: 9px;
     object-fit: cover;
     object-position: center;
+    transition: transform 180ms ease;
 }
 .technical-card span {
-    color: #000;
-    font-size: 13px;
-    line-height: 1.2;
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    color: inherit;
+    font-size: 15px;
+    line-height: 1.35;
 }
-.technical-card:link,
-.technical-card:visited,
-.technical-card:hover,
-.technical-card:active,
 .technical-card:focus-visible {
-    background-color: lightgreen;
-    border-color: darkgreen;
-    box-shadow: 0 0 0 3px darkgreen, 0 4px 10px rgba(0, 0, 0, 0.3);
-    color: #000;
-    transform: translateY(-2px);
+    outline: 3px solid #76c893;
+    outline-offset: 3px;
 }
-.technical-card:focus-visible { outline: 3px solid lightgreen; outline-offset: 2px; }
+@media (hover: hover) {
+    .technical-card:hover {
+        background: darkgreen;
+        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.22);
+        color: #fff;
+        transform: translateY(-4px);
+    }
+    .technical-card:hover img {
+        transform: scale(1.025);
+    }
+}
+.technical-card:active {
+    transform: translateY(-1px);
+}
 @media (max-width: 760px) {
     .technical-cards {
-        grid-template-columns: repeat(4, minmax(180px, 1fr));
-        width: 96%;
-        overflow-x: auto;
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+        width: min(calc(100% - 32px), 640px);
         padding: 0 0 8px;
     }
-    .technical-card { min-height: 116px; padding: 8px 6px; }
-    .technical-card img { height: 140px; flex-basis: 140px; }
-    .technical-card span { font-size: 12px; }
+    .technical-card { min-height: 210px; }
 }
 
 /* Estilos para el separador */
