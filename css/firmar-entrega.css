@@ -114,7 +114,10 @@ body {
 .firma-campo .signature-pad {
   display: block;
   width: 100%;
-  height: clamp(150px, 40vw, 240px);
+  aspect-ratio: 600 / 220;
+  height: auto;
+  max-width: 600px;
+  margin: 0 auto;
   border: 1px solid #94a3b8;
   border-radius: 6px;
   background: #fff;

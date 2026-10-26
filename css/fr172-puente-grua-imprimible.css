@@ -127,7 +127,7 @@ tr.enc th { text-align: center; font: 600 4.8pt/1.05 var(--sans); background: #f
   border-top: .2mm solid #64748b; color: #475569; font-size: 4.8pt; font-weight: 500;
 }
 svg.sello {
-  display: block; width: 100%; height: 11mm; max-width: 100%; margin: 0 auto;
+  display: block; width: 100%; height: 26mm; max-width: 100%; margin: 0 auto;
   fill: none; stroke: #16233a; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round;
 }
 .error-impresion { margin: 1rem auto; max-width: 200mm; padding: .75rem; background: #fff4d6; color: #713f12; }
