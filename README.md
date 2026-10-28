@@ -79,6 +79,8 @@ Abre `http://127.0.0.1:5500/mantenimiento/`. En este repositorio, [js/api-config
 
 No se publica durante las pruebas locales. Para publicar, sube los cambios revisados a `main` y verifica el workflow de GitHub Pages. Los cambios del backend no se publican con ese workflow: se despliegan manualmente en AWS Lightsail siguiendo la guía del repositorio backend, después de respaldar la base y aplicar las migraciones requeridas.
 
+El contacto para reportar vulnerabilidades se publica en [`.well-known/security.txt`](.well-known/security.txt). Renueva su fecha `Expires` antes de que venza.
+
 ## Consideraciones
 
 - Este directorio no debería depender de una base de datos ni ejecutar lógica de negocio.
