@@ -15,6 +15,10 @@
   --border: #d1d5db;
 }
 
+.tools-layout [hidden] {
+  display: none !important;
+}
+
 .tools-site-header {
   position: relative;
   z-index: 20;
@@ -214,6 +218,71 @@
 .tools-account-action:hover,
 .tools-account-action:focus-visible {
   background: #374151;
+}
+
+.tools-password-card .tools-auth-intro {
+  margin-bottom: 18px;
+}
+
+.tools-password-help {
+  margin: -10px 0 16px;
+  color: var(--muted);
+  font-size: .875rem;
+}
+
+.tools-password-message {
+  min-height: 0;
+  margin: 0;
+  font-weight: 600;
+}
+
+.tools-password-message:not(:empty) {
+  margin: 0 0 10px;
+}
+
+.tools-password-message[data-state="error"] {
+  color: #b91c1c;
+}
+
+.tools-password-message[data-state="success"] {
+  color: #166534;
+}
+
+.tools-password-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.tools-password-actions button {
+  min-height: 42px;
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--primary);
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.tools-password-actions button:hover {
+  background: var(--primary-hover);
+}
+
+.tools-password-actions button:disabled {
+  opacity: .65;
+  cursor: wait;
+}
+
+.tools-password-actions #toolsPasswordCancel {
+  background: var(--detail);
+  color: var(--text);
+}
+
+.tools-password-actions #toolsPasswordCancel:hover {
+  background: #e5e7eb;
 }
 
 .tools-nav-toggle {
