@@ -6,8 +6,21 @@
     .find(src => /\/js\/herramientas-layout\.js(?:\?|#|$)/.test(src));
   const frontendRoot = scriptUrl ? new URL('../', scriptUrl) : new URL('/', location.origin);
   const toolsRoot = new URL('herramientas/', frontendRoot).pathname;
+  const toolsRootPath = toolsRoot.replace(/\/+$/, '');
   const authorRoot = frontendRoot.pathname;
   const currentPath = location.pathname.replace(/\/+$/, '') || '/';
+  const redirectStorageKey = 'herramientasPostLoginRedirect';
+  const protectedToolsTarget = value => {
+    if (!value) return null;
+    try {
+      const target = new URL(value, location.href);
+      if (target.origin !== location.origin ||
+          (target.pathname !== toolsRootPath && !target.pathname.startsWith(toolsRoot))) return null;
+      return `${target.pathname}${target.search}${target.hash}`;
+    } catch {
+      return null;
+    }
+  };
   const pages = [
     { label: 'Panel', path: toolsRoot },
     { label: 'Pedidos', path: `${toolsRoot}solicitud-herramientas/index.html` },
@@ -155,6 +168,8 @@
   renderAuth();
   document.addEventListener('herramientas:auth-change', renderAuth);
   document.addEventListener('herramientas:session-expirada', () => {
+    const currentTarget = protectedToolsTarget(`${location.pathname}${location.search}${location.hash}`);
+    if (currentTarget) sessionStorage.setItem(redirectStorageKey, currentTarget);
     renderAuth();
     modal.querySelector('#mensajeLogin').textContent = 'Tu sesión venció. Inicia sesión nuevamente para continuar.';
     openLoginModal();
@@ -172,6 +187,14 @@
     if (!authContainer.contains(event.target)) closeAccountMenu();
     if (!shell.contains(event.target)) closeNav();
   });
+  document.addEventListener('click', event => {
+    const link = event.target instanceof Element ? event.target.closest('a[href]') : null;
+    const target = link ? protectedToolsTarget(link.href) : null;
+    if (!target || sessionStorage.getItem('herramientas_token')) return;
+    event.preventDefault();
+    sessionStorage.setItem(redirectStorageKey, target);
+    openLoginModal();
+  }, true);
   document.addEventListener('keydown', event => {
     if (event.ctrlKey && event.shiftKey && !event.altKey && event.key.toLowerCase() === 'u') {
       event.preventDefault();
@@ -210,7 +233,11 @@
   });
   modal.addEventListener('click', event => event.stopPropagation());
 
-  if (new URLSearchParams(location.search).has('login')) {
+  if (!sessionStorage.getItem('herramientas_token')) {
+    const currentTarget = protectedToolsTarget(`${location.pathname}${location.search}${location.hash}`);
+    if (currentTarget) sessionStorage.setItem(redirectStorageKey, currentTarget);
+    openLoginModal();
+  } else if (new URLSearchParams(location.search).has('login')) {
     openLoginModal();
     history.replaceState(null, '', `${location.pathname}${location.hash}`);
   }

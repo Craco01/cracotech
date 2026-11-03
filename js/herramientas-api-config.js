@@ -28,7 +28,7 @@ async function API_FETCH(path, options = {}) {
   if (token) headers.Authorization = `Bearer ${token}`;
 
   const response = await fetch(API_URL(path), { ...options, headers });
-  if (response.status === 401 && !String(path).includes('/api/auth/login')) {
+  if (response.status === 401 && token && !String(path).includes('/api/auth/login')) {
     cerrarSesionHerramientas();
     document.dispatchEvent(new Event('herramientas:session-expirada'));
   }
