@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitud de Herramientas</title>
+    <link rel="stylesheet" href="../../css/solicitud-herramientas.css">
+    <link rel="stylesheet" href="../../css/herramientas-layout.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="header">
+            <h1>Solicitud de Herramientas</h1>
+            <p>Registra una solicitud y consulta su seguimiento desde el panel de herramientas.</p>
+        </div>
+
+        <form id="formSolicitud">
+
+            <!-- DATOS GENERALES -->
+            <div class="card">
+
+                <h2>Datos de la Solicitud</h2>
+
+                <div class="grid">
+
+                    <div class="form-group">
+                        <label for="ot">OT de la Obra <span class="req">*</span></label>
+                        <input type="text" id="ot" required
+                            placeholder="Ej: 12345"
+                            title="Número de orden de trabajo de la obra">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="puntero">Puntero Asignado <span class="req">*</span></label>
+                        <input type="text" id="puntero" required
+                            placeholder="Nombre y apellido del puntero"
+                            title="Persona responsable de recibir las herramientas">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fechaNecesidadVista">Fecha de Necesidad <span class="req">*</span></label>
+                        <input type="text" id="fechaNecesidadVista" readonly aria-haspopup="dialog"
+                            aria-controls="modalSeleccionFecha" title="Seleccionar fecha y hora de necesidad">
+                        <input type="datetime-local" id="fechaNecesidad" class="sr-only" required step="1800"
+                            tabindex="-1" aria-hidden="true"
+                            title="Mínimo 12 horas hábiles de anticipación, en horario de atención">
+                        <span class="hint">Haz clic para elegir una fecha y hora.</span>
+                        <span class="hint">Mín. 12 hs hábiles de anticipación. Lun a Vie 07:00–17:00 · Sáb 07:00–12:00.</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tipoSolicitud">Tipo de Solicitud <span class="req">*</span></label>
+                        <select id="tipoSolicitud" required title="Seleccione el motivo de la solicitud">
+                            <option value="">Seleccione un tipo…</option>
+                            <option>Herramientas para Ingreso a Obra</option>
+                            <option>Reposición de Herramientas (Herramientas averiadas o extraviadas)</option>
+                            <option>Herramientas Adicionales</option>
+                            <option>Herramientas para Puntero Nuevo</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="traslado">Necesita Traslado</label>
+                        <select id="traslado" title="Indique si las herramientas deben ser trasladadas a la obra">
+                            <option>No</option>
+                            <option>Sí</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div id="mensajeError" role="alert" aria-live="polite"></div>
+
+            </div>
+
+            <!-- HERRAMIENTAS -->
+            <div class="card">
+
+                <div class="section-header">
+                    <h2>Herramientas Solicitadas</h2>
+
+                    <button type="button" id="btnAgregar" title="Agregar otra herramienta a la lista">
+                        + Agregar
+                    </button>
+                </div>
+
+                <div class="table-wrap">
+                    <table id="tablaHerramientas">
+                        <thead>
+                            <tr>
+                                <th>Herramienta</th>
+                                <th>Cantidad</th>
+                                <th>Unidad de medida</th>
+                                <th>Observación</th>
+                                <th><span class="sr-only">Acciones</span></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <!-- OBSERVACIONES -->
+            <div class="card">
+
+                <h2>Observaciones</h2>
+
+                <label for="observaciones">Detalles adicionales</label>
+                <textarea
+                    id="observaciones"
+                    rows="5"
+                    maxlength="1000"
+                    placeholder="Ej: Indicar medidas, marca preferida, urgencia o cualquier detalle útil para preparar el pedido…"></textarea>
+            </div>
+
+            <div class="actions">
+
+                <button type="submit" id="btnEnviar" class="btn-primary">
+                    Enviar solicitud
+                </button>
+
+                <button type="reset" class="btn-secondary">
+                    Limpiar
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+    <dialog class="selector-fecha-dialog" id="modalSeleccionFecha"
+        aria-labelledby="tituloSeleccionFecha">
+        <div class="selector-fecha-contenido">
+            <h2 id="tituloSeleccionFecha">Fecha y hora de necesidad</h2>
+            <div class="selector-fecha-campos">
+                <div class="selector-calendario">
+                    <div class="selector-calendario-cabecera">
+                        <button type="button" id="mesAnterior" aria-label="Mes anterior">‹</button>
+                        <h3 id="mesCalendario"></h3>
+                        <button type="button" id="mesSiguiente" aria-label="Mes siguiente">›</button>
+                    </div>
+                    <div class="selector-calendario-dias-semana" aria-hidden="true">
+                        <span>lu</span><span>ma</span><span>mi</span><span>ju</span>
+                        <span>vi</span><span>sa</span><span>do</span>
+                    </div>
+                    <div id="diasCalendario" class="selector-calendario-dias"
+                        role="group" aria-label="Días del mes"></div>
+                </div>
+                <div class="selector-hora-columnas">
+                    <div class="selector-hora-columna">
+                        <span class="selector-hora-titulo">Hora</span>
+                        <div id="opcionesHora" class="selector-hora-opciones"
+                            role="group" aria-label="Hora"></div>
+                    </div>
+                    <div class="selector-hora-columna">
+                        <span class="selector-hora-titulo">Minutos</span>
+                        <div id="opcionesMinuto" class="selector-hora-opciones"
+                            role="group" aria-label="Minutos"></div>
+                    </div>
+                </div>
+            </div>
+            <p id="errorSeleccionFecha" class="error selector-fecha-error" role="alert" hidden></p>
+            <div class="selector-fecha-acciones">
+                <button type="button" id="btnCancelarFecha" class="btn-secondary">Cancelar</button>
+                <button type="button" id="btnAceptarFecha" class="btn-primary">Aceptar</button>
+            </div>
+        </div>
+    </dialog>
+
+    <dialog class="solicitud-confirmacion" id="modalSolicitudCreada"
+        aria-labelledby="tituloSolicitudCreada" aria-describedby="mensajeSolicitudCreada">
+        <div class="solicitud-confirmacion-contenido">
+            <h2 id="tituloSolicitudCreada">Solicitud creada</h2>
+            <p id="mensajeSolicitudCreada"></p>
+            <button type="button" id="btnCerrarSolicitudCreada" class="btn-primary" autofocus>
+                Ir a reportes
+            </button>
+        </div>
+    </dialog>
+
+    <script src="../../js/herramientas-api-config.js"></script>
+    <script src="../../js/herramientas-layout.js"></script>
+    <script src="../../js/login-herramientas.js"></script>
+    <script src="../../js/solicitud-herramientas.js"></script>
+
+</body>
+
+</html>

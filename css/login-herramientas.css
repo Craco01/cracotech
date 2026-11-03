@@ -1,0 +1,114 @@
+*{
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+:root{
+    --primary:#374151;
+    --primary-hover:#1f2937;
+    --accent:#9ca3af;
+    --detail:#f3f4f6;
+    --text:#111827;
+    --muted:#6b7280;
+    --border:#d1d5db;
+}
+
+body{
+    min-height:100vh;
+    margin:0;
+    color:var(--text);
+    background:#f9fafb;
+}
+
+.login-shell{
+    position:fixed;
+    inset:0;
+    z-index:1000;
+    display:grid;
+    place-items:center;
+    padding:24px;
+    overflow-y:auto;
+    background:rgba(24,24,27,.58);
+}
+
+.login-card{
+    width:min(100%,440px);
+    padding:32px;
+    background:#fff;
+    border:1px solid var(--border);
+    border-top:5px solid var(--primary);
+    border-radius:14px;
+}
+
+.login-card h1{
+    margin:0 0 8px;
+    color:var(--primary);
+    font-size:26px;
+}
+
+.login-card p{
+    margin:0 0 24px;
+    color:var(--muted);
+    line-height:1.5;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+    margin-bottom:18px;
+}
+
+label{
+    font-size:14px;
+    font-weight:700;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    border:2px solid var(--border);
+    border-radius:8px;
+    background:#fff;
+    color:var(--text);
+    font-size:16px;
+}
+
+input:focus{
+    outline:2px solid var(--accent);
+    outline-offset:1px;
+    border-color:var(--accent);
+}
+
+button{
+    width:100%;
+    padding:13px;
+    border:0;
+    border-radius:8px;
+    background:var(--primary);
+    color:#fff;
+    font-size:16px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+button:hover{
+    background:var(--primary-hover);
+}
+
+button:disabled{
+    opacity:.65;
+    cursor:wait;
+}
+
+#mensajeLogin{
+    margin:0 0 14px;
+    color:#991b1b;
+    font-weight:600;
+}
+
+@media(max-width:480px){
+    .login-shell{padding:14px}
+    .login-card{padding:24px}
+    .login-card h1{font-size:23px}
+}

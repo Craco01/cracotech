@@ -34,6 +34,11 @@ frontend/
 │   ├── index.html              # Inicio del portal
 │   ├── formularios/index.html
 │   └── ...
+├── herramientas/               # Gestión independiente de pedidos de herramientas
+│   ├── index.html
+│   ├── solicitud-herramientas/
+│   ├── reporte-herramientas/
+│   └── usuarios/
 ├── pages_bak/                  # Respaldo de las páginas HTML anteriores (renombrada desde pages/)
 ├── css/
 │   ├── portfolio.css
@@ -55,7 +60,8 @@ frontend/
 3. `pages_bak/` se conserva como respaldo de las páginas anteriores; la navegación principal ya no depende de esa carpeta.
 4. La administración de usuarios también está disponible en `/administrar-usuarios/`; el atajo de teclado `Ctrl+Alt+U` abre esa ruta.
 5. [js/api-config.js](js/api-config.js) centraliza la URL base de la API productiva.
-6. El backend está en el repositorio independiente `upkeepmv_backend` y se actualiza manualmente en AWS Lightsail.
+6. Herramientas se publica en `/herramientas/` y consume `https://api.cracotech.com/api/herramientas` mediante [js/herramientas-api-config.js](js/herramientas-api-config.js). Sus cuentas y sesión son independientes del portal de mantenimiento.
+7. El backend está en el repositorio independiente `upkeepmv_backend` y se actualiza manualmente en AWS Lightsail.
 
 ## Autenticación
 
@@ -73,7 +79,7 @@ Desde este directorio, inicia un servidor estático para el frontend:
 py -m http.server 5500
 ```
 
-Abre `http://127.0.0.1:5500/mantenimiento/`. En este repositorio, [js/api-config.js](js/api-config.js) apunta al API HTTPS de producción; por tanto, la interfaz local seguirá consultando el backend productivo. Las pruebas locales integrales deben ejecutarse en el directorio independiente `pruebas`, con su propia configuración local y sin copiar su `.env` a este repositorio.
+Abre `http://127.0.0.1:5500/mantenimiento/` o `http://127.0.0.1:5500/herramientas/`. Por defecto, ambos módulos consultan el API HTTPS de producción. Para apuntar Herramientas a un backend local, define `window.HERRAMIENTAS_API_BASE_URL = 'http://127.0.0.1:3000/api/herramientas'` antes de cargar `js/herramientas-api-config.js`. No copies credenciales ni archivos `.env` de otros entornos.
 
 ## Publicación
 

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#374151">
+  <title>Administrar usuarios | Herramientas</title>
+  <link rel="stylesheet" href="../../css/herramientas-layout.css">
+  <link rel="stylesheet" href="../../css/site-dialogs.css">
+  <link rel="stylesheet" href="../../css/usuarios.css">
+</head>
+<body data-require-admin="true">
+  <main class="users-page">
+    <header class="users-heading">
+      <div>
+        <p class="users-eyebrow">ADMINISTRACIÓN</p>
+        <h1>Usuarios</h1>
+        <p>Crear, actualizar y eliminar cuentas de Herramientas.</p>
+      </div>
+      <a class="users-back" href="../index.html">Volver al panel</a>
+    </header>
+
+    <section class="users-card" id="adminGate" aria-live="polite">
+      <h2>Acceso exclusivo para administradores</h2>
+      <p id="adminGateMessage">Verificando permisos...</p>
+      <button class="users-button" id="loginAdmin" type="button" hidden>
+        Iniciar sesión como administrador
+      </button>
+    </section>
+
+    <div id="adminContent" hidden>
+      <p class="users-notice" id="usersNotice" role="status" aria-live="polite" hidden></p>
+      <section class="users-card">
+        <div class="users-section-heading">
+          <div>
+            <h2 id="formTitle">Crear usuario</h2>
+            <p>La contraseña debe tener entre 6 y 72 bytes.</p>
+          </div>
+        </div>
+        <form id="userForm" class="user-form">
+          <label>
+            Nombre completo
+            <input name="nombre" maxlength="150" autocomplete="name" required>
+          </label>
+          <label>
+            Usuario
+            <input name="username" maxlength="30" autocomplete="username" required>
+          </label>
+          <label>
+            Correo electrónico
+            <input name="email" type="email" maxlength="190" autocomplete="email" required>
+          </label>
+          <label>
+            Rol
+            <select name="rol" required>
+              <option value="observador">Observador</option>
+              <option value="solicitante" selected>Solicitante</option>
+              <option value="gestor">Gestor</option>
+              <option value="administrador">Administrador</option>
+            </select>
+          </label>
+          <label class="password-field">
+            <span id="passwordLabel">Contraseña inicial</span>
+            <input name="password" type="password" minlength="6" maxlength="72"
+              autocomplete="new-password">
+          </label>
+          <label class="password-confirmation-field">
+            Confirmar contraseña
+            <input name="passwordConfirm" type="password" minlength="6" maxlength="72"
+              autocomplete="new-password">
+          </label>
+          <label class="active-field" id="activeField" hidden>
+            Estado
+            <select name="activo">
+              <option value="true">Activo</option>
+              <option value="false">Desactivado</option>
+            </select>
+          </label>
+          <div class="user-form-actions">
+            <button class="users-button" id="saveUser" type="submit">Crear usuario</button>
+            <button class="users-button users-button-secondary" id="cancelEdit" type="button" hidden>
+              Cancelar edición
+            </button>
+          </div>
+          <p class="form-error" id="formError" role="alert" hidden></p>
+        </form>
+      </section>
+
+      <section class="users-card">
+        <div class="users-section-heading">
+          <div>
+            <h2>Usuarios registrados</h2>
+            <p id="userCount">Cargando usuarios...</p>
+          </div>
+          <label class="filter-field">
+            Buscar
+            <input id="userFilter" type="search" placeholder="Nombre, usuario o correo">
+          </label>
+        </div>
+        <div class="users-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Usuario</th>
+                <th>Correo</th>
+                <th>Rol</th>
+                <th>Estado</th>
+                <th>Último acceso</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="usersTable"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="../../js/herramientas-api-config.js"></script>
+  <script src="../../js/herramientas-layout.js"></script>
+  <script src="../../js/login-herramientas.js"></script>
+  <script src="../../js/site-dialogs.js"></script>
+  <script src="../../js/usuarios.js"></script>
+</body>
+</html>

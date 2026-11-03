@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reporte de pedidos de herramientas</title>
+<link rel="stylesheet" href="../../css/reporte-herramientas.css">
+<link rel="stylesheet" href="../../css/herramientas-layout.css">
+</head>
+<body>
+<div class="container">
+  <header class="header">
+    <h1>Pedidos de herramientas</h1>
+    <p id="rango">Reporte por fecha de necesidad</p>
+  </header>
+
+  <section class="kpis" id="kpis" aria-label="Resumen de pedidos"></section>
+
+  <section class="barra card" aria-label="Filtros y navegación del reporte">
+    <div class="controles">
+      <div class="tabs" role="tablist" id="tabs" aria-label="Vista del reporte">
+        <button type="button" role="tab" data-vista="tabla" class="on">Tabla</button>
+        <button type="button" role="tab" data-vista="mes">Mes</button>
+        <button type="button" role="tab" data-vista="semana">Semana</button>
+        <button type="button" role="tab" data-vista="dia">Día</button>
+      </div>
+      <div class="nav" id="nav">
+        <button type="button" id="prev" aria-label="Anterior">‹</button>
+        <button type="button" id="hoy">Hoy</button>
+        <button type="button" id="next" aria-label="Siguiente">›</button>
+      </div>
+    </div>
+    <div class="filtros">
+      <input type="search" id="q" placeholder="Buscar OT, puntero o herramienta" aria-label="Buscar pedidos">
+      <select id="fEstado" aria-label="Filtrar por estado"><option value="">Todos los estados</option></select>
+      <select id="fTipo" aria-label="Filtrar por tipo"><option value="">Todos los tipos</option></select>
+      <select id="fHerr" aria-label="Filtrar por estado de herramienta"><option value="">Toda herramienta</option></select>
+    </div>
+  </section>
+
+  <main id="vista" class="card" aria-live="polite"></main>
+
+<dialog id="modal"><div id="modalBody"></div></dialog>
+<dialog id="modalEnvio"><div id="modalEnvioBody"></div></dialog>
+</div>
+
+<script src="../../js/herramientas-api-config.js"></script>
+<script src="../../js/herramientas-layout.js"></script>
+<script src="../../js/login-herramientas.js"></script>
+<script src="../../js/reporte-herramientas.js"></script>
+</body>
+</html>

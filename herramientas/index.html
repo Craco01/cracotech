@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#374151">
+  <title>Herramientas | Panel principal</title>
+  <link rel="stylesheet" href="../css/herramientas-index.css">
+  <link rel="stylesheet" href="../css/herramientas-layout.css">
+</head>
+<body>
+  <main class="sec on">
+    <header class="top">
+      <div>
+        <p class="eyebrow">GESTIÓN DE HERRAMIENTAS</p>
+        <h1>Panel principal</h1>
+        <p class="sub">Resumen de pedidos y accesos rápidos a los módulos.</p>
+      </div>
+      <div class="atajos">
+        <a class="atajo primario" href="/herramientas/solicitud-herramientas/index.html">Nuevo pedido</a>
+        <a class="atajo secundario" href="/herramientas/reporte-herramientas/index.html">Ver reportes</a>
+      </div>
+    </header>
+
+    <p id="mensajeError" class="mensaje-error" role="alert" hidden></p>
+    <section class="kpis mx-kpis" id="mxKpis" aria-label="Indicadores de pedidos"></section>
+    <section class="mx-grid" id="mxGrid" aria-label="Métricas de pedidos"></section>
+  </main>
+
+  <script src="../js/herramientas-api-config.js"></script>
+  <script src="../js/herramientas-layout.js"></script>
+  <script src="../js/login-herramientas.js"></script>
+  <script src="../js/herramientas-dashboard-data.js"></script>
+  <script src="../js/herramientas-metricas.js"></script>
+</body>
+</html>
