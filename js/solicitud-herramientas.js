@@ -1,4 +1,4 @@
-const HORAS_ANTICIPACION = 12;
+const HORAS_ANTICIPACION = 10;
 
 const fechaNecesidad = document.getElementById("fechaNecesidad");
 const fechaNecesidadVista = document.getElementById("fechaNecesidadVista");
