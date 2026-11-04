@@ -2,7 +2,13 @@
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  background: #f9fafb;
+  background-color: #f9fafb;
+  background-image: linear-gradient(rgb(249 250 251 / 18%), rgb(249 250 251 / 18%)),
+    url("../img/WHerramientas.png");
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
   color-scheme: light;
   color: #111827;
   font: 14px/1.5 "Segoe UI", sans-serif;

@@ -28,8 +28,6 @@ Este repositorio contiene el sitio estático que se publica en GitHub Pages. La 
 ```text
 frontend/
 ├── index.html                 # Portafolio público
-├── administrar-usuarios/       # Administración con ruta limpia
-│   └── index.html
 ├── mantenimiento/             # Rutas limpias del portal de mantenimiento
 │   ├── index.html              # Inicio del portal
 │   ├── formularios/index.html
@@ -58,7 +56,7 @@ frontend/
 1. El workflow `.github/workflows/deploy-pages.yml` publica el sitio en GitHub Pages al actualizar `main` o al ejecutarse manualmente desde GitHub Actions.
 2. El acceso principal desde la portada es [mantenimiento/](mantenimiento/); sus módulos usan rutas limpias, por ejemplo `/mantenimiento/reportes/`.
 3. `pages_bak/` se conserva como respaldo de las páginas anteriores; la navegación principal ya no depende de esa carpeta.
-4. La administración de usuarios también está disponible en `/administrar-usuarios/`; el atajo de teclado `Ctrl+Alt+U` abre esa ruta.
+4. La administración de usuarios está disponible únicamente en `/mantenimiento/administrar-usuarios/`; el atajo `Ctrl+Mayús+U` abre esa ruta desde el portal de mantenimiento.
 5. [js/api-config.js](js/api-config.js) centraliza la URL base de la API productiva.
 6. Herramientas se publica en `/herramientas/` y consume `https://api.cracotech.com/api/herramientas` mediante [js/herramientas-api-config.js](js/herramientas-api-config.js). Sus cuentas y sesión son independientes del portal de mantenimiento.
 7. El backend está en el repositorio independiente `upkeepmv_backend` y se actualiza manualmente en AWS Lightsail.

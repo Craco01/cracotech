@@ -33,9 +33,7 @@
     if (maintenanceRoute === 'visor-pdf') {
       return protectedViewerGroups.has(new URLSearchParams(search).get('grupo'));
     }
-    return pathname === '/administrar-usuarios/' ||
-      pathname === '/administrar-usuarios' ||
-      Boolean(maintenanceRoute && protectedMaintenanceRoutes.has(maintenanceRoute));
+    return Boolean(maintenanceRoute && protectedMaintenanceRoutes.has(maintenanceRoute));
   }
 
   function requiresEditor(pathname) {
