@@ -72,7 +72,7 @@ function filtrados() {
   return pedidos.filter(p =>
     (!fe || p.estado === fe) && (!ft || p.tipo_solicitud === ft) &&
     (!fh || p.detalle.some(d => d.estado_herramienta === fh)) &&
-    (!q || [p.ot_obra, p.puntero_asignado, p.solicitante, ...p.detalle.map(d => d.herramienta)].join(' ').toLowerCase().includes(q))
+    (!q || [p.ot_obra, p.nombre_obra, p.puntero_asignado, p.solicitante, ...p.detalle.map(d => d.herramienta)].join(' ').toLowerCase().includes(q))
   );
 }
 const delDia = (lista, d) => lista.filter(p => mismoDia(p.fecha_necesidad, d)).sort((a, b) => a.fecha_necesidad - b.fecha_necesidad);
@@ -100,7 +100,7 @@ function vTabla(l) {
   const o = [...l].sort((a, b) => { const x = v(a, orden.col), y = v(b, orden.col); return (x > y ? 1 : x < y ? -1 : 0) * orden.dir; });
   if (!o.length) return '<div class="vacio">No hay pedidos con estos filtros. Probá quitar alguno.</div>';
   return `<div class="cont"><table><thead><tr>${cols.map(([c, t]) => `<th scope="col" data-col="${c}" tabindex="0" aria-sort="${orden.col === c ? (orden.dir > 0 ? 'ascending' : 'descending') : 'none'}" class="${orden.col === c ? (orden.dir > 0 ? 'asc' : 'desc') : ''}">${t}</th>`).join('')}</tr></thead><tbody>${
-    o.map(p => `<tr tabindex="0" data-id="${p.id}"><td><b>${esc(p.ot_obra)}</b></td><td>${esc(p.puntero_asignado)}</td><td>${esc(p.solicitante)}</td><td>${esc(p.tipo_solicitud.split(' (')[0])}</td><td>${fFH(p.fecha_necesidad)}</td><td>${tagEstado(p.estado)}</td><td>${p.detalle.length} ${puntos(p)}</td></tr>`).join('')
+    o.map(p => `<tr tabindex="0" data-id="${p.id}"><td><b>${esc(p.ot_obra)}</b>${p.nombre_obra ? `<br><small>${esc(p.nombre_obra)}</small>` : ''}</td><td>${esc(p.puntero_asignado)}</td><td>${esc(p.solicitante)}</td><td>${esc(p.tipo_solicitud.split(' (')[0])}</td><td>${fFH(p.fecha_necesidad)}</td><td>${tagEstado(p.estado)}</td><td>${p.detalle.length} ${puntos(p)}</td></tr>`).join('')
   }</tbody></table></div>`;
 }
 
@@ -167,7 +167,7 @@ function detalle(id) {
       </div>
     </div>
     <div class="pedido-estado-general"><b>Estado del pedido</b>${tagEstado(p.estado)}</div>
-    <dl><dt>Puntero asignado</dt><dd>${esc(p.puntero_asignado)}</dd><dt>Solicitante</dt><dd>${esc(p.solicitante)}</dd>
+    <dl><dt>Nombre de la obra</dt><dd>${esc(p.nombre_obra) || '—'}</dd><dt>Puntero asignado</dt><dd>${esc(p.puntero_asignado)}</dd><dt>Solicitante</dt><dd>${esc(p.solicitante)}</dd>
     <dt>Tipo de solicitud</dt><dd>${esc(p.tipo_solicitud)}</dd><dt>Necesita traslado</dt><dd>${p.necesita_traslado ? 'Sí' : 'No'}</dd>
     <dt>Fecha de necesidad</dt><dd>${fFH(p.fecha_necesidad)}</dd><dt>Registrado</dt><dd>${fFH(p.fecha_registro)}</dd>
     <dt>Entrega</dt><dd>${fFH(p.fecha_entrega)}</dd><dt>Envío</dt><dd>${requiereFechaEnvio(p.estado) ? fFH(p.fecha_envio) : '—'}</dd>
@@ -224,7 +224,7 @@ function abrirModalEnvio(pedidoId) {
         <label for="estadoPedido">Estado general del pedido</label>
         <select id="estadoPedido" name="estadoPedido" required>${pedidoEstadoOpciones}</select>
       </div>
-      <dl><dt>Puntero asignado</dt><dd>${esc(pedido.puntero_asignado)}</dd><dt>Solicitante</dt><dd>${esc(pedido.solicitante)}</dd>
+      <dl><dt>Nombre de la obra</dt><dd>${esc(pedido.nombre_obra) || '—'}</dd><dt>Puntero asignado</dt><dd>${esc(pedido.puntero_asignado)}</dd><dt>Solicitante</dt><dd>${esc(pedido.solicitante)}</dd>
       <dt>Tipo de solicitud</dt><dd>${esc(pedido.tipo_solicitud)}</dd><dt>Necesita traslado</dt><dd>${pedido.necesita_traslado ? 'Sí' : 'No'}</dd>
       <dt>Fecha de necesidad</dt><dd>${fFH(pedido.fecha_necesidad)}</dd><dt>Registrado</dt><dd>${fFH(pedido.fecha_registro)}</dd>
       <dt>Entrega</dt><dd>${fFH(pedido.fecha_entrega)}</dd>

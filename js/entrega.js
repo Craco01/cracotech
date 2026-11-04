@@ -8,6 +8,12 @@ function formatFecha(value) {
     return `${p(value.getDate())}/${p(value.getMonth() + 1)}/${value.getFullYear()} ${p(value.getHours())}:${p(value.getMinutes())}`;
   }
   const texto = String(value).trim();
+  if (/(?:Z|[+-]\d{2}:?\d{2})$/i.test(texto)) {
+    const fecha = new Date(texto);
+    if (Number.isNaN(fecha.getTime())) return texto;
+    const p = numero => String(numero).padStart(2, '0');
+    return `${p(fecha.getDate())}/${p(fecha.getMonth() + 1)}/${fecha.getFullYear()} ${p(fecha.getHours())}:${p(fecha.getMinutes())}`;
+  }
   const match = texto.match(/^(\d{4})-(\d{2})-(\d{2})[T\s](\d{2}):(\d{2})(?::(\d{2}))?/);
   if (!match) return texto;
   return `${match[3]}/${match[2]}/${match[1]} ${match[4]}:${match[5]}`;

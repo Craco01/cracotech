@@ -36,6 +36,13 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="nombreObra">Nombre de la obra <span class="req">*</span></label>
+                        <input type="text" id="nombreObra" maxlength="150" required
+                            placeholder="Ej: Construccion galpon sector norte"
+                            title="Nombre o descripcion de la obra asociada a la OT">
+                    </div>
+
+                    <div class="form-group">
                         <label for="puntero">Puntero Asignado <span class="req">*</span></label>
                         <input type="text" id="puntero" required
                             placeholder="Nombre y apellido del puntero"
@@ -48,9 +55,9 @@
                             aria-controls="modalSeleccionFecha" title="Seleccionar fecha y hora de necesidad">
                         <input type="datetime-local" id="fechaNecesidad" class="sr-only" required step="1800"
                             tabindex="-1" aria-hidden="true"
-                            title="Mínimo 12 horas hábiles de anticipación, en horario de atención">
+                            title="Mínimo 10 horas hábiles de anticipación, en horario de atención">
                         <span class="hint">Haz clic para elegir una fecha y hora.</span>
-                        <span class="hint">Mín. 12 hs hábiles de anticipación. Lun a Vie 07:00–17:00 · Sáb 07:00–12:00.</span>
+                        <span class="hint">Mín. 10 hs hábiles de anticipación. Lun a Vie 07:00–17:00 · Sáb 07:00–12:00.</span>
                     </div>
 
                     <div class="form-group">
@@ -192,7 +199,7 @@
     <script src="../../js/herramientas-api-config.js"></script>
     <script src="../../js/herramientas-layout.js"></script>
     <script src="../../js/login-herramientas.js"></script>
-    <script src="../../js/solicitud-herramientas.js"></script>
+    <script src="../../js/solicitud-herramientas.js?v=20261104-1"></script>
 
 </body>
 

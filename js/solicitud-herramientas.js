@@ -435,6 +435,7 @@ formulario.addEventListener("submit", async event => {
 
     const solicitud = {
         ot: document.getElementById("ot").value.trim(),
+        nombreObra: document.getElementById("nombreObra").value.trim(),
         puntero: document.getElementById("puntero").value.trim(),
         fechaNecesidad: fechaNecesidad.value,
         tipoSolicitud: document.getElementById("tipoSolicitud").value,

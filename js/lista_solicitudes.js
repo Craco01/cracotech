@@ -119,7 +119,13 @@ function formatFecha(value) {
   }
   const texto = String(value).trim();
   if (!texto) return '';
-  const match = texto.match(/^\s*(\d{4})-(\d{2})-(\d{2})[T\s](\d{2}):(\d{2})(?::(\d{2}))?(?:\.\d+)?(?:Z|[+-]\d{2}:?\d{2})?\s*$/i);
+  if (/(?:Z|[+-]\d{2}:?\d{2})$/i.test(texto)) {
+    const fecha = new Date(texto);
+    if (Number.isNaN(fecha.getTime())) return texto;
+    const p = n => String(n).padStart(2, '0');
+    return `${p(fecha.getDate())}/${p(fecha.getMonth() + 1)}/${fecha.getFullYear()} ${p(fecha.getHours())}:${p(fecha.getMinutes())}${fecha.getSeconds() ? `:${p(fecha.getSeconds())}` : ''}`;
+  }
+  const match = texto.match(/^\s*(\d{4})-(\d{2})-(\d{2})[T\s](\d{2}):(\d{2})(?::(\d{2}))?(?:\.\d+)?\s*$/i);
   if (!match) return texto;
   const [, anio, mes, dia, hora, minutos, segundos = '00'] = match;
   return `${dia}/${mes}/${anio} ${hora}:${minutos}${segundos !== '00' ? `:${segundos}` : ''}`;
@@ -131,7 +137,12 @@ function normalizarTexto(value) {
 
 function fechaVencimiento(row) {
   if (!row.fecha_vencimiento) return null;
-  const match = String(row.fecha_vencimiento).match(/^(\d{4})-(\d{2})-(\d{2})[T\s](\d{2}):(\d{2})(?::(\d{2}))?/);
+  const value = String(row.fecha_vencimiento);
+  if (/(?:Z|[+-]\d{2}:?\d{2})$/i.test(value)) {
+    const fecha = new Date(value);
+    return Number.isNaN(fecha.getTime()) ? null : fecha;
+  }
+  const match = value.match(/^(\d{4})-(\d{2})-(\d{2})[T\s](\d{2}):(\d{2})(?::(\d{2}))?/);
   if (!match) return null;
   return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]), Number(match[4]), Number(match[5]), Number(match[6] || 0));
 }
