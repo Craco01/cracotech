@@ -1,9 +1,23 @@
-const state = { token: '', selected: null };
+const state = { selected: null };
 const $ = (id) => document.getElementById(id);
-$('apiBase').value = API_BASE_URL;
-const api = (path) => `${$('apiBase').value.trim().replace(/\/$/, '')}${path}`;
 const setStatus = (id, message, type = '') => { const element = $(id); element.textContent = message; element.className = `status ${type}`; };
-const authHeaders = () => ({ 'Content-Type': 'application/json', Authorization: `Bearer ${state.token}` });
+const authHeaders = () => {
+  const token = localStorage.getItem('token');
+  return {
+    'Content-Type': 'application/json',
+    ...(token ? { Authorization: `Bearer ${token}` } : {})
+  };
+};
+
+function redirectToActiveLogin() {
+  localStorage.removeItem('token');
+  localStorage.removeItem('username');
+  localStorage.removeItem('role');
+  const loginUrl = new URL('/mantenimiento/', window.location.origin);
+  loginUrl.searchParams.set('loginRequired', '1');
+  loginUrl.searchParams.set('returnTo', `${location.pathname}${location.search}${location.hash}`);
+  window.location.replace(loginUrl.href);
+}
 
 async function request(path, options = {}) {
   const method = (options.method || 'GET').toUpperCase();
@@ -11,11 +25,15 @@ async function request(path, options = {}) {
   if (method !== 'GET') headers['X-Master-Password'] = $('masterPassword').value;
   let response;
   try {
-    response = await fetch(api(path), { ...options, headers });
+    response = await fetch(API_URL(path), { ...options, headers });
   } catch {
     throw new Error('No se pudo conectar con la API. Comprueba la URL, la conexión y que el backend esté disponible.');
   }
   const data = await response.json().catch(() => ({}));
+  if (response.status === 401 && data.error !== 'Clave maestra incorrecta') {
+    redirectToActiveLogin();
+    throw new Error('La sesión de administrador venció. Volviendo al inicio de sesión.');
+  }
   if (!response.ok) throw new Error(data.error || `Error HTTP ${response.status}`);
   if (method !== 'GET') $('masterPassword').value = '';
   return data;
@@ -98,36 +116,6 @@ function bindRows() {
   }));
 }
 
-$('loginButton').addEventListener('click', async () => {
-  setStatus('loginStatus', '');
-  try {
-    let response;
-    try {
-      response = await fetch(api('/api/auth/login'), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: $('loginUser').value.trim(), password: $('loginPassword').value }) });
-    } catch {
-      throw new Error('No se pudo conectar con la API. Comprueba la URL, la conexión y que el backend esté disponible.');
-    }
-    const data = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(data.error || 'No fue posible iniciar sesión');
-    if (data.role !== 'administrador') throw new Error('La cuenta debe tener rol administrador');
-    state.token = data.token;
-    $('loginPassword').value = '';
-    $('loginPanel').classList.add('hidden');
-    $('adminPanel').classList.remove('hidden');
-    setStatus('adminStatus', 'Sesión iniciada. Los listados no requieren clave maestra.', 'ok');
-    await loadAccounts();
-  } catch (error) {
-    setStatus('loginStatus', error.message, 'error');
-  }
-});
-
-$('logoutButton').addEventListener('click', () => {
-  state.token = '';
-  $('masterPassword').value = '';
-  clearForm();
-  $('adminPanel').classList.add('hidden');
-  $('loginPanel').classList.remove('hidden');
-});
 $('clearButton').addEventListener('click', clearForm);
 $('loadButton').addEventListener('click', loadAccounts);
 $('resetPasswordOpen').addEventListener('click', () => {
@@ -206,3 +194,8 @@ $('deleteButton').addEventListener('click', async () => {
 
 function escapeHtml(value) { return String(value).replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[character])); }
 setFormMode();
+if (localStorage.getItem('token') && localStorage.getItem('role') === 'administrador') {
+  $('adminPanel').classList.remove('hidden');
+  setStatus('adminStatus', 'Sesión de administrador activa.', 'ok');
+  loadAccounts();
+}

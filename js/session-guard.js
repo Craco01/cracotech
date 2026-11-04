@@ -18,6 +18,7 @@
   const editorMaintenanceRoutes = new Set([
     'fr172-puente-grua-formulario'
   ]);
+  const administratorMaintenanceRoutes = new Set(['administrar-usuarios']);
   const currentPath = window.location.pathname;
   const loginModal = document.getElementById('loginModal');
 
@@ -75,6 +76,11 @@
   if (isProtectedPath(currentPath, window.location.search)) {
     if (!localStorage.getItem('token')) {
       redirectToLogin(`${currentPath}${window.location.search}${window.location.hash}`);
+      return;
+    }
+    if (administratorMaintenanceRoutes.has(maintenanceRouteName(currentPath)) &&
+        localStorage.getItem('role') !== 'administrador') {
+      window.location.replace('/mantenimiento/');
       return;
     }
     if (requiresEditor(currentPath) && !canEdit()) {

@@ -2,7 +2,7 @@
 * { box-sizing: border-box; }
 body { margin: 0; color: var(--ink); font: 15px/1.45 Georgia, "Times New Roman", serif; background: linear-gradient(135deg, #e8e8e8, #fafafa 55%, #d7d7d7); min-height: 100vh; }
 main { width: min(1120px, calc(100% - 32px)); margin: 36px auto; }
-header { display: flex; justify-content: space-between; align-items: end; gap: 20px; margin-bottom: 24px; }
+main > .page-heading { display: flex; justify-content: space-between; align-items: end; gap: 20px; margin-bottom: 24px; }
 h1, h2 { margin: 0; letter-spacing: .01em; } h1 { font-size: clamp(28px, 5vw, 46px); } h2 { font-size: 21px; }
 .eyebrow { color: var(--accent); font: 700 12px/1.2 Arial, sans-serif; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 8px; }
 .subtle { color: var(--muted); margin: 7px 0 0; }
@@ -22,4 +22,4 @@ button.secondary { background: #dfe8e5; color: var(--ink); } button.danger { bac
 .reset-module { border-top: 1px solid var(--line); margin-top: 18px; padding-top: 18px; } .reset-module h3 { margin: 0; font-size: 17px; } .reset-module .subtle { margin-bottom: 14px; }
 .hidden { display: none; } .session { display: grid; grid-template-columns: 1fr 1fr auto; gap: 12px; align-items: end; }
 .badge { display: inline-block; border-radius: 999px; background: #e5efed; color: var(--accent-dark); padding: 3px 9px; font: 700 11px Arial, sans-serif; }
-@media (max-width: 700px) { main { width: min(100% - 20px, 560px); margin: 18px auto; } header { display: block; } .grid, .session { grid-template-columns: 1fr; } .panel { padding: 16px; } }
+@media (max-width: 700px) { main { width: min(100% - 20px, 560px); margin: 18px auto; } main > .page-heading { display: block; } .grid, .session { grid-template-columns: 1fr; } .panel { padding: 16px; } }
