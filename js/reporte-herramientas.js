@@ -99,7 +99,7 @@ function vTabla(l) {
   const v = (p, c) => c === 'herr' ? p.detalle.length : p[c];
   const o = [...l].sort((a, b) => { const x = v(a, orden.col), y = v(b, orden.col); return (x > y ? 1 : x < y ? -1 : 0) * orden.dir; });
   if (!o.length) return '<div class="vacio">No hay pedidos con estos filtros. Probá quitar alguno.</div>';
-  return `<div class="cont"><table><thead><tr>${cols.map(([c, t]) => `<th data-col="${c}" class="${orden.col === c ? (orden.dir > 0 ? 'asc' : 'desc') : ''}">${t}</th>`).join('')}</tr></thead><tbody>${
+  return `<div class="cont"><table><thead><tr>${cols.map(([c, t]) => `<th scope="col" data-col="${c}" tabindex="0" aria-sort="${orden.col === c ? (orden.dir > 0 ? 'ascending' : 'descending') : 'none'}" class="${orden.col === c ? (orden.dir > 0 ? 'asc' : 'desc') : ''}">${t}</th>`).join('')}</tr></thead><tbody>${
     o.map(p => `<tr tabindex="0" data-id="${p.id}"><td><b>${esc(p.ot_obra)}</b></td><td>${esc(p.puntero_asignado)}</td><td>${esc(p.solicitante)}</td><td>${esc(p.tipo_solicitud.split(' (')[0])}</td><td>${fFH(p.fecha_necesidad)}</td><td>${tagEstado(p.estado)}</td><td>${p.detalle.length} ${puntos(p)}</td></tr>`).join('')
   }</tbody></table></div>`;
 }
@@ -146,7 +146,13 @@ function render() {
   $('#nav').classList.toggle('oculto', vista === 'tabla');
   $('#nav .titulo')?.remove();
   if (vista !== 'tabla') $('#hoy').insertAdjacentHTML('beforebegin', `<span class="titulo">${titulo()}</span>`);
-  document.querySelectorAll('#tabs button').forEach(b => { b.classList.toggle('on', b.dataset.vista === vista); b.setAttribute('aria-selected', b.dataset.vista === vista); });
+  document.querySelectorAll('#tabs button').forEach(b => {
+    const selected = b.dataset.vista === vista;
+    b.classList.toggle('on', selected);
+    b.setAttribute('aria-selected', String(selected));
+    b.tabIndex = selected ? 0 : -1;
+  });
+  $('#vista').setAttribute('aria-labelledby', `tab-${vista}`);
   const ayudaEnvio = puedeGestionarEnvios() ? ' · Clic derecho sobre un pedido para registrar el envío' : '';
   $('#rango').textContent = `${l.length} pedidos · ordenados por fecha de necesidad${ayudaEnvio}${aviso}`;
 }
@@ -166,7 +172,7 @@ function detalle(id) {
     <dt>Fecha de necesidad</dt><dd>${fFH(p.fecha_necesidad)}</dd><dt>Registrado</dt><dd>${fFH(p.fecha_registro)}</dd>
     <dt>Entrega</dt><dd>${fFH(p.fecha_entrega)}</dd><dt>Envío</dt><dd>${requiereFechaEnvio(p.estado) ? fFH(p.fecha_envio) : '—'}</dd>
     <dt>Observaciones</dt><dd>${esc(p.observaciones) || '—'}</dd></dl>
-    <table><thead><tr><th>Herramienta</th><th>Cant.</th><th>Unidad</th><th>Estado</th><th>Nota</th></tr></thead><tbody>${
+    <table><thead><tr><th scope="col">Herramienta</th><th scope="col">Cant.</th><th scope="col">Unidad</th><th scope="col">Estado</th><th scope="col">Nota</th></tr></thead><tbody>${
       p.detalle.map(d => `<tr><td>${esc(d.herramienta)}</td><td>${d.cantidad}</td><td>${esc(d.unidad_medida) || '—'}</td><td>${tagHerr(d.estado_herramienta)}</td><td>${esc(d.observacion) || '—'}</td></tr>`).join('')
     }</tbody></table></div>`;
   $('#modal').showModal();
@@ -225,7 +231,7 @@ function abrirModalEnvio(pedidoId) {
       <dt id="fechaEnvioEtiqueta"${mostrarFechaEnvio ? '' : ' hidden'}>Fecha de envío</dt>
       <dd id="fechaEnvioCampo"${mostrarFechaEnvio ? '' : ' hidden'}><input id="fechaEnvio" name="fechaEnvio" type="datetime-local" value="${mostrarFechaEnvio ? valorFechaLocal(pedido.fecha_envio) : ''}"${mostrarFechaEnvio ? ' required' : ''}></dd>
       <dt>Observaciones</dt><dd>${esc(pedido.observaciones) || '—'}</dd></dl>
-      <div class="cont"><table><thead><tr><th>Herramienta</th><th>Cant.</th><th>Unidad</th><th>Estado</th><th>Nota</th></tr></thead>
+      <div class="cont"><table><thead><tr><th scope="col">Herramienta</th><th scope="col">Cant.</th><th scope="col">Unidad</th><th scope="col">Estado</th><th scope="col">Nota</th></tr></thead>
       <tbody>${detalle}</tbody></table></div>
       <p id="mensajeEnvio" role="alert" aria-live="polite"></p>
     </form>
@@ -313,6 +319,18 @@ function init() {
     `<option value="${esc(estado)}">${esc(etiquetaEstadoHerr(estado))}</option>`
   ).join(''));
   $('#tabs').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { vista = b.dataset.vista; render(); } });
+  $('#tabs').addEventListener('keydown', e => {
+    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
+    const tabs = [...$('#tabs').querySelectorAll('[role="tab"]')];
+    const index = tabs.indexOf(e.target);
+    if (index < 0) return;
+    e.preventDefault();
+    const next = e.key === 'Home' ? 0 : e.key === 'End' ? tabs.length - 1 :
+      (index + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length;
+    tabs[next].focus();
+    vista = tabs[next].dataset.vista;
+    render();
+  });
   $('#prev').onclick = () => mover(-1); $('#next').onclick = () => mover(1);
   $('#hoy').onclick = () => { ref = new Date(); ref.setHours(0, 0, 0, 0); render(); };
   ['#q', '#fEstado', '#fTipo', '#fHerr'].forEach(s => $(s).addEventListener('input', render));
@@ -329,6 +347,14 @@ function init() {
     abrirModalEnvio(el.dataset.id);
   });
   $('#vista').addEventListener('keydown', e => { const tr = e.target.closest('tr[data-id]'); if (tr && e.key === 'Enter') detalle(tr.dataset.id); });
+  $('#vista').addEventListener('keydown', e => {
+    const th = e.target.closest('th[data-col]');
+    if (!th || !['Enter', ' '].includes(e.key)) return;
+    e.preventDefault();
+    orden = { col: th.dataset.col, dir: orden.col === th.dataset.col ? -orden.dir : 1 };
+    render();
+    $('#vista th[data-col="' + CSS.escape(orden.col) + '"]')?.focus();
+  });
   $('#modal').addEventListener('click', e => {
     if (e.target.id === 'modal' || e.target.id === 'cerrar') $('#modal').close();
   });

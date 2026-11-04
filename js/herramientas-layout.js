@@ -56,7 +56,8 @@
     </nav>
     <div class="tools-banner">
       <div class="tools-banner-inner">
-        <div class="tools-brand-mark" aria-hidden="true">MV</div>
+        <img class="tools-brand-mark" src="${new URL('img/Logo_MV_obra.png', frontendRoot).pathname}"
+          alt="Logotipo de Metalúrgica Vera S.A.E." width="76" height="76" decoding="async">
         <div class="tools-banner-copy">
           <p>GESTIÓN OPERATIVA</p>
           <h1>Herramientas · Metalúrgica Vera S.A.E.</h1>

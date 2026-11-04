@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Reporte de pedidos de herramientas</title>
+<link rel="icon" href="../../img/Logo_MV_obra.png" type="image/png">
 <link rel="stylesheet" href="../../css/reporte-herramientas.css">
 <link rel="stylesheet" href="../../css/herramientas-layout.css">
 </head>
@@ -19,15 +20,15 @@
   <section class="barra card" aria-label="Filtros y navegación del reporte">
     <div class="controles">
       <div class="tabs" role="tablist" id="tabs" aria-label="Vista del reporte">
-        <button type="button" role="tab" data-vista="tabla" class="on">Tabla</button>
-        <button type="button" role="tab" data-vista="mes">Mes</button>
-        <button type="button" role="tab" data-vista="semana">Semana</button>
-        <button type="button" role="tab" data-vista="dia">Día</button>
+        <button type="button" role="tab" id="tab-tabla" aria-controls="vista" aria-selected="true" tabindex="0" data-vista="tabla" class="on">Tabla</button>
+        <button type="button" role="tab" id="tab-mes" aria-controls="vista" aria-selected="false" tabindex="-1" data-vista="mes">Mes</button>
+        <button type="button" role="tab" id="tab-semana" aria-controls="vista" aria-selected="false" tabindex="-1" data-vista="semana">Semana</button>
+        <button type="button" role="tab" id="tab-dia" aria-controls="vista" aria-selected="false" tabindex="-1" data-vista="dia">Día</button>
       </div>
       <div class="nav" id="nav">
-        <button type="button" id="prev" aria-label="Anterior">‹</button>
+        <button type="button" id="prev" aria-label="Periodo anterior">‹</button>
         <button type="button" id="hoy">Hoy</button>
-        <button type="button" id="next" aria-label="Siguiente">›</button>
+        <button type="button" id="next" aria-label="Periodo siguiente">›</button>
       </div>
     </div>
     <div class="filtros">
@@ -38,7 +39,7 @@
     </div>
   </section>
 
-  <main id="vista" class="card" aria-live="polite"></main>
+  <main id="vista" class="card" role="tabpanel" tabindex="0" aria-labelledby="tab-tabla" aria-live="polite"></main>
 
 <dialog id="modal"><div id="modalBody"></div></dialog>
 <dialog id="modalEnvio"><div id="modalEnvioBody"></div></dialog>

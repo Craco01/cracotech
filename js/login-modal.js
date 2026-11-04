@@ -143,6 +143,8 @@ function renderNav() {
   const token = localStorage.getItem('token');
   const username = localStorage.getItem('username');
   const role = localStorage.getItem('role');
+  const adminUsersNavItem = document.getElementById('adminUsersNavItem');
+  if (adminUsersNavItem) adminUsersNavItem.hidden = role !== 'administrador';
   if (token && username) {
     const changePasswordItem = role !== 'viewer'
       ? '<li><button type="button" id="changePasswordButton" class="nav-user-item">Cambiar contrase\u00f1a</button></li>'
@@ -197,6 +199,14 @@ loginModal.addEventListener('click', event => {
 });
 document.addEventListener('click', () => closeUserMenu());
 document.addEventListener('keydown', event => {
+  if (event.ctrlKey && event.shiftKey && !event.altKey && !event.metaKey && event.key.toLowerCase() === 'u') {
+    event.preventDefault();
+    const target = '/mantenimiento/administrar-usuarios/';
+    if (window.location.pathname.replace(/\/+$/, '') !== target.replace(/\/+$/, '')) {
+      window.location.assign(target);
+    }
+    return;
+  }
   if (event.key === 'Escape' && loginModal.classList.contains('is-visible')) closeLoginModal();
   if (event.key === 'Escape') {
     const passwordModal = document.getElementById('changePasswordModal');

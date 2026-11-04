@@ -86,8 +86,8 @@
         <td>${escapeHtml(user.ultimo_acceso || '—')}</td>
         <td>
           <div class="user-actions">
-            <button class="table-action" type="button" data-edit="${Number(user.id)}">Editar</button>
-            <button class="table-action danger" type="button" data-delete="${Number(user.id)}">Eliminar</button>
+            <button class="table-action" type="button" data-edit="${Number(user.id)}" aria-label="Editar a ${escapeHtml(user.nombre)}">Editar</button>
+            <button class="table-action danger" type="button" data-delete="${Number(user.id)}" aria-label="Eliminar a ${escapeHtml(user.nombre)}">Eliminar</button>
           </div>
         </td>
       </tr>

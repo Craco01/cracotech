@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#374151">
   <title>Administrar usuarios | Herramientas</title>
+  <link rel="icon" href="../../img/Logo_MV_obra.png" type="image/png">
   <link rel="stylesheet" href="../../css/herramientas-layout.css">
   <link rel="stylesheet" href="../../css/site-dialogs.css">
   <link rel="stylesheet" href="../../css/usuarios.css">
@@ -17,7 +18,7 @@
         <h1>Usuarios</h1>
         <p>Crear, actualizar y eliminar cuentas de Herramientas.</p>
       </div>
-      <a class="users-back" href="../index.html">Volver al panel</a>
+      <a class="users-back" href="../index.html">Volver al panel principal</a>
     </header>
 
     <section class="users-card" id="adminGate" aria-live="polite">
@@ -99,15 +100,16 @@
         </div>
         <div class="users-table-wrap">
           <table>
+            <caption class="sr-only">Cuentas de Herramientas registradas</caption>
             <thead>
               <tr>
-                <th>Nombre</th>
-                <th>Usuario</th>
-                <th>Correo</th>
-                <th>Rol</th>
-                <th>Estado</th>
-                <th>Último acceso</th>
-                <th>Acciones</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Usuario</th>
+                <th scope="col">Correo</th>
+                <th scope="col">Rol</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Último acceso</th>
+                <th scope="col">Acciones</th>
               </tr>
             </thead>
             <tbody id="usersTable"></tbody>

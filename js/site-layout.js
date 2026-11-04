@@ -26,6 +26,7 @@
               <li><a href="${maintenanceRoot}#form-adds">Formularios</a></li>
               <li><a href="${maintenanceRoot}proyectos/">Proyectos</a></li>
               <li><a href="${maintenanceRoot}#contacto">Contacto</a></li>
+              <li id="adminUsersNavItem" hidden><a href="${maintenanceRoot}administrar-usuarios/">Usuarios</a></li>
               <li><a href="/">Autor</a></li>
             </ul>
             <div id="nav-login"></div>
@@ -80,6 +81,14 @@
     }
 
     const loginDialog = document.getElementById('loginModal');
+    const syncAdminUsersLink = () => {
+      const item = document.getElementById('adminUsersNavItem');
+      if (item) item.hidden = localStorage.getItem('role') !== 'administrador';
+    };
+    syncAdminUsersLink();
+    window.addEventListener('storage', event => {
+      if (event.key === 'role' || event.key === null) syncAdminUsersLink();
+    });
     if (loginDialog && window.MutationObserver) {
       const syncLoginDialogState = () => {
         const isOpen = loginDialog.classList.contains('is-visible');

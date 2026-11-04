@@ -97,7 +97,8 @@ header {
         line-height: 1.4;
     }
     .logo img {
-        width: 200px;   /* más chico en móviles */
+        width: min(120px, 100%);
+        max-width: 120px;
         height: auto;
     }
 }
@@ -142,6 +143,10 @@ header {
     align-items: center;
     height: 48px;
     padding: 0 6px;
+}
+
+.list-bar [hidden] {
+  display: none !important;
 }
 #nav-login {
     display: inline-flex;

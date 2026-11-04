@@ -329,18 +329,11 @@
 }
 
 .tools-brand-mark {
-  display: grid;
-  width: 76px;
-  height: 76px;
-  flex: 0 0 76px;
-  place-items: center;
-  border: 2px solid #9ca3af;
-  border-radius: 12px;
-  background: #374151;
-  color: #fff;
-  font-size: 24px;
-  font-weight: 800;
-  letter-spacing: 1px;
+  display: block;
+  width: 160px;
+  height: auto;
+  flex: 0 0 160px;
+  object-fit: contain;
 }
 
 .tools-auth-modal {
@@ -611,11 +604,9 @@
   }
 
   .tools-brand-mark {
-    width: 58px;
-    height: 58px;
-    flex-basis: 58px;
-    border-radius: 10px;
-    font-size: 20px;
+    width: min(120px, 100%);
+    height: auto;
+    flex-basis: min(120px, 100%);
   }
 
   .tools-banner-copy h1 {
