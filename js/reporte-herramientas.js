@@ -94,13 +94,13 @@ function evBtn(p, conHora = true) {
 }
 
 function vTabla(l) {
-  const cols = [['ot_obra', 'OT / Obra'], ['puntero_asignado', 'Puntero'], ['solicitante', 'Solicitante'], ['tipo_solicitud', 'Tipo'],
+  const cols = [['id', 'ID'], ['ot_obra', 'OT / Obra'], ['puntero_asignado', 'Puntero'], ['solicitante', 'Solicitante'], ['tipo_solicitud', 'Tipo'],
     ['fecha_necesidad', 'Necesidad'], ['estado', 'Estado'], ['herr', 'Herramientas']];
   const v = (p, c) => c === 'herr' ? p.detalle.length : p[c];
   const o = [...l].sort((a, b) => { const x = v(a, orden.col), y = v(b, orden.col); return (x > y ? 1 : x < y ? -1 : 0) * orden.dir; });
   if (!o.length) return '<div class="vacio">No hay pedidos con estos filtros. Probá quitar alguno.</div>';
   return `<div class="cont"><table><thead><tr>${cols.map(([c, t]) => `<th scope="col" data-col="${c}" tabindex="0" aria-sort="${orden.col === c ? (orden.dir > 0 ? 'ascending' : 'descending') : 'none'}" class="${orden.col === c ? (orden.dir > 0 ? 'asc' : 'desc') : ''}">${t}</th>`).join('')}</tr></thead><tbody>${
-    o.map(p => `<tr tabindex="0" data-id="${p.id}"><td><b>${esc(p.ot_obra)}</b>${p.nombre_obra ? `<br><small>${esc(p.nombre_obra)}</small>` : ''}</td><td>${esc(p.puntero_asignado)}</td><td>${esc(p.solicitante)}</td><td>${esc(p.tipo_solicitud.split(' (')[0])}</td><td>${fFH(p.fecha_necesidad)}</td><td>${tagEstado(p.estado)}</td><td>${p.detalle.length} ${puntos(p)}</td></tr>`).join('')
+    o.map(p => `<tr tabindex="0" data-id="${p.id}"><td><b>${p.id}</b></td><td><b>${esc(p.ot_obra)}</b>${p.nombre_obra ? `<br><small>${esc(p.nombre_obra)}</small>` : ''}</td><td>${esc(p.puntero_asignado)}</td><td>${esc(p.solicitante)}</td><td>${esc(p.tipo_solicitud.split(' (')[0])}</td><td>${fFH(p.fecha_necesidad)}</td><td>${tagEstado(p.estado)}</td><td>${p.detalle.length} ${puntos(p)}</td></tr>`).join('')
   }</tbody></table></div>`;
 }
 
