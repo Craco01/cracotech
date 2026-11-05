@@ -42,7 +42,7 @@
   }
 
   function canEdit() {
-    return ['editor', 'administrador'].includes(localStorage.getItem('role'));
+    return ['editor', 'supervisor', 'administrador'].includes(localStorage.getItem('role'));
   }
 
   function getProtectedTarget(value) {

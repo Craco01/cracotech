@@ -4,7 +4,7 @@
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
   let rol = localStorage.getItem('role');
-  let puedeEditar = ['editor', 'administrador'].includes(rol);
+  let puedeEditar = ['editor', 'supervisor', 'administrador'].includes(rol);
   let tieneSesion = Boolean(localStorage.getItem('token'));
   const form = $('#ficha');
   const aviso = $('#guardado');
@@ -196,7 +196,7 @@
   function guardarYa({ comoBorrador = false } = {}) {
     clearTimeout(temporizador);
     FR172.guardar(est);
-    if (!tieneSesion || !puedeEditar) return Promise.reject(new Error('Se requiere sesión de editor o administrador.'));
+    if (!tieneSesion || !puedeEditar) return Promise.reject(new Error('Se requiere sesión de editor, supervisor o administrador.'));
     const payload = contenidoParaGuardar();
     if (comoBorrador && estadoFicha === 'finalizada') payload.estado = 'borrador';
     colaGuardado = colaGuardado.catch(() => {}).then(async () => {
@@ -357,7 +357,7 @@
         }
         throw new Error(session.error || 'No se pudo validar la sesión.');
       }
-      if (!['editor', 'administrador'].includes(session.role)) {
+      if (!['editor', 'supervisor', 'administrador'].includes(session.role)) {
         location.replace('/mantenimiento/reportes/?vista=fr172&accessDenied=1');
         return;
       }

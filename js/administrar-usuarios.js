@@ -100,7 +100,7 @@ function bindRows() {
     row.classList.add('selected');
     $('username').value = row.dataset.username;
     const role = row.children[1].textContent.trim();
-    $('role').value = ['viewer', 'editor', 'administrador'].includes(role) ? role : 'viewer';
+    $('role').value = ['viewer', 'editor', 'supervisor', 'administrador'].includes(role) ? role : 'viewer';
     $('employeeName').value = row.children[2].querySelector('.badge') ? '' : row.children[2].textContent.trim();
     $('employeeCi').value = row.dataset.ci;
     $('employeeLegajo').value = row.dataset.legajo;
