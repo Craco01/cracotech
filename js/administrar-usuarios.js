@@ -45,7 +45,7 @@ function setFormMode() {
   $('employeeName').required = !hasAccount;
   $('password').required = !hasAccount;
   $('passwordConfirm').required = !hasAccount;
-  $('passwordHint').textContent = hasAccount ? 'Opcional al editar; 3 a 9 caracteres alfanuméricos' : 'Obligatoria; 3 a 9 caracteres alfanuméricos';
+  $('passwordHint').textContent = hasAccount ? 'Opcional al editar; vacia el campo para conservarla' : 'Obligatoria al crear; 3 a 9 caracteres alfanumericos';
   $('saveButton').textContent = state.selected ? (hasAccount ? 'Actualizar cuenta y empleado' : 'Crear cuenta vinculada') : 'Crear cuenta y empleado';
   $('deleteButton').disabled = !state.selected;
   $('resetPasswordOpen').disabled = !hasAccount;
