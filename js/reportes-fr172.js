@@ -5,7 +5,7 @@
   const body = document.getElementById('fr172Body');
   const status = document.getElementById('fr172Estado');
   const search = document.getElementById('fr172Buscador');
-  const canEdit = ['editor', 'administrador'].includes(localStorage.getItem('role'));
+  const canEdit = ['editor', 'supervisor', 'administrador'].includes(localStorage.getItem('role'));
   const accessDenied = new URLSearchParams(location.search).get('accessDenied') === '1';
   let fichas = [];
 
