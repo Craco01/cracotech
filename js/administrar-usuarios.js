@@ -69,7 +69,7 @@ function renderAccount(account) {
   const employeeId = account.employeeId ?? '';
   const conflict = Boolean(account.linkConflict);
   const userLabel = account.userId ? escapeHtml(account.username) : '<span class="badge">Sin cuenta</span>';
-  const employeeLabel = account.employeeId ? escapeHtml(account.nombre_apellido || '') : '<span class="subtle">Sin empleado</span>';
+  const employeeLabel = account.employeeId ? escapeHtml(account.nombre_apellido || '') : '<span class="unlinked-label">Sin empleado</span>';
   const linkLabel = conflict ? 'Vínculo duplicado' : account.userId && account.employeeId ? 'Vinculados' : account.userId ? 'Sin empleado' : 'Sin cuenta';
   const rowClass = conflict ? ' class="conflict-row"' : '';
   const title = conflict ? 'Varios empleados comparten este usuario; corrige la relación en la base de datos.' : '';

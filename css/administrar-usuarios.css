@@ -86,6 +86,7 @@ table { width: 100%; min-width: 620px; border-collapse: collapse; background: #f
 th, td { padding: 12px 13px; border-bottom: 1px solid #e8efec; text-align: left; vertical-align: top; }
 th { background: #f5f8f7; color: #65756f; font-size: 11px; font-weight: 750; letter-spacing: .07em; text-transform: uppercase; }
 tbody tr:last-child td { border-bottom: 0; }
+#accountsBody .unlinked-label { display: inline-block; max-width: 100%; color: var(--admin-muted); font-size: inherit; line-height: inherit; white-space: nowrap; }
 #accountsBody tr[data-user-id] { cursor: pointer; }
 #accountsBody tr[data-user-id]:hover { background: #f1f8f5; }
 #accountsBody tr.conflict-row { background: #fff7e4; color: #654b16; cursor: not-allowed; }
