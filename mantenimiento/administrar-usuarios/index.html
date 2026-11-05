@@ -20,11 +20,11 @@
     <div style="display:flex;justify-content:space-between;gap:12px;align-items:start;flex-wrap:wrap"><div><h2 id="adminPanelTitle">Cuenta y empleado</h2><p class="subtle">Una operación guarda ambos registros. El usuario de la cuenta se sincroniza con empleados.user.</p></div></div>
     <form id="accountForm">
       <div class="grid">
-        <label>Usuario<input id="username" maxlength="50" required autocomplete="off"></label>
+        <label>Usuario<input id="username" maxlength="50" autocomplete="off"></label>
         <label>Rol<select id="role" required><option value="viewer">viewer</option><option value="editor">editor</option><option value="supervisor">supervisor</option><option value="administrador">administrador</option></select><span class="subtle">Selecciona una cuenta del listado para cambiar su rol y luego guarda los cambios.</span></label>
-        <label>Contraseña <span class="subtle" id="passwordHint">Obligatoria; 3 a 9 caracteres alfanuméricos</span><input id="password" type="password" minlength="3" maxlength="9" pattern="[A-Za-z0-9]{3,9}" autocomplete="new-password" required></label>
-        <label>Confirmar contraseña<input id="passwordConfirm" type="password" minlength="3" maxlength="9" pattern="[A-Za-z0-9]{3,9}" autocomplete="new-password" required></label>
-        <label>Nombre y apellido<input id="employeeName" maxlength="255" required></label>
+        <label>Contraseña <span class="subtle" id="passwordHint">Obligatoria; 3 a 9 caracteres alfanuméricos</span><input id="password" type="password" minlength="3" maxlength="9" pattern="[A-Za-z0-9]{3,9}" autocomplete="new-password"></label>
+        <label>Confirmar contraseña<input id="passwordConfirm" type="password" minlength="3" maxlength="9" pattern="[A-Za-z0-9]{3,9}" autocomplete="new-password"></label>
+        <label>Nombre y apellido<input id="employeeName" maxlength="255"></label>
         <label>CI<input id="employeeCi" type="number" step="1"></label>
         <label>Legajo<input id="employeeLegajo" type="number" step="1"></label>
         <label>Cargo<input id="employeeCargo" maxlength="100"></label>

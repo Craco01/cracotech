@@ -41,6 +41,8 @@ async function request(path, options = {}) {
 
 function setFormMode() {
   const hasAccount = Boolean(state.selected?.userId);
+  $('username').required = !hasAccount;
+  $('employeeName').required = !hasAccount;
   $('password').required = !hasAccount;
   $('passwordConfirm').required = !hasAccount;
   $('passwordHint').textContent = hasAccount ? 'Opcional al editar; 3 a 9 caracteres alfanuméricos' : 'Obligatoria; 3 a 9 caracteres alfanuméricos';
