@@ -166,7 +166,21 @@
   width: auto;
   min-height: 36px;
   padding: 8px 10px;
+  border: 1px solid #0f7a32;
+  border-radius: 6px;
+  background: #0f7a32;
+  color: #fff;
   white-space: nowrap;
+}
+
+#tablaHabilitaciones .habilitaciones-accion:hover:not(:disabled) {
+  background: #075c24;
+  border-color: #075c24;
+}
+
+#tablaHabilitaciones .habilitaciones-accion:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 #tablaHabilitaciones .habilitaciones-accion--borrar {
