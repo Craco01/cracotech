@@ -34,7 +34,9 @@ async function cargarProductos() {
     productos = data;
 
     const tablaBody = document.getElementById('tablaBody');
-    if (tablaBody && tablaBody.querySelectorAll('tr').length === 0) agregarFila();
+    if (tablaBody && tablaBody.querySelectorAll('tr').length === 0) {
+      agregarFila();
+    }
     recalcularTotal();
 
     const submitButton = document.querySelector('form[data-habilitacion="true"] button[type="submit"]');
@@ -161,11 +163,15 @@ function crearBuscador(onSelect) {
   return { contenedor, buscador };
 }
 
-function agregarFila() {
+function agregarFila(prefill = null) {
   const tablaBody = document.getElementById('tablaBody');
   if (!tablaBody) return;
   const filasActuales = tablaBody.querySelectorAll('tr').length;
   if (filasActuales >= maxFilas) return;
+  if (!prefill && filasActuales === 0 && document.querySelector('form[data-habilitacion="true"]')) {
+    const productoVarios = productos.find(producto => String(producto.codigo) === '4125');
+    if (productoVarios) prefill = { producto: productoVarios, cantidad: 1 };
+  }
 
   const fila = document.createElement('tr');
 
@@ -232,6 +238,17 @@ function agregarFila() {
   fila.appendChild(document.createElement('td')).appendChild(removeBtn);
 
   tablaBody.appendChild(fila);
+  if (prefill?.producto) {
+    const producto = prefill.producto;
+    fila.dataset.productoCodigo = producto.codigo;
+    buscador.value = `${producto.codigo} - ${producto.descripcion}`;
+    inputCantidad.value = String(prefill.cantidad || 1);
+    const precio = Number(producto.precio_compra) || 0;
+    costoUnitario.value = formatearNumero(precio);
+    total.value = formatearNumero((Number(inputCantidad.value) || 0) * precio);
+    recalcularTotal();
+    actualizarComparacionProducto();
+  }
 }
 
 function agregarFilaSiNecesaria() {

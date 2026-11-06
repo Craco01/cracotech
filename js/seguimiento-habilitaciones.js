@@ -146,14 +146,17 @@
 
     const puedeActualizar = ['supervisor', 'administrador'].includes(localStorage.getItem('role'));
     const estaHabilitado = String(orden.habilitado || 'no').trim().toLowerCase() === 'si';
-    const statusCell = crearCelda(estaHabilitado ? 'Sí' : 'No');
+    const statusCell = crearCelda(estaHabilitado ? 'Habilitado' : 'No habilitado');
+    if (estaHabilitado) statusCell.classList.add('habilitaciones-estado--habilitado');
+    else statusCell.classList.add('habilitaciones-estado--no-habilitado');
     const actionCell = document.createElement('td');
-    const habilitarButton = document.createElement('button');
-    habilitarButton.type = 'button';
-    habilitarButton.className = 'habilitaciones-accion';
-    habilitarButton.textContent = 'Habilitar';
-    habilitarButton.disabled = !puedeActualizar || estaHabilitado;
-    habilitarButton.addEventListener('click', async () => {
+    if (puedeActualizar) {
+      const habilitarButton = document.createElement('button');
+      habilitarButton.type = 'button';
+      habilitarButton.className = 'habilitaciones-accion';
+      habilitarButton.textContent = 'Habilitar';
+      habilitarButton.disabled = estaHabilitado;
+      habilitarButton.addEventListener('click', async () => {
       if (!await window.siteDialog.confirm('¿Habilito este pedido?', { acceptText: 'Sí', cancelText: 'No' })) return;
       habilitarButton.disabled = true;
       try {
@@ -165,17 +168,41 @@
         const result = await response.json();
         if (!response.ok) throw new Error(result.detalle || result.error || 'No se pudo actualizar el estado.');
         orden.habilitado = result.habilitado;
-        statusCell.textContent = 'Sí';
+        statusCell.textContent = 'Habilitado';
+        statusCell.classList.add('habilitaciones-estado--habilitado');
         state.textContent = `Orden ${orden.id} habilitada.`;
         await window.siteDialog.alert(`El pedido ${orden.id} quedó habilitado.`);
       } catch (error) {
         state.textContent = error.message;
         console.error('Error al actualizar el estado de habilitación:', error);
         await window.siteDialog.alert(error.message);
-        habilitarButton.disabled = !puedeActualizar || String(orden.habilitado || 'no').trim().toLowerCase() === 'si';
+        habilitarButton.disabled = String(orden.habilitado || 'no').trim().toLowerCase() === 'si';
       }
-    });
-    actionCell.appendChild(habilitarButton);
+      });
+      actionCell.appendChild(habilitarButton);
+    }
+    if (puedeActualizar) {
+      const borrarButton = document.createElement('button');
+      borrarButton.type = 'button';
+      borrarButton.className = 'habilitaciones-accion habilitaciones-accion--borrar';
+      borrarButton.textContent = 'Borrar';
+      borrarButton.addEventListener('click', async () => {
+        if (!await window.siteDialog.confirm('¿Borro el costeo de repuestos de esta orden?', { acceptText: 'Borrar', cancelText: 'Cancelar' })) return;
+        borrarButton.disabled = true;
+        try {
+          const response = await API_FETCH(`/api/ordenes/habilitacion/${encodeURIComponent(orden.id)}/repuestos`, { method: 'DELETE' });
+          const result = await response.json();
+          if (!response.ok) throw new Error(result.detalle || result.error || 'No se pudo borrar el costeo.');
+          state.textContent = `Costeo de la orden ${orden.id} borrado.`;
+          await cargarHabilitaciones({ page: currentPage });
+        } catch (error) {
+          state.textContent = error.message;
+          await window.siteDialog.alert(error.message);
+          borrarButton.disabled = false;
+        }
+      });
+      actionCell.appendChild(borrarButton);
+    }
     row.append(statusCell, actionCell);
     return row;
   }
