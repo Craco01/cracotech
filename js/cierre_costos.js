@@ -248,6 +248,7 @@ function agregarFila(prefill = null) {
     total.value = formatearNumero((Number(inputCantidad.value) || 0) * precio);
     recalcularTotal();
     actualizarComparacionProducto();
+    agregarFilaSiNecesaria();
   }
 }
 
