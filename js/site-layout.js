@@ -48,6 +48,7 @@
             <form id="loginForm">
               <label for="user">Usuario:</label>
               <input type="text" id="user" name="user" autocomplete="username" required>
+              <label class="remember-user" for="rememberUser"><input type="checkbox" id="rememberUser" name="rememberUser"> Recordar usuario</label>
               <label for="password">Contraseña:</label>
               <input type="password" id="password" name="password" autocomplete="current-password" required>
               <button type="submit">Iniciar sesión</button>

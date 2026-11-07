@@ -12,13 +12,17 @@ formLogin.addEventListener('submit', async event => {
   event.preventDefault();
   mensajeLogin.textContent = '';
   btnIngresar.disabled = true;
+  const username = document.getElementById('username').value.trim();
+  const rememberUser = document.getElementById('toolsRememberUser').checked;
+  if (rememberUser) localStorage.setItem('herramientas_usuario_recordado', username);
+  else localStorage.removeItem('herramientas_usuario_recordado');
 
   try {
     const response = await API_FETCH('/api/auth/login', {
       method: 'POST',
       headers: API_JSON_HEADERS,
       body: JSON.stringify({
-        username: document.getElementById('username').value.trim(),
+        username,
         password: document.getElementById('password').value
       })
     });

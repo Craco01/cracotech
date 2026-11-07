@@ -3,6 +3,10 @@ const loginModal = document.getElementById('loginModal');
 const closeModal = document.getElementById('closeLoginModal');
 const form = document.getElementById('loginForm');
 const mensaje = document.getElementById('loginMensaje');
+const rememberedUserKey = 'mantenimiento_usuario_recordado';
+const rememberedUser = localStorage.getItem(rememberedUserKey) || '';
+document.getElementById('user').value = rememberedUser;
+document.getElementById('rememberUser').checked = Boolean(rememberedUser);
 let loginTrigger = null;
 let passwordTrigger = null;
 
@@ -112,6 +116,8 @@ function closeLoginModal() {
   loginModal.classList.remove('is-visible');
   loginModal.setAttribute('aria-hidden', 'true');
   form.reset();
+  document.getElementById('user').value = localStorage.getItem(rememberedUserKey) || '';
+  document.getElementById('rememberUser').checked = Boolean(localStorage.getItem(rememberedUserKey));
   sessionStorage.removeItem('postLoginRedirect');
   loginTrigger?.setAttribute('aria-expanded', 'false');
   loginTrigger?.focus();
@@ -216,8 +222,11 @@ document.addEventListener('keydown', event => {
 });
 form.addEventListener('submit', async event => {
   event.preventDefault();
+  const username = document.getElementById('user').value.trim();
+  if (document.getElementById('rememberUser').checked) localStorage.setItem(rememberedUserKey, username);
+  else localStorage.removeItem(rememberedUserKey);
   try {
-    const res = await API_FETCH('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: document.getElementById('user').value, password: document.getElementById('password').value }) });
+    const res = await API_FETCH('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, password: document.getElementById('password').value }) });
     const data = await res.json();
     if (!res.ok) {
       if (res.status === 401) {

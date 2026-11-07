@@ -77,6 +77,7 @@
           <label for="username">Usuario</label>
           <input type="text" id="username" name="username" autocomplete="username"
             placeholder="Usuario" maxlength="30" required>
+          <label class="tools-remember-user" for="toolsRememberUser"><input type="checkbox" id="toolsRememberUser" name="rememberUser"> Recordar usuario</label>
           <label for="password">Contraseña</label>
           <input type="password" id="password" name="password" autocomplete="current-password" required>
           <p id="mensajeLogin" role="alert" aria-live="polite"></p>
@@ -119,6 +120,11 @@
   const modal = shell.querySelector('#toolsAuthModal');
   const passwordModal = shell.querySelector('#toolsPasswordModal');
   const authContainer = shell.querySelector('#toolsNavAuth');
+  const rememberedToolsUserKey = 'herramientas_usuario_recordado';
+  const usernameInput = modal.querySelector('#username');
+  const rememberUser = modal.querySelector('#toolsRememberUser');
+  usernameInput.value = localStorage.getItem(rememberedToolsUserKey) || '';
+  rememberUser.checked = Boolean(usernameInput.value);
   const closeNav = () => {
     nav.classList.remove('is-open');
     toggle.setAttribute('aria-expanded', 'false');
@@ -197,6 +203,8 @@
     modal.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('tools-modal-open');
     modal.querySelector('#formLogin').reset();
+    usernameInput.value = localStorage.getItem(rememberedToolsUserKey) || '';
+    rememberUser.checked = Boolean(usernameInput.value);
     modal.querySelector('#mensajeLogin').textContent = '';
     const trigger = authContainer.querySelector('#toolsLoginTrigger');
     trigger?.setAttribute('aria-expanded', 'false');

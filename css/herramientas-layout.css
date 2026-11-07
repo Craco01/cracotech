@@ -443,6 +443,23 @@
   border-color: var(--accent);
 }
 
+.tools-auth-card label.tools-remember-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 16px;
+  font-size: .95rem;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.tools-auth-card label.tools-remember-user input {
+  width: 18px;
+  min-height: 18px;
+  height: 18px;
+  margin: 0;
+}
+
 .tools-auth-card form > button[type="submit"] {
   min-height: 42px;
   margin-top: 8px;

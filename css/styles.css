@@ -2305,6 +2305,23 @@ padding: 0 0 20px 0;
   font-family: Arial, Helvetica, sans-serif;
 }
 
+.login-modal-content label.remember-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 16px;
+  font-size: .95rem;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.login-modal-content label.remember-user input {
+  width: 18px;
+  min-height: 18px;
+  height: 18px;
+  margin: 0;
+}
+
 .login-modal-content input {
   display: block;
   width: 100%;
