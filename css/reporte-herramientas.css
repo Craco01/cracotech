@@ -920,12 +920,42 @@ dialog::backdrop {
   display: none;
 }
 
+body.imprimiendo-reporte .container > :not(#impresion) {
+  display: none !important;
+}
+
+body.imprimiendo-reporte .container > #impresion {
+  display: block !important;
+}
+
 @page {
   size: A4 landscape;
   margin: 10mm;
 }
 
 @media print {
+  html body > * {
+    display: none !important;
+  }
+
+  html body > .container {
+    display: block !important;
+  }
+
+  html body > .container > :not(#impresion) {
+    display: none !important;
+  }
+
+  html body > .container > #impresion {
+    display: block !important;
+    position: static !important;
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    visibility: visible !important;
+  }
+
   html,
   body {
     width: auto;
@@ -971,9 +1001,13 @@ dialog::backdrop {
 
   .imp-logo {
     display: block;
-    width: 22mm;
-    height: 15mm;
-    object-fit: contain;
+    width: 22mm !important;
+    height: 15mm !important;
+    max-width: 22mm !important;
+    max-height: 15mm !important;
+    object-fit: contain !important;
+    object-position: center;
+    flex: 0 0 22mm;
   }
 
   .imp-empresa strong,

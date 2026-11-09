@@ -177,7 +177,11 @@ async function imprimirPeriodo() {
     <table class="imp-tabla-programacion"><thead><tr><th>Fecha / hora</th><th>Pedido y asignación</th><th>Herramienta solicitada</th><th>Cant.</th><th>Unidad</th><th>Estado herramienta</th><th>Observación de herramienta</th></tr></thead>${grupos || '<tbody><tr><td colspan="7">No hay pedidos en este periodo con los filtros actuales.</td></tr></tbody>'}</table>`;
   const logo = $('#impresion .imp-logo');
   if (logo && !logo.complete) await new Promise(resolve => { logo.onload = resolve; logo.onerror = resolve; });
+  const limpiarEstadoImpresion = () => document.body.classList.remove('imprimiendo-reporte');
+  window.addEventListener('afterprint', limpiarEstadoImpresion, { once: true });
+  document.body.classList.add('imprimiendo-reporte');
   window.print();
+  if (!window.matchMedia('print').matches) limpiarEstadoImpresion();
 }
 
 function render() {
