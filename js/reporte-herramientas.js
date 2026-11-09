@@ -139,11 +139,54 @@ function titulo() {
   return `${DIAS[(ref.getDay() + 6) % 7]} ${fFecha(ref)}`;
 }
 
+function pedidosDelPeriodo(lista) {
+  if (vista === 'semana') {
+    const inicio = lunes(ref);
+    const fin = suma(inicio, 7);
+    return lista.filter(p => p.fecha_necesidad >= inicio && p.fecha_necesidad < fin)
+      .sort((a, b) => a.fecha_necesidad - b.fecha_necesidad);
+  }
+  return delDia(lista, ref);
+}
+
+async function imprimirPeriodo() {
+  if (!puedeGestionarEnvios()) return;
+  const lista = pedidosDelPeriodo(filtrados());
+  const esDia = vista === 'dia';
+  const periodo = esDia ? `Programación diaria · ${titulo()}` : `Programación semanal · ${titulo()}`;
+  const grupos = lista.map(p => {
+    const pedidoInfo = `<strong>${esc(p.ot_obra)}${p.nombre_obra ? ` · ${esc(p.nombre_obra)}` : ''}</strong><br>
+      <small>Pedido #${esc(p.id)} · ${esc(p.estado) || '—'}</small><br>
+      <small>Puntero: ${esc(p.puntero_asignado) || '—'} · Solicitante: ${esc(p.solicitante) || '—'}</small><br>
+      <small>Tipo: ${esc(p.tipo_solicitud) || '—'} · Traslado: ${p.necesita_traslado ? 'Sí' : 'No'}</small><br>
+      <small>Registrado: ${fFH(p.fecha_registro)} · Entrega: ${fFH(p.fecha_entrega)} · Envío: ${fFH(p.fecha_envio)}</small><br>
+      <small>Obs. pedido: ${esc(p.observaciones) || '—'}</small>`;
+    const detalles = p.detalle.length ? p.detalle : [null];
+    return `<tbody class="imp-grupo">${detalles.map((d, index) => `<tr>
+      ${index === 0 ? `<td rowspan="${detalles.length}" class="imp-fecha">${fFecha(p.fecha_necesidad)}<br><strong>${fHora(p.fecha_necesidad)}</strong></td><td rowspan="${detalles.length}" class="imp-pedido-info">${pedidoInfo}</td>` : ''}
+      ${d ? `<td class="imp-herramienta">${esc(d.herramienta) || '—'}</td><td>${esc(d.cantidad ?? '—')}</td><td>${esc(d.unidad_medida) || '—'}</td><td>${esc(etiquetaEstadoHerr(d.estado_herramienta || '')) || '—'}</td><td>${esc(d.observacion) || '—'}</td>` : '<td colspan="5">Sin herramientas registradas</td>'}
+    </tr>`).join('')}</tbody>`;
+  }).join('');
+  const cantidadHerramientas = lista.reduce((total, p) => total + p.detalle.length, 0);
+  $('#impresion').className = esDia ? 'imp-dia' : 'imp-semana';
+  $('#impresion').innerHTML = `<header class="imp-membrete">
+      <img class="imp-logo" src="../../img/Logo%20MV%20Vertical%20SAE.png" alt="Logotipo de Metalúrgica Vera S.A.E.">
+      <div class="imp-empresa"><strong>Metalúrgica Vera S.A.E.</strong><span>Confiabilidad, disponibilidad y eficiencia de los equipos e instalaciones industriales.</span></div>
+      <div class="imp-documento"><strong>GESTIÓN OPERATIVA</strong><span>REPORTE DE HERRAMIENTAS</span><small>${esDia ? 'Programación diaria' : 'Programación semanal'}</small></div>
+    </header><header class="imp-cabecera"><h1>Programación de herramientas</h1><h2>${esc(periodo)}</h2><p>${lista.length} pedidos · ${cantidadHerramientas} herramientas · Impreso el ${fFH(new Date())}</p></header>
+    <table class="imp-tabla-programacion"><thead><tr><th>Fecha / hora</th><th>Pedido y asignación</th><th>Herramienta solicitada</th><th>Cant.</th><th>Unidad</th><th>Estado herramienta</th><th>Observación de herramienta</th></tr></thead>${grupos || '<tbody><tr><td colspan="7">No hay pedidos en este periodo con los filtros actuales.</td></tr></tbody>'}</table>`;
+  const logo = $('#impresion .imp-logo');
+  if (logo && !logo.complete) await new Promise(resolve => { logo.onload = resolve; logo.onerror = resolve; });
+  window.print();
+}
+
 function render() {
   const l = filtrados();
   kpis(l);
   $('#vista').innerHTML = { tabla: vTabla, mes: vMes, semana: vSemana, dia: vDia }[vista](l);
   $('#nav').classList.toggle('oculto', vista === 'tabla');
+  $('#imprimir').hidden = !['semana', 'dia'].includes(vista) || !puedeGestionarEnvios();
+  $('#imprimir').textContent = vista === 'dia' ? 'Imprimir día A4' : 'Imprimir semana A4';
   $('#nav .titulo')?.remove();
   if (vista !== 'tabla') $('#hoy').insertAdjacentHTML('beforebegin', `<span class="titulo">${titulo()}</span>`);
   document.querySelectorAll('#tabs button').forEach(b => {
@@ -333,6 +376,7 @@ function init() {
   });
   $('#prev').onclick = () => mover(-1); $('#next').onclick = () => mover(1);
   $('#hoy').onclick = () => { ref = new Date(); ref.setHours(0, 0, 0, 0); render(); };
+  $('#imprimir').addEventListener('click', imprimirPeriodo);
   ['#q', '#fEstado', '#fTipo', '#fHerr'].forEach(s => $(s).addEventListener('input', render));
   $('#vista').addEventListener('click', e => {
     const th = e.target.closest('th[data-col]');

@@ -169,6 +169,7 @@
         if (!response.ok) throw new Error(result.detalle || result.error || 'No se pudo actualizar el estado.');
         orden.habilitado = result.habilitado;
         statusCell.textContent = 'Habilitado';
+        statusCell.classList.remove('habilitaciones-estado--no-habilitado');
         statusCell.classList.add('habilitaciones-estado--habilitado');
         state.textContent = `Orden ${orden.id} habilitada.`;
         await window.siteDialog.alert(`El pedido ${orden.id} quedó habilitado.`);

@@ -195,6 +195,15 @@ tr:focus-visible,
   display: none;
 }
 
+.btn-imprimir {
+  min-height: 40px;
+  padding: 7px 14px;
+  border: 1px solid var(--primary);
+  border-radius: 8px;
+  background: var(--primary);
+  color: #fff;
+}
+
 .filtros {
   display: grid;
   grid-template-columns: minmax(220px, 1.5fr) repeat(3, minmax(160px, 1fr));
@@ -904,5 +913,266 @@ dialog::backdrop {
       transform: translateY(8px);
       opacity: 0;
     }
+  }
+}
+
+#impresion {
+  display: none;
+}
+
+@page {
+  size: A4 landscape;
+  margin: 10mm;
+}
+
+@media print {
+  html,
+  body {
+    width: auto;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    color: #111;
+    font: 9pt/1.35 Arial, sans-serif;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .container {
+    width: auto;
+    max-width: none;
+    margin: 0;
+  }
+
+  .container > :not(#impresion) {
+    display: none !important;
+  }
+
+  #impresion {
+    display: block;
+  }
+
+  .imp-cabecera {
+    margin-bottom: 8mm;
+    padding-bottom: 4mm;
+  }
+
+  .imp-membrete {
+    display: grid;
+    grid-template-columns: 23mm 1fr auto;
+    align-items: center;
+    gap: 5mm;
+    margin-bottom: 5mm;
+    padding-bottom: 4mm;
+    border-bottom: 2px solid #374151;
+    break-inside: avoid;
+  }
+
+  .imp-logo {
+    display: block;
+    width: 22mm;
+    height: 15mm;
+    object-fit: contain;
+  }
+
+  .imp-empresa strong,
+  .imp-empresa span,
+  .imp-documento strong,
+  .imp-documento span,
+  .imp-documento small {
+    display: block;
+  }
+
+  .imp-empresa strong {
+    color: #12317f;
+    font-size: 15pt;
+    line-height: 1.2;
+  }
+
+  .imp-empresa span {
+    margin-top: 1.5mm;
+    color: #4b5563;
+    font-size: 8pt;
+  }
+
+  .imp-documento {
+    padding-left: 5mm;
+    border-left: 1px solid #9ca3af;
+    text-align: right;
+  }
+
+  .imp-documento strong {
+    color: #12317f;
+    font-size: 9pt;
+    letter-spacing: .5px;
+  }
+
+  .imp-documento span {
+    margin-top: 1mm;
+    font-size: 8pt;
+    font-weight: 700;
+  }
+
+  .imp-documento small {
+    margin-top: 1mm;
+    color: #4b5563;
+    font-size: 7.5pt;
+  }
+
+  .imp-cabecera h1,
+  .imp-cabecera h2,
+  .imp-cabecera p {
+    margin: 0 0 2mm;
+  }
+
+  .imp-cabecera h1 {
+    font-size: 16pt;
+  }
+
+  .imp-cabecera h2 {
+    font-size: 12pt;
+  }
+
+  .imp-pedido {
+    margin: 0 0 7mm;
+    padding: 0 0 5mm;
+    border-bottom: 1px solid #9ca3af;
+    break-inside: avoid-page;
+    page-break-inside: avoid;
+  }
+
+  .imp-pedido h2 {
+    margin: 0 0 3mm;
+    font-size: 11pt;
+    break-after: avoid;
+  }
+
+  .imp-pedido h2 small {
+    font-size: 9pt;
+    font-weight: 400;
+  }
+
+  .imp-pedido dl {
+    display: grid;
+    grid-template-columns: 35mm 1fr;
+    gap: 1mm 3mm;
+    margin: 0 0 3mm;
+  }
+
+  .imp-pedido dt {
+    font-weight: 700;
+  }
+
+  .imp-pedido dd {
+    min-width: 0;
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .imp-pedido table {
+    width: 100%;
+    min-width: 0;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  .imp-pedido-dia table {
+    margin: 0 0 3mm;
+  }
+
+  .imp-pedido-dia th:first-child,
+  .imp-pedido-dia td:first-child {
+    width: 30%;
+  }
+
+  .imp-pedido-dia th:nth-child(2),
+  .imp-pedido-dia td:nth-child(2),
+  .imp-pedido-dia th:nth-child(3),
+  .imp-pedido-dia td:nth-child(3) {
+    width: 10%;
+  }
+
+  .imp-pedido-dia th:nth-child(4),
+  .imp-pedido-dia td:nth-child(4) {
+    width: 18%;
+  }
+
+  .imp-pedido-dia th:nth-child(5),
+  .imp-pedido-dia td:nth-child(5) {
+    width: 32%;
+  }
+
+  .imp-pedido-dia table + dl {
+    font-size: 8pt;
+  }
+
+  .imp-pedido th,
+  .imp-pedido td {
+    padding: 1.5mm 2mm;
+    border: 1px solid #9ca3af;
+    color: #111;
+    font-size: 8pt;
+    text-align: left;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .imp-pedido th {
+    background: #e5e7eb !important;
+  }
+
+  .imp-tabla-programacion {
+    width: 100%;
+    min-width: 0;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  .imp-tabla-programacion thead {
+    display: table-header-group;
+  }
+
+  .imp-tabla-programacion th,
+  .imp-tabla-programacion td {
+    padding: 2mm 2.2mm;
+    border: 1px solid #64748b;
+    color: #111;
+    font-size: 8pt;
+    text-align: left;
+    vertical-align: top;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .imp-tabla-programacion th {
+    background: #dbe3ed !important;
+    font-size: 8.5pt;
+  }
+
+  .imp-tabla-programacion th:nth-child(1) { width: 10%; }
+  .imp-tabla-programacion th:nth-child(2) { width: 29%; }
+  .imp-tabla-programacion th:nth-child(3) { width: 17%; }
+  .imp-tabla-programacion th:nth-child(4) { width: 6%; }
+  .imp-tabla-programacion th:nth-child(5) { width: 8%; }
+  .imp-tabla-programacion th:nth-child(6) { width: 12%; }
+  .imp-tabla-programacion th:nth-child(7) { width: 18%; }
+
+  .imp-tabla-programacion tbody.imp-grupo {
+    break-inside: avoid-page;
+    page-break-inside: avoid;
+  }
+
+  .imp-fecha {
+    text-align: center !important;
+  }
+
+  .imp-pedido-info small {
+    font-size: 7.2pt;
+    line-height: 1.3;
+  }
+
+  .imp-herramienta {
+    font-weight: 700;
   }
 }

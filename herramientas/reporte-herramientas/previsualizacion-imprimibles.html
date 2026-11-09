@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Previsualización · Programación de herramientas</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 22px; background: #e5e7eb; color: #111827; font: 13px/1.35 Arial, sans-serif; }
+  .aviso { max-width: 297mm; margin: 0 auto 18px; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; }
+  .aviso p { margin: 4px 0 0; color: #4b5563; }
+  .hoja { width: 297mm; min-height: 210mm; margin: 0 auto 24px; padding: 10mm; background: #fff; box-shadow: 0 4px 18px #0002; }
+  .membrete { display: grid; grid-template-columns: 23mm 1fr auto; align-items: center; gap: 5mm; margin-bottom: 5mm; padding-bottom: 4mm; border-bottom: 2px solid #374151; }
+  .membrete img { display: block; width: 22mm; height: 15mm; object-fit: contain; }
+  .empresa strong, .empresa span, .documento strong, .documento span, .documento small { display: block; }
+  .empresa strong { color: #12317f; font-size: 15pt; line-height: 1.2; }
+  .empresa span { margin-top: 1.5mm; color: #4b5563; font-size: 8pt; }
+  .documento { padding-left: 5mm; border-left: 1px solid #9ca3af; text-align: right; }
+  .documento strong { color: #12317f; font-size: 9pt; letter-spacing: .5px; }
+  .documento span { margin-top: 1mm; font-size: 8pt; font-weight: 700; }
+  .documento small { margin-top: 1mm; color: #4b5563; font-size: 7.5pt; }
+  .cabecera { margin-bottom: 6mm; padding-bottom: 4mm; border-bottom: 2px solid #374151; }
+  .cabecera h1 { margin: 0 0 2mm; font-size: 16pt; }
+  .cabecera h2 { margin: 0 0 2mm; font-size: 12pt; }
+  .cabecera p { margin: 0; color: #4b5563; }
+  table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  th, td { padding: 2mm; border: 1px solid #64748b; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+  th { background: #dbe3ed; font-size: 9pt; }
+  td { font-size: 8.5pt; }
+  th:nth-child(1) { width: 10%; } th:nth-child(2) { width: 29%; } th:nth-child(3) { width: 17%; }
+  th:nth-child(4) { width: 6%; } th:nth-child(5) { width: 8%; } th:nth-child(6) { width: 12%; } th:nth-child(7) { width: 18%; }
+  tbody.grupo { break-inside: avoid; }
+  .fecha { text-align: center; }
+  .herramienta { font-weight: 700; }
+  .pedido strong { font-size: 9pt; }
+  .pedido small { font-size: 7.5pt; line-height: 1.3; }
+  @page { size: A4 landscape; margin: 10mm; }
+  @media print {
+    body { padding: 0; background: #fff; }
+    .aviso { display: none; }
+    .hoja { width: auto; min-height: 0; margin: 0; padding: 0; box-shadow: none; page-break-after: always; }
+    .hoja:last-child { page-break-after: auto; }
+  }
+  @media screen and (max-width: 900px) {
+    body { padding: 10px; }
+    .hoja { width: 100%; min-height: 0; padding: 14px; overflow-x: auto; }
+    table { min-width: 900px; }
+  }
+</style>
+</head>
+<body>
+<aside class="aviso"><strong>Previsualización de las tablas imprimibles A4</strong><p>Los datos son ilustrativos. La impresión real usa los pedidos y filtros seleccionados. Formato apaisado para facilitar la lectura de las columnas.</p></aside>
+
+<section class="hoja">
+  <header class="membrete"><img src="../../img/Logo%20MV%20Vertical%20SAE.png" alt="Logotipo de Metalúrgica Vera S.A.E."><div class="empresa"><strong>Metalúrgica Vera S.A.E.</strong><span>Confiabilidad, disponibilidad y eficiencia de los equipos e instalaciones industriales.</span></div><div class="documento"><strong>GESTIÓN OPERATIVA</strong><span>REPORTE DE HERRAMIENTAS</span><small>Programación semanal</small></div></header>
+  <header class="cabecera"><h1>Programación de herramientas</h1><h2>Programación semanal · 9 nov – 15 nov 2026</h2><p>3 pedidos · 5 herramientas · Impreso el 09/11/2026 10:30</p></header>
+  <table><thead><tr><th>Fecha / hora</th><th>Pedido y asignación</th><th>Herramienta solicitada</th><th>Cant.</th><th>Unidad</th><th>Estado herramienta</th><th>Observación de herramienta</th></tr></thead>
+    <tbody class="grupo"><tr><td class="fecha" rowspan="2">09/11/2026<br><strong>08:00</strong></td><td class="pedido" rowspan="2"><strong>OT-248 · Reparación de bomba</strong><br><small>Pedido #1048 · En proceso<br>Puntero: Juan Pérez · Solicitante: María Gómez<br>Tipo: Herramientas adicionales · Traslado: Sí<br>Registrado: 02/11/2026 14:20 · Entrega: — · Envío: —<br>Obs. pedido: Coordinar entrega con encargado.</small></td><td class="herramienta">Amoladora angular 7”</td><td>1</td><td>unidad</td><td>Disponible</td><td>Con disco de corte</td></tr>
+      <tr><td class="herramienta">Llave ajustable 12”</td><td>2</td><td>unidad</td><td>Para buscar</td><td>—</td></tr></tbody>
+    <tbody class="grupo"><tr><td class="fecha">11/11/2026<br><strong>09:30</strong></td><td class="pedido"><strong>OT-251 · Montaje de estructura</strong><br><small>Pedido #1052 · Solicitado<br>Puntero: Carlos Benítez · Solicitante: Laura Vera<br>Tipo: Ingreso a obra · Traslado: No<br>Registrado: 08/11/2026 16:05 · Entrega: — · Envío: —<br>Obs. pedido: Entregar en depósito principal.</small></td><td class="herramienta">Taladro percutor</td><td>1</td><td>unidad</td><td>Para compra</td><td>Con mandril de 13 mm</td></tr></tbody>
+    <tbody class="grupo"><tr><td class="fecha" rowspan="2">13/11/2026<br><strong>10:00</strong></td><td class="pedido" rowspan="2"><strong>OT-256 · Mantenimiento de compresor</strong><br><small>Pedido #1059 · Completado<br>Puntero: Pedro Rojas · Solicitante: Diego López<br>Tipo: Reposición · Traslado: No<br>Registrado: 09/11/2026 07:10 · Entrega: 13/11/2026 09:50 · Envío: 13/11/2026 08:20<br>Obs. pedido: Retirar en pañol.</small></td><td class="herramienta">Juego de llaves combinadas</td><td>1</td><td>juego</td><td>Disponible</td><td>Medidas 8 a 24 mm</td></tr>
+      <tr><td class="herramienta">Multímetro digital</td><td>1</td><td>unidad</td><td>Ya enviado</td><td>Verificar batería</td></tr></tbody>
+  </table>
+</section>
+
+<section class="hoja">
+  <header class="membrete"><img src="../../img/Logo%20MV%20Vertical%20SAE.png" alt="Logotipo de Metalúrgica Vera S.A.E."><div class="empresa"><strong>Metalúrgica Vera S.A.E.</strong><span>Confiabilidad, disponibilidad y eficiencia de los equipos e instalaciones industriales.</span></div><div class="documento"><strong>GESTIÓN OPERATIVA</strong><span>REPORTE DE HERRAMIENTAS</span><small>Programación diaria</small></div></header>
+  <header class="cabecera"><h1>Programación de herramientas</h1><h2>Programación diaria · lunes 9/11/2026</h2><p>2 pedidos · 4 herramientas · Impreso el 09/11/2026 10:30</p></header>
+  <table><thead><tr><th>Fecha / hora</th><th>Pedido y asignación</th><th>Herramienta solicitada</th><th>Cant.</th><th>Unidad</th><th>Estado herramienta</th><th>Observación de herramienta</th></tr></thead>
+    <tbody class="grupo"><tr><td class="fecha" rowspan="2">09/11/2026<br><strong>08:00</strong></td><td class="pedido" rowspan="2"><strong>OT-248 · Reparación de bomba</strong><br><small>Pedido #1048 · En proceso<br>Puntero: Juan Pérez · Solicitante: María Gómez<br>Tipo: Herramientas adicionales · Traslado: Sí<br>Registrado: 02/11/2026 14:20 · Entrega: — · Envío: —<br>Obs. pedido: Coordinar entrega con encargado.</small></td><td class="herramienta">Amoladora angular 7”</td><td>1</td><td>unidad</td><td>Disponible</td><td>Con disco de corte</td></tr>
+      <tr><td class="herramienta">Llave ajustable 12”</td><td>2</td><td>unidad</td><td>Para buscar</td><td>—</td></tr></tbody>
+    <tbody class="grupo"><tr><td class="fecha" rowspan="2">09/11/2026<br><strong>10:30</strong></td><td class="pedido" rowspan="2"><strong>OT-256 · Mantenimiento de compresor</strong><br><small>Pedido #1059 · Completado<br>Puntero: Pedro Rojas · Solicitante: Diego López<br>Tipo: Reposición · Traslado: No<br>Registrado: 09/11/2026 07:10 · Entrega: 09/11/2026 10:15 · Envío: 09/11/2026 08:20<br>Obs. pedido: Retirar en pañol.</small></td><td class="herramienta">Juego de llaves combinadas</td><td>1</td><td>juego</td><td>Disponible</td><td>Medidas 8 a 24 mm</td></tr>
+      <tr><td class="herramienta">Multímetro digital</td><td>1</td><td>unidad</td><td>Ya enviado</td><td>Verificar batería</td></tr></tbody>
+  </table>
+</section>
+</body>
+</html>
