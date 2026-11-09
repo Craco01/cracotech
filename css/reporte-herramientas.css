@@ -928,12 +928,157 @@ body.imprimiendo-reporte .container > #impresion {
   display: block !important;
 }
 
+body.imprimiendo-reporte {
+  overflow: hidden;
+}
+
+body.imprimiendo-reporte #impresion {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  overflow: auto;
+  padding: 12px;
+  background: #e5e7eb !important;
+  color: #111827;
+  font: 14px/1.35 Arial, sans-serif;
+}
+
+.imp-preview-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  min-height: 54px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: #1f2937;
+  color: #fff;
+  box-shadow: 0 2px 8px #0003;
+}
+
+.imp-preview-toolbar > div {
+  display: flex;
+  gap: 8px;
+}
+
+.imp-preview-toolbar button {
+  min-height: 36px;
+  padding: 6px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #fff;
+  color: #111827;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+}
+
+.imp-preview-toolbar #imprimirPrevisualizacion {
+  border-color: #15803d;
+  background: #15803d;
+  color: #fff;
+}
+
+#impresion .imp-pagina {
+  box-sizing: border-box;
+  width: min(297mm, calc(100vw - 28px));
+  min-height: 210mm;
+  margin: 12px auto;
+  padding: 7mm;
+  overflow: visible;
+  background: #fff !important;
+  background-image: none !important;
+  color: #111;
+  font: 9pt/1.35 Arial, sans-serif;
+  box-shadow: 0 3px 16px #0003;
+}
+
+#impresion .imp-membrete {
+  display: grid;
+  grid-template-columns: 23mm 1fr auto;
+  align-items: center;
+  gap: 3mm;
+  margin-bottom: 2mm;
+  padding-bottom: 2mm;
+  border-bottom: 1px solid #374151;
+  break-inside: avoid;
+}
+
+#impresion .imp-logo {
+  display: block;
+  width: 22mm;
+  height: 15mm;
+  max-width: 22mm;
+  max-height: 15mm;
+  object-fit: contain;
+  object-position: center;
+}
+
+#impresion .imp-empresa strong,
+#impresion .imp-empresa span,
+#impresion .imp-documento strong,
+#impresion .imp-documento span,
+#impresion .imp-documento small {
+  display: block;
+}
+
+#impresion .imp-empresa strong { color: #12317f; font-size: 15pt; line-height: 1.2; }
+#impresion .imp-empresa span { margin-top: 1.5mm; color: #4b5563; font-size: 8pt; }
+#impresion .imp-documento { padding-left: 5mm; border-left: 1px solid #9ca3af; text-align: right; }
+#impresion .imp-documento strong { color: #12317f; font-size: 9pt; letter-spacing: .5px; }
+#impresion .imp-documento span { margin-top: 1mm; font-size: 8pt; font-weight: 700; }
+#impresion .imp-documento small { margin-top: 1mm; color: #4b5563; font-size: 7.5pt; }
+#impresion .imp-cabecera { margin-bottom: 3mm; padding-bottom: 0; }
+#impresion .imp-cabecera h1,
+#impresion .imp-cabecera h2,
+#impresion .imp-cabecera p { margin: 0 0 2mm; }
+#impresion .imp-cabecera h1 { font-size: 16pt; }
+#impresion .imp-cabecera h2 { font-size: 12pt; }
+
+#impresion .imp-tabla-programacion {
+  width: 100%;
+  min-width: 0;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+#impresion .imp-tabla-programacion th,
+#impresion .imp-tabla-programacion td {
+  padding: 2mm 2.2mm;
+  border: 1px solid #64748b;
+  color: #111;
+  font-size: 8pt;
+  text-align: left;
+  vertical-align: top;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+#impresion .imp-tabla-programacion th { background: #dbe3ed !important; font-size: 8.5pt; }
+#impresion .imp-tabla-programacion th:nth-child(1) { width: 10%; }
+#impresion .imp-tabla-programacion th:nth-child(2) { width: 29%; }
+#impresion .imp-tabla-programacion th:nth-child(3) { width: 17%; }
+#impresion .imp-tabla-programacion th:nth-child(4) { width: 6%; }
+#impresion .imp-tabla-programacion th:nth-child(5) { width: 8%; }
+#impresion .imp-tabla-programacion th:nth-child(6) { width: 12%; }
+#impresion .imp-tabla-programacion th:nth-child(7) { width: 18%; }
+#impresion .imp-fecha { text-align: center !important; }
+#impresion .imp-pedido-info small { font-size: 7.2pt; line-height: 1.3; }
+#impresion .imp-herramienta { font-weight: 700; }
+
 @page {
   size: A4 landscape;
-  margin: 10mm;
+  margin: 7mm;
 }
 
 @media print {
+  body.imprimiendo-reporte {
+    overflow: visible !important;
+  }
+
   html body > * {
     display: none !important;
   }
@@ -954,6 +1099,23 @@ body.imprimiendo-reporte .container > #impresion {
     max-height: none !important;
     overflow: visible !important;
     visibility: visible !important;
+    background: #fff !important;
+    background-image: none !important;
+  }
+
+  .imp-preview-toolbar {
+    display: none !important;
+  }
+
+  #impresion .imp-pagina {
+    width: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    box-shadow: none !important;
+    background: #fff !important;
+    background-image: none !important;
   }
 
   html,
@@ -962,17 +1124,39 @@ body.imprimiendo-reporte .container > #impresion {
     min-height: 0;
     margin: 0;
     padding: 0;
-    background: #fff;
+    background: #fff !important;
+    background-color: #fff !important;
+    background-image: none !important;
+    background-attachment: initial !important;
     color: #111;
     font: 9pt/1.35 Arial, sans-serif;
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
   }
 
+  body.tools-layout {
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+    background-color: #fff !important;
+    background-image: none !important;
+  }
+
   .container {
     width: auto;
     max-width: none;
     margin: 0;
+  }
+
+  body.tools-layout .container {
+    width: auto !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+    background-image: none !important;
+    box-shadow: none !important;
   }
 
   .container > :not(#impresion) {
@@ -984,18 +1168,18 @@ body.imprimiendo-reporte .container > #impresion {
   }
 
   .imp-cabecera {
-    margin-bottom: 8mm;
-    padding-bottom: 4mm;
+    margin-bottom: 3mm;
+    padding-bottom: 0;
   }
 
   .imp-membrete {
     display: grid;
     grid-template-columns: 23mm 1fr auto;
     align-items: center;
-    gap: 5mm;
-    margin-bottom: 5mm;
-    padding-bottom: 4mm;
-    border-bottom: 2px solid #374151;
+    gap: 3mm;
+    margin-bottom: 2mm;
+    padding-bottom: 2mm;
+    border-bottom: 1px solid #374151;
     break-inside: avoid;
   }
 

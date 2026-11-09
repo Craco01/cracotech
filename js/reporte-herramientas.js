@@ -169,19 +169,27 @@ async function imprimirPeriodo() {
   }).join('');
   const cantidadHerramientas = lista.reduce((total, p) => total + p.detalle.length, 0);
   $('#impresion').className = esDia ? 'imp-dia' : 'imp-semana';
-  $('#impresion').innerHTML = `<header class="imp-membrete">
+  $('#impresion').setAttribute('role', 'dialog');
+  $('#impresion').setAttribute('aria-modal', 'true');
+  $('#impresion').setAttribute('aria-label', 'Vista previa de impresión');
+  $('#impresion').innerHTML = `<div class="imp-preview-toolbar" role="toolbar" aria-label="Acciones de impresión">
+      <strong>Vista previa A4 · ${esDia ? 'Día' : 'Semana'}</strong>
+      <div><button type="button" id="cerrarPrevisualizacion">Volver al reporte</button><button type="button" id="imprimirPrevisualizacion">Imprimir</button></div>
+    </div><div class="imp-pagina"><header class="imp-membrete">
       <img class="imp-logo" src="../../img/Logo%20MV%20Vertical%20SAE.png" alt="Logotipo de Metalúrgica Vera S.A.E.">
       <div class="imp-empresa"><strong>Metalúrgica Vera S.A.E.</strong><span>Confiabilidad, disponibilidad y eficiencia de los equipos e instalaciones industriales.</span></div>
       <div class="imp-documento"><strong>GESTIÓN OPERATIVA</strong><span>REPORTE DE HERRAMIENTAS</span><small>${esDia ? 'Programación diaria' : 'Programación semanal'}</small></div>
     </header><header class="imp-cabecera"><h1>Programación de herramientas</h1><h2>${esc(periodo)}</h2><p>${lista.length} pedidos · ${cantidadHerramientas} herramientas · Impreso el ${fFH(new Date())}</p></header>
-    <table class="imp-tabla-programacion"><thead><tr><th>Fecha / hora</th><th>Pedido y asignación</th><th>Herramienta solicitada</th><th>Cant.</th><th>Unidad</th><th>Estado herramienta</th><th>Observación de herramienta</th></tr></thead>${grupos || '<tbody><tr><td colspan="7">No hay pedidos en este periodo con los filtros actuales.</td></tr></tbody>'}</table>`;
+    <table class="imp-tabla-programacion"><thead><tr><th>Fecha / hora</th><th>Pedido y asignación</th><th>Herramienta solicitada</th><th>Cant.</th><th>Unidad</th><th>Estado herramienta</th><th>Observación de herramienta</th></tr></thead>${grupos || '<tbody><tr><td colspan="7">No hay pedidos en este periodo con los filtros actuales.</td></tr></tbody>'}</table></div>`;
   const logo = $('#impresion .imp-logo');
   if (logo && !logo.complete) await new Promise(resolve => { logo.onload = resolve; logo.onerror = resolve; });
-  const limpiarEstadoImpresion = () => document.body.classList.remove('imprimiendo-reporte');
-  window.addEventListener('afterprint', limpiarEstadoImpresion, { once: true });
+  $('#cerrarPrevisualizacion').addEventListener('click', () => {
+    document.body.classList.remove('imprimiendo-reporte');
+    $('#impresion').removeAttribute('role');
+    $('#impresion').removeAttribute('aria-modal');
+  });
+  $('#imprimirPrevisualizacion').addEventListener('click', () => window.print());
   document.body.classList.add('imprimiendo-reporte');
-  window.print();
-  if (!window.matchMedia('print').matches) limpiarEstadoImpresion();
 }
 
 function render() {
