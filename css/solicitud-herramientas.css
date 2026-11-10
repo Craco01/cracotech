@@ -173,6 +173,12 @@ input[type="file"]{
     margin-bottom:0;
 }
 
+.add-tool-action{
+    display:flex;
+    justify-content:flex-end;
+    margin-top:8px;
+}
+
 .table-wrap{
     overflow-x:auto;
 }

@@ -218,6 +218,7 @@ function detalle(id) {
     <div class="envio-modal-header">
       <h2>${esc(p.ot_obra)} · Pedido #${p.id}</h2>
       <div class="envio-acciones">
+        <button class="btn-guardar" id="editarPedido" data-id="${p.id}" type="button" hidden>Editar</button>
         <button class="cerrar" id="cerrar" type="button">Cerrar</button>
       </div>
     </div>
@@ -230,6 +231,7 @@ function detalle(id) {
     <table><thead><tr><th scope="col">Herramienta</th><th scope="col">Cant.</th><th scope="col">Unidad</th><th scope="col">Estado</th><th scope="col">Nota</th></tr></thead><tbody>${
       p.detalle.map(d => `<tr><td>${esc(d.herramienta)}</td><td>${d.cantidad}</td><td>${esc(d.unidad_medida) || '—'}</td><td>${tagHerr(d.estado_herramienta)}</td><td>${esc(d.observacion) || '—'}</td></tr>`).join('')
     }</tbody></table></div>`;
+  $('#editarPedido').hidden = !puedeGestionarEnvios();
   $('#modal').showModal();
 }
 
@@ -412,7 +414,12 @@ function init() {
     $('#vista th[data-col="' + CSS.escape(orden.col) + '"]')?.focus();
   });
   $('#modal').addEventListener('click', e => {
-    if (e.target.id === 'modal' || e.target.id === 'cerrar') $('#modal').close();
+    if (e.target.id === 'modal' || e.target.id === 'cerrar') {
+      $('#modal').close();
+    } else if (e.target.id === 'editarPedido') {
+      $('#modal').close();
+      abrirModalEnvio(e.target.dataset.id);
+    }
   });
   $('#modalEnvio').addEventListener('click', e => {
     if (e.target.id === 'modalEnvio' || e.target.id === 'cerrarEnvio') {

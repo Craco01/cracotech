@@ -680,6 +680,10 @@ dialog::backdrop {
   cursor: default;
 }
 
+.envio-acciones .btn-guardar[hidden] {
+  display: none;
+}
+
 .cerrar {
   float: right;
   padding: 8px 14px;
