@@ -47,7 +47,7 @@
   <section class="sec">
     <h2>1. Identificación del equipo</h2>
     <div class="campos">
-      <label class="campo"><span>Tipo de polipasto</span><input name="tipo_polipasto" list="dl-polipasto"></label>
+      <label class="campo"><span>Tipo de polipasto</span><select name="tipo_polipasto" id="sel-polipasto"></select></label>
       <label class="campo"><span>Capacidad nominal</span><input name="capacidad" placeholder="Ej.: 5 t"></label>
       <label class="campo"><span>Marca / fabricante</span><input name="marca"></label>
       <label class="campo"><span>Modelo</span><input name="modelo"></label>
@@ -61,7 +61,7 @@
   <section class="sec">
     <h2>2. Tipo y alcance del trabajo</h2>
     <div class="campos">
-      <label class="campo"><span>Tipo de trabajo</span><input name="tipo_trabajo" list="dl-trabajo"></label>
+      <label class="campo"><span>Tipo de trabajo</span><select name="tipo_trabajo" id="sel-trabajo"></select></label>
       <label class="campo"><span>Fecha de inicio</span><input type="date" name="fecha_inicio"></label>
       <label class="campo"><span>Fecha de finalización</span><input type="date" name="fecha_fin"></label>
       <label class="campo"><span>Horas de trabajo</span><input name="horas" inputmode="decimal"></label>
@@ -112,20 +112,22 @@
   <section class="sec">
     <h2>8. Recepción y conformidad del cliente</h2>
     <p class="legal">El cliente declara haber recibido el equipo/trabajo indicado en esta ficha y haber sido informado sobre los trabajos realizados, las pruebas efectuadas y, cuando corresponda, las observaciones o pendientes indicados. La firma acredita la recepción y conformidad con el servicio ejecutado, sin perjuicio de las observaciones expresamente consignadas en este documento.</p>
-    <div class="campos">
-      <label class="campo"><span>Conformidad del cliente</span>
-        <select name="conformidad" id="sel-conformidad"></select></label>
-      <label class="campo"><span>Fecha de recepción</span><input type="date" name="fecha_recepcion"></label>
-      <label class="campo"><span>Nombre y apellido</span><input name="nombre"></label>
-      <label class="campo"><span>Cargo</span><input name="cargo"></label>
-    </div>
-    <div class="firmas">
-      <div class="firma">
+    <div class="recepcion-grupos">
+      <div class="recepcion-grupo">
+        <h3>Datos del cliente</h3>
+        <div class="campos">
+          <label class="campo"><span>Conformidad del cliente</span>
+            <select name="conformidad" id="sel-conformidad"></select></label>
+          <label class="campo"><span>Fecha de recepción</span><input type="date" name="fecha_recepcion"></label>
+          <label class="campo ancho"><span>Nombre y apellido</span><input name="nombre"></label>
+          <label class="campo ancho"><span>Cargo</span><input name="cargo"></label>
+        </div>
         <span class="etiqueta">Firma / sello del cliente</span>
         <svg id="cv-cliente" class="firma-path" viewBox="0 0 600 220" preserveAspectRatio="none" role="img" tabindex="0" aria-label="Área de firma del cliente"></svg>
         <button type="button" class="btn sec-btn" data-borrar-firma="firma_cliente">Borrar firma</button>
       </div>
-      <div class="firma">
+      <div class="recepcion-grupo">
+        <h3>Datos del técnico</h3>
         <span class="etiqueta">Firma del técnico</span>
         <svg id="cv-tecnico" class="firma-path" viewBox="0 0 600 220" preserveAspectRatio="none" role="img" tabindex="0" aria-label="Área de firma del técnico"></svg>
         <button type="button" class="btn sec-btn" data-borrar-firma="firma_tecnico">Borrar firma</button>
@@ -138,15 +140,6 @@
     <button type="submit" id="btn-finalizar-ficha" value="finalizar" class="btn principal">Finalizar ficha de asistencia</button>
   </div>
 
-  <datalist id="dl-polipasto">
-    <option value="Eléctrico a cadena"><option value="Eléctrico a cable">
-    <option value="Manual a cadena"><option value="Neumático">
-  </datalist>
-  <datalist id="dl-trabajo">
-    <option value="Mantenimiento preventivo"><option value="Mantenimiento correctivo">
-    <option value="Inspección"><option value="Reparación">
-    <option value="Instalación"><option value="Prueba y puesta en marcha">
-  </datalist>
 </form>
 </main>
 

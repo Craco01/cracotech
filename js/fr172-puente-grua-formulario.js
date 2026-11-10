@@ -87,6 +87,8 @@
     $('#filas-verif').innerHTML = FR172.verificaciones.map((t, k) => filaVerif(t, k + 1)).join('');
     $('#filas-docs').innerHTML = FR172.documentos.map((t, k) => filaDoc(t, k + 1)).join('') + filaOtro;
 
+    $('#sel-polipasto').innerHTML = opciones(FR172.tiposPolipasto);
+    $('#sel-trabajo').innerHTML = opciones(FR172.tiposTrabajo);
     $('#sel-operativo').innerHTML = opciones(FR172.operativo);
     $('#sel-conformidad').innerHTML = opciones(FR172.conformidad);
   }
@@ -96,7 +98,15 @@
       if (el.type === 'checkbox') el.checked = false; else el.value = '';
       const v = est[el.name];
       if (v === undefined || v === null) return;
-      if (el.type === 'checkbox') el.checked = !!v; else el.value = v;
+      if (el.type === 'checkbox') {
+        el.checked = !!v;
+      } else {
+        if (el instanceof HTMLSelectElement &&
+            !Array.from(el.options).some(option => option.value === String(v))) {
+          el.add(new Option(String(v), String(v)));
+        }
+        el.value = v;
+      }
     });
   }
 

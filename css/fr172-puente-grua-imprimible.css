@@ -74,7 +74,7 @@ tr.alto th, tr.alto td { height: 7mm; }
 tr.medio th, tr.medio td { height: 4.5mm; }
 tr.firma { height: 32mm; }
 tr.firma td { height: 32mm; padding: 1mm 2.5mm; }
-.recep tr.firma, .recep tr.firma td { height: 100%; }
+.recep tr.firma, .recep tr.firma td { height: 32mm; }
 .gris, th.gris { background: #f8fafc; }
 
 /* ---- Identidad de la ficha ---- */
