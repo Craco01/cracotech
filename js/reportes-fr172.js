@@ -5,13 +5,32 @@
   const body = document.getElementById('fr172Body');
   const status = document.getElementById('fr172Estado');
   const search = document.getElementById('fr172Buscador');
-  const role = localStorage.getItem('role');
-  const canEdit = ['editor', 'supervisor', 'administrador'].includes(role);
-  const isAdmin = role === 'administrador';
+  const createLink = document.querySelector('.fr172-reportes__nuevo');
+  let canEdit = false;
+  let isAdmin = false;
   const accessDenied = new URLSearchParams(location.search).get('accessDenied') === '1';
   let fichas = [];
 
-  if (!canEdit) document.querySelector('.fr172-reportes__nuevo').hidden = true;
+  function setRole(role) {
+    canEdit = ['editor', 'supervisor', 'administrador'].includes(role);
+    isAdmin = role === 'administrador';
+    createLink.hidden = !canEdit;
+    localStorage.setItem('role', role);
+  }
+
+  async function refreshRole() {
+    const response = await API_FETCH('/api/auth/session', { cache: 'no-store' });
+    const result = await response.json();
+    if (response.status === 403) {
+      setRole('viewer');
+      return;
+    }
+    if (!response.ok) throw new Error(result.error || 'No se pudo validar el rol de la sesión.');
+    if (!['editor', 'supervisor', 'administrador'].includes(result.role)) {
+      throw new Error('El servidor devolvió un rol no válido para el reporte FR-172.');
+    }
+    setRole(result.role);
+  }
 
   const escapeHtml = value => String(value ?? '')
     .replace(/&/g, '&amp;')
@@ -74,6 +93,7 @@
     document.getElementById('fr172Refrescar').disabled = true;
     body.replaceChildren();
     try {
+      await refreshRole();
       const response = await API_FETCH('/api/fr172-puente-grua');
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || 'No se pudieron cargar las fichas.');
