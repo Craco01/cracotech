@@ -61,6 +61,8 @@ frontend/
 6. Herramientas se publica en `/herramientas/` y consume `https://api.cracotech.com/api/herramientas` mediante [js/herramientas-api-config.js](js/herramientas-api-config.js). Sus cuentas y sesión son independientes del portal de mantenimiento.
 7. El backend está en el repositorio independiente `upkeepmv_backend` y se actualiza manualmente en AWS Lightsail.
 
+Las fichas FR-172 no se guardan automáticamente. Los cambios se persisten en el servidor solo al enviar el formulario con «Guardar en borrador» o «Finalizar ficha».
+
 ## Autenticación
 
 La sesión no se guarda en el backend; se maneja por token JWT enviado desde el frontend y almacenado en localStorage.

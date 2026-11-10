@@ -17,7 +17,7 @@
       solicitudes: ['firmas-entrega.js?v=20261020-3', 'lista_solicitudes.js?v=20261104-2'],
       habilitaciones: ['seguimiento-habilitaciones.js?v=20261109-1'],
       informes: ['firmas-entrega.js?v=20261020-3', 'modulo_solicitudes.js?v=20261104-2'],
-      fr172: ['reportes-fr172.js']
+      fr172: ['reportes-fr172.js?v=20261110-1']
     }
   };
 
@@ -41,7 +41,7 @@
     solicitudes: ['lista_solicitudes.css', 'firmas-entrega.css'],
     habilitaciones: ['lista_solicitudes.css', 'habilitaciones.css'],
     informes: ['modulo_solicitudes.css', 'firmas-entrega.css'],
-    fr172: ['lista_solicitudes.css', 'reportes-fr172.css']
+    fr172: ['lista_solicitudes.css', 'reportes-fr172.css?v=20261110-1']
   };
   function cargarHojaEstilo(nombre) {
     return new Promise((resolve, reject) => {

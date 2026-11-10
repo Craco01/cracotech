@@ -9,7 +9,6 @@
   const form = $('#ficha');
   const aviso = $('#guardado');
   let est = {};
-  let temporizador = null;
   const requestedId = Number(new URLSearchParams(location.search).get('id')) || null;
   let cargandoFicha = Boolean(requestedId);
   let idFicha = requestedId;
@@ -119,7 +118,7 @@
       lineWidth: 2.4,
       onChange: paths => {
         est.firma_cliente = paths;
-        programarGuardado();
+        marcarCambiosSinGuardar();
       },
       onLimit: type => {
         aviso.textContent = type === 'strokes'
@@ -135,7 +134,7 @@
       lineWidth: 2.4,
       onChange: paths => {
         est.firma_tecnico = paths;
-        programarGuardado();
+        marcarCambiosSinGuardar();
       },
       onLimit: type => {
         aviso.textContent = type === 'strokes'
@@ -189,23 +188,14 @@
     return { datos, firma_cliente, firma_tecnico };
   }
 
-  function programarGuardado() {
+  function marcarCambiosSinGuardar() {
     if (!tieneSesion || !puedeEditar) return;
-    clearTimeout(temporizador);
-    FR172.guardar(est);
-    if (estadoFicha === 'finalizada') {
-      aviso.textContent = 'Ficha finalizada: cambios sin guardar';
-      return;
-    }
-    aviso.textContent = 'Guardando…';
-    temporizador = setTimeout(() => guardarYa().catch(error => {
-      aviso.textContent = `Error al guardar: ${error.message}`;
-    }), 500);
+    aviso.textContent = estadoFicha === 'finalizada'
+      ? 'Ficha finalizada: cambios sin guardar'
+      : 'Cambios sin guardar';
   }
 
   function guardarYa({ comoBorrador = false } = {}) {
-    clearTimeout(temporizador);
-    FR172.guardar(est);
     if (!tieneSesion || !puedeEditar) return Promise.reject(new Error('Se requiere sesión de editor, supervisor o administrador.'));
     const payload = contenidoParaGuardar();
     if (comoBorrador && estadoFicha === 'finalizada') payload.estado = 'borrador';
@@ -241,7 +231,7 @@
         ajustarFilas(tipo, 1);
       }
     }
-    programarGuardado();
+    marcarCambiosSinGuardar();
   }
   form.addEventListener('input', alCambiar);
   form.addEventListener('change', alCambiar);
@@ -265,7 +255,7 @@
     }
     est[clave] = n;
     actualizarModoEdicion();
-    programarGuardado();
+    marcarCambiosSinGuardar();
   }
   form.addEventListener('click', e => {
     const b = e.target.closest('[data-fila]');
@@ -290,7 +280,6 @@
     idFicha = record.id;
     estadoFicha = record.estado;
     est = { ...record.datos, firma_cliente: record.firma_cliente, firma_tecnico: record.firma_tecnico };
-    FR172.guardar(est);
     history.replaceState(null, '', `${location.pathname}?id=${idFicha}`);
     cargandoFicha = false;
     renderizarFicha();

@@ -5,7 +5,9 @@
   const body = document.getElementById('fr172Body');
   const status = document.getElementById('fr172Estado');
   const search = document.getElementById('fr172Buscador');
-  const canEdit = ['editor', 'supervisor', 'administrador'].includes(localStorage.getItem('role'));
+  const role = localStorage.getItem('role');
+  const canEdit = ['editor', 'supervisor', 'administrador'].includes(role);
+  const isAdmin = role === 'administrador';
   const accessDenied = new URLSearchParams(location.search).get('accessDenied') === '1';
   let fichas = [];
 
@@ -47,6 +49,9 @@
       const editButton = canEdit
         ? `<button type="button" class="fr172-accion fr172-accion--editar" data-action="edit" data-id="${escapeHtml(ficha.id)}">Editar doc</button>`
         : '<button type="button" class="fr172-accion fr172-accion--editar" disabled title="Se requiere perfil editor para modificar fichas">Editar doc</button>';
+      const deleteButton = isAdmin
+        ? `<button type="button" class="fr172-accion fr172-accion--eliminar" data-action="delete" data-id="${escapeHtml(ficha.id)}">Borrar</button>`
+        : '';
       return `<tr>
         <td>${escapeHtml(ficha.id)}</td>
         <td>${escapeHtml(ficha.ot)}</td>
@@ -58,6 +63,7 @@
         <td class="fr172-reportes__acciones">
           <button type="button" class="fr172-accion" data-action="print" data-id="${id}">Ver ficha imprimible</button>
           ${editButton}
+          ${deleteButton}
         </td>
       </tr>`;
     }).join('');
@@ -85,6 +91,26 @@
     }
   }
 
+  async function removeFicha(id, button) {
+    if (!isAdmin || !await window.siteDialog.confirm(`¿Eliminar permanentemente la ficha FR-172 ${id}? Esta acción no se puede deshacer.`)) return;
+    button.disabled = true;
+    status.textContent = `Eliminando la ficha ${id}...`;
+    try {
+      const response = await API_FETCH(`/api/fr172-puente-grua/${encodeURIComponent(id)}`, { method: 'DELETE' });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'No se pudo eliminar la ficha.');
+      await load();
+      if (!status.textContent.startsWith('Error al cargar')) {
+        status.textContent = `Ficha ${id} eliminada. ${fichas.length} ficha${fichas.length === 1 ? '' : 's'} cargada${fichas.length === 1 ? '' : 's'}.`;
+      }
+    } catch (error) {
+      status.textContent = `No se pudo eliminar la ficha ${id}: ${error.message}`;
+      await window.siteDialog.alert(status.textContent);
+    } finally {
+      button.disabled = false;
+    }
+  }
+
   search.addEventListener('input', render);
   document.getElementById('fr172Refrescar').addEventListener('click', load);
   body.addEventListener('click', event => {
@@ -95,6 +121,8 @@
       location.href = `../fr172-puente-grua-imprimible/?id=${id}`;
     } else if (button.dataset.action === 'edit' && canEdit) {
       location.href = `../fr172-puente-grua-formulario/?id=${id}`;
+    } else if (button.dataset.action === 'delete' && isAdmin) {
+      removeFicha(button.dataset.id, button);
     }
   });
 

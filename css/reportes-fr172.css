@@ -105,6 +105,10 @@
   background: #148a2b;
 }
 
+.fr172-accion--eliminar {
+  background: #b42318;
+}
+
 .fr172-accion:hover:not(:disabled) {
   filter: brightness(.88);
 }
