@@ -11,28 +11,80 @@
   <link rel="stylesheet" href="../css/herramientas-layout.css">
 </head>
 <body>
-  <main class="sec on">
-    <header class="top">
-      <div>
-        <p class="eyebrow">GESTIÓN DE HERRAMIENTAS</p>
-        <h1>Panel principal</h1>
-        <p class="sub">Resumen de pedidos y accesos rápidos a los módulos.</p>
+  <main class="tools-home">
+    <section class="tools-home-section tools-home-requests" id="solicitudes" aria-labelledby="solicitudesTitle">
+      <header class="tools-home-heading">
+        <p class="tools-home-eyebrow">GESTIÓN DE HERRAMIENTAS</p>
+        <h2 id="solicitudesTitle">Solicitudes y seguimiento</h2>
+        <p>Registra las herramientas que necesita cada obra y consulta el avance de los pedidos.</p>
+      </header>
+      <div class="tools-home-links">
+        <a class="tools-home-link" href="/herramientas/solicitud-herramientas/index.html">
+          <span class="tools-home-icon" aria-hidden="true">+</span>
+          <span>
+            <strong>Crear solicitud</strong>
+            <small>Indica la obra, la fecha de necesidad y las herramientas requeridas.</small>
+          </span>
+          <span class="tools-home-arrow" aria-hidden="true">→</span>
+        </a>
+        <a class="tools-home-link" href="/herramientas/reporte-herramientas/index.html">
+          <span class="tools-home-icon" aria-hidden="true">↗</span>
+          <span>
+            <strong>Consultar pedidos</strong>
+            <small>Revisa estados, fechas de entrega y reportes de herramientas.</small>
+          </span>
+          <span class="tools-home-arrow" aria-hidden="true">→</span>
+        </a>
       </div>
-      <div class="atajos">
-        <a class="atajo primario" href="/herramientas/solicitud-herramientas/index.html">Nuevo pedido</a>
-        <a class="atajo secundario" href="/herramientas/reporte-herramientas/index.html">Ver reportes</a>
-      </div>
-    </header>
+    </section>
 
-    <p id="mensajeError" class="mensaje-error" role="alert" hidden></p>
-    <section class="kpis mx-kpis" id="mxKpis" aria-label="Indicadores de pedidos"></section>
-    <section class="mx-grid" id="mxGrid" aria-label="Métricas de pedidos"></section>
+    <section class="tools-home-section tools-home-guide" id="guia" aria-labelledby="guiaTitle">
+      <header class="tools-home-heading">
+        <p class="tools-home-eyebrow">FLUJO DE GESTIÓN</p>
+        <h2 id="guiaTitle">De la solicitud a la entrega</h2>
+        <p>Solicitudes, seguimiento y reportes en un solo lugar.</p>
+      </header>
+      <ol class="tools-home-steps">
+        <li>
+          <span class="tools-home-step-number" aria-hidden="true">01</span>
+          <div><h3>Registra el pedido</h3><p>Asocia la solicitud a la obra e indica quién recibirá las herramientas.</p></div>
+        </li>
+        <li>
+          <span class="tools-home-step-number" aria-hidden="true">02</span>
+          <div><h3>Consulta el seguimiento</h3><p>Revisa el estado del pedido y la disponibilidad de cada herramienta.</p></div>
+        </li>
+        <li>
+          <span class="tools-home-step-number" aria-hidden="true">03</span>
+          <div><h3>Revisa los reportes</h3><p>Filtra los pedidos para consultar la actividad y las fechas de necesidad.</p></div>
+        </li>
+      </ol>
+    </section>
+
+    <section class="tools-home-section tools-home-dashboard" id="panel" aria-labelledby="panelTitle">
+      <header class="tools-home-heading">
+        <p class="tools-home-eyebrow">RESUMEN OPERATIVO</p>
+        <h2 id="panelTitle">Panel principal</h2>
+        <p>Indicadores y actividad de los pedidos de herramientas.</p>
+      </header>
+      <div class="tools-home-panel-preview">
+        <iframe id="panelHerramientasFrame"
+          title="Vista previa del panel de herramientas"
+          src="./panel-herramientas/?embed=1"
+          loading="lazy"
+          width="600"
+          height="300"></iframe>
+      </div>
+      <div class="tools-home-panel-action">
+        <a class="atajo secundario" href="./reporte-herramientas/index.html">Ver reportes</a>
+        <a class="atajo primario" href="./panel-herramientas/">Abrir panel completo</a>
+      </div>
+    </section>
+
   </main>
 
   <script src="../js/herramientas-api-config.js"></script>
   <script src="../js/herramientas-layout.js"></script>
   <script src="../js/login-herramientas.js"></script>
-  <script src="../js/herramientas-dashboard-data.js"></script>
-  <script src="../js/herramientas-metricas.js"></script>
+  <script src="../js/herramientas-panel-embed.js"></script>
 </body>
 </html>

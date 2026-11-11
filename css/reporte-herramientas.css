@@ -206,7 +206,7 @@ tr:focus-visible,
 
 .filtros {
   display: grid;
-  grid-template-columns: minmax(220px, 1.5fr) repeat(3, minmax(160px, 1fr));
+  grid-template-columns: minmax(220px, 1.5fr) repeat(3, minmax(150px, 1fr)) repeat(2, minmax(120px, .75fr));
   gap: 10px;
 }
 

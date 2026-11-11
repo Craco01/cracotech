@@ -49,11 +49,18 @@ function calcular() {
   // Carga por puntero
   const pp = [...contar(pedidos, p => p.puntero_asignado)].sort((a, b) => b[1] - a[1]);
 
-  // Pedidos por semana de necesidad (2 atrás, actual y 3 adelante)
-  const ini = suma(lunes(new Date()), -14);
+  // Pedidos por semana de necesidad dentro del mes seleccionado.
+  const hoy = new Date();
+  const anioSeleccionado = Number($('#filtroAnioPanel').value) || hoy.getFullYear();
+  const mesSeleccionado = Number($('#filtroMesPanel').value);
+  const inicioPeriodo = mesSeleccionado
+    ? new Date(anioSeleccionado, mesSeleccionado - 1, 1)
+    : hoy;
+  const ini = mesSeleccionado ? lunes(inicioPeriodo) : suma(lunes(hoy), -14);
   const semanas = Array.from({ length: 6 }, (_, i) => {
     const a = suma(ini, i * 7), b = suma(a, 7);
-    return { a, n: pedidos.filter(p => p.fecha_necesidad >= a && p.fecha_necesidad < b).length, act: i === 2 };
+    const actual = hoy >= a && hoy < b;
+    return { a, n: pedidos.filter(p => p.fecha_necesidad >= a && p.fecha_necesidad < b).length, act: actual };
   });
   const maxS = Math.max(1, ...semanas.map(s => s.n));
   const cols = `<article class="mx-card"><h3>Pedidos por semana (fecha de necesidad)</h3><div class="mx-cols">${

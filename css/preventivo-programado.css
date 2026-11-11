@@ -23,7 +23,7 @@
 }
 
 .mpp-heading h1,
-.mpp-page h2 {
+.mpp-content h2 {
   color: #000;
   font-family: Georgia, 'Times New Roman', serif;
   text-shadow: 3px 3px 5px rgba(255,255,255,0.6);
@@ -40,7 +40,7 @@
   max-width: none;
 }
 
-.mpp-page h2 {
+.mpp-content h2 {
   margin-top: 0;
   font-size: clamp(22px, 3vw, 28px);
 }
@@ -88,7 +88,7 @@
   text-transform: uppercase;
 }
 
-.mpp-page section {
+.mpp-content > section {
   padding: 28px;
   border: 1px solid rgba(185, 197, 214, 0.85);
   border-radius: 8px;

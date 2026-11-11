@@ -136,3 +136,115 @@
         font-size: 14px;
     }
 }
+
+.maintenance-whatsapp-button {
+    position: fixed;
+    right: 40px;
+    bottom: 40px;
+    z-index: 1000;
+    display: grid;
+    width: 60px;
+    height: 60px;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+}
+
+.maintenance-whatsapp-button img {
+    display: block;
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    transition: transform .2s ease;
+}
+
+.maintenance-whatsapp-button:hover img {
+    transform: scale(1.1);
+}
+
+.maintenance-whatsapp-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgb(0 0 0 / 50%);
+}
+
+.maintenance-whatsapp-overlay.is-visible {
+    display: flex;
+}
+
+.maintenance-whatsapp-card {
+    position: absolute;
+    right: 60px;
+    bottom: 150px;
+    width: 280px;
+    max-width: calc(100% - 40px);
+    padding: 20px;
+    border-radius: 16px;
+    background: #a9a9a9;
+    box-shadow: 0 4px 8px rgb(0 0 0 / 50%);
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.maintenance-whatsapp-card h2 {
+    margin: 0 0 12px;
+    color: #f1f1f1;
+}
+
+.maintenance-whatsapp-card a {
+    display: block;
+    margin: 8px 0;
+    padding: 10px;
+    border-radius: 4px;
+    background: #007bff;
+    color: #fff;
+    text-decoration: none;
+}
+
+.maintenance-whatsapp-card a:hover {
+    background: darkblue;
+    font-weight: 700;
+}
+
+.maintenance-whatsapp-card button {
+    margin-top: 15px;
+    padding: 8px 12px;
+    border: 0;
+    border-radius: 4px;
+    background: #ccc;
+    cursor: pointer;
+}
+
+.maintenance-whatsapp-card button:hover {
+    background: #8f8c8c;
+}
+
+@media (max-width: 768px) {
+    .mapa {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .footer-contacto ul {
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .maintenance-whatsapp-button {
+        right: 20px;
+        bottom: 20px;
+    }
+
+    .maintenance-whatsapp-card {
+        right: 20px;
+        bottom: 100px;
+    }
+}

@@ -27,6 +27,39 @@ const fFH = date => date
   : '—';
 
 let pedidos = [];
+let todosPedidos = [];
+
+function actualizarFiltroFecha() {
+  if (!sessionStorage.getItem(AUTH_TOKEN_KEY)) return;
+  const anio = Number($('#filtroAnioPanel').value);
+  const mes = Number($('#filtroMesPanel').value);
+  pedidos = todosPedidos.filter(p =>
+    p.fecha_necesidad &&
+    !Number.isNaN(p.fecha_necesidad.getTime()) &&
+    (!anio || p.fecha_necesidad.getFullYear() === anio) &&
+    (!mes || p.fecha_necesidad.getMonth() + 1 === mes)
+  );
+  calcular();
+}
+
+function prepararFiltrosFecha() {
+  const anioSelect = $('#filtroAnioPanel');
+  const anioSeleccionado = anioSelect.value || String(new Date().getFullYear());
+  const anios = new Set([new Date().getFullYear(), ...todosPedidos
+    .filter(p => p.fecha_necesidad && !Number.isNaN(p.fecha_necesidad.getTime()))
+    .map(p => p.fecha_necesidad.getFullYear())]);
+  anioSelect.innerHTML = '<option value="">Todos los años</option>' +
+    [...anios].sort((a, b) => b - a).map(anio => `<option value="${anio}">${anio}</option>`).join('');
+  anioSelect.value = anios.has(Number(anioSeleccionado)) ? anioSeleccionado : String(new Date().getFullYear());
+
+  const mesSelect = $('#filtroMesPanel');
+  if (!mesSelect.value) mesSelect.value = String(new Date().getMonth() + 1);
+  if (!anioSelect.dataset.listenerAdded) {
+    anioSelect.addEventListener('change', actualizarFiltroFecha);
+    mesSelect.addEventListener('change', actualizarFiltroFecha);
+    anioSelect.dataset.listenerAdded = 'true';
+  }
+}
 
 function mostrarErrorPedidos(mensaje) {
   $('#mensajeError').textContent = mensaje;
@@ -36,8 +69,10 @@ function mostrarErrorPedidos(mensaje) {
 }
 
 async function cargarPedidos() {
+  prepararFiltrosFecha();
   if (!sessionStorage.getItem(AUTH_TOKEN_KEY)) {
     pedidos = [];
+    todosPedidos = [];
     mostrarErrorPedidos('Inicia sesión para consultar los pedidos y sus métricas.');
     return;
   }
@@ -48,7 +83,7 @@ async function cargarPedidos() {
     if (!response.ok) throw new Error(data.errores?.join(' ') || data.error || 'No se pudieron cargar los pedidos.');
     if (!Array.isArray(data)) throw new TypeError('La API devolvió una lista de pedidos no válida.');
 
-    pedidos = data.map(pedido => ({
+    todosPedidos = data.map(pedido => ({
       ...pedido,
       detalle: Array.isArray(pedido.detalle) ? pedido.detalle : [],
       fecha_necesidad: pedido.fecha_necesidad ? new Date(String(pedido.fecha_necesidad).replace(' ', 'T')) : null,
@@ -56,10 +91,12 @@ async function cargarPedidos() {
       fecha_entrega: pedido.fecha_entrega ? new Date(String(pedido.fecha_entrega).replace(' ', 'T')) : null
     }));
     $('#mensajeError').hidden = true;
-    calcular();
+    prepararFiltrosFecha();
+    actualizarFiltroFecha();
   } catch (error) {
     console.error('No se pudieron cargar las métricas de pedidos.', error);
     pedidos = [];
+    todosPedidos = [];
     mostrarErrorPedidos(error.message || 'No se pudieron cargar los pedidos desde la API.');
   }
 }

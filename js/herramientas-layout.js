@@ -9,6 +9,7 @@
   const toolsRootPath = toolsRoot.replace(/\/+$/, '');
   const authorRoot = frontendRoot.pathname;
   const currentPath = location.pathname.replace(/\/+$/, '') || '/';
+  const embedMode = new URLSearchParams(location.search).has('embed');
   const redirectStorageKey = 'herramientasPostLoginRedirect';
   const protectedToolsTarget = value => {
     if (!value) return null;
@@ -22,9 +23,11 @@
     }
   };
   const pages = [
-    { label: 'Panel', path: toolsRoot },
-    { label: 'Pedidos', path: `${toolsRoot}solicitud-herramientas/index.html` },
-    { label: 'Reportes', path: `${toolsRoot}reporte-herramientas/index.html` },
+    { label: 'Inicio', path: toolsRoot },
+    { label: 'Solicitudes', path: `${toolsRoot}#solicitudes` },
+    { label: 'Guía', path: `${toolsRoot}#guia` },
+    { label: 'Panel', path: `${toolsRoot}#panel` },
+    { label: 'Contacto', path: `${toolsRoot}#contacto` },
     { label: 'Autor', path: authorRoot }
   ];
   const usuariosPath = `${toolsRoot}usuarios/index.html`;
@@ -33,7 +36,10 @@
     const visiblePages = pages.filter(({ label }) => label !== 'Pedidos' || role !== 'observador');
     if (role === 'administrador') visiblePages.push({ label: 'Usuarios', path: usuariosPath });
     return visiblePages.map(({ label, path }) => {
-      const active = currentPath === path.replace(/\/+$/, '');
+      const target = new URL(path, location.origin);
+      const targetPath = target.pathname.replace(/\/+$/, '') || '/';
+      const active = currentPath === targetPath && (!target.hash || location.hash === target.hash) &&
+        (label !== 'Inicio' || !location.hash);
       return `<li><a href="${path}"${active ? ' aria-current="page"' : ''}>${label}</a></li>`;
     }).join('');
   };
@@ -43,7 +49,6 @@
   shell.innerHTML = `
     <nav class="tools-nav" aria-label="Navegación principal">
       <div class="tools-nav-inner">
-        <a class="tools-nav-brand" href="${toolsRoot}">Herramientas</a>
         <button class="tools-nav-toggle" type="button" aria-label="Abrir menú"
           aria-controls="toolsMainNav" aria-expanded="false">
           <span></span><span></span><span></span>
@@ -112,7 +117,100 @@
   `;
 
   document.body.classList.add('tools-layout');
+  if (embedMode) document.body.classList.add('tools-embed');
   document.body.insertBefore(shell, document.body.firstChild);
+
+  if (!embedMode) {
+    const whatsapp = document.createElement('div');
+    whatsapp.className = 'tools-whatsapp';
+    whatsapp.innerHTML = `
+      <button class="tools-whatsapp-button" id="waButton" type="button"
+        aria-label="Elegir contacto por WhatsApp" aria-haspopup="dialog"
+        aria-controls="waModal" aria-expanded="false">
+        <img src="${new URL('img/WhatsApp.png', frontendRoot).pathname}" alt="" aria-hidden="true">
+      </button>
+      <div class="tools-whatsapp-overlay" id="waModal" role="dialog" aria-modal="true"
+        aria-labelledby="waModalTitle" aria-hidden="true">
+        <section class="tools-whatsapp-card">
+          <h2 id="waModalTitle">Elegir contacto de WhatsApp</h2>
+          <a href="https://wa.me/595986221400" target="_blank" rel="noopener noreferrer">Cristhian Redes</a>
+          <a href="https://wa.me/595982156163" target="_blank" rel="noopener noreferrer">Gustavo González</a>
+          <a href="https://wa.me/595986651207" target="_blank" rel="noopener noreferrer">Edgar Ledezma</a>
+          <button id="closeBtn" type="button">Cerrar</button>
+        </section>
+      </div>
+    `;
+    document.body.append(whatsapp);
+
+    const waButton = whatsapp.querySelector('#waButton');
+    const waModal = whatsapp.querySelector('#waModal');
+    const closeWaModal = () => {
+      waModal.classList.remove('is-visible');
+      waModal.setAttribute('aria-hidden', 'true');
+      waButton.setAttribute('aria-expanded', 'false');
+      waButton.focus();
+    };
+    waButton.addEventListener('click', () => {
+      waModal.classList.add('is-visible');
+      waModal.setAttribute('aria-hidden', 'false');
+      waButton.setAttribute('aria-expanded', 'true');
+      waModal.querySelector('a')?.focus();
+    });
+    whatsapp.querySelector('#closeBtn').addEventListener('click', closeWaModal);
+    waModal.addEventListener('click', event => {
+      if (event.target === waModal) closeWaModal();
+    });
+    waModal.addEventListener('keydown', event => {
+      if (event.key !== 'Tab') return;
+      const items = [...waModal.querySelectorAll('a[href], button:not(:disabled)')];
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && waModal.classList.contains('is-visible')) closeWaModal();
+    });
+  }
+
+  if (!embedMode) {
+    const footer = document.createElement('footer');
+    footer.className = 'tools-footer';
+    footer.id = 'contacto';
+    footer.innerHTML = `
+    <div class="tools-footer-inner">
+      <section class="tools-footer-contact" aria-labelledby="toolsFooterContactTitle">
+        <h2 id="toolsFooterContactTitle">Contacto</h2>
+        <address>
+          <ul>
+            <li><span class="tools-footer-label">Informaciones</span><a href="tel:+595213283240">(+595) 21 3283240/2/3</a></li>
+            <li><span class="tools-footer-label">Gustavo González</span><a href="tel:+595982156163">(+595) 982 156163</a></li>
+            <li><span class="tools-footer-label">Cristhian Redes</span><a href="tel:+595986221400">(+595) 986 221400</a></li>
+            <li><span class="tools-footer-label">Gustavo González</span><a href="mailto:mantenimiento2@metalurgicavera.com.py">mantenimiento2@metalurgicavera.com.py</a></li>
+            <li><span class="tools-footer-label">Cristhian Redes</span><a href="mailto:reparaciones@metalurgicavera.com.py">reparaciones@metalurgicavera.com.py</a></li>
+            <li><span class="tools-footer-label">Edgar Ledezma</span><span><a href="tel:+595986651207">(+595) 986 651207</a> · <a href="mailto:herramientas@metalurgicavera.com.py">herramientas@metalurgicavera.com.py</a></span></li>
+            <li><span class="tools-footer-label">Facebook</span><span>Metalúrgica Vera S.A.E.</span></li>
+            <li><span class="tools-footer-label">Sitio web</span><a href="https://www.metalurgicavera.com.py" target="_blank" rel="noopener noreferrer">www.metalurgicavera.com.py</a></li>
+            <li><span class="tools-footer-label">Dirección</span><span>Ruta PY 01, Km 28,6 (Acceso Sur), Ypané</span></li>
+          </ul>
+        </address>
+      </section>
+      <section class="tools-footer-map" aria-labelledby="toolsFooterMapTitle">
+        <h2 id="toolsFooterMapTitle">Metalúrgica Vera S.A.E.</h2>
+        <iframe title="Mapa de ubicación de Metalúrgica Vera"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3601.6318628140593!2d-57.49297322382588!3d-25.48396533503066!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x945c525ca4d7e83b%3A0xa27d522bed160530!2sMetal%C3%BArgica%20Vera%20S.R.L!5e0!3m2!1ses!2spy!4v1781532505861!5m2!1ses!2spy"
+          loading="lazy" referrerpolicy="no-referrer">
+        </iframe>
+      </section>
+    </div>
+  `;
+    document.body.append(footer);
+  }
 
   const nav = shell.querySelector('.tools-nav');
   const navItems = shell.querySelector('#toolsNavItems');
@@ -361,7 +459,7 @@
   });
   passwordModal.addEventListener('click', event => event.stopPropagation());
 
-  if (!sessionStorage.getItem('herramientas_token')) {
+  if (!sessionStorage.getItem('herramientas_token') && !embedMode) {
     const currentTarget = protectedToolsTarget(`${location.pathname}${location.search}${location.hash}`);
     if (currentTarget) sessionStorage.setItem(redirectStorageKey, currentTarget);
     openLoginModal();

@@ -58,8 +58,10 @@ frontend/
 3. `pages_bak/` se conserva como respaldo de las páginas anteriores; la navegación principal ya no depende de esa carpeta.
 4. La administración de usuarios está disponible únicamente en `/mantenimiento/administrar-usuarios/`; el atajo `Ctrl+Mayús+U` abre esa ruta desde el portal de mantenimiento.
 5. [js/api-config.js](js/api-config.js) centraliza la URL base de la API productiva.
-6. Herramientas se publica en `/herramientas/` y consume `https://api.cracotech.com/api/herramientas` mediante [js/herramientas-api-config.js](js/herramientas-api-config.js). Sus cuentas y sesión son independientes del portal de mantenimiento.
+6. Herramientas se publica en `/herramientas/` y consume `https://api.cracotech.com/api/herramientas` mediante [js/herramientas-api-config.js](js/herramientas-api-config.js). Su portada agrupa accesos a solicitudes y seguimiento, una vista previa del panel de métricas en iframe y una guía del flujo; el panel completo está en `/herramientas/panel-herramientas/`. La navegación superior enlaza a las secciones de la portada. Sus cuentas y sesión son independientes del portal de mantenimiento.
 7. El backend está en el repositorio independiente `upkeepmv_backend` y se actualiza manualmente en AWS Lightsail.
+
+El layout compartido de Mantenimiento, [js/site-layout.js](js/site-layout.js), inserta el selector de contactos de WhatsApp y el footer de contacto y ubicación en sus páginas; sus estilos están en [css/footer-estilo.css](css/footer-estilo.css).
 
 Las fichas FR-172 no se guardan automáticamente. Los cambios se persisten en el servidor solo al enviar el formulario con «Guardar en borrador» o «Finalizar ficha».
 
@@ -73,13 +75,13 @@ Los componentes del flujo de login del portal están en:
 
 ## Ejecución local
 
-Desde este directorio, inicia un servidor estático para el frontend:
+Desde este directorio, inicia el servidor estático local:
 
 ```powershell
-py -m http.server 5500
+node .\server.js
 ```
 
-Abre `http://127.0.0.1:5500/mantenimiento/` o `http://127.0.0.1:5500/herramientas/`. Por defecto, ambos módulos consultan el API HTTPS de producción. Para apuntar Herramientas a un backend local, define `window.HERRAMIENTAS_API_BASE_URL = 'http://127.0.0.1:3000/api/herramientas'` antes de cargar `js/herramientas-api-config.js`. No copies credenciales ni archivos `.env` de otros entornos.
+Abre `http://127.0.0.1:5500/mantenimiento/` o `http://127.0.0.1:5500/herramientas/`. Por defecto, los módulos consultan la API HTTPS de producción configurada en sus archivos `js/*api-config.js`; este servidor solo sirve archivos estáticos y no inicia un backend local. Para apuntar Herramientas a un backend local, define `window.HERRAMIENTAS_API_BASE_URL = 'http://127.0.0.1:3000/api/herramientas'` antes de cargar `js/herramientas-api-config.js`. No copies credenciales ni archivos `.env` de otros entornos.
 
 ## Publicación
 

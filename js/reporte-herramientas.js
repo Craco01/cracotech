@@ -67,13 +67,28 @@ function normalizarPedido(p) {
   };
 }
 
-function filtrados() {
+function filtrados(aplicarFecha = vista === 'tabla') {
   const q = $('#q').value.trim().toLowerCase(), fe = $('#fEstado').value, ft = $('#fTipo').value, fh = $('#fHerr').value;
+  const anio = aplicarFecha ? Number($('#fAnio').value) : 0;
+  const mes = aplicarFecha ? Number($('#fMes').value) : 0;
   return pedidos.filter(p =>
     (!fe || p.estado === fe) && (!ft || p.tipo_solicitud === ft) &&
     (!fh || p.detalle.some(d => d.estado_herramienta === fh)) &&
+    (!anio || (p.fecha_necesidad && p.fecha_necesidad.getFullYear() === anio)) &&
+    (!mes || (p.fecha_necesidad && p.fecha_necesidad.getMonth() + 1 === mes)) &&
     (!q || [p.ot_obra, p.nombre_obra, p.puntero_asignado, p.solicitante, ...p.detalle.map(d => d.herramienta)].join(' ').toLowerCase().includes(q))
   );
+}
+
+function actualizarAnios() {
+  const select = $('#fAnio');
+  const seleccionado = select.value || String(new Date().getFullYear());
+  const anios = new Set([new Date().getFullYear(), ...pedidos
+    .filter(p => p.fecha_necesidad && !Number.isNaN(p.fecha_necesidad.getTime()))
+    .map(p => p.fecha_necesidad.getFullYear())]);
+  select.innerHTML = '<option value="">Todos los años</option>' +
+    [...anios].sort((a, b) => b - a).map(anio => `<option value="${anio}">${anio}</option>`).join('');
+  select.value = anios.has(Number(seleccionado)) ? seleccionado : String(new Date().getFullYear());
 }
 const delDia = (lista, d) => lista.filter(p => mismoDia(p.fecha_necesidad, d)).sort((a, b) => a.fecha_necesidad - b.fecha_necesidad);
 
@@ -194,7 +209,7 @@ async function imprimirPeriodo() {
 
 function render() {
   const l = filtrados();
-  kpis(l);
+  kpis(filtrados(false));
   $('#vista').innerHTML = { tabla: vTabla, mes: vMes, semana: vSemana, dia: vDia }[vista](l);
   $('#nav').classList.toggle('oculto', vista === 'tabla');
   $('#imprimir').hidden = !['semana', 'dia'].includes(vista) || !puedeGestionarEnvios();
@@ -392,6 +407,7 @@ function init() {
   $('#hoy').onclick = () => { ref = new Date(); ref.setHours(0, 0, 0, 0); render(); };
   $('#imprimir').addEventListener('click', imprimirPeriodo);
   ['#q', '#fEstado', '#fTipo', '#fHerr'].forEach(s => $(s).addEventListener('input', render));
+  ['#fAnio', '#fMes'].forEach(s => $(s).addEventListener('change', render));
   $('#vista').addEventListener('click', e => {
     const th = e.target.closest('th[data-col]');
     if (th) { orden = { col: th.dataset.col, dir: orden.col === th.dataset.col ? -orden.dir : 1 }; return render(); }
@@ -435,6 +451,10 @@ function init() {
     }
   });
   $('#modalEnvio').addEventListener('submit', guardarEnvio);
+  const hoy = new Date();
+  $('#fMes').value = String(hoy.getMonth() + 1);
+  actualizarAnios();
+  $('#fAnio').value = String(hoy.getFullYear());
   render();
 }
 
@@ -458,6 +478,7 @@ async function cargar() {
     aviso = ` · ${err.message || 'No se pudieron cargar los pedidos desde la API.'}`;
     pedidos = [];
   }
+  if (inicializado) actualizarAnios();
   init();
 }
 document.addEventListener('herramientas:auth-change', cargar);

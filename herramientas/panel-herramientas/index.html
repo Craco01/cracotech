@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#374151">
+  <title>Panel de herramientas | Metalúrgica Vera S.A.E.</title>
+  <meta name="description" content="Panel e indicadores de pedidos de herramientas de Metalúrgica Vera S.A.E.">
+  <link rel="icon" href="../../img/Logo_MV_obra.png" type="image/png">
+  <link rel="stylesheet" href="../../css/herramientas-index.css">
+  <link rel="stylesheet" href="../../css/herramientas-layout.css">
+</head>
+<body>
+  <main class="tools-home tools-panel-page">
+    <section class="tools-home-section tools-home-dashboard" aria-labelledby="panelTitle">
+      <header class="top">
+        <div>
+          <p class="eyebrow">RESUMEN OPERATIVO</p>
+          <h1 id="panelTitle">Panel de herramientas</h1>
+          <p class="sub">Indicadores y actividad de los pedidos de herramientas.</p>
+        </div>
+        <div class="atajos">
+          <a class="atajo primario" href="../reporte-herramientas/index.html">Ver reportes</a>
+        </div>
+      </header>
+      <p id="mensajeError" class="mensaje-error" role="alert" hidden></p>
+      <div class="tools-panel-date-filters" aria-label="Filtrar panel por fecha de necesidad">
+        <label for="filtroAnioPanel">Año de necesidad
+          <select id="filtroAnioPanel">
+            <option value="">Todos los años</option>
+          </select>
+        </label>
+        <label for="filtroMesPanel">Mes de necesidad
+          <select id="filtroMesPanel">
+            <option value="">Todos los meses</option>
+            <option value="1">Enero</option>
+            <option value="2">Febrero</option>
+            <option value="3">Marzo</option>
+            <option value="4">Abril</option>
+            <option value="5">Mayo</option>
+            <option value="6">Junio</option>
+            <option value="7">Julio</option>
+            <option value="8">Agosto</option>
+            <option value="9">Septiembre</option>
+            <option value="10">Octubre</option>
+            <option value="11">Noviembre</option>
+            <option value="12">Diciembre</option>
+          </select>
+        </label>
+      </div>
+      <section class="kpis mx-kpis" id="mxKpis" aria-label="Indicadores de pedidos"></section>
+      <section class="mx-grid" id="mxGrid" aria-label="Métricas de pedidos"></section>
+    </section>
+  </main>
+
+  <script src="../../js/herramientas-api-config.js"></script>
+  <script src="../../js/herramientas-layout.js"></script>
+  <script src="../../js/login-herramientas.js"></script>
+  <script src="../../js/herramientas-dashboard-data.js"></script>
+  <script src="../../js/herramientas-metricas.js"></script>
+  <script src="../../js/herramientas-panel-embed.js"></script>
+</body>
+</html>
