@@ -161,6 +161,10 @@ a:focus-visible {
   margin: 0 0 18px;
 }
 
+html.tools-panel-embedded .tools-panel-date-filters {
+  display: none;
+}
+
 .tools-panel-date-filters label {
   display: grid;
   min-width: 180px;

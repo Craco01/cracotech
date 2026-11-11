@@ -9,6 +9,7 @@ const TIPOS = [
 ];
 const ESTADOS_HERR = ['Disponible', 'No disponible', 'Buscar', 'Para compra'];
 const $ = selector => document.querySelector(selector);
+const esPanelEmbebido = new URLSearchParams(window.location.search).get('embed') === '1';
 const esc = value => String(value ?? '').replace(/[&<>"]/g, char => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'
 }[char]));
@@ -31,8 +32,9 @@ let todosPedidos = [];
 
 function actualizarFiltroFecha() {
   if (!sessionStorage.getItem(AUTH_TOKEN_KEY)) return;
-  const anio = Number($('#filtroAnioPanel').value);
-  const mes = Number($('#filtroMesPanel').value);
+  const hoy = new Date();
+  const anio = esPanelEmbebido ? hoy.getFullYear() : Number($('#filtroAnioPanel').value);
+  const mes = esPanelEmbebido ? hoy.getMonth() + 1 : Number($('#filtroMesPanel').value);
   pedidos = todosPedidos.filter(p =>
     p.fecha_necesidad &&
     !Number.isNaN(p.fecha_necesidad.getTime()) &&
@@ -54,7 +56,10 @@ function prepararFiltrosFecha() {
 
   const mesSelect = $('#filtroMesPanel');
   if (!mesSelect.value) mesSelect.value = String(new Date().getMonth() + 1);
-  if (!anioSelect.dataset.listenerAdded) {
+  if (esPanelEmbebido) {
+    anioSelect.value = String(new Date().getFullYear());
+    mesSelect.value = String(new Date().getMonth() + 1);
+  } else if (!anioSelect.dataset.listenerAdded) {
     anioSelect.addEventListener('change', actualizarFiltroFecha);
     mesSelect.addEventListener('change', actualizarFiltroFecha);
     anioSelect.dataset.listenerAdded = 'true';
