@@ -485,8 +485,11 @@ function init() {
     if (e.target.id === 'estadoPedido') {
       actualizarFechaEnvio();
     } else if (e.target.matches('[name="estadoHerramienta"]') && e.target.value) {
-      $('#estadoPedido').value = 'En proceso';
-      actualizarFechaEnvio();
+      const form = e.target.closest('#formEnvio');
+      if (form?.dataset.estadoOriginal === 'Solicitado') {
+        $('#estadoPedido').value = 'En proceso';
+        actualizarFechaEnvio();
+      }
     }
   });
   $('#modalEnvio').addEventListener('submit', guardarEnvio);
