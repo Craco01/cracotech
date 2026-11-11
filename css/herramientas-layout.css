@@ -547,6 +547,13 @@
 .tools-footer-contact {
   width: 520px;
   max-width: 100%;
+  min-height: 288px;
+}
+
+@media (min-width: 761px) and (max-width: 900px) {
+  .tools-footer-contact {
+    min-height: 421px;
+  }
 }
 
 .tools-footer h2 {
@@ -580,6 +587,12 @@
 
 .tools-footer li:last-child {
   margin-bottom: 0;
+}
+
+.tools-footer li > i {
+  flex: 0 0 1.1em;
+  color: #00bfff;
+  text-align: center;
 }
 
 .tools-footer-label {
@@ -903,6 +916,7 @@
 
   .tools-footer-contact {
     width: auto;
+    min-height: 421px;
   }
 
   .tools-footer ul {
@@ -934,6 +948,10 @@
     grid-template-columns: 1fr;
     gap: 0;
     text-align: center;
+  }
+
+  .tools-footer-contact {
+    min-height: 341px;
   }
 }
 

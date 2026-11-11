@@ -179,6 +179,14 @@
   }
 
   if (!embedMode) {
+    const iconStylesheetUrl = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css';
+    if (!document.querySelector(`link[href="${iconStylesheetUrl}"]`)) {
+      const iconStylesheet = document.createElement('link');
+      iconStylesheet.rel = 'stylesheet';
+      iconStylesheet.href = iconStylesheetUrl;
+      document.head.append(iconStylesheet);
+    }
+
     const footer = document.createElement('footer');
     footer.className = 'tools-footer';
     footer.id = 'contacto';
@@ -190,13 +198,12 @@
           <ul>
             <li><span class="tools-footer-label">Informaciones</span><a href="tel:+595213283240">(+595) 21 3283240/2/3</a></li>
             <li><span class="tools-footer-label">Gustavo González</span><a href="tel:+595982156163">(+595) 982 156163</a></li>
-            <li><span class="tools-footer-label">Cristhian Redes</span><a href="tel:+595986221400">(+595) 986 221400</a></li>
+            <li><span class="tools-footer-label">Edgar Ledezma</span><a href="tel:+595986651207">(+595) 986 651207</a></li>
             <li><span class="tools-footer-label">Gustavo González</span><a href="mailto:mantenimiento2@metalurgicavera.com.py">mantenimiento2@metalurgicavera.com.py</a></li>
-            <li><span class="tools-footer-label">Cristhian Redes</span><a href="mailto:reparaciones@metalurgicavera.com.py">reparaciones@metalurgicavera.com.py</a></li>
-            <li><span class="tools-footer-label">Edgar Ledezma</span><span><a href="tel:+595986651207">(+595) 986 651207</a> · <a href="mailto:herramientas@metalurgicavera.com.py">herramientas@metalurgicavera.com.py</a></span></li>
-            <li><span class="tools-footer-label">Facebook</span><span>Metalúrgica Vera S.A.E.</span></li>
-            <li><span class="tools-footer-label">Sitio web</span><a href="https://www.metalurgicavera.com.py" target="_blank" rel="noopener noreferrer">www.metalurgicavera.com.py</a></li>
-            <li><span class="tools-footer-label">Dirección</span><span>Ruta PY 01, Km 28,6 (Acceso Sur), Ypané</span></li>
+            <li><span class="tools-footer-label">Edgar Ledezma</span><a href="mailto:herramientas@metalurgicavera.com.py">herramientas@metalurgicavera.com.py</a></li>
+            <li><i class="fa-brands fa-facebook" aria-hidden="true"></i><span>Metalúrgica Vera S.A.E.</span></li>
+            <li><i class="fa-solid fa-globe" aria-hidden="true"></i><a href="https://www.metalurgicavera.com.py" target="_blank" rel="noopener noreferrer">www.metalurgicavera.com.py</a></li>
+            <li><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span>Ruta PY 01, Km 28,6 (Acceso Sur), Ypané</span></li>
           </ul>
         </address>
       </section>
