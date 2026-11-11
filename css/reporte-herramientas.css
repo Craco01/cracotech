@@ -315,10 +315,13 @@ tbody tr:hover {
 }
 
 #vista tbody tr.fila-completada,
-#vista tbody tr.fila-cancelada,
-#vista tbody tr.fila-completada:hover,
-#vista tbody tr.fila-cancelada:hover {
+#vista tbody tr.fila-completada:hover {
   background: #e8f5e9;
+}
+
+#vista tbody tr.fila-cancelada,
+#vista tbody tr.fila-cancelada:hover {
+  background: #f1f3f5;
 }
 
 #vista tbody tr.fila-vencida,
