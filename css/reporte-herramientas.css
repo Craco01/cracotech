@@ -314,6 +314,23 @@ tbody tr:hover {
   background: var(--detail);
 }
 
+#vista tbody tr.fila-completada,
+#vista tbody tr.fila-cancelada,
+#vista tbody tr.fila-completada:hover,
+#vista tbody tr.fila-cancelada:hover {
+  background: #e8f5e9;
+}
+
+#vista tbody tr.fila-vencida,
+#vista tbody tr.fila-vencida:hover {
+  background: #ffebee;
+}
+
+#vista tbody tr.fila-envio-parcial,
+#vista tbody tr.fila-envio-parcial:hover {
+  background: #fff8e1;
+}
+
 tbody tr:last-child td {
   border-bottom: 0;
 }
@@ -344,6 +361,10 @@ tbody tr:last-child td {
 .e-en-proceso,
 .h-para-compra {
   color: var(--buy);
+}
+
+.e-envio-parcial {
+  color: #8a6400;
 }
 
 .e-completado,

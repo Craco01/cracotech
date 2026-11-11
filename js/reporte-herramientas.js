@@ -1,7 +1,7 @@
 'use strict';
 
 /* ===== Catálogos (iguales a los ENUM de la BD) ===== */
-const ESTADOS = ['Solicitado', 'En proceso', 'Completado', 'Cancelado'];
+const ESTADOS = ['Solicitado', 'En proceso', 'Envío parcial', 'Completado', 'Cancelado'];
 const TIPOS = [
   'Herramientas para Ingreso a Obra',
   'Reposición de Herramientas (Herramientas averiadas o extraviadas)',
@@ -30,7 +30,8 @@ let pedidos = [];
 let vista = 'tabla';
 let inicializado = false;
 let ref = new Date(); ref.setHours(0, 0, 0, 0);
-let orden = { col: 'fecha_necesidad', dir: 1 };
+let orden = { col: 'id', dir: -1 };
+let ordenInicialPorEstado = true;
 
 /* ===== Utilidades ===== */
 const mismoDia = (a, b) => a.toDateString() === b.toDateString();
@@ -44,7 +45,7 @@ const cap = s => s[0].toUpperCase() + s.slice(1);
 
 const tagEstado = e => `<span class="tag e-${slug(e)}">${esc(e)}</span>`;
 const etiquetaEstadoHerr = e => ETIQUETAS_ESTADO_HERR[e] || e;
-const requiereFechaEnvio = estado => estado === 'Completado' || estado === 'Cancelado';
+const requiereFechaEnvio = estado => estado === 'Completado' || estado === 'Cancelado' || estado === 'Envío parcial';
 const tagHerr = e => e ? `<span class="tag h-${slug(e)}">${esc(etiquetaEstadoHerr(e))}</span>` : '';
 function puntos(p) {
   return `<span class="pts">${p.detalle.filter(d => d.estado_herramienta).map(d => `<span class="pt h-${slug(d.estado_herramienta)}" title="${esc(d.herramienta)}: ${esc(etiquetaEstadoHerr(d.estado_herramienta))}"><small>${esc(etiquetaEstadoHerr(d.estado_herramienta))}</small></span>`).join('')}</span>`;
@@ -112,10 +113,25 @@ function vTabla(l) {
   const cols = [['id', 'ID'], ['ot_obra', 'OT / Obra'], ['puntero_asignado', 'Puntero'], ['solicitante', 'Solicitante'], ['tipo_solicitud', 'Tipo'],
     ['fecha_necesidad', 'Necesidad'], ['estado', 'Estado'], ['herr', 'Herramientas']];
   const v = (p, c) => c === 'herr' ? p.detalle.length : p[c];
-  const o = [...l].sort((a, b) => { const x = v(a, orden.col), y = v(b, orden.col); return (x > y ? 1 : x < y ? -1 : 0) * orden.dir; });
+  const o = [...l].sort((a, b) => {
+    if (ordenInicialPorEstado) {
+      const grupo = p => p.estado === 'Solicitado' || p.estado === 'En proceso' ? 0 : 1;
+      const porGrupo = grupo(a) - grupo(b);
+      if (porGrupo) return porGrupo;
+      return Number(b.id) - Number(a.id);
+    }
+    const x = v(a, orden.col), y = v(b, orden.col);
+    return (x > y ? 1 : x < y ? -1 : 0) * orden.dir;
+  });
   if (!o.length) return '<div class="vacio">No hay pedidos con estos filtros. Probá quitar alguno.</div>';
   return `<div class="cont"><table><thead><tr>${cols.map(([c, t]) => `<th scope="col" data-col="${c}" tabindex="0" aria-sort="${orden.col === c ? (orden.dir > 0 ? 'ascending' : 'descending') : 'none'}" class="${orden.col === c ? (orden.dir > 0 ? 'asc' : 'desc') : ''}">${t}</th>`).join('')}</tr></thead><tbody>${
-    o.map(p => `<tr tabindex="0" data-id="${p.id}"><td><b>${p.id}</b></td><td><b>${esc(p.ot_obra)}</b>${p.nombre_obra ? `<br><small>${esc(p.nombre_obra)}</small>` : ''}</td><td>${esc(p.puntero_asignado)}</td><td>${esc(p.solicitante)}</td><td>${esc(p.tipo_solicitud.split(' (')[0])}</td><td>${fFH(p.fecha_necesidad)}</td><td>${tagEstado(p.estado)}</td><td>${p.detalle.length} ${puntos(p)}</td></tr>`).join('')
+    o.map(p => {
+      const filaEstado = p.estado === 'Envío parcial' ? 'fila-envio-parcial'
+        : p.estado === 'Completado' ? 'fila-completada'
+        : p.estado === 'Cancelado' ? 'fila-cancelada'
+        : p.fecha_necesidad && p.fecha_necesidad < new Date() ? 'fila-vencida' : '';
+      return `<tr tabindex="0" class="${filaEstado}" data-id="${p.id}"><td><b>${p.id}</b></td><td><b>${esc(p.ot_obra)}</b>${p.nombre_obra ? `<br><small>${esc(p.nombre_obra)}</small>` : ''}</td><td>${esc(p.puntero_asignado)}</td><td>${esc(p.solicitante)}</td><td>${esc(p.tipo_solicitud.split(' (')[0])}</td><td>${fFH(p.fecha_necesidad)}</td><td>${tagEstado(p.estado)}</td><td>${p.detalle.length} ${puntos(p)}</td></tr>`;
+    }).join('')
   }</tbody></table></div>`;
 }
 
@@ -224,7 +240,10 @@ function render() {
   });
   $('#vista').setAttribute('aria-labelledby', `tab-${vista}`);
   const ayudaEnvio = puedeGestionarEnvios() ? ' · Clic derecho sobre un pedido para registrar el envío' : '';
-  $('#rango').textContent = `${l.length} pedidos · ordenados por fecha de necesidad${ayudaEnvio}${aviso}`;
+  const descripcionOrden = ordenInicialPorEstado
+    ? 'Solicitados y en proceso primero · ID decreciente'
+    : `ordenados por ${orden.col.replace('_', ' ')} ${orden.dir > 0 ? 'ascendente' : 'descendente'}`;
+  $('#rango').textContent = `${l.length} pedidos · ${descripcionOrden}${ayudaEnvio}${aviso}`;
 }
 
 function detalle(id) {
@@ -299,7 +318,7 @@ function abrirModalEnvio(pedidoId) {
       <dl><dt>Nombre de la obra</dt><dd>${esc(pedido.nombre_obra) || '—'}</dd><dt>Puntero asignado</dt><dd>${esc(pedido.puntero_asignado)}</dd><dt>Solicitante</dt><dd>${esc(pedido.solicitante)}</dd>
       <dt>Tipo de solicitud</dt><dd>${esc(pedido.tipo_solicitud)}</dd><dt>Necesita traslado</dt><dd>${pedido.necesita_traslado ? 'Sí' : 'No'}</dd>
       <dt>Fecha de necesidad</dt><dd>${fFH(pedido.fecha_necesidad)}</dd><dt>Registrado</dt><dd>${fFH(pedido.fecha_registro)}</dd>
-      <dt>Entrega</dt><dd>${fFH(pedido.fecha_entrega)}</dd>
+      <dt>Entrega registrada</dt><dd>${fFH(pedido.fecha_entrega)}</dd>
       <dt id="fechaEnvioEtiqueta"${mostrarFechaEnvio ? '' : ' hidden'}>Fecha de envío</dt>
       <dd id="fechaEnvioCampo"${mostrarFechaEnvio ? '' : ' hidden'}><input id="fechaEnvio" name="fechaEnvio" type="datetime-local" value="${mostrarFechaEnvio ? valorFechaLocal(pedido.fecha_envio) : ''}"${mostrarFechaEnvio ? ' required' : ''}></dd>
       <dt>Observaciones</dt><dd>${esc(pedido.observaciones) || '—'}</dd></dl>
@@ -410,7 +429,11 @@ function init() {
   ['#fAnio', '#fMes'].forEach(s => $(s).addEventListener('change', render));
   $('#vista').addEventListener('click', e => {
     const th = e.target.closest('th[data-col]');
-    if (th) { orden = { col: th.dataset.col, dir: orden.col === th.dataset.col ? -orden.dir : 1 }; return render(); }
+    if (th) {
+      ordenInicialPorEstado = false;
+      orden = { col: th.dataset.col, dir: orden.col === th.dataset.col ? -orden.dir : 1 };
+      return render();
+    }
     const el = e.target.closest('[data-id]'); if (el) return detalle(el.dataset.id);
     const c = e.target.closest('[data-dia]'); if (c) { ref = new Date(c.dataset.dia); vista = 'dia'; render(); }
   });
@@ -425,6 +448,7 @@ function init() {
     const th = e.target.closest('th[data-col]');
     if (!th || !['Enter', ' '].includes(e.key)) return;
     e.preventDefault();
+    ordenInicialPorEstado = false;
     orden = { col: th.dataset.col, dir: orden.col === th.dataset.col ? -orden.dir : 1 };
     render();
     $('#vista th[data-col="' + CSS.escape(orden.col) + '"]')?.focus();

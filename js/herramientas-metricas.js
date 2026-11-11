@@ -2,7 +2,7 @@
 /* Usa globals de dashboard-data.js: pedidos, ESTADOS, ESTADOS_HERR, TIPOS, esc, lunes, suma, fFH, $ */
 
 const COLOR = {
-  'Solicitado': 'var(--buscar)', 'En proceso': 'var(--cobre-claro)', 'Completado': 'var(--ok)', 'Cancelado': 'var(--tenue)',
+  'Solicitado': 'var(--buscar)', 'En proceso': 'var(--cobre-claro)', 'Envío parcial': '#b88900', 'Completado': 'var(--ok)', 'Cancelado': 'var(--tenue)',
   'Disponible': 'var(--ok)', 'No disponible': 'var(--no)', 'Buscar': 'var(--buscar)', 'Para compra': 'var(--compra)'
 };
 
@@ -21,10 +21,10 @@ function contar(arr, clave) {
 }
 
 function calcular() {
-  const activos = pedidos.filter(p => p.estado === 'Solicitado' || p.estado === 'En proceso');
+  const activos = pedidos.filter(p => p.estado === 'Solicitado' || p.estado === 'En proceso' || p.estado === 'Envío parcial');
   const items = pedidos.flatMap(p => p.detalle.map(d => ({ ...d, p })));
   const unidades = items.reduce((a, d) => a + d.cantidad, 0);
-  const entregados = pedidos.filter(p => p.estado === 'Completado' && p.fecha_entrega);
+  const entregados = pedidos.filter(p => (p.estado === 'Completado' || p.estado === 'Envío parcial') && p.fecha_entrega);
   const aTiempo = entregados.filter(p => p.fecha_entrega <= p.fecha_necesidad).length;
   const porGestionar = items.filter(d => d.p.estado !== 'Cancelado' && d.p.estado !== 'Completado' && (d.estado_herramienta === 'Buscar' || d.estado_herramienta === 'Para compra')).length;
 

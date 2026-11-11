@@ -326,6 +326,10 @@ button:focus-visible{
     font-weight:600;
 }
 
+#mensajeErrorReprogramacion:empty{
+    display:none;
+}
+
 .input-error{
     border-color:var(--danger) !important;
     background-color:#fef2f2 !important;

@@ -1,6 +1,6 @@
 'use strict';
 
-const ESTADOS = ['Solicitado', 'En proceso', 'Completado', 'Cancelado'];
+const ESTADOS = ['Solicitado', 'En proceso', 'Envío parcial', 'Completado', 'Cancelado'];
 const TIPOS = [
   'Herramientas para Ingreso a Obra',
   'Reposición de Herramientas (Herramientas averiadas o extraviadas)',
