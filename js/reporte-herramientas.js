@@ -52,6 +52,7 @@ function puntos(p) {
 }
 
 const puedeGestionarEnvios = () => ['gestor', 'administrador'].includes(sessionStorage.getItem('herramientas_rol'));
+const esAdministradorHerramientas = () => sessionStorage.getItem('herramientas_rol') === 'administrador';
 
 function normalizarPedido(p) {
   return {
@@ -281,9 +282,12 @@ function abrirModalEnvio(pedidoId) {
   const tieneIdsReales = pedido.detalle.length > 0 &&
     pedido.detalle.every(item => Number.isSafeInteger(item.id) && item.id > 0);
   const puedeGuardar = tieneIdsReales && puedeGestionarEnvios();
+  const esAdmin = esAdministradorHerramientas();
+  const estadoTerminal = ['Completado', 'Cancelado'].includes(pedido.estado);
+  const bloquearEstado = !esAdmin && estadoTerminal;
 
   const pedidoEstadoOpciones = ESTADOS.map(estado =>
-    `<option value="${esc(estado)}"${estado === pedido.estado ? ' selected' : ''}>${esc(estado)}</option>`
+    `<option value="${esc(estado)}"${estado === pedido.estado ? ' selected' : ''}${!esAdmin && pedido.estado !== 'Solicitado' && estado === 'Solicitado' ? ' disabled' : ''}>${esc(estado)}</option>`
   ).join('');
   const mostrarFechaEnvio = requiereFechaEnvio(pedido.estado);
   const detalle = pedido.detalle.map((item, index) => {
@@ -310,10 +314,11 @@ function abrirModalEnvio(pedidoId) {
       </div>
     </div>
     ${puedeGuardar ? '' : `<p class="envio-preview" role="status">${tieneIdsReales ? 'Vista previa: inicia sesión como gestor o administrador para guardar.' : 'Vista previa con datos de ejemplo: el guardado está deshabilitado.'}</p>`}
-    <form id="formEnvio" class="envio-form" data-pedido-id="${pedido.id}">
+    <form id="formEnvio" class="envio-form" data-pedido-id="${pedido.id}" data-estado-original="${esc(pedido.estado)}">
       <div class="pedido-estado-general">
         <label for="estadoPedido">Estado general del pedido</label>
-        <select id="estadoPedido" name="estadoPedido" required>${pedidoEstadoOpciones}</select>
+        <select id="estadoPedido" name="estadoPedido" required${bloquearEstado ? ' disabled' : ''}>${pedidoEstadoOpciones}</select>
+        ${bloquearEstado ? '<small>Solo un administrador puede cambiar un pedido completado o cancelado.</small>' : ''}
       </div>
       <dl><dt>Nombre de la obra</dt><dd>${esc(pedido.nombre_obra) || '—'}</dd><dt>Puntero asignado</dt><dd>${esc(pedido.puntero_asignado)}</dd><dt>Solicitante</dt><dd>${esc(pedido.solicitante)}</dd>
       <dt>Tipo de solicitud</dt><dd>${esc(pedido.tipo_solicitud)}</dd><dt>Necesita traslado</dt><dd>${pedido.necesita_traslado ? 'Sí' : 'No'}</dd>
@@ -353,6 +358,16 @@ async function guardarEnvio(event) {
   const mensaje = $('#mensajeEnvio');
   const pedidoId = Number(form.dataset.pedidoId);
   const estadoPedido = form.elements.estadoPedido.value;
+  const estadoOriginal = form.dataset.estadoOriginal;
+  const rol = sessionStorage.getItem('herramientas_rol');
+  if (rol === 'gestor' && estadoPedido === 'Solicitado' && estadoOriginal !== 'Solicitado') {
+    mensaje.textContent = 'El gestor no puede volver un pedido al estado Solicitado.';
+    return;
+  }
+  if (['Completado', 'Cancelado'].includes(estadoPedido) && estadoPedido !== estadoOriginal &&
+      !window.confirm(`¿Confirma que desea marcar el pedido como ${estadoPedido}? Después, solo un administrador podrá cambiar su estado.`)) {
+    return;
+  }
   const herramientas = Array.from(form.querySelectorAll('[data-herramienta-id]'), select => ({
     id: Number(select.dataset.herramientaId),
     estadoHerramienta: select.value || select.dataset.estadoOriginal || null
