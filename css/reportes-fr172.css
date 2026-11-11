@@ -117,3 +117,70 @@
   background: #94a3b8;
   cursor: not-allowed;
 }
+
+.fr172-master-dialog {
+  width: min(420px, calc(100% - 32px));
+  padding: 22px;
+  border: 0;
+  border-radius: 10px;
+  box-shadow: 0 16px 48px rgb(15 23 42 / 28%);
+}
+
+.fr172-master-dialog::backdrop {
+  background: rgb(15 23 42 / 58%);
+}
+
+.fr172-master-dialog h3 {
+  margin: 0 0 8px;
+}
+
+.fr172-master-dialog p {
+  margin: 0 0 14px;
+}
+
+.fr172-master-dialog label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.fr172-master-dialog input {
+  width: 100%;
+  min-height: 42px;
+  padding: 8px 10px;
+  border: 1px solid #94a3b8;
+  border-radius: 5px;
+  font: inherit;
+}
+
+.fr172-master-dialog input:focus-visible {
+  outline: 3px solid #60a5fa;
+  outline-offset: 2px;
+}
+
+.fr172-master-dialog__error {
+  min-height: 1.4em;
+  margin: 6px 0 0 !important;
+  color: #b42318;
+}
+
+.fr172-master-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.fr172-master-dialog__actions button {
+  padding: 9px 12px;
+  border: 0;
+  border-radius: 5px;
+  background: #e2e8f0;
+  font: inherit;
+  cursor: pointer;
+}
+
+.fr172-master-dialog__actions .fr172-master-dialog__confirm {
+  background: #b42318;
+  color: #fff;
+}

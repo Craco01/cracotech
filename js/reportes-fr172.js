@@ -6,6 +6,10 @@
   const status = document.getElementById('fr172Estado');
   const search = document.getElementById('fr172Buscador');
   const createLink = document.querySelector('.fr172-reportes__nuevo');
+  const masterDialog = document.getElementById('fr172MasterDialog');
+  const masterForm = document.getElementById('fr172MasterForm');
+  const masterPasswordInput = document.getElementById('fr172MasterPassword');
+  const masterError = document.getElementById('fr172MasterError');
   let canEdit = false;
   let isAdmin = false;
   const accessDenied = new URLSearchParams(location.search).get('accessDenied') === '1';
@@ -111,12 +115,47 @@
     }
   }
 
+  function pedirClaveMaestra() {
+    return new Promise(resolve => {
+      const finish = value => {
+        masterDialog.close();
+        masterForm.removeEventListener('submit', onSubmit);
+        document.getElementById('fr172MasterCancel').removeEventListener('click', onCancel);
+        masterDialog.removeEventListener('cancel', onCancel);
+        masterPasswordInput.value = '';
+        resolve(value);
+      };
+      const onSubmit = event => {
+        event.preventDefault();
+        if (!masterPasswordInput.value.trim()) {
+          masterError.textContent = 'La clave maestra es obligatoria.';
+          return;
+        }
+        finish(masterPasswordInput.value);
+      };
+      const onCancel = () => finish(null);
+
+      masterError.textContent = '';
+      masterPasswordInput.value = '';
+      masterForm.addEventListener('submit', onSubmit);
+      document.getElementById('fr172MasterCancel').addEventListener('click', onCancel);
+      masterDialog.addEventListener('cancel', onCancel);
+      masterDialog.showModal();
+      masterPasswordInput.focus();
+    });
+  }
+
   async function removeFicha(id, button) {
     if (!isAdmin || !await window.siteDialog.confirm(`¿Eliminar permanentemente la ficha FR-172 ${id}? Esta acción no se puede deshacer.`)) return;
+    let masterPassword = await pedirClaveMaestra();
+    if (!masterPassword) return;
     button.disabled = true;
     status.textContent = `Eliminando la ficha ${id}...`;
     try {
-      const response = await API_FETCH(`/api/fr172-puente-grua/${encodeURIComponent(id)}`, { method: 'DELETE' });
+      const response = await API_FETCH(`/api/fr172-puente-grua/${encodeURIComponent(id)}`, {
+        method: 'DELETE',
+        headers: { 'X-Master-Password': masterPassword }
+      });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || 'No se pudo eliminar la ficha.');
       await load();
@@ -127,6 +166,7 @@
       status.textContent = `No se pudo eliminar la ficha ${id}: ${error.message}`;
       await window.siteDialog.alert(status.textContent);
     } finally {
+      masterPassword = '';
       button.disabled = false;
     }
   }

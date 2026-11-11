@@ -169,6 +169,19 @@
           <tbody id="fr172Body"></tbody>
         </table>
       </div>
+      <dialog id="fr172MasterDialog" class="fr172-master-dialog" aria-labelledby="fr172MasterTitle">
+        <form id="fr172MasterForm">
+          <h3 id="fr172MasterTitle">Confirmar borrado</h3>
+          <p>Para eliminar esta ficha, confirma la operación con la clave maestra.</p>
+          <label for="fr172MasterPassword">Clave maestra</label>
+          <input id="fr172MasterPassword" type="password" autocomplete="current-password" required>
+          <p id="fr172MasterError" class="fr172-master-dialog__error" role="alert" aria-live="polite"></p>
+          <div class="fr172-master-dialog__actions">
+            <button type="button" id="fr172MasterCancel">Cancelar</button>
+            <button type="submit" class="fr172-master-dialog__confirm">Confirmar borrado</button>
+          </div>
+        </form>
+      </dialog>
     </div>
   </template>
 
