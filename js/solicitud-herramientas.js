@@ -1,19 +1,26 @@
 const HORAS_ANTICIPACION = 10;
-
-const fechaNecesidad = document.getElementById("fechaNecesidad");
-const fechaNecesidadVista = document.getElementById("fechaNecesidadVista");
+const modoReprogramar = new URLSearchParams(window.location.search).get("modo") === "reprogramar";
+const fechaNecesidad = document.getElementById(modoReprogramar ? "fechaNecesidadNueva" : "fechaNecesidad");
+const fechaNecesidadVista = document.getElementById(modoReprogramar ? "fechaNecesidadNuevaVista" : "fechaNecesidadVista");
 const modalSeleccionFecha = document.getElementById("modalSeleccionFecha");
 const mesCalendario = document.getElementById("mesCalendario");
 const diasCalendario = document.getElementById("diasCalendario");
 const opcionesHora = document.getElementById("opcionesHora");
 const opcionesMinuto = document.getElementById("opcionesMinuto");
 const errorSeleccionFecha = document.getElementById("errorSeleccionFecha");
-const mensajeError = document.getElementById("mensajeError");
+const mensajeError = document.getElementById(modoReprogramar ? "mensajeErrorReprogramacion" : "mensajeError");
 const formulario = document.getElementById("formSolicitud");
 const tabla = document.querySelector("#tablaHerramientas tbody");
 const btnAgregar = document.getElementById("btnAgregar");
 const btnEnviar = document.getElementById("btnEnviar");
 const modalSolicitudCreada = document.getElementById("modalSolicitudCreada");
+const formReprogramarPedido = document.getElementById("formReprogramarPedido");
+const pedidoReprogramar = document.getElementById("pedidoReprogramar");
+const fechaNecesidadNueva = fechaNecesidad;
+const motivoReprogramacion = document.getElementById("motivoReprogramacion");
+const mensajeErrorReprogramacion = document.getElementById("mensajeErrorReprogramacion");
+const btnReprogramarPedido = document.getElementById("btnReprogramarPedido");
+let claveReprogramacionPendiente = null;
 let claveSolicitudPendiente = null;
 let fechaSeleccionada = "";
 let fechaMesMostrado = null;
@@ -21,9 +28,78 @@ let horaSeleccionada = "";
 let minutoSeleccionado = "";
 
 window.addEventListener("DOMContentLoaded", () => {
+    if (modoReprogramar) {
+        document.title = "Reprogramar pedido | Herramientas";
+        document.querySelector(".header h1").textContent = "Reprogramar pedido";
+        document.querySelector(".header p").textContent = "Selecciona un pedido activo, indica la nueva fecha de necesidad y explica el motivo.";
+        formulario.querySelectorAll(":scope > .card:not(#formReprogramarPedido), :scope > .actions").forEach(element => {
+            element.hidden = true;
+            element.querySelectorAll("input, select, textarea, button").forEach(control => { control.disabled = true; });
+        });
+        formReprogramarPedido.hidden = false;
+        configurarFechaMinima();
+        actualizarAccesoReprogramacion();
+        return;
+    }
     configurarFechaMinima();
     agregarFilaHerramienta();
 });
+
+document.addEventListener("herramientas:auth-change", () => {
+    if (modoReprogramar) actualizarAccesoReprogramacion();
+});
+
+function actualizarAccesoReprogramacion() {
+    const rol = sessionStorage.getItem(AUTH_ROLE_KEY);
+    const controles = formReprogramarPedido.querySelectorAll("input, select, textarea, button");
+    if (rol === "observador") {
+        controles.forEach(control => { control.disabled = true; });
+        mostrarErrorReprogramacion("Tu perfil de observador no tiene permiso para reprogramar pedidos.");
+        return;
+    }
+
+    controles.forEach(control => { control.disabled = false; });
+    if (!sessionStorage.getItem(AUTH_TOKEN_KEY)) {
+        pedidoReprogramar.replaceChildren(new Option("Inicia sesión para cargar pedidos", ""));
+        mostrarErrorReprogramacion("Inicia sesión con un perfil solicitante, gestor o administrador.");
+        return;
+    }
+    mostrarErrorReprogramacion("");
+    cargarPedidosReprogramables();
+}
+
+function mostrarErrorReprogramacion(texto, tipo = "error") {
+    mensajeErrorReprogramacion.textContent = texto;
+    mensajeErrorReprogramacion.className = tipo;
+}
+
+async function cargarPedidosReprogramables() {
+    pedidoReprogramar.replaceChildren(new Option("Cargando pedidos...", ""));
+    try {
+        const response = await API_FETCH("/api/pedidos/reprogramables");
+        const pedidos = await response.json();
+        if (!response.ok) throw new Error(pedidos.error || "No se pudieron cargar los pedidos.");
+
+        pedidoReprogramar.replaceChildren(new Option("Selecciona un pedido", ""));
+        for (const pedido of pedidos) {
+            const fecha = pedido.fecha_necesidad
+                ? new Intl.DateTimeFormat("es", { dateStyle: "short", timeStyle: "short" })
+                    .format(new Date(String(pedido.fecha_necesidad).replace(" ", "T")))
+                : "Sin fecha";
+            const opcion = new Option(
+                `Pedido ${pedido.id} · OT ${pedido.ot_obra} · ${pedido.nombre_obra || "Obra sin nombre"} · Puntero: ${pedido.puntero_asignado} · Necesidad: ${fecha}`,
+                String(pedido.id)
+            );
+            pedidoReprogramar.add(opcion);
+        }
+        if (!pedidos.length) {
+            pedidoReprogramar.replaceChildren(new Option("No hay pedidos activos para reprogramar", ""));
+        }
+    } catch (error) {
+        pedidoReprogramar.replaceChildren(new Option("No se pudieron cargar los pedidos", ""));
+        mostrarErrorReprogramacion(error.message || "No se pudieron cargar los pedidos.");
+    }
+}
 
 function ventanaDelDia(fecha) {
     const dia = fecha.getDay();
@@ -414,6 +490,53 @@ formulario.addEventListener("reset", () => {
 
 formulario.addEventListener("submit", async event => {
     event.preventDefault();
+    if (modoReprogramar) {
+        if (!pedidoReprogramar.reportValidity()) return;
+        const errorFecha = obtenerErrorFecha(fechaNecesidadNueva.value);
+        if (errorFecha) {
+            mostrarErrorReprogramacion(errorFecha);
+            fechaNecesidadVista.focus();
+            return;
+        }
+        if (!motivoReprogramacion.reportValidity()) return;
+        if (!sessionStorage.getItem(AUTH_TOKEN_KEY)) {
+            mostrarErrorReprogramacion("Inicia sesión para reprogramar el pedido.");
+            window.abrirLoginHerramientas?.();
+            return;
+        }
+        const pedidoId = pedidoReprogramar.value;
+        if (!pedidoId) {
+            mostrarErrorReprogramacion("Selecciona un pedido activo.");
+            return;
+        }
+        if (!claveReprogramacionPendiente) claveReprogramacionPendiente = crypto.randomUUID();
+        btnReprogramarPedido.disabled = true;
+        mostrarErrorReprogramacion("Guardando la reprogramación...", "success");
+        try {
+            const response = await API_FETCH(`/api/pedidos/${encodeURIComponent(pedidoId)}/reprogramacion`, {
+                method: "POST",
+                headers: { ...API_JSON_HEADERS, "Idempotency-Key": claveReprogramacionPendiente },
+                body: JSON.stringify({
+                    fechaNecesidad: fechaNecesidadNueva.value,
+                    motivo: motivoReprogramacion.value.trim()
+                })
+            });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.errores?.join(" ") || result.error || "No se pudo reprogramar el pedido.");
+            claveReprogramacionPendiente = null;
+            document.getElementById("tituloSolicitudCreada").textContent = "Pedido reprogramado";
+            document.getElementById("mensajeSolicitudCreada").textContent =
+                `Se creó el pedido ${result.id} y el pedido ${pedidoId} quedó completado.`;
+            modalSolicitudCreada.showModal();
+        } catch (error) {
+            mostrarErrorReprogramacion(error instanceof TypeError
+                ? "No se pudo conectar con el servidor. Verifica la conexión e intenta nuevamente."
+                : error.message || "No se pudo reprogramar el pedido.");
+        } finally {
+            btnReprogramarPedido.disabled = false;
+        }
+        return;
+    }
     if (!validarFecha()) return;
 
     if (!sessionStorage.getItem(AUTH_TOKEN_KEY)) {

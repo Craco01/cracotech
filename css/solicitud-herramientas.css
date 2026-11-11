@@ -73,6 +73,11 @@ body{
     margin-bottom:20px;
 }
 
+.card[hidden],
+.actions[hidden]{
+    display:none!important;
+}
+
 .card h2{
     margin-bottom:20px;
     color:var(--primary);
@@ -83,6 +88,19 @@ body{
     display:grid;
     grid-template-columns:1fr;
     gap:20px;
+}
+
+.grid-reprogramacion{
+    grid-template-columns:1fr;
+    align-items:start;
+}
+
+.reprogramacion-pedido{
+    grid-column:auto;
+}
+
+.reprogramacion-motivo textarea{
+    min-height:112px;
 }
 
 .form-group{
@@ -265,6 +283,33 @@ button:focus-visible{
     display:flex;
     gap:10px;
     flex-wrap:wrap;
+}
+
+#formReprogramarPedido .actions a.btn-secondary{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    background:#e5e7eb;
+    color:#374151;
+    border-color:#9ca3af;
+    font:inherit;
+    text-decoration:none;
+    cursor:pointer;
+}
+
+#formReprogramarPedido .actions{
+    flex-direction:row;
+    align-items:center;
+    margin-top:20px;
+}
+
+#formReprogramarPedido .actions button,
+#formReprogramarPedido .actions a{
+    width:auto;
+}
+
+#formReprogramarPedido .actions a.btn-secondary:hover{
+    background:#d1d5db;
 }
 
 .mt-20{
@@ -509,6 +554,14 @@ button:disabled{
 }
 
 @media (max-width:768px){
+
+    #formReprogramarPedido .actions{
+        flex-direction:row;
+    }
+
+    #formReprogramarPedido .actions button{
+        width:auto;
+    }
 
     body{
         padding:14px;
