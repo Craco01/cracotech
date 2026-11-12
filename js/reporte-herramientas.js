@@ -268,6 +268,10 @@ function detalle(id) {
     <dt>Fecha de necesidad</dt><dd>${fFH(p.fecha_necesidad)}</dd><dt>Registrado</dt><dd>${fFH(p.fecha_registro)}</dd>
     <dt>Entrega</dt><dd>${fFH(p.fecha_entrega)}</dd><dt>Envío</dt><dd>${requiereFechaEnvio(p.estado) ? fFH(p.fecha_envio) : '—'}</dd>
     <dt>Observaciones</dt><dd>${esc(p.observaciones) || '—'}</dd></dl>
+    <section class="remisiones-qr-field remisiones-qr-readonly" aria-labelledby="tituloRemisionesDetalle">
+      <strong id="tituloRemisionesDetalle">Remisiones</strong>
+      ${renderListaRemisiones(p.remisiones_qr)}
+    </section>
     <table><thead><tr><th scope="col">Herramienta</th><th scope="col">Cant.</th><th scope="col">Unidad</th><th scope="col">Estado</th><th scope="col">Nota</th></tr></thead><tbody>${
       p.detalle.map(d => `<tr><td>${esc(d.herramienta)}</td><td>${d.cantidad}</td><td>${esc(d.unidad_medida) || '—'}</td><td>${tagHerr(d.estado_herramienta)}</td><td>${esc(d.observacion) || '—'}</td></tr>`).join('')
     }</tbody></table></div>`;
@@ -293,7 +297,7 @@ function renderListaRemisiones(remisiones) {
     const fechaTexto = fecha && !Number.isNaN(fecha.getTime()) ? fecha.toLocaleString('es-PY') : '';
     return `<li class="remision-item">
       <div><strong>Remisión ${index + 1}</strong><small>${origen}${fechaTexto ? ` · ${esc(fechaTexto)}` : ''}</small></div>
-      ${url ? `<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(url)}</a>` : '<span>Enlace QR no válido</span>'}
+      ${url ? `<a href="${esc(url)}" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">Remisión ${index + 1}</a>` : '<span>Enlace QR no válido</span>'}
     </li>`;
   }).join('')}</ol>`;
 }
