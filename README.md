@@ -81,7 +81,9 @@ Desde este directorio, inicia el servidor estático local:
 node .\server.js
 ```
 
-Abre `http://127.0.0.1:5500/mantenimiento/` o `http://127.0.0.1:5500/herramientas/`. Por defecto, los módulos consultan la API HTTPS de producción configurada en sus archivos `js/*api-config.js`; este servidor solo sirve archivos estáticos y no inicia un backend local. Para apuntar Herramientas a un backend local, define `window.HERRAMIENTAS_API_BASE_URL = 'http://127.0.0.1:3000/api/herramientas'` antes de cargar `js/herramientas-api-config.js`. No copies credenciales ni archivos `.env` de otros entornos.
+Abre `http://127.0.0.1:5500/mantenimiento/` o `http://127.0.0.1:5500/herramientas/`. El servidor sirve los archivos estáticos y reenvía las solicitudes `/api/*` a `https://api.cracotech.com`, incluyendo las rutas de Herramientas bajo `/api/herramientas`; así ambos módulos acceden a producción desde el mismo origen local. En el reporte de Herramientas, gestores y administradores pueden leer un QR con la cámara o subir una imagen; cada enlace se agrega como una remisión independiente. No inicia un backend local. Se pueden cambiar el destino de API y el origen reenviado con las variables `API_TARGET` y `PROD_ORIGIN`. No copies credenciales ni archivos `.env` de otros entornos.
+
+Si ejecutas el `server.js` de la raíz del proyecto, abre `http://127.0.0.1:5600/`; ese servidor también reenvía ambas APIs a producción. Tras cambiar cualquiera de los servidores, reinícialo para que tome la nueva configuración.
 
 ## Publicación
 

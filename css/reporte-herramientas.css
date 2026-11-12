@@ -664,6 +664,103 @@ dialog::backdrop {
   color: var(--text);
 }
 
+.remisiones-qr-field {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: #f9fafb;
+}
+
+.remisiones-qr-heading,
+.remisiones-qr-actions,
+.remision-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.remisiones-qr-heading > div:first-child,
+.remision-item > div {
+  display: grid;
+  gap: 3px;
+}
+
+.remisiones-qr-heading small,
+.remision-item small {
+  color: var(--muted);
+}
+
+.remisiones-qr-actions button,
+#cancelarLecturaQr {
+  min-height: 36px;
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: #fff;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.remisiones-qr-actions button:hover,
+#cancelarLecturaQr:hover {
+  border-color: var(--accent);
+  background: var(--detail);
+}
+
+.remisiones-qr-actions button:disabled {
+  cursor: wait;
+  opacity: .65;
+}
+
+.lector-qr-remision {
+  display: grid;
+  justify-items: start;
+  gap: 8px;
+}
+
+.lector-qr-remision video {
+  width: min(100%, 380px);
+  max-height: 300px;
+  border-radius: 8px;
+  background: #111827;
+  object-fit: contain;
+}
+
+.lector-qr-remision p,
+.mensaje-remisiones-qr,
+.remision-vacia {
+  margin: 0;
+  color: var(--muted);
+}
+
+.mensaje-remisiones-qr.error {
+  color: var(--danger);
+}
+
+.remisiones-lista {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.remision-item {
+  align-items: flex-start;
+  padding: 9px 10px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: #fff;
+}
+
+.remision-item a {
+  max-width: 62%;
+  overflow-wrap: anywhere;
+}
+
 .m dl {
   display: grid;
   grid-template-columns: minmax(130px, 180px) 1fr;
@@ -754,7 +851,8 @@ dialog::backdrop {
 }
 
 .envio-form select,
-.envio-form input {
+.envio-form input,
+.envio-form textarea {
   width: 100%;
   min-height: 42px;
   padding: 8px 10px;
@@ -762,6 +860,24 @@ dialog::backdrop {
   border-radius: 7px;
   background: #fff;
   color: var(--text);
+}
+
+.envio-form textarea {
+  min-height: 64px;
+  resize: vertical;
+  font: inherit;
+}
+
+.m table .nota-actual {
+  min-width: 150px;
+  margin-bottom: 6px;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.m table textarea {
+  min-width: 170px;
+  min-height: 64px;
 }
 
 .envio-acciones {
@@ -795,6 +911,16 @@ dialog::backdrop {
 @media (max-width: 480px) {
   .envio-modal-header {
     flex-direction: column-reverse;
+  }
+
+  .remisiones-qr-heading,
+  .remision-item {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .remision-item a {
+    max-width: 100%;
   }
 
   .envio-modal-header .envio-acciones {

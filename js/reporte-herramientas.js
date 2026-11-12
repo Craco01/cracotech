@@ -29,6 +29,10 @@ const DIAS = ['lun', 'mar', 'mié', 'jue', 'vie', 'sáb', 'dom'];
 let pedidos = [];
 let vista = 'tabla';
 let inicializado = false;
+let cargaJsQR;
+let tokenCapturaQR = 0;
+let streamCapturaQR = null;
+let frameCapturaQR = null;
 let ref = new Date(); ref.setHours(0, 0, 0, 0);
 let orden = { col: 'id', dir: -1 };
 let ordenInicialPorEstado = true;
@@ -57,6 +61,7 @@ const esAdministradorHerramientas = () => sessionStorage.getItem('herramientas_r
 function normalizarPedido(p) {
   return {
     ...p,
+    remisiones_qr: Array.isArray(p.remisiones_qr) ? p.remisiones_qr : [],
     solicitante: p.solicitante || p.solicitante_nombre || '—',
     fecha_necesidad: aFecha(p.fecha_necesidad),
     fecha_registro: aFecha(p.fecha_registro),
@@ -270,6 +275,219 @@ function detalle(id) {
   $('#modal').showModal();
 }
 
+function urlRemisionSegura(value) {
+  try {
+    const url = new URL(String(value || '').trim());
+    return ['http:', 'https:'].includes(url.protocol) && !url.username && !url.password ? url.href : '';
+  } catch {
+    return '';
+  }
+}
+
+function renderListaRemisiones(remisiones) {
+  if (!remisiones.length) return '<p class="remision-vacia">Todavía no hay remisiones cargadas.</p>';
+  return `<ol class="remisiones-lista">${remisiones.map((remision, index) => {
+    const url = urlRemisionSegura(remision.url);
+    const origen = remision.origen === 'lectura' ? 'Leído con cámara' : 'Subido desde imagen';
+    const fecha = remision.cargado_en ? new Date(remision.cargado_en) : null;
+    const fechaTexto = fecha && !Number.isNaN(fecha.getTime()) ? fecha.toLocaleString('es-PY') : '';
+    return `<li class="remision-item">
+      <div><strong>Remisión ${index + 1}</strong><small>${origen}${fechaTexto ? ` · ${esc(fechaTexto)}` : ''}</small></div>
+      ${url ? `<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(url)}</a>` : '<span>Enlace QR no válido</span>'}
+    </li>`;
+  }).join('')}</ol>`;
+}
+
+function campoRemisiones(pedido) {
+  return `<section class="remisiones-qr-field" aria-labelledby="tituloRemisionesQR">
+    <div class="remisiones-qr-heading">
+      <div><strong id="tituloRemisionesQR">Remisiones</strong><small>Cada QR se guarda como una remisión independiente al leerlo o cargarlo.</small></div>
+      <div class="remisiones-qr-actions">
+        <button type="button" id="leerQrRemision">Leer QR</button>
+        <button type="button" id="subirQrRemision">Subir QR</button>
+        <input id="archivoQrRemision" type="file" accept="image/*" multiple hidden>
+      </div>
+    </div>
+    <div id="lectorQrRemision" class="lector-qr-remision" hidden>
+      <video id="videoQrRemision" muted playsinline></video>
+      <div><p id="estadoLectorQr" role="status" aria-live="polite"></p><button type="button" id="cancelarLecturaQr">Cancelar lectura</button></div>
+    </div>
+    <p id="mensajeRemisionesQR" class="mensaje-remisiones-qr" role="status" aria-live="polite"></p>
+    <div id="listaRemisionesQR">${renderListaRemisiones(pedido.remisiones_qr)}</div>
+  </section>`;
+}
+
+function mensajeRemisiones(texto, error = false) {
+  const mensaje = $('#mensajeRemisionesQR');
+  if (!mensaje) return;
+  mensaje.textContent = texto;
+  mensaje.classList.toggle('error', error);
+}
+
+function bloquearAccionesQR(bloquear) {
+  const leer = $('#leerQrRemision');
+  const subir = $('#subirQrRemision');
+  if (leer) leer.disabled = bloquear;
+  if (subir) subir.disabled = bloquear;
+}
+
+function cargarJsQR() {
+  if (window.jsQR) return Promise.resolve(window.jsQR);
+  if (!cargaJsQR) {
+    cargaJsQR = new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js';
+      script.onload = () => window.jsQR ? resolve(window.jsQR) : reject(new Error('No se pudo iniciar el lector QR.'));
+      script.onerror = () => reject(new Error('No se pudo cargar el lector QR.'));
+      document.head.appendChild(script);
+    }).catch(error => {
+      cargaJsQR = null;
+      throw error;
+    });
+  }
+  return cargaJsQR;
+}
+
+function detenerLecturaQR() {
+  tokenCapturaQR += 1;
+  if (frameCapturaQR !== null) cancelAnimationFrame(frameCapturaQR);
+  frameCapturaQR = null;
+  if (streamCapturaQR) streamCapturaQR.getTracks().forEach(track => track.stop());
+  streamCapturaQR = null;
+  const video = $('#videoQrRemision');
+  if (video) {
+    video.pause();
+    video.srcObject = null;
+  }
+  const lector = $('#lectorQrRemision');
+  if (lector) lector.hidden = true;
+}
+
+async function guardarRemisionQR(pedidoId, url, origen) {
+  const response = await API_FETCH(`/api/pedidos/${pedidoId}/remisiones`, {
+    method: 'POST',
+    headers: API_JSON_HEADERS,
+    body: JSON.stringify({ url, origen })
+  });
+  const result = await response.json();
+  if (!response.ok) throw new Error(result.errores?.join(' ') || result.error || 'No se pudo guardar la remisión.');
+
+  const pedido = pedidos.find(item => item.id === pedidoId);
+  if (pedido) {
+    pedido.remisiones_qr = Array.isArray(result.remisiones_qr) ? result.remisiones_qr : [];
+    const lista = $('#listaRemisionesQR');
+    if (lista) lista.innerHTML = renderListaRemisiones(pedido.remisiones_qr);
+  }
+}
+
+async function iniciarLecturaQR(pedidoId) {
+  detenerLecturaQR();
+  const token = tokenCapturaQR;
+  const lector = $('#lectorQrRemision');
+  const estado = $('#estadoLectorQr');
+  lector.hidden = false;
+  estado.textContent = 'Preparando cámara…';
+  mensajeRemisiones('');
+  bloquearAccionesQR(true);
+
+  try {
+    if (!navigator.mediaDevices?.getUserMedia) throw new Error('Este navegador no permite acceder a la cámara.');
+    const decoder = await cargarJsQR();
+    if (token !== tokenCapturaQR) return;
+    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' } }, audio: false });
+    if (token !== tokenCapturaQR) {
+      stream.getTracks().forEach(track => track.stop());
+      return;
+    }
+    streamCapturaQR = stream;
+    const video = $('#videoQrRemision');
+    video.srcObject = stream;
+    await video.play();
+    estado.textContent = 'Enfoca el código QR de la remisión.';
+
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d', { willReadFrequently: true });
+    const escanear = async () => {
+      if (token !== tokenCapturaQR) return;
+      if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA && video.videoWidth && video.videoHeight) {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const codigo = decoder(context.getImageData(0, 0, canvas.width, canvas.height).data, canvas.width, canvas.height, {
+          inversionAttempts: 'attemptBoth'
+        });
+        if (codigo) {
+          detenerLecturaQR();
+          try {
+            const url = urlRemisionSegura(codigo.data);
+            if (!url) throw new Error('El QR debe contener un enlace HTTP o HTTPS válido.');
+            await guardarRemisionQR(pedidoId, url, 'lectura');
+            mensajeRemisiones('Remisión guardada.');
+          } catch (error) {
+            mensajeRemisiones(error.message || 'No se pudo guardar la remisión.', true);
+          } finally {
+            bloquearAccionesQR(false);
+          }
+          return;
+        }
+      }
+      frameCapturaQR = requestAnimationFrame(escanear);
+    };
+    frameCapturaQR = requestAnimationFrame(escanear);
+  } catch (error) {
+    detenerLecturaQR();
+    bloquearAccionesQR(false);
+    mensajeRemisiones(error.message || 'No se pudo iniciar la lectura QR.', true);
+  }
+}
+
+async function leerQRDeArchivo(file) {
+  const decoder = await cargarJsQR();
+  if (typeof createImageBitmap !== 'function') throw new Error('Este navegador no permite leer imágenes QR.');
+  const image = await createImageBitmap(file);
+  try {
+    const scale = Math.min(1, 1600 / Math.max(image.width, image.height));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.max(1, Math.round(image.width * scale));
+    canvas.height = Math.max(1, Math.round(image.height * scale));
+    const context = canvas.getContext('2d', { willReadFrequently: true });
+    context.drawImage(image, 0, 0, canvas.width, canvas.height);
+    const codigo = decoder(context.getImageData(0, 0, canvas.width, canvas.height).data, canvas.width, canvas.height, {
+      inversionAttempts: 'attemptBoth'
+    });
+    if (!codigo) throw new Error('No se encontró un QR legible en la imagen.');
+    const url = urlRemisionSegura(codigo.data);
+    if (!url) throw new Error('El QR debe contener un enlace HTTP o HTTPS válido.');
+    return url;
+  } finally {
+    image.close();
+  }
+}
+
+async function subirImagenesQR(files, pedidoId) {
+  const seleccionados = Array.from(files || []);
+  if (!seleccionados.length) return;
+  bloquearAccionesQR(true);
+  let guardadas = 0;
+  const errores = [];
+  try {
+    for (const [index, file] of seleccionados.entries()) {
+      mensajeRemisiones(`Leyendo imagen ${index + 1} de ${seleccionados.length}…`);
+      try {
+        const url = await leerQRDeArchivo(file);
+        await guardarRemisionQR(pedidoId, url, 'subida');
+        guardadas += 1;
+      } catch (error) {
+        errores.push(`${file.name}: ${error.message || 'no se pudo leer.'}`);
+      }
+    }
+    const resumen = guardadas ? `${guardadas} remisión(es) guardada(s).` : '';
+    mensajeRemisiones([resumen, ...errores].filter(Boolean).join(' '), errores.length > 0);
+  } finally {
+    bloquearAccionesQR(false);
+  }
+}
+
 function valorFechaLocal(fecha) {
   const d = fecha || new Date();
   const dos = n => String(n).padStart(2, '0');
@@ -302,7 +520,10 @@ function abrirModalEnvio(pedidoId) {
       <td><select name="estadoHerramienta" aria-label="Estado de ${esc(item.herramienta)}"
         data-herramienta-id="${item.id ?? `preview-${index}`}"
         data-estado-original="${esc(item.estado_herramienta)}">${estadoActualVacio ? '<option value="" selected aria-label="Sin estado asignado"></option>' : ''}${estados}</select></td>
-      <td>${esc(item.observacion) || '—'}</td>
+      <td><div class="nota-actual">${esc(item.observacion) || '—'}</div>
+        <textarea name="notaHerramienta" data-nota-herramienta-id="${item.id ?? `preview-${index}`}" maxlength="300"
+          aria-label="Agregar nota para ${esc(item.herramienta)}"
+          placeholder="Agregar nota; se conservará la anterior"></textarea></td>
     </tr>`;
   }).join('');
   $('#modalEnvioBody').innerHTML = `<div class="m">
@@ -320,6 +541,7 @@ function abrirModalEnvio(pedidoId) {
         <select id="estadoPedido" name="estadoPedido" required${bloquearEstado ? ' disabled' : ''}>${pedidoEstadoOpciones}</select>
         ${bloquearEstado ? '<small>Solo un administrador puede cambiar un pedido completado o cancelado.</small>' : ''}
       </div>
+      ${campoRemisiones(pedido)}
       <dl><dt>Nombre de la obra</dt><dd>${esc(pedido.nombre_obra) || '—'}</dd><dt>Puntero asignado</dt><dd>${esc(pedido.puntero_asignado)}</dd><dt>Solicitante</dt><dd>${esc(pedido.solicitante)}</dd>
       <dt>Tipo de solicitud</dt><dd>${esc(pedido.tipo_solicitud)}</dd><dt>Necesita traslado</dt><dd>${pedido.necesita_traslado ? 'Sí' : 'No'}</dd>
       <dt>Fecha de necesidad</dt><dd>${fFH(pedido.fecha_necesidad)}</dd><dt>Registrado</dt><dd>${fFH(pedido.fecha_registro)}</dd>
@@ -353,6 +575,7 @@ function actualizarFechaEnvio() {
 
 async function guardarEnvio(event) {
   event.preventDefault();
+  detenerLecturaQR();
   const form = event.target;
   const submit = $('#guardarEnvio');
   const mensaje = $('#mensajeEnvio');
@@ -370,7 +593,8 @@ async function guardarEnvio(event) {
   }
   const herramientas = Array.from(form.querySelectorAll('[data-herramienta-id]'), select => ({
     id: Number(select.dataset.herramientaId),
-    estadoHerramienta: select.value || select.dataset.estadoOriginal || null
+    estadoHerramienta: select.value || select.dataset.estadoOriginal || null,
+    nota: form.querySelector(`[data-nota-herramienta-id="${select.dataset.herramientaId}"]`)?.value || ''
   }));
   const fechaEnvio = form.elements.fechaEnvio.value;
   submit.disabled = true;
@@ -392,7 +616,10 @@ async function guardarEnvio(event) {
       pedido.estado = result.estado;
       for (const herramienta of result.herramientas) {
         const item = pedido.detalle.find(d => d.id === herramienta.id);
-        if (item) item.estado_herramienta = herramienta.estadoHerramienta;
+        if (item) {
+          item.estado_herramienta = herramienta.estadoHerramienta;
+          item.observacion = herramienta.observacion;
+        }
       }
     }
     $('#modalEnvio').close();
@@ -478,7 +705,16 @@ function init() {
   });
   $('#modalEnvio').addEventListener('click', e => {
     if (e.target.id === 'modalEnvio' || e.target.id === 'cerrarEnvio') {
+      detenerLecturaQR();
       $('#modalEnvio').close();
+    } else if (e.target.id === 'leerQrRemision') {
+      iniciarLecturaQR(Number($('#formEnvio').dataset.pedidoId));
+    } else if (e.target.id === 'subirQrRemision') {
+      $('#archivoQrRemision').click();
+    } else if (e.target.id === 'cancelarLecturaQr') {
+      detenerLecturaQR();
+      bloquearAccionesQR(false);
+      mensajeRemisiones('Lectura cancelada.');
     }
   });
   $('#modalEnvio').addEventListener('change', e => {
@@ -490,8 +726,13 @@ function init() {
         $('#estadoPedido').value = 'En proceso';
         actualizarFechaEnvio();
       }
+    } else if (e.target.id === 'archivoQrRemision') {
+      const form = e.target.closest('#formEnvio');
+      subirImagenesQR(e.target.files, Number(form.dataset.pedidoId));
+      e.target.value = '';
     }
   });
+  $('#modalEnvio').addEventListener('close', detenerLecturaQR);
   $('#modalEnvio').addEventListener('submit', guardarEnvio);
   const hoy = new Date();
   $('#fMes').value = String(hoy.getMonth() + 1);
