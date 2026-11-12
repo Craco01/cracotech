@@ -125,7 +125,7 @@
         document.dispatchEvent(new Event('herramientas:auth-change'));
       }
       if (session.rol !== 'administrador') {
-        gateMessage.textContent = 'Esta sección es exclusiva para administradores. Inicia sesión con una cuenta administradora.';
+        gateMessage.textContent = 'No tienes autorización para acceder a esta sección.';
         loginAdmin.hidden = false;
         window.abrirLoginHerramientas();
         return;

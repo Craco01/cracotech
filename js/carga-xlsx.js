@@ -60,7 +60,7 @@ const tabla = () => destino;
 const adminRequired = Boolean(destino?.truncate && localStorage.getItem('role') !== 'administrador');
 
 if (adminRequired) {
-  $("destino").textContent = `La carga completa de ${destino.nombre} requiere una cuenta administrador.`;
+  $("destino").textContent = `La carga completa de ${destino.nombre} no está habilitada para esta cuenta.`;
   $("destino").className = "bad";
   $("file-section").hidden = true;
   $("res").hidden = true;

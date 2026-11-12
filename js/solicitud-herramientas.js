@@ -61,7 +61,7 @@ function actualizarAccesoReprogramacion() {
     controles.forEach(control => { control.disabled = false; });
     if (!sessionStorage.getItem(AUTH_TOKEN_KEY)) {
         pedidoReprogramar.replaceChildren(new Option("Inicia sesión para cargar pedidos", ""));
-        mostrarErrorReprogramacion("Inicia sesión con un perfil solicitante, gestor o administrador.");
+        mostrarErrorReprogramacion("No tienes autorización para reprogramar pedidos.");
         return;
     }
     mostrarErrorReprogramacion("");

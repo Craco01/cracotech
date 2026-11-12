@@ -183,7 +183,7 @@
     const loginDialog = document.getElementById('loginModal');
     const syncAdminUsersLink = () => {
       const item = document.getElementById('adminUsersNavItem');
-      if (item) item.hidden = localStorage.getItem('role') !== 'administrador';
+      if (item) item.hidden = !sessionStorage.getItem('token');
     };
     syncAdminUsersLink();
     window.addEventListener('storage', event => {

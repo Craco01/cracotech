@@ -71,7 +71,7 @@
       const id = encodeURIComponent(String(ficha.id));
       const editButton = canEdit
         ? `<button type="button" class="fr172-accion fr172-accion--editar" data-action="edit" data-id="${escapeHtml(ficha.id)}">Editar doc</button>`
-        : '<button type="button" class="fr172-accion fr172-accion--editar" disabled title="Se requiere perfil editor para modificar fichas">Editar doc</button>';
+        : '<button type="button" class="fr172-accion fr172-accion--editar" disabled title="No tienes autorización para modificar fichas">Editar doc</button>';
       const deleteButton = isAdmin
         ? `<button type="button" class="fr172-accion fr172-accion--eliminar" data-action="delete" data-id="${escapeHtml(ficha.id)}">Borrar</button>`
         : '';
@@ -105,7 +105,7 @@
       fichas = result;
       render();
       status.textContent = accessDenied
-        ? 'La cuenta actual no tiene permisos para crear fichas FR-172. Se requiere perfil editor o administrador.'
+        ? 'La cuenta actual no tiene autorización para crear fichas FR-172.'
         : `${fichas.length} ficha${fichas.length === 1 ? '' : 's'} cargada${fichas.length === 1 ? '' : 's'}.`;
     } catch (error) {
       status.textContent = `Error al cargar las fichas: ${error.message}`;

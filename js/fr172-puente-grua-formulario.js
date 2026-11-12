@@ -196,7 +196,7 @@
   }
 
   function guardarYa({ comoBorrador = false } = {}) {
-    if (!tieneSesion || !puedeEditar) return Promise.reject(new Error('Se requiere sesión de editor, supervisor o administrador.'));
+    if (!tieneSesion || !puedeEditar) return Promise.reject(new Error('No tienes autorización para guardar esta ficha.'));
     const payload = contenidoParaGuardar();
     if (comoBorrador && estadoFicha === 'finalizada') payload.estado = 'borrador';
     colaGuardado = colaGuardado.catch(() => {}).then(async () => {

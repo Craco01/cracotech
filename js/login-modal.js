@@ -150,7 +150,7 @@ function renderNav() {
   const username = sessionStorage.getItem('username');
   const role = localStorage.getItem('role');
   const adminUsersNavItem = document.getElementById('adminUsersNavItem');
-  if (adminUsersNavItem) adminUsersNavItem.hidden = role !== 'administrador';
+  if (adminUsersNavItem) adminUsersNavItem.hidden = !token;
   if (token && username) {
     const changePasswordItem = role !== 'viewer'
       ? '<li><button type="button" id="changePasswordButton" class="nav-user-item">Cambiar contrase\u00f1a</button></li>'

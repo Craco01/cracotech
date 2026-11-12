@@ -39,6 +39,39 @@ async function request(path, options = {}) {
   return data;
 }
 
+async function iniciarPanelAdministracion() {
+  const token = sessionStorage.getItem('token');
+  if (!token) {
+    redirectToActiveLogin();
+    return;
+  }
+
+  try {
+    const response = await fetch(API_URL('/api/auth/session'), {
+      headers: { Authorization: `Bearer ${token}` },
+      cache: 'no-store'
+    });
+    const session = await response.json().catch(() => ({}));
+    if (response.status === 401) {
+      redirectToActiveLogin();
+      return;
+    }
+    if (!response.ok || session.role !== 'administrador') {
+      $('adminStatus').textContent = 'No tienes autorización para acceder a esta sección.';
+      return;
+    }
+
+    localStorage.setItem('role', session.role);
+    const adminUsersNavItem = document.getElementById('adminUsersNavItem');
+    if (adminUsersNavItem) adminUsersNavItem.hidden = false;
+    $('adminPanel').classList.remove('hidden');
+    setStatus('adminStatus', 'Acceso validado.', 'ok');
+    await loadAccounts();
+  } catch {
+    setStatus('adminStatus', 'No se pudo validar el acceso. Intenta nuevamente.', 'error');
+  }
+}
+
 function setFormMode() {
   const hasAccount = Boolean(state.selected?.userId);
   $('username').required = !hasAccount;
@@ -196,8 +229,4 @@ $('deleteButton').addEventListener('click', async () => {
 
 function escapeHtml(value) { return String(value).replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[character])); }
 setFormMode();
-if (sessionStorage.getItem('token') && localStorage.getItem('role') === 'administrador') {
-  $('adminPanel').classList.remove('hidden');
-  setStatus('adminStatus', 'Sesión de administrador activa.', 'ok');
-  loadAccounts();
-}
+iniciarPanelAdministracion();

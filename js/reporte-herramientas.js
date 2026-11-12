@@ -543,7 +543,7 @@ function abrirModalEnvio(pedidoId) {
       <div class="pedido-estado-general">
         <label for="estadoPedido">Estado general del pedido</label>
         <select id="estadoPedido" name="estadoPedido" required${bloquearEstado ? ' disabled' : ''}>${pedidoEstadoOpciones}</select>
-        ${bloquearEstado ? '<small>Solo un administrador puede cambiar un pedido completado o cancelado.</small>' : ''}
+        ${bloquearEstado ? '<small>No tienes autorización para cambiar el estado de este pedido.</small>' : ''}
       </div>
       ${campoRemisiones(pedido)}
       <dl><dt>Nombre de la obra</dt><dd>${esc(pedido.nombre_obra) || '—'}</dd><dt>Puntero asignado</dt><dd>${esc(pedido.puntero_asignado)}</dd><dt>Solicitante</dt><dd>${esc(pedido.solicitante)}</dd>
@@ -592,7 +592,7 @@ async function guardarEnvio(event) {
     return;
   }
   if (['Completado', 'Cancelado'].includes(estadoPedido) && estadoPedido !== estadoOriginal &&
-      !window.confirm(`¿Confirma que desea marcar el pedido como ${estadoPedido}? Después, solo un administrador podrá cambiar su estado.`)) {
+      !window.confirm(`¿Confirma que desea marcar el pedido como ${estadoPedido}? Después, se requerirá autorización especial para cambiarlo.`)) {
     return;
   }
   const herramientas = Array.from(form.querySelectorAll('[data-herramienta-id]'), select => ({
