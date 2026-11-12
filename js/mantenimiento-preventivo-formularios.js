@@ -24,7 +24,7 @@ async function obtenerSalarioEmpleado(identificador) {
 async function calcularCostoManoObraMPP() {
   const horasInput = document.getElementById('horas');
   const horas = Number(horasInput?.value || 0);
-  const username = localStorage.getItem('username');
+  const username = sessionStorage.getItem('username');
   const apoyoId = document.getElementById('apoyo')?.value;
   const [salarioResponsable, salarioApoyo] = await Promise.all([
     obtenerSalarioEmpleado(username),

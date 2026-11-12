@@ -6,7 +6,7 @@
       return (window.API_BASE || (typeof API_BASE_URL !== "undefined" ? API_BASE_URL : "")).replace(/\/$/, "");
     },
     async getJson(url) {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       const headers = { "Accept": "application/json" };
       if (token) headers.Authorization = `Bearer ${token}`;
       const response = await fetch(url, { headers });

@@ -1,6 +1,10 @@
 /* Configuración centralizada de la API para el frontend */
 const API_BASE_URL = 'https://api.cracotech.com';
 
+localStorage.removeItem('token');
+localStorage.removeItem('username');
+localStorage.removeItem('role');
+
 const API_URL = (path) => {
   if (!path) return API_BASE_URL;
   let normalized = String(path).trim();
@@ -48,9 +52,9 @@ window.SEARCH_UTILS = {
 };
 
 function clearExpiredSession() {
-  localStorage.removeItem('token');
-  localStorage.removeItem('username');
-  localStorage.removeItem('role');
+  sessionStorage.removeItem('token');
+  sessionStorage.removeItem('username');
+  sessionStorage.removeItem('role');
   if (new URLSearchParams(window.location.search).has('embed')) {
     const dashboard = document.getElementById('dashboard');
     if (dashboard) dashboard.innerHTML = '<div class="empty session-required">Debe iniciar sesión para visualizar el reporte.</div>';
@@ -67,7 +71,7 @@ function clearExpiredSession() {
 
 const API_FETCH = async (path, options = {}) => {
   const url = API_URL(path);
-  const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
   const headers = { ...(options.headers || {}) };
   if (token) headers.Authorization = `Bearer ${token}`;
 

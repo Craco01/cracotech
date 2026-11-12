@@ -127,7 +127,7 @@ window.fetch = (url, options = {}) => {
   const normalizedUrl = typeof url === 'string' && url.startsWith('/api/') ? API_URL(url) : url;
   const urlString = typeof normalizedUrl === 'string' ? normalizedUrl : String(normalizedUrl.url || '');
   if (urlString.includes('/api/')) {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     options.headers = { ...(options.headers || {}), ...(token ? { Authorization: `Bearer ${token}` } : {}) };
   }
   return fetchOriginal(normalizedUrl, options);
@@ -146,9 +146,9 @@ function closeUserMenu() {
 }
 
 function renderNav() {
-  const token = localStorage.getItem('token');
-  const username = localStorage.getItem('username');
-  const role = localStorage.getItem('role');
+  const token = sessionStorage.getItem('token');
+  const username = sessionStorage.getItem('username');
+  const role = sessionStorage.getItem('role');
   const adminUsersNavItem = document.getElementById('adminUsersNavItem');
   if (adminUsersNavItem) adminUsersNavItem.hidden = role !== 'administrador';
   if (token && username) {
@@ -174,7 +174,7 @@ function renderNav() {
       toggle.setAttribute('aria-expanded', String(isOpen));
     });
     document.getElementById('logoutDiv').addEventListener('click', () => {
-      localStorage.removeItem('token'); localStorage.removeItem('username'); localStorage.removeItem('role');
+      sessionStorage.removeItem('token'); sessionStorage.removeItem('username'); sessionStorage.removeItem('role');
       form.reset();
       window.location.href = window.location.pathname.startsWith('/mantenimiento/')
         ? '/mantenimiento/'
@@ -239,7 +239,7 @@ form.addEventListener('submit', async event => {
       mensaje.style.color = 'red';
       return;
     }
-    localStorage.setItem('token', data.token); localStorage.setItem('role', data.role); localStorage.setItem('username', document.getElementById('user').value);
+    sessionStorage.setItem('token', data.token); sessionStorage.setItem('role', data.role); sessionStorage.setItem('username', document.getElementById('user').value);
     const redirect = sessionStorage.getItem('postLoginRedirect');
     if (redirect) {
       sessionStorage.removeItem('postLoginRedirect');

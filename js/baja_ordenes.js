@@ -62,7 +62,7 @@ masterKeyForm.addEventListener('submit', async event => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token') || ''}`
+        Authorization: `Bearer ${sessionStorage.getItem('token') || ''}`
       },
       body: JSON.stringify(payload)
     });
@@ -76,9 +76,9 @@ masterKeyForm.addEventListener('submit', async event => {
         : 'Se agotaron los intentos. La sesión se cerrará.';
       masterKeyInput.value = '';
       if (remainingAttempts <= 0) {
-        localStorage.removeItem('token');
-        localStorage.removeItem('username');
-        localStorage.removeItem('role');
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('username');
+        sessionStorage.removeItem('role');
         cerrarModalClave();
         window.location.reload();
       }

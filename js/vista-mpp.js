@@ -1,5 +1,5 @@
 function estaLogueado() {
-  return Boolean(localStorage.getItem('token'));
+  return Boolean(sessionStorage.getItem('token'));
 }
 
 function ocultarTodasLasVistas() {

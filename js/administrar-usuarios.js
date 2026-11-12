@@ -2,7 +2,7 @@ const state = { selected: null };
 const $ = (id) => document.getElementById(id);
 const setStatus = (id, message, type = '') => { const element = $(id); element.textContent = message; element.className = `status ${type}`; };
 const authHeaders = () => {
-  const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
   return {
     'Content-Type': 'application/json',
     ...(token ? { Authorization: `Bearer ${token}` } : {})
@@ -10,9 +10,9 @@ const authHeaders = () => {
 };
 
 function redirectToActiveLogin() {
-  localStorage.removeItem('token');
-  localStorage.removeItem('username');
-  localStorage.removeItem('role');
+  sessionStorage.removeItem('token');
+  sessionStorage.removeItem('username');
+  sessionStorage.removeItem('role');
   const loginUrl = new URL('/mantenimiento/', window.location.origin);
   loginUrl.searchParams.set('loginRequired', '1');
   loginUrl.searchParams.set('returnTo', `${location.pathname}${location.search}${location.hash}`);
@@ -196,7 +196,7 @@ $('deleteButton').addEventListener('click', async () => {
 
 function escapeHtml(value) { return String(value).replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[character])); }
 setFormMode();
-if (localStorage.getItem('token') && localStorage.getItem('role') === 'administrador') {
+if (sessionStorage.getItem('token') && sessionStorage.getItem('role') === 'administrador') {
   $('adminPanel').classList.remove('hidden');
   setStatus('adminStatus', 'Sesión de administrador activa.', 'ok');
   loadAccounts();

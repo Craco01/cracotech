@@ -73,7 +73,7 @@ function rellenarCopia(copy, orden, etiqueta, mostrarTimestamp) {
     elemento.hidden = !texto;
   });
   copy.querySelector('.ts').textContent = mostrarTimestamp
-    ? `Documento generado el ${formatTimestampImpresion(new Date())} por ${localStorage.getItem('username') || 'usuario desconocido'}`
+    ? `Documento generado el ${formatTimestampImpresion(new Date())} por ${sessionStorage.getItem('username') || 'usuario desconocido'}`
     : '';
 }
 
@@ -99,7 +99,7 @@ function mostrarEntrega(orden, mostrarTimestamp = false) {
 }
 
 function headersAutorizados() {
-  const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
   return token ? { Authorization: `Bearer ${token}` } : {};
 }
 

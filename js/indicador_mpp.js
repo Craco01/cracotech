@@ -91,7 +91,7 @@ async function cargarIndicadoresMPP() {
   const status = document.getElementById('indicadorStatus');
   const loginModal = document.getElementById('loginModal');
 
-  if (!localStorage.getItem('token')) {
+  if (!sessionStorage.getItem('token')) {
     status.textContent = 'Debe iniciar sesión para ver los indicadores de mantenimiento preventivo.';
     if (loginModal) loginModal.classList.add('is-visible');
     ['maq1', 'maq2', 'infra'].forEach((prefix) => paintMetric(prefix, 0, 0));

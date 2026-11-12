@@ -57,7 +57,7 @@ const state = { rows: [], malas: 0, faltan: [], data: null };
 const destinoId = new URLSearchParams(window.location.search).get("tabla");
 const destino = Object.prototype.hasOwnProperty.call(CONFIG.tablas, destinoId) ? CONFIG.tablas[destinoId] : null;
 const tabla = () => destino;
-const adminRequired = Boolean(destino?.truncate && localStorage.getItem('role') !== 'administrador');
+const adminRequired = Boolean(destino?.truncate && sessionStorage.getItem('role') !== 'administrador');
 
 if (adminRequired) {
   $("destino").textContent = `La carga completa de ${destino.nombre} requiere una cuenta administrador.`;

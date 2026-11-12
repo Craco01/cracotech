@@ -42,7 +42,7 @@
   }
 
   function canEdit() {
-    return ['editor', 'supervisor', 'administrador'].includes(localStorage.getItem('role'));
+    return ['editor', 'supervisor', 'administrador'].includes(sessionStorage.getItem('role'));
   }
 
   function getProtectedTarget(value) {
@@ -74,12 +74,12 @@
   }
 
   if (isProtectedPath(currentPath, window.location.search)) {
-    if (!localStorage.getItem('token')) {
+    if (!sessionStorage.getItem('token')) {
       redirectToLogin(`${currentPath}${window.location.search}${window.location.hash}`);
       return;
     }
     if (administratorMaintenanceRoutes.has(maintenanceRouteName(currentPath)) &&
-        localStorage.getItem('role') !== 'administrador') {
+        sessionStorage.getItem('role') !== 'administrador') {
       window.location.replace('/mantenimiento/');
       return;
     }
@@ -95,7 +95,7 @@
     link.addEventListener('click', (event) => {
       const target = getProtectedTarget(link.href);
       if (!target) return;
-      if (localStorage.getItem('token')) {
+      if (sessionStorage.getItem('token')) {
         if (!requiresEditor(new URL(target, window.location.href).pathname) || canEdit()) return;
         event.preventDefault();
         window.location.assign('/mantenimiento/reportes/?vista=fr172&accessDenied=1');
@@ -115,7 +115,7 @@
     const params = new URLSearchParams(window.location.search);
     const requestedTarget = getProtectedTarget(params.get('returnTo'));
     if (params.get('loginRequired') === '1' && requestedTarget) {
-      if (localStorage.getItem('token')) {
+      if (sessionStorage.getItem('token')) {
         window.location.replace(requestedTarget);
         return;
       }
@@ -126,7 +126,7 @@
 
   const dashboardFrame = document.querySelector('#informaciones iframe[data-protected-src]');
   if (dashboardFrame) {
-    if (localStorage.getItem('token')) {
+    if (sessionStorage.getItem('token')) {
       dashboardFrame.src = dashboardFrame.dataset.protectedSrc;
       dashboardFrame.removeAttribute('data-protected-src');
     } else {
@@ -138,7 +138,7 @@
 
   document.querySelectorAll('#solicitudes a[href], #mpp a[href], #informaciones a[href], #form-adds a[href]').forEach((link) => {
     link.addEventListener('click', (event) => {
-      if (localStorage.getItem('token')) return;
+      if (sessionStorage.getItem('token')) return;
       const target = getProtectedTarget(link.href);
       if (!target) return;
       event.preventDefault();

@@ -17,7 +17,7 @@
   let isSubmitting = false;
   const idempotencyKey = window.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`;
   const submitButton = form.querySelector('button[type="submit"], input[type="submit"]');
-  const token = () => localStorage.getItem('token');
+  const token = () => sessionStorage.getItem('token');
   const value = id => document.getElementById(id)?.value || '';
   const selectedText = element => element?.selectedOptions?.[0]?.text?.trim() || '';
   const sectorNames = ['', 'Mantenimiento', 'Maquinado', 'Armado', 'Accesorios', 'Herrería', 'Pintura', 'Logística', 'Galvamax', 'Administración', 'Obras'];
@@ -92,7 +92,7 @@
     event.preventDefault();
     if (isSubmitting) return;
 
-    if (!['editor', 'supervisor', 'administrador'].includes(localStorage.getItem('role')) || !token()) return window.siteDialog.alert('Debe iniciar sesión como editor, supervisor o administrador.');
+    if (!['editor', 'supervisor', 'administrador'].includes(sessionStorage.getItem('role')) || !token()) return window.siteDialog.alert('Debe iniciar sesión como editor, supervisor o administrador.');
     const data = payload();
     if (!data) return;
     if (action.endsWith('/asignacion') && !data.responsable) return window.siteDialog.alert('Seleccione un técnico responsable.');

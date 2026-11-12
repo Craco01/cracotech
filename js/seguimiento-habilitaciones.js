@@ -144,7 +144,7 @@
       crearCeldaCosteo(orden.repuestos, orden.valor_producto, orden.fecha_adquisicion)
     );
 
-    const puedeActualizar = ['supervisor', 'administrador'].includes(localStorage.getItem('role'));
+    const puedeActualizar = ['supervisor', 'administrador'].includes(sessionStorage.getItem('role'));
     const estaHabilitado = String(orden.habilitado || 'no').trim().toLowerCase() === 'si';
     const statusCell = crearCelda(estaHabilitado ? 'Habilitado' : 'No habilitado');
     if (estaHabilitado) statusCell.classList.add('habilitaciones-estado--habilitado');
