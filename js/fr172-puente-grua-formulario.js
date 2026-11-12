@@ -3,7 +3,7 @@
 
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
-  let rol = sessionStorage.getItem('role');
+  let rol = localStorage.getItem('role');
   let puedeEditar = ['editor', 'supervisor', 'administrador'].includes(rol);
   let tieneSesion = Boolean(sessionStorage.getItem('token'));
   const form = $('#ficha');
@@ -364,7 +364,7 @@
       rol = session.role;
       puedeEditar = true;
       tieneSesion = true;
-      sessionStorage.setItem('role', session.role);
+      localStorage.setItem('role', session.role);
       sessionStorage.setItem('username', session.username);
       $('#acceso-requerido').hidden = true;
       form.hidden = false;

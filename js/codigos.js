@@ -4,7 +4,7 @@ let paginaActual = 0;
 let resultados = [];
 
 const cargaProductos = document.getElementById("codigos-admin-actions");
-if (cargaProductos && sessionStorage.getItem("role") === "administrador") {
+if (cargaProductos && localStorage.getItem("role") === "administrador") {
   cargaProductos.hidden = false;
 }
 

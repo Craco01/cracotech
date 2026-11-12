@@ -2,8 +2,6 @@
 const API_BASE_URL = 'https://api.cracotech.com';
 
 localStorage.removeItem('token');
-localStorage.removeItem('username');
-localStorage.removeItem('role');
 
 const API_URL = (path) => {
   if (!path) return API_BASE_URL;
@@ -54,7 +52,7 @@ window.SEARCH_UTILS = {
 function clearExpiredSession() {
   sessionStorage.removeItem('token');
   sessionStorage.removeItem('username');
-  sessionStorage.removeItem('role');
+  localStorage.removeItem('role');
   if (new URLSearchParams(window.location.search).has('embed')) {
     const dashboard = document.getElementById('dashboard');
     if (dashboard) dashboard.innerHTML = '<div class="empty session-required">Debe iniciar sesión para visualizar el reporte.</div>';

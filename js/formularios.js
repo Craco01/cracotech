@@ -92,7 +92,7 @@
     event.preventDefault();
     if (isSubmitting) return;
 
-    if (!['editor', 'supervisor', 'administrador'].includes(sessionStorage.getItem('role')) || !token()) return window.siteDialog.alert('Debe iniciar sesión como editor, supervisor o administrador.');
+    if (!['editor', 'supervisor', 'administrador'].includes(localStorage.getItem('role')) || !token()) return window.siteDialog.alert('Debe iniciar sesión como editor, supervisor o administrador.');
     const data = payload();
     if (!data) return;
     if (action.endsWith('/asignacion') && !data.responsable) return window.siteDialog.alert('Seleccione un técnico responsable.');

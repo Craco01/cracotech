@@ -12,7 +12,7 @@ const authHeaders = () => {
 function redirectToActiveLogin() {
   sessionStorage.removeItem('token');
   sessionStorage.removeItem('username');
-  sessionStorage.removeItem('role');
+  localStorage.removeItem('role');
   const loginUrl = new URL('/mantenimiento/', window.location.origin);
   loginUrl.searchParams.set('loginRequired', '1');
   loginUrl.searchParams.set('returnTo', `${location.pathname}${location.search}${location.hash}`);
@@ -196,7 +196,7 @@ $('deleteButton').addEventListener('click', async () => {
 
 function escapeHtml(value) { return String(value).replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[character])); }
 setFormMode();
-if (sessionStorage.getItem('token') && sessionStorage.getItem('role') === 'administrador') {
+if (sessionStorage.getItem('token') && localStorage.getItem('role') === 'administrador') {
   $('adminPanel').classList.remove('hidden');
   setStatus('adminStatus', 'Sesión de administrador activa.', 'ok');
   loadAccounts();

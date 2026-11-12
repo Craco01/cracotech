@@ -67,7 +67,7 @@ Las fichas FR-172 no se guardan automáticamente. Los cambios se persisten en el
 
 ## Autenticación
 
-La sesión no se guarda en el backend; se maneja por token JWT enviado desde el frontend y almacenado en sessionStorage, por lo que normalmente termina al cerrar la pestaña. La opción «Recordar usuario» solo conserva el nombre en localStorage.
+La sesión no se guarda en el backend; se maneja por token JWT enviado desde el frontend y almacenado en sessionStorage, por lo que termina al cerrar la pestaña. El rol se conserva en localStorage para mantener disponibles los accesos de interfaz, pero no concede permisos por sí solo: el backend valida cada operación con el token de sesión. La opción «Recordar usuario» solo conserva el nombre si se marca.
 
 Los componentes del flujo de login del portal están en:
 - [js/login-modal.js](js/login-modal.js)

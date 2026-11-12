@@ -42,7 +42,7 @@
   }
 
   function canEdit() {
-    return ['editor', 'supervisor', 'administrador'].includes(sessionStorage.getItem('role'));
+    return ['editor', 'supervisor', 'administrador'].includes(localStorage.getItem('role'));
   }
 
   function getProtectedTarget(value) {
@@ -79,7 +79,7 @@
       return;
     }
     if (administratorMaintenanceRoutes.has(maintenanceRouteName(currentPath)) &&
-        sessionStorage.getItem('role') !== 'administrador') {
+        localStorage.getItem('role') !== 'administrador') {
       window.location.replace('/mantenimiento/');
       return;
     }

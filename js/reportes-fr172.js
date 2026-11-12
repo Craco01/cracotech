@@ -19,7 +19,7 @@
     canEdit = ['editor', 'supervisor', 'administrador'].includes(role);
     isAdmin = role === 'administrador';
     createLink.hidden = !canEdit;
-    sessionStorage.setItem('role', role);
+    localStorage.setItem('role', role);
   }
 
   async function refreshRole() {

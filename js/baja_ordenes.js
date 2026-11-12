@@ -78,7 +78,7 @@ masterKeyForm.addEventListener('submit', async event => {
       if (remainingAttempts <= 0) {
         sessionStorage.removeItem('token');
         sessionStorage.removeItem('username');
-        sessionStorage.removeItem('role');
+        localStorage.removeItem('role');
         cerrarModalClave();
         window.location.reload();
       }

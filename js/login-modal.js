@@ -148,7 +148,7 @@ function closeUserMenu() {
 function renderNav() {
   const token = sessionStorage.getItem('token');
   const username = sessionStorage.getItem('username');
-  const role = sessionStorage.getItem('role');
+  const role = localStorage.getItem('role');
   const adminUsersNavItem = document.getElementById('adminUsersNavItem');
   if (adminUsersNavItem) adminUsersNavItem.hidden = role !== 'administrador';
   if (token && username) {
@@ -174,7 +174,7 @@ function renderNav() {
       toggle.setAttribute('aria-expanded', String(isOpen));
     });
     document.getElementById('logoutDiv').addEventListener('click', () => {
-      sessionStorage.removeItem('token'); sessionStorage.removeItem('username'); sessionStorage.removeItem('role');
+      sessionStorage.removeItem('token'); sessionStorage.removeItem('username'); localStorage.removeItem('role');
       form.reset();
       window.location.href = window.location.pathname.startsWith('/mantenimiento/')
         ? '/mantenimiento/'
@@ -239,7 +239,7 @@ form.addEventListener('submit', async event => {
       mensaje.style.color = 'red';
       return;
     }
-    sessionStorage.setItem('token', data.token); sessionStorage.setItem('role', data.role); sessionStorage.setItem('username', document.getElementById('user').value);
+    sessionStorage.setItem('token', data.token); localStorage.setItem('role', data.role); sessionStorage.setItem('username', document.getElementById('user').value);
     const redirect = sessionStorage.getItem('postLoginRedirect');
     if (redirect) {
       sessionStorage.removeItem('postLoginRedirect');
