@@ -526,7 +526,7 @@ formulario.addEventListener("submit", async event => {
             claveReprogramacionPendiente = null;
             document.getElementById("tituloSolicitudCreada").textContent = "Pedido reprogramado";
             document.getElementById("mensajeSolicitudCreada").textContent =
-                `Se creó el pedido ${result.id} y el pedido ${pedidoId} quedó completado.`;
+                `Se creó el pedido ${result.id} y el pedido ${pedidoId} quedó Cancelado.`;
             modalSolicitudCreada.showModal();
         } catch (error) {
             mostrarErrorReprogramacion(error instanceof TypeError

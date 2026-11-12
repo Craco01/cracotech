@@ -206,5 +206,7 @@
   ensureLayout();
   ensureContactStyles();
   ensureWhatsApp();
-  ensureContactFooter();
+  if (new URLSearchParams(window.location.search).get('embed') !== '1') {
+    ensureContactFooter();
+  }
 })();
