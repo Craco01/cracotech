@@ -1,0 +1,59 @@
+.rrhh-layout {
+  min-height: 100vh;
+  color: #111827;
+  background: #f3f4f6;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+.rrhh-layout [hidden] { display: none !important; }
+.rrhh-site-header { position: relative; z-index: 5; }
+.rrhh-nav {
+  display: flex;
+  min-height: 54px;
+  align-items: stretch;
+  gap: 18px;
+  padding: 0 clamp(14px, 4vw, 44px);
+  background: #374151;
+  box-shadow: 0 2px 8px rgb(17 24 39 / 18%);
+}
+.rrhh-nav-brand { display: inline-flex; align-items: center; gap: 9px; color: #fff; font-size: 14px; font-weight: 800; letter-spacing: .08em; text-decoration: none; }
+.rrhh-nav-brand img { width: 34px; height: 34px; object-fit: contain; }
+.rrhh-nav-links { display: flex; align-items: stretch; gap: 3px; margin-left: auto; }
+.rrhh-nav-links a { display: inline-flex; align-items: center; padding: 0 14px; border-bottom: 3px solid transparent; color: #e5e7eb; font-size: 14px; font-weight: 650; text-decoration: none; }
+.rrhh-nav-links a:hover, .rrhh-nav-links a:focus-visible, .rrhh-nav-links a[aria-current="page"] { background: #1f2937; color: #fff; }
+.rrhh-nav-links a[aria-current="page"] { border-bottom-color: #9ca3af; }
+.rrhh-nav-toggle { display: none; margin: auto 0 auto auto; padding: 7px 11px; border: 1px solid #9ca3af; border-radius: 6px; background: transparent; color: #fff; font: inherit; }
+.rrhh-banner { display: flex; min-height: 118px; align-items: center; gap: 20px; padding: 17px clamp(18px, 5vw, 58px); background: #123a76; color: #fff; }
+.rrhh-banner > img { width: 70px; height: 70px; object-fit: contain; }
+.rrhh-banner p { margin: 0 0 4px; color: #dbeafe; font-size: 11px; font-weight: 800; letter-spacing: .13em; }
+.rrhh-banner h1 { margin: 0; color: #fff; font-size: clamp(22px, 3vw, 30px); line-height: 1.15; }
+.rrhh-banner span { display: block; margin-top: 5px; color: #e5e7eb; font-size: 14px; }
+.rrhh-layout .contenedor,
+.rrhh-layout .pagina { width: min(96vw, 1320px); max-width: 1320px; margin: 25px auto 36px; padding: clamp(18px, 3vw, 36px); border: 1px solid #d1d5db; border-radius: 12px; background: #fff; box-shadow: 0 8px 22px rgb(17 24 39 / 10%); }
+.rrhh-layout .pagina { width: min(96vw, 1060px); }
+.rrhh-layout .contenedor { min-height: 360px; }
+.rrhh-layout .encabezado { margin-left: 0; }
+.rrhh-layout .encabezado h1,
+.rrhh-layout .pagina > .cabecera h1 { color: #123a76; }
+.rrhh-layout .sobretitulo,
+.rrhh-layout .tblock { color: #24603d; }
+.rrhh-layout .panel { border-color: #d1d5db; border-radius: 9px; box-shadow: 0 5px 16px rgb(17 24 39 / 8%); }
+.rrhh-layout button,
+.rrhh-layout .boton { border-radius: 6px; background: #374151; }
+.rrhh-layout button:hover,
+.rrhh-layout .boton:hover { background: #1f2937; }
+.rrhh-layout .rrhh-footer { display: flex; justify-content: space-between; gap: 12px; width: min(96vw, 1320px); margin: 0 auto; padding: 4px 0 24px; color: #4b5563; font-size: 13px; }
+.rrhh-layout .rrhh-footer a { color: #1d4ed8; font-weight: 650; }
+.rrhh-layout.visor-pdf main { height: calc(100vh - 4rem); }
+@media (max-width: 700px) {
+  .rrhh-nav { min-height: 52px; flex-wrap: wrap; gap: 0; }
+  .rrhh-nav-toggle { display: inline-flex; align-items: center; justify-content: center; }
+  .rrhh-nav-links { display: none; width: calc(100% + 28px); flex-direction: column; order: 3; margin: 0 -14px; padding: 4px 14px 10px; }
+  .rrhh-nav-links.is-open { display: flex; }
+  .rrhh-nav-links a { min-height: 42px; padding: 0 12px; border: 0; border-radius: 5px; }
+  .rrhh-banner { min-height: 96px; gap: 12px; padding: 14px 16px; }
+  .rrhh-banner > img { width: 52px; height: 52px; }
+  .rrhh-banner span { font-size: 12px; }
+  .rrhh-layout .contenedor, .rrhh-layout .pagina { width: calc(100% - 16px); margin: 12px auto 20px; padding: 14px; }
+  .rrhh-layout .rrhh-footer { width: calc(100% - 24px); flex-direction: column; padding-bottom: 18px; }
+  .rrhh-layout .barra { top: 0; }
+}
