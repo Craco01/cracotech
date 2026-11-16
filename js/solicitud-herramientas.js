@@ -472,7 +472,7 @@ modalSolicitudCreada.addEventListener("close", () => {
 tabla.addEventListener("click", event => {
     if (!event.target.classList.contains("btnEliminar")) return;
     if (tabla.querySelectorAll("tr").length === 1) {
-        alert("Debe existir al menos una herramienta.");
+        window.siteDialog.alert("Debe existir al menos una herramienta.");
         return;
     }
     event.target.closest("tr").remove();

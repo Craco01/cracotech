@@ -591,9 +591,15 @@ async function guardarEnvio(event) {
     mensaje.textContent = 'El gestor no puede volver un pedido al estado Solicitado.';
     return;
   }
-  if (['Completado', 'Cancelado'].includes(estadoPedido) && estadoPedido !== estadoOriginal &&
-      !window.confirm(`¿Confirma que desea marcar el pedido como ${estadoPedido}? Después, se requerirá autorización especial para cambiarlo.`)) {
-    return;
+  if (['Completado', 'Cancelado'].includes(estadoPedido) && estadoPedido !== estadoOriginal) {
+    const modal = $('#modalEnvio');
+    modal.close();
+    const confirmado = await window.siteDialog.confirm(
+      `¿Confirma que desea marcar el pedido como ${estadoPedido}? Después, se requerirá autorización especial para cambiarlo.`
+    );
+    modal.showModal();
+    $('#estadoPedido').focus({ preventScroll: true });
+    if (!confirmado) return;
   }
   const herramientas = Array.from(form.querySelectorAll('[data-herramienta-id]'), select => ({
     id: Number(select.dataset.herramientaId),
