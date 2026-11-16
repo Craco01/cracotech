@@ -121,6 +121,7 @@
 
                 <div class="section-header">
                     <h2>Herramientas Solicitadas</h2>
+                    <button type="button" id="btnCargarExcel" class="btn-excel">📥 Cargar desde Excel</button>
                 </div>
 
                 <div class="table-wrap">
@@ -218,6 +219,50 @@
         </div>
     </dialog>
 
+    <dialog class="modal-excel" id="modalExcel" aria-labelledby="mxTitulo">
+        <div class="mx-modal">
+            <div class="mx-header">
+                <h2 id="mxTitulo">Cargar herramientas desde Excel</h2>
+                <button type="button" class="mx-cerrar" id="mxCerrar" aria-label="Cerrar">&times;</button>
+            </div>
+            <div class="mx-body">
+                <div class="mx-instrucciones">
+                    <p><strong>Cómo cargar:</strong></p>
+                    <ol><li>La primera fila se toma como encabezado y se ignora su texto. Mantén siempre las columnas en este orden: Herramienta, Cantidad, Unidad de medida y Observación.</li></ol>
+                    <table class="mx-tabla">
+                        <thead><tr><th>Herramienta</th><th>Cantidad</th><th>Unidad de medida</th><th>Observación</th></tr></thead>
+                        <tbody>
+                            <tr><td>Taladro percutor 13 mm</td><td>1</td><td>ud.</td><td>con maletín y 2 baterías</td></tr>
+                            <tr><td>Disco de corte 4 1/2"</td><td>10</td><td>ud.</td><td></td></tr>
+                        </tbody>
+                    </table>
+                    <ol start="2">
+                        <li>Herramienta es obligatoria y Cantidad debe ser mayor a 0.</li>
+                        <li>Unidad de medida y Observación son opcionales; si falta la unidad se usará “ud.”.</li>
+                        <li>Sube un archivo o pega las celdas incluyendo la primera fila de encabezado.</li>
+                    </ol>
+                </div>
+                <div class="mx-tabs">
+                    <button type="button" class="mx-tab activo" data-tab="archivo">Subir Excel</button>
+                    <button type="button" class="mx-tab" data-tab="pegar">Pegar texto</button>
+                </div>
+                <div class="mx-panel" id="mxPanelArchivo">
+                    <input type="file" id="mxArchivo" accept=".xlsx,.xls,.csv">
+                    <small>Formatos admitidos: .xlsx, .xls, .csv (se lee la primera hoja).</small>
+                </div>
+                <div class="mx-panel" id="mxPanelPegar" hidden>
+                    <textarea id="mxTexto" rows="7" placeholder="Herramienta&#9;Cantidad&#9;Unidad de medida&#9;Observación&#10;Taladro percutor 13 mm&#9;1&#9;ud.&#9;con maletín"></textarea>
+                    <small>Copia las celdas de Excel con Ctrl+C y pégalas aquí con Ctrl+V.</small>
+                </div>
+                <div id="mxMensaje" class="mx-mensaje" role="status" hidden></div>
+            </div>
+            <div class="mx-footer">
+                <button type="button" class="btn-secondary" id="mxCancelar">Cancelar</button>
+                <button type="button" class="btn-primary" id="mxProcesar">Cargar herramientas</button>
+            </div>
+        </div>
+    </dialog>
+
     <dialog class="solicitud-confirmacion" id="modalSolicitudCreada"
         aria-labelledby="tituloSolicitudCreada" aria-describedby="mensajeSolicitudCreada">
         <div class="solicitud-confirmacion-contenido">
@@ -233,7 +278,8 @@
     <script src="../../js/herramientas-layout.js"></script>
     <script src="../../js/login-herramientas.js"></script>
     <script src="../../js/site-dialogs.js"></script>
-    <script src="../../js/solicitud-herramientas.js?v=20261111-3"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="../../js/solicitud-herramientas.js?v=20261116-excel-1"></script>
 
 </body>
 

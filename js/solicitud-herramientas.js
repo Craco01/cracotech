@@ -390,7 +390,7 @@ function validarFecha() {
     return true;
 }
 
-function agregarFilaHerramienta() {
+function agregarFilaHerramienta(item = {}) {
     const fila = document.createElement("tr");
     fila.innerHTML = `
         <td data-label="Herramienta">
@@ -414,6 +414,11 @@ function agregarFilaHerramienta() {
                 aria-label="Quitar herramienta" class="btn-danger btnEliminar">X</button>
         </td>
     `;
+    const campos = fila.querySelectorAll("input");
+    if (item.herramienta !== undefined) campos[0].value = item.herramienta;
+    if (item.cantidad !== undefined) campos[1].value = item.cantidad;
+    if (item.unidad !== undefined) campos[2].value = item.unidad;
+    if (item.observacion !== undefined) campos[3].value = item.observacion;
     tabla.appendChild(fila);
 }
 
@@ -461,7 +466,114 @@ document.addEventListener("keydown", event => {
         modalSeleccionFecha.close();
     }
 });
-btnAgregar.addEventListener("click", agregarFilaHerramienta);
+btnAgregar.addEventListener("click", () => agregarFilaHerramienta());
+
+// Carga de herramientas desde Excel, CSV o celdas copiadas.
+const modalExcel = document.getElementById("modalExcel");
+const mensajeExcel = document.getElementById("mxMensaje");
+let pestañaExcelActiva = "archivo";
+
+function mostrarMensajeExcel(tipo, texto) {
+    mensajeExcel.textContent = texto;
+    mensajeExcel.className = `mx-mensaje ${tipo}`;
+    mensajeExcel.hidden = false;
+}
+
+document.getElementById("btnCargarExcel").addEventListener("click", () => {
+    document.getElementById("mxArchivo").value = "";
+    document.getElementById("mxTexto").value = "";
+    mensajeExcel.hidden = true;
+    modalExcel.showModal();
+});
+document.getElementById("mxCerrar").addEventListener("click", () => modalExcel.close());
+document.getElementById("mxCancelar").addEventListener("click", () => modalExcel.close());
+modalExcel.addEventListener("click", event => {
+    if (event.target === modalExcel) modalExcel.close();
+});
+document.querySelectorAll(".mx-tab").forEach(boton => boton.addEventListener("click", () => {
+    pestañaExcelActiva = boton.dataset.tab;
+    document.querySelectorAll(".mx-tab").forEach(tab => tab.classList.toggle("activo", tab === boton));
+    document.getElementById("mxPanelArchivo").hidden = pestañaExcelActiva !== "archivo";
+    document.getElementById("mxPanelPegar").hidden = pestañaExcelActiva !== "pegar";
+    mensajeExcel.hidden = true;
+}));
+
+function leerArchivoExcel(archivo) {
+    return new Promise((resolve, reject) => {
+        if (typeof XLSX === "undefined") {
+            reject(new Error("No se cargó la librería de Excel. Revisa la conexión a internet."));
+            return;
+        }
+        const lector = new FileReader();
+        lector.onload = evento => {
+            try {
+                const libro = XLSX.read(evento.target.result, { type: "array" });
+                const hoja = libro.Sheets[libro.SheetNames[0]];
+                resolve(XLSX.utils.sheet_to_json(hoja, { header: 1, defval: "", raw: false }));
+            } catch (error) { reject(error); }
+        };
+        lector.onerror = () => reject(new Error("No se pudo leer el archivo."));
+        lector.readAsArrayBuffer(archivo);
+    });
+}
+
+function leerTextoExcel(texto) {
+    const lineas = texto.replace(/\r/g, "").split("\n").filter(linea => linea.trim());
+    if (!lineas.length) return [];
+    const separador = lineas[0].includes("\t") ? "\t" : lineas[0].includes(";") ? ";" : ",";
+    return lineas.map(linea => linea.split(separador).map(celda => celda.replace(/^"|"$/g, "")));
+}
+
+function validarFilasExcel(filas) {
+    if (filas.length < 2) throw new Error("Incluye los encabezados y al menos una fila de datos.");
+    const items = [];
+    const errores = [];
+    filas.slice(1).forEach((fila, indiceFila) => {
+        if (!fila.some(celda => String(celda).trim())) return;
+        // Los títulos de la primera fila se ignoran; las columnas conservan este orden fijo.
+        const obtener = indice => String(fila[indice] ?? "").trim();
+        const herramienta = obtener(0);
+        const cantidad = Number(obtener(1).replace(",", "."));
+        if (!herramienta) errores.push(`Fila ${indiceFila + 2}: falta la herramienta.`);
+        else if (herramienta.length > 200) errores.push(`Fila ${indiceFila + 2}: la herramienta supera 200 caracteres.`);
+        else if (!Number.isInteger(cantidad) || cantidad < 1) errores.push(`Fila ${indiceFila + 2}: la cantidad debe ser un entero mayor a 0.`);
+        else {
+            const unidad = obtener(2) || "ud.";
+            const observacion = obtener(3);
+            if (unidad.length > 50) errores.push(`Fila ${indiceFila + 2}: la unidad supera 50 caracteres.`);
+            else if (observacion.length > 300) errores.push(`Fila ${indiceFila + 2}: la observación supera 300 caracteres.`);
+            else items.push({ herramienta, cantidad, unidad, observacion });
+        }
+    });
+    if (errores.length) throw new Error(errores.slice(0, 15).join(" "));
+    if (!items.length) throw new Error("No se encontraron filas con datos.");
+    return items;
+}
+
+document.getElementById("mxProcesar").addEventListener("click", async () => {
+    mensajeExcel.hidden = true;
+    try {
+        let filas;
+        if (pestañaExcelActiva === "archivo") {
+            const archivo = document.getElementById("mxArchivo").files[0];
+            if (!archivo) throw new Error("Selecciona un archivo primero.");
+            filas = await leerArchivoExcel(archivo);
+        } else {
+            const texto = document.getElementById("mxTexto").value;
+            if (!texto.trim()) throw new Error("Pega el contenido copiado desde Excel.");
+            filas = leerTextoExcel(texto);
+        }
+        const items = validarFilasExcel(filas);
+        Array.from(tabla.querySelectorAll("tr")).forEach(fila => {
+            if (!fila.querySelector("input").value.trim()) fila.remove();
+        });
+        items.forEach(agregarFilaHerramienta);
+        mostrarMensajeExcel("ok", `Se cargaron ${items.length} herramienta(s).`);
+        window.setTimeout(() => modalExcel.close(), 1200);
+    } catch (error) {
+        mostrarMensajeExcel("error", error.message || "No se pudo procesar el archivo.");
+    }
+});
 document.getElementById("btnCerrarSolicitudCreada").addEventListener("click", () => {
     modalSolicitudCreada.close();
 });
