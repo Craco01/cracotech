@@ -88,6 +88,7 @@
   color: #e5e7eb;
   font-weight: 600;
   text-decoration: none;
+  text-transform: uppercase;
   transition: background-color .15s, color .15s;
 }
 
@@ -122,6 +123,7 @@
   color: #e5e7eb;
   font: inherit;
   font-weight: 600;
+  text-transform: uppercase;
   text-decoration: none;
   transition: background-color .15s, color .15s;
   cursor: pointer;
@@ -149,6 +151,7 @@
   color: #fff;
   font: inherit;
   font-weight: 600;
+  text-transform: uppercase;
   cursor: pointer;
   transition: background-color .15s, color .15s;
 }

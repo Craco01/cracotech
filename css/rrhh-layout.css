@@ -12,18 +12,16 @@
   align-items: stretch;
   gap: 18px;
   padding: 0 clamp(14px, 4vw, 44px);
-  background: #374151;
+  background: #072885;
   box-shadow: 0 2px 8px rgb(17 24 39 / 18%);
 }
-.rrhh-nav-brand { display: inline-flex; align-items: center; gap: 9px; color: #fff; font-size: 14px; font-weight: 800; letter-spacing: .08em; text-decoration: none; }
-.rrhh-nav-brand img { width: 34px; height: 34px; object-fit: contain; }
 .rrhh-nav-links { display: flex; align-items: stretch; gap: 3px; margin-left: auto; }
-.rrhh-nav-links a { display: inline-flex; align-items: center; padding: 0 14px; border-bottom: 3px solid transparent; color: #e5e7eb; font-size: 14px; font-weight: 650; text-decoration: none; }
-.rrhh-nav-links a:hover, .rrhh-nav-links a:focus-visible, .rrhh-nav-links a[aria-current="page"] { background: #1f2937; color: #fff; }
+.rrhh-nav-links a { display: inline-flex; align-items: center; padding: 0 14px; border-bottom: 3px solid transparent; color: #e5e7eb; font-size: 14px; font-weight: 650; text-decoration: none; text-transform: uppercase; }
+.rrhh-nav-links a:hover, .rrhh-nav-links a:focus-visible, .rrhh-nav-links a[aria-current="page"] { background: #061f66; color: #fff; }
 .rrhh-nav-links a[aria-current="page"] { border-bottom-color: #9ca3af; }
 .rrhh-nav-toggle { display: none; margin: auto 0 auto auto; padding: 7px 11px; border: 1px solid #9ca3af; border-radius: 6px; background: transparent; color: #fff; font: inherit; }
-.rrhh-banner { display: flex; min-height: 118px; align-items: center; gap: 20px; padding: 17px clamp(18px, 5vw, 58px); background: #123a76; color: #fff; }
-.rrhh-banner > img { width: 70px; height: 70px; object-fit: contain; }
+.rrhh-banner { display: flex; min-height: 118px; align-items: center; gap: 20px; padding: 17px clamp(18px, 5vw, 58px); background: linear-gradient(90deg, #0a6b0a 0%, #1d8a1d 100%); color: #fff; }
+.rrhh-banner > img { box-sizing: border-box; width: 70px; height: 70px; padding: 7px; border-radius: 8px; background: #fff; object-fit: contain; }
 .rrhh-banner p { margin: 0 0 4px; color: #dbeafe; font-size: 11px; font-weight: 800; letter-spacing: .13em; }
 .rrhh-banner h1 { margin: 0; color: #fff; font-size: clamp(22px, 3vw, 30px); line-height: 1.15; }
 .rrhh-banner span { display: block; margin-top: 5px; color: #e5e7eb; font-size: 14px; }
