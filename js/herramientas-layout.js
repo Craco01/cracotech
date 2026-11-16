@@ -30,7 +30,7 @@
     { label: 'Contacto', path: `${toolsRoot}#contacto` },
     { label: 'Autor', path: authorRoot }
   ];
-  const usuariosPath = `${toolsRoot}usuarios/index.html`;
+  const usuariosPath = `${toolsRoot}usuarios/`;
   const renderNavItems = () => {
     const role = sessionStorage.getItem('herramientas_rol');
     const visiblePages = pages.filter(({ label }) => label !== 'Pedidos' || role !== 'observador');

@@ -15,7 +15,7 @@
   const links = [
     { label: 'Reportes', href: moduleRoot, active: page === 'rrhh' },
     { label: 'Actualizar ficha', href: route('rrhh/actualizacion/'), active: page === 'actualizacion' },
-    { label: 'Autor', href: route('index.html') }
+    { label: 'Autor', href: route('./') }
   ];
 
   document.body.classList.add('rrhh-layout');
@@ -44,6 +44,6 @@
 
   const footer = document.createElement('footer');
   footer.className = 'rrhh-footer';
-  footer.innerHTML = `<span>Recursos Humanos · Metalúrgica Vera S.A.E.</span><a href="${route('index.html')}">Volver al portal CracoTech</a>`;
+  footer.innerHTML = `<span>Recursos Humanos · Metalúrgica Vera S.A.E.</span><a href="${route('./')}">Volver al portal CracoTech</a>`;
   document.body.append(footer);
 })();
