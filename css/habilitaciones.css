@@ -47,13 +47,13 @@
 }
 
 #tablaHabilitaciones .habilitaciones-col-id { width: 6%; }
-#tablaHabilitaciones .habilitaciones-col-maquina { width: 16%; }
+#tablaHabilitaciones .habilitaciones-col-maquina { width: 14%; }
 #tablaHabilitaciones .habilitaciones-col-nombre { width: 10%; }
-#tablaHabilitaciones .habilitaciones-col-averia { width: 18%; }
+#tablaHabilitaciones .habilitaciones-col-averia { width: 17%; }
 #tablaHabilitaciones .habilitaciones-col-responsable { width: 8%; }
-#tablaHabilitaciones .habilitaciones-col-costeo { width: 25%; }
-#tablaHabilitaciones .habilitaciones-col-estado { width: 7%; }
-#tablaHabilitaciones .habilitaciones-col-accion { width: 10%; }
+#tablaHabilitaciones .habilitaciones-col-costeo { width: 23%; }
+#tablaHabilitaciones .habilitaciones-col-estado { width: 10%; }
+#tablaHabilitaciones .habilitaciones-col-accion { width: 12%; }
 
 #tablaHabilitaciones thead th {
   position: sticky;
@@ -162,10 +162,26 @@
   color: #c62828;
 }
 
+#tablaHabilitaciones .habilitaciones-estado--habilitado,
+#tablaHabilitaciones .habilitaciones-estado--no-habilitado {
+  word-break: normal;
+  overflow-wrap: normal;
+}
+
+#tablaHabilitaciones .habilitaciones-acciones-grupo {
+  display: flex;
+  min-width: 80px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+}
+
 #tablaHabilitaciones .habilitaciones-accion {
-  width: auto;
+  box-sizing: border-box;
+  width: 100%;
   min-height: 36px;
-  padding: 8px 10px;
+  margin: 0;
+  padding: 7px 8px;
   border: 1px solid #0f7a32;
   border-radius: 6px;
   background: #0f7a32;
@@ -186,7 +202,6 @@
 }
 
 #tablaHabilitaciones .habilitaciones-accion--borrar {
-  margin-left: 6px;
   background: #b42318;
   border-color: #b42318;
 }
@@ -196,9 +211,37 @@
 }
 
 @media (max-width: 760px) {
+  #solicitudes-app {
+    width: 100%;
+    max-width: none;
+    padding: 0;
+  }
+
   #habilitacionesReporte {
-    width: calc(100% - 24px);
+    box-sizing: border-box;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    max-height: none;
+    overflow: visible;
     padding: 12px;
+    border-radius: 0;
+  }
+
+  #habilitacionesTablaContenedor {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 6px;
+  }
+
+  #tablaHabilitaciones {
+    display: table;
+    width: 980px;
+    min-width: 980px;
+    table-layout: fixed;
   }
 
   #tablaHabilitaciones .habilitaciones-comparacion {

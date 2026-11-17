@@ -971,3 +971,8 @@
     font-size: 12px;
   }
 }
+@media (max-width: 820px) {
+  :where([class*="actions"], [class*="acciones"], [class*="button-group"], [class*="buttons"], [class*="botones"], [class*="btn-group"], [class*="atajos"]) {
+    row-gap: 12px;
+  }
+}

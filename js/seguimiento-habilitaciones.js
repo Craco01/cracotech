@@ -150,6 +150,8 @@
     if (estaHabilitado) statusCell.classList.add('habilitaciones-estado--habilitado');
     else statusCell.classList.add('habilitaciones-estado--no-habilitado');
     const actionCell = document.createElement('td');
+    const actionGroup = document.createElement('div');
+    actionGroup.className = 'habilitaciones-acciones-grupo';
     if (puedeActualizar) {
       const habilitarButton = document.createElement('button');
       habilitarButton.type = 'button';
@@ -180,7 +182,7 @@
         habilitarButton.disabled = String(orden.habilitado || 'no').trim().toLowerCase() === 'si';
       }
       });
-      actionCell.appendChild(habilitarButton);
+      actionGroup.appendChild(habilitarButton);
     }
     if (puedeActualizar) {
       const borrarButton = document.createElement('button');
@@ -202,8 +204,9 @@
           borrarButton.disabled = false;
         }
       });
-      actionCell.appendChild(borrarButton);
+      actionGroup.appendChild(borrarButton);
     }
+    actionCell.appendChild(actionGroup);
     row.append(statusCell, actionCell);
     return row;
   }
