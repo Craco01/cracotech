@@ -11,7 +11,7 @@ const TIPOS = [
 const ESTADOS_HERR = ['Disponible', 'No disponible', 'Buscar', 'Para compra', 'Envío cancelado', 'Ya enviado', 'Ya completado'];
 const ETIQUETAS_ESTADO_HERR = {
   Buscar: 'Para buscar',
-  'Ya completado': 'El operador ya cuenta con ella'
+  'Ya completado': 'Puntero ya tiene'
 };
 
 /* ===== Datos =====
@@ -257,10 +257,7 @@ function detalle(id) {
   $('#modalBody').innerHTML = `<div class="m">
     <div class="envio-modal-header">
       <h2>${esc(p.ot_obra)} · Pedido #${p.id}</h2>
-      <div class="envio-acciones">
-        <button class="btn-guardar" id="editarPedido" data-id="${p.id}" type="button" hidden>Editar</button>
-        <button class="cerrar" id="cerrar" type="button">Cerrar</button>
-      </div>
+      <button class="modal-cerrar-flotante" type="button" data-modal-close aria-label="Cerrar vista del pedido">×</button>
     </div>
     <div class="pedido-estado-general"><b>Estado del pedido</b>${tagEstado(p.estado)}</div>
     <dl><dt>Nombre de la obra</dt><dd>${esc(p.nombre_obra) || '—'}</dd><dt>Puntero asignado</dt><dd>${esc(p.puntero_asignado)}</dd><dt>Solicitante</dt><dd>${esc(p.solicitante)}</dd>
@@ -274,7 +271,12 @@ function detalle(id) {
     </section>
     <table><thead><tr><th scope="col">Herramienta</th><th scope="col">Cant.</th><th scope="col">Unidad</th><th scope="col">Estado</th><th scope="col">Nota</th></tr></thead><tbody>${
       p.detalle.map(d => `<tr><td>${esc(d.herramienta)}</td><td>${d.cantidad}</td><td>${esc(d.unidad_medida) || '—'}</td><td>${tagHerr(d.estado_herramienta)}</td><td>${esc(d.observacion) || '—'}</td></tr>`).join('')
-    }</tbody></table></div>`;
+    }</tbody></table>
+    <div class="envio-acciones">
+      <button class="btn-guardar" id="editarPedido" data-id="${p.id}" type="button" hidden>Editar</button>
+      <button class="cerrar" id="cerrar" type="button">Cerrar</button>
+    </div>
+  </div>`;
   $('#editarPedido').hidden = !puedeGestionarEnvios();
   $('#modal').showModal();
 }
@@ -533,10 +535,7 @@ function abrirModalEnvio(pedidoId) {
   $('#modalEnvioBody').innerHTML = `<div class="m">
     <div class="envio-modal-header">
       <h2>${esc(pedido.ot_obra)} · Pedido #${pedido.id}</h2>
-      <div class="envio-acciones">
-        <button id="guardarEnvio" class="btn-guardar" type="submit" form="formEnvio"${puedeGuardar ? '' : ' disabled'}>Guardar</button>
-        <button class="cerrar" id="cerrarEnvio" type="button">Cerrar</button>
-      </div>
+      <button class="modal-cerrar-flotante" type="button" data-modal-close aria-label="Cerrar edición del pedido">×</button>
     </div>
     ${puedeGuardar ? '' : `<p class="envio-preview" role="status">${tieneIdsReales ? 'Vista previa: inicia sesión como gestor o administrador para guardar.' : 'Vista previa con datos de ejemplo: el guardado está deshabilitado.'}</p>`}
     <form id="formEnvio" class="envio-form" data-pedido-id="${pedido.id}" data-estado-original="${esc(pedido.estado)}">
@@ -557,6 +556,10 @@ function abrirModalEnvio(pedidoId) {
       <tbody>${detalle}</tbody></table></div>
       <p id="mensajeEnvio" role="alert" aria-live="polite"></p>
     </form>
+    <div class="envio-acciones">
+      <button id="guardarEnvio" class="btn-guardar" type="submit" form="formEnvio"${puedeGuardar ? '' : ' disabled'}>Guardar</button>
+      <button class="cerrar" id="cerrarEnvio" type="button">Cerrar</button>
+    </div>
   </div>`;
 
   const modal = $('#modalEnvio');
@@ -706,7 +709,7 @@ function init() {
     $('#vista th[data-col="' + CSS.escape(orden.col) + '"]')?.focus();
   });
   $('#modal').addEventListener('click', e => {
-    if (e.target.id === 'modal' || e.target.id === 'cerrar') {
+    if (e.target.id === 'modal' || e.target.closest('[data-modal-close]') || e.target.id === 'cerrar') {
       $('#modal').close();
     } else if (e.target.id === 'editarPedido') {
       $('#modal').close();
@@ -714,7 +717,7 @@ function init() {
     }
   });
   $('#modalEnvio').addEventListener('click', e => {
-    if (e.target.id === 'modalEnvio' || e.target.id === 'cerrarEnvio') {
+    if (e.target.id === 'modalEnvio' || e.target.closest('[data-modal-close]') || e.target.id === 'cerrarEnvio') {
       detenerLecturaQR();
       $('#modalEnvio').close();
     } else if (e.target.id === 'leerQrRemision') {

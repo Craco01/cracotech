@@ -632,6 +632,7 @@ dialog::backdrop {
 }
 
 .m {
+  position: relative;
   padding: 24px;
 }
 
@@ -834,16 +835,46 @@ dialog::backdrop {
 }
 
 .envio-modal-header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 12px;
+  margin: -24px -24px 12px;
+  padding: 20px 64px 10px 24px;
+  background: #fff;
 }
 
 .envio-modal-header h2 {
   min-width: 0;
+  max-width: calc(100% - 180px);
   overflow-wrap: anywhere;
+}
+
+.modal-cerrar-flotante {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--text);
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .14);
+}
+
+.modal-cerrar-flotante:hover {
+  border-color: var(--accent);
+  background: var(--detail);
 }
 
 .envio-form label {
@@ -884,6 +915,10 @@ dialog::backdrop {
 }
 
 .envio-acciones {
+  position: absolute;
+  top: 18px;
+  right: 60px;
+  z-index: 6;
   display: flex;
   flex-wrap: wrap;
   flex: 0 0 auto;
@@ -913,7 +948,27 @@ dialog::backdrop {
 
 @media (max-width: 480px) {
   .envio-modal-header {
-    flex-direction: column-reverse;
+    padding: 16px 54px 10px 24px;
+  }
+
+  .envio-modal-header h2 {
+    max-width: 100%;
+  }
+
+  .envio-acciones {
+    position: sticky;
+    bottom: 0;
+    width: auto;
+    margin: 20px -24px -24px;
+    padding: 12px 24px;
+    border-top: 1px solid var(--border);
+    background: #fff;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, .08);
+    justify-content: stretch;
+  }
+
+  .envio-acciones button {
+    flex: 1;
   }
 
   .remisiones-qr-heading,
@@ -924,14 +979,6 @@ dialog::backdrop {
 
   .remision-item a {
     max-width: 100%;
-  }
-
-  .envio-modal-header .envio-acciones {
-    width: 100%;
-  }
-
-  .envio-modal-header .envio-acciones button {
-    flex: 1;
   }
 }
 
