@@ -8,7 +8,7 @@ const TIPOS = [
   'Herramientas Adicionales',
   'Herramientas para Puntero Nuevo'
 ];
-const ESTADOS_HERR = ['Disponible', 'No disponible', 'Buscar', 'Para compra', 'Envío cancelado', 'Ya enviado', 'Ya completado'];
+const ESTADOS_HERR = ['Disponible', 'No disponible', 'Buscar', 'Para compra', 'Envío cancelado', 'Ya enviado', 'Puntero ya tiene'];
 const ETIQUETAS_ESTADO_HERR = {
   Buscar: 'Para buscar',
   'Ya completado': 'Puntero ya tiene'
