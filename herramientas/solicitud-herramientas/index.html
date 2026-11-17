@@ -22,36 +22,6 @@
         </div>
 
         <form id="formSolicitud">
-
-            <section id="formReprogramarPedido" class="card" hidden aria-labelledby="tituloReprogramarPedido">
-                <h2 id="tituloReprogramarPedido">Reprogramar pedido</h2>
-                <div class="grid grid-reprogramacion">
-                    <div class="form-group reprogramacion-pedido">
-                        <label for="pedidoReprogramar">Pedido <span class="req">*</span></label>
-                        <select id="pedidoReprogramar" required>
-                            <option value="">Cargando pedidos...</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="fechaNecesidadNuevaVista">Nueva fecha de necesidad <span class="req">*</span></label>
-                        <input type="text" id="fechaNecesidadNuevaVista" readonly aria-haspopup="dialog"
-                            aria-controls="modalSeleccionFecha" title="Seleccionar nueva fecha y hora de necesidad">
-                        <input type="datetime-local" id="fechaNecesidadNueva" class="sr-only" required step="1800"
-                            tabindex="-1" aria-hidden="true">
-                        <span class="hint">Mín. 10 horas hábiles de anticipación. Lun a Vie 07:00–17:00 · Sáb 07:00–12:00.</span>
-                    </div>
-                    <div class="form-group reprogramacion-motivo">
-                        <label for="motivoReprogramacion">Motivo de la reprogramación <span class="req">*</span></label>
-                        <textarea id="motivoReprogramacion" rows="4" maxlength="1000" required placeholder="Indica el cambio de cronograma que requiere reprogramar el pedido."></textarea>
-                    </div>
-                </div>
-                <div id="mensajeErrorReprogramacion" role="alert" aria-live="polite"></div>
-                <div class="actions">
-                    <button type="submit" id="btnReprogramarPedido" class="btn-primary">Reprogramar pedido</button>
-                    <a class="btn-secondary" href="/herramientas/">Cancelar</a>
-                </div>
-            </section>
-
             <!-- DATOS GENERALES -->
             <div class="card">
 
@@ -84,7 +54,7 @@
                         <label for="fechaNecesidadVista">Fecha de Necesidad <span class="req">*</span></label>
                         <input type="text" id="fechaNecesidadVista" readonly aria-haspopup="dialog"
                             aria-controls="modalSeleccionFecha" title="Seleccionar fecha y hora de necesidad">
-                        <input type="datetime-local" id="fechaNecesidad" class="sr-only" required step="1800"
+                        <input type="datetime-local" id="fechaNecesidad" class="sr-only" step="1800"
                             tabindex="-1" aria-hidden="true"
                             title="Mínimo 10 horas hábiles de anticipación, en horario de atención">
                         <span class="hint">Haz clic para elegir una fecha y hora.</span>
@@ -112,7 +82,7 @@
 
                 </div>
 
-                <div id="mensajeError" role="alert" aria-live="polite"></div>
+                <div id="mensajeError" role="alert" aria-live="polite" tabindex="-1"></div>
 
             </div>
 
@@ -170,12 +140,43 @@
                     Enviar solicitud
                 </button>
 
-                <button type="reset" class="btn-secondary">
+                <button type="button" id="btnLimpiar" class="btn-secondary">
                     Limpiar
                 </button>
 
             </div>
 
+        </form>
+
+        <form id="formReprogramacion" hidden>
+            <section id="formReprogramarPedido" class="card" aria-labelledby="tituloReprogramarPedido">
+                <h2 id="tituloReprogramarPedido">Reprogramar pedido</h2>
+                <div class="grid grid-reprogramacion">
+                    <div class="form-group reprogramacion-pedido">
+                        <label for="pedidoReprogramar">Pedido <span class="req">*</span></label>
+                        <select id="pedidoReprogramar" required>
+                            <option value="">Cargando pedidos...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="fechaNecesidadNuevaVista">Nueva fecha de necesidad <span class="req">*</span></label>
+                        <input type="text" id="fechaNecesidadNuevaVista" readonly aria-haspopup="dialog"
+                            aria-controls="modalSeleccionFecha" title="Seleccionar nueva fecha y hora de necesidad">
+                        <input type="datetime-local" id="fechaNecesidadNueva" class="sr-only" step="1800"
+                            tabindex="-1" aria-hidden="true">
+                        <span class="hint">Mín. 10 horas hábiles de anticipación. Lun a Vie 07:00–17:00 · Sáb 07:00–12:00.</span>
+                    </div>
+                    <div class="form-group reprogramacion-motivo">
+                        <label for="motivoReprogramacion">Motivo de la reprogramación <span class="req">*</span></label>
+                        <textarea id="motivoReprogramacion" rows="4" maxlength="1000" required placeholder="Indica el cambio de cronograma que requiere reprogramar el pedido."></textarea>
+                    </div>
+                </div>
+                <div id="mensajeErrorReprogramacion" role="alert" aria-live="polite" tabindex="-1"></div>
+                <div class="actions">
+                    <button type="submit" id="btnReprogramarPedido" class="btn-primary">Reprogramar pedido</button>
+                    <a class="btn-secondary" href="/herramientas/">Cancelar</a>
+                </div>
+            </section>
         </form>
 
     </div>

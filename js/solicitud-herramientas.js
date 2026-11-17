@@ -13,8 +13,10 @@ const formulario = document.getElementById("formSolicitud");
 const tabla = document.querySelector("#tablaHerramientas tbody");
 const btnAgregar = document.getElementById("btnAgregar");
 const btnEnviar = document.getElementById("btnEnviar");
+const btnLimpiar = document.getElementById("btnLimpiar");
 const modalSolicitudCreada = document.getElementById("modalSolicitudCreada");
 const formReprogramarPedido = document.getElementById("formReprogramarPedido");
+const formReprogramacion = document.getElementById("formReprogramacion");
 const pedidoReprogramar = document.getElementById("pedidoReprogramar");
 const fechaNecesidadNueva = fechaNecesidad;
 const motivoReprogramacion = document.getElementById("motivoReprogramacion");
@@ -32,11 +34,8 @@ window.addEventListener("DOMContentLoaded", () => {
         document.title = "Reprogramar pedido | Herramientas";
         document.querySelector(".header h1").textContent = "Reprogramar pedido";
         document.querySelector(".header p").textContent = "Selecciona un pedido activo, indica la nueva fecha de necesidad y explica el motivo.";
-        formulario.querySelectorAll(":scope > .card:not(#formReprogramarPedido), :scope > .actions").forEach(element => {
-            element.hidden = true;
-            element.querySelectorAll("input, select, textarea, button").forEach(control => { control.disabled = true; });
-        });
-        formReprogramarPedido.hidden = false;
+        formulario.hidden = true;
+        formReprogramacion.hidden = false;
         configurarFechaMinima();
         actualizarAccesoReprogramacion();
         return;
@@ -68,9 +67,57 @@ function actualizarAccesoReprogramacion() {
     cargarPedidosReprogramables();
 }
 
-function mostrarErrorReprogramacion(texto, tipo = "error") {
+function mostrarErrorReprogramacion(texto, tipo = "error", campoForzado = null) {
     mensajeErrorReprogramacion.textContent = texto;
     mensajeErrorReprogramacion.className = tipo;
+    if (tipo === "error" && texto) {
+        const campo = campoForzado || campoErrorReprogramacion(texto);
+        const destino = campo || mensajeErrorReprogramacion;
+        if (campo) campo.classList.add("input-error");
+        destino.scrollIntoView({ behavior: "smooth", block: "center" });
+        destino.focus({ preventScroll: true });
+    }
+}
+
+function campoErrorReprogramacion(texto) {
+    if (texto.includes("fechaNecesidad")) return fechaNecesidadVista;
+    if (texto.includes("motivo")) return motivoReprogramacion;
+    if (texto.includes("pedido")) return pedidoReprogramar;
+    return null;
+}
+
+function campoErrorSolicitud(texto) {
+    if (texto.includes("fechaNecesidad")) return fechaNecesidadVista;
+    if (/(^|\s)ot:/.test(texto)) return document.getElementById("ot");
+    if (texto.includes("nombreObra")) return document.getElementById("nombreObra");
+    if (texto.includes("puntero")) return document.getElementById("puntero");
+    if (texto.includes("tipoSolicitud")) return document.getElementById("tipoSolicitud");
+
+    const errorHerramienta = texto.match(/herramientas\[(\d+)\]\.(herramienta|cantidad|unidadMedida|observacion)/);
+    if (errorHerramienta) {
+        const fila = tabla.querySelectorAll("tr")[Number(errorHerramienta[1])];
+        if (fila) {
+            const indiceCampo = {
+                herramienta: 0,
+                cantidad: 1,
+                unidadMedida: 2,
+                observacion: 3
+            }[errorHerramienta[2]];
+            return fila.querySelectorAll("input")[indiceCampo];
+        }
+    }
+    if (texto.includes("herramientas:")) return btnAgregar;
+    return null;
+}
+
+function mostrarErrorSolicitud(texto) {
+    mensajeError.textContent = texto;
+    mensajeError.className = "error";
+    const campo = campoErrorSolicitud(texto);
+    const destino = campo || mensajeError;
+    if (campo) campo.classList.add("input-error");
+    destino.scrollIntoView({ behavior: "smooth", block: "center" });
+    destino.focus({ preventScroll: true });
 }
 
 async function cargarPedidosReprogramables() {
@@ -166,11 +213,20 @@ function configurarFechaMinima() {
         minimo.setMinutes(minutoValido, 0, 0);
     }
 
-    const predeterminada = new Date(minimo);
+    const predeterminada = new Date();
+    predeterminada.setDate(predeterminada.getDate() + 1);
     predeterminada.setHours(7, 0, 0, 0);
-    while (predeterminada < minimo || predeterminada.getDay() === 0) {
+    while (predeterminada.getDay() === 0) {
         predeterminada.setDate(predeterminada.getDate() + 1);
         predeterminada.setHours(7, 0, 0, 0);
+    }
+    if (predeterminada < minimo) predeterminada.setTime(minimo.getTime());
+    while (!dentroDeHorario(predeterminada)) {
+        predeterminada.setDate(predeterminada.getDate() + 1);
+        predeterminada.setHours(7, 0, 0, 0);
+        while (predeterminada.getDay() === 0) {
+            predeterminada.setDate(predeterminada.getDate() + 1);
+        }
     }
 
     const dosDigitos = numero => String(numero).padStart(2, "0");
@@ -178,7 +234,16 @@ function configurarFechaMinima() {
         `${fecha.getFullYear()}-${dosDigitos(fecha.getMonth() + 1)}-${dosDigitos(fecha.getDate())}` +
         `T${dosDigitos(fecha.getHours())}:${dosDigitos(fecha.getMinutes())}`;
     fechaNecesidad.min = formatoFecha(minimo);
-    fechaNecesidad.value = formatoFecha(predeterminada);
+    const seleccionActual = new Date(fechaNecesidad.value);
+    if (
+        !fechaNecesidad.value ||
+        fechaNecesidad.value < fechaNecesidad.min ||
+        Number.isNaN(seleccionActual.getTime()) ||
+        seleccionActual.getMinutes() % 30 !== 0 ||
+        !dentroDeHorario(seleccionActual)
+    ) {
+        fechaNecesidad.value = formatoFecha(predeterminada);
+    }
     actualizarFechaVisible();
 }
 
@@ -194,6 +259,7 @@ function actualizarFechaVisible() {
 }
 
 function abrirSelectorFecha() {
+    configurarFechaMinima();
     fechaSeleccionada = fechaNecesidad.value.slice(0, 10);
     const [hora, minuto] = fechaNecesidad.value.slice(11, 16).split(":");
     const [anio, mes] = fechaSeleccionada.split("-").map(Number);
@@ -358,7 +424,9 @@ function agregarBotonOpcion(contenedor, valor, seleccionado, alSeleccionar) {
 function mostrarErrorFecha(texto) {
     mensajeError.textContent = texto;
     mensajeError.className = "error";
-    fechaNecesidad.classList.add("input-error");
+    fechaNecesidadVista.classList.add("input-error");
+    fechaNecesidadVista.scrollIntoView({ behavior: "smooth", block: "center" });
+    fechaNecesidadVista.focus({ preventScroll: true });
     return false;
 }
 
@@ -386,7 +454,7 @@ function validarFecha() {
 
     mensajeError.textContent = "";
     mensajeError.className = "";
-    fechaNecesidad.classList.remove("input-error");
+    fechaNecesidadVista.classList.remove("input-error");
     return true;
 }
 
@@ -452,7 +520,7 @@ document.getElementById("btnAceptarFecha").addEventListener("click", () => {
     fechaNecesidad.value = nuevoValor;
     mensajeError.textContent = "";
     mensajeError.className = "";
-    fechaNecesidad.classList.remove("input-error");
+    fechaNecesidadVista.classList.remove("input-error");
     actualizarFechaVisible();
     modalSeleccionFecha.close();
 });
@@ -594,66 +662,85 @@ formulario.addEventListener("reset", () => {
     claveSolicitudPendiente = null;
     mensajeError.textContent = "";
     mensajeError.className = "";
-    fechaNecesidad.classList.remove("input-error");
+    fechaNecesidadVista.classList.remove("input-error");
     tabla.replaceChildren();
     agregarFilaHerramienta();
     setTimeout(configurarFechaMinima, 0);
 });
 
-formulario.addEventListener("submit", async event => {
+formulario.addEventListener("input", event => {
+    if (event.target instanceof HTMLElement) event.target.classList.remove("input-error");
+});
+formulario.addEventListener("change", event => {
+    if (event.target instanceof HTMLElement) event.target.classList.remove("input-error");
+});
+formReprogramacion.addEventListener("input", event => {
+    if (event.target instanceof HTMLElement) event.target.classList.remove("input-error");
+});
+formReprogramacion.addEventListener("change", event => {
+    if (event.target instanceof HTMLElement) event.target.classList.remove("input-error");
+});
+
+btnLimpiar.addEventListener("click", async () => {
+    const confirmado = await window.siteDialog.confirm(
+        "¿Estás seguro de que quieres limpiar el formulario? Se borrarán los datos ingresados."
+    );
+    if (confirmado) formulario.reset();
+});
+
+formReprogramacion.addEventListener("submit", async event => {
     event.preventDefault();
-    if (modoReprogramar) {
-        if (!pedidoReprogramar.reportValidity()) return;
-        const errorFecha = obtenerErrorFecha(fechaNecesidadNueva.value);
-        if (errorFecha) {
-            mostrarErrorReprogramacion(errorFecha);
-            fechaNecesidadVista.focus();
-            return;
-        }
-        if (!motivoReprogramacion.reportValidity()) return;
-        if (!sessionStorage.getItem(AUTH_TOKEN_KEY)) {
-            mostrarErrorReprogramacion("Inicia sesión para reprogramar el pedido.");
-            window.abrirLoginHerramientas?.();
-            return;
-        }
-        const pedidoId = pedidoReprogramar.value;
-        if (!pedidoId) {
-            mostrarErrorReprogramacion("Selecciona un pedido activo.");
-            return;
-        }
-        if (!claveReprogramacionPendiente) claveReprogramacionPendiente = crypto.randomUUID();
-        btnReprogramarPedido.disabled = true;
-        mostrarErrorReprogramacion("Guardando la reprogramación...", "success");
-        try {
-            const response = await API_FETCH(`/api/pedidos/${encodeURIComponent(pedidoId)}/reprogramacion`, {
-                method: "POST",
-                headers: { ...API_JSON_HEADERS, "Idempotency-Key": claveReprogramacionPendiente },
-                body: JSON.stringify({
-                    fechaNecesidad: fechaNecesidadNueva.value,
-                    motivo: motivoReprogramacion.value.trim()
-                })
-            });
-            const result = await response.json();
-            if (!response.ok) throw new Error(result.errores?.join(" ") || result.error || "No se pudo reprogramar el pedido.");
-            claveReprogramacionPendiente = null;
-            document.getElementById("tituloSolicitudCreada").textContent = "Pedido reprogramado";
-            document.getElementById("mensajeSolicitudCreada").textContent =
-                `Se creó el pedido ${result.id} y el pedido ${pedidoId} quedó Cancelado.`;
-            modalSolicitudCreada.showModal();
-        } catch (error) {
-            mostrarErrorReprogramacion(error instanceof TypeError
-                ? "No se pudo conectar con el servidor. Verifica la conexión e intenta nuevamente."
-                : error.message || "No se pudo reprogramar el pedido.");
-        } finally {
-            btnReprogramarPedido.disabled = false;
-        }
+    if (!pedidoReprogramar.reportValidity()) return;
+    const errorFecha = obtenerErrorFecha(fechaNecesidadNueva.value);
+    if (errorFecha) {
+        mostrarErrorReprogramacion(errorFecha, "error", fechaNecesidadVista);
         return;
     }
+    if (!motivoReprogramacion.reportValidity()) return;
+    if (!sessionStorage.getItem(AUTH_TOKEN_KEY)) {
+        mostrarErrorReprogramacion("Inicia sesión para reprogramar el pedido.");
+        window.abrirLoginHerramientas?.();
+        return;
+    }
+    const pedidoId = pedidoReprogramar.value;
+    if (!pedidoId) {
+        mostrarErrorReprogramacion("Selecciona un pedido activo.");
+        return;
+    }
+    if (!claveReprogramacionPendiente) claveReprogramacionPendiente = crypto.randomUUID();
+    btnReprogramarPedido.disabled = true;
+    mostrarErrorReprogramacion("Guardando la reprogramación...", "success");
+    try {
+        const response = await API_FETCH(`/api/pedidos/${encodeURIComponent(pedidoId)}/reprogramacion`, {
+            method: "POST",
+            headers: { ...API_JSON_HEADERS, "Idempotency-Key": claveReprogramacionPendiente },
+            body: JSON.stringify({
+                fechaNecesidad: fechaNecesidadNueva.value,
+                motivo: motivoReprogramacion.value.trim()
+            })
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.errores?.join(" ") || result.error || "No se pudo reprogramar el pedido.");
+        claveReprogramacionPendiente = null;
+        document.getElementById("tituloSolicitudCreada").textContent = "Pedido reprogramado";
+        document.getElementById("mensajeSolicitudCreada").textContent =
+            `Se creó el pedido ${result.id} y el pedido ${pedidoId} quedó Cancelado.`;
+        modalSolicitudCreada.showModal();
+    } catch (error) {
+        mostrarErrorReprogramacion(error instanceof TypeError
+            ? "No se pudo conectar con el servidor. Verifica la conexión e intenta nuevamente."
+            : error.message || "No se pudo reprogramar el pedido.");
+    } finally {
+        btnReprogramarPedido.disabled = false;
+    }
+});
+
+formulario.addEventListener("submit", async event => {
+    event.preventDefault();
     if (!validarFecha()) return;
 
     if (!sessionStorage.getItem(AUTH_TOKEN_KEY)) {
-        mensajeError.textContent = "Inicia sesión para enviar la solicitud.";
-        mensajeError.className = "error";
+        mostrarErrorSolicitud("Inicia sesión para enviar la solicitud.");
         window.abrirLoginHerramientas?.();
         return;
     }
@@ -708,10 +795,10 @@ formulario.addEventListener("submit", async event => {
             `La solicitud ${result.id} se guardó correctamente.`;
         modalSolicitudCreada.showModal();
     } catch (error) {
-        mensajeError.textContent = error instanceof TypeError
+        const mensaje = error instanceof TypeError
             ? "No se pudo conectar con la API local. Verifica que el backend esté iniciado y vuelve a intentar."
             : error.message || "No se pudo guardar la solicitud.";
-        mensajeError.className = "error";
+        mostrarErrorSolicitud(mensaje);
     } finally {
         btnEnviar.disabled = false;
     }

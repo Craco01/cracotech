@@ -699,3 +699,11 @@ button:disabled{
         width:100%;
     }
 }
+
+:root .site-dialog__accept{
+    background:var(--primary);
+}
+
+:root .site-dialog__accept:hover{
+    background:var(--primary-hover);
+}
