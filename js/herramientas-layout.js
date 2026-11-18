@@ -6,11 +6,18 @@
     .find(src => /\/js\/herramientas-layout\.js(?:\?|#|$)/.test(src));
   const frontendRoot = scriptUrl ? new URL('../', scriptUrl) : new URL('/', location.origin);
   const toolsRoot = new URL('herramientas/', frontendRoot).pathname;
-  const toolsRootPath = toolsRoot.replace(/\/+$/, '');
   const authorRoot = frontendRoot.pathname;
   const currentPath = location.pathname.replace(/\/+$/, '') || '/';
-  const embedMode = new URLSearchParams(location.search).has('embed');
+  const panelToolsPath = `${toolsRoot}panel-herramientas`;
+  const embedMode = new URLSearchParams(location.search).get('embed') === '1' &&
+    currentPath === panelToolsPath;
   const redirectStorageKey = 'herramientasPostLoginRedirect';
+  const protectedToolsPaths = [
+    `${toolsRoot}solicitud-herramientas`,
+    `${toolsRoot}reporte-herramientas`,
+    panelToolsPath,
+    `${toolsRoot}usuarios`
+  ];
   const ensureWhatsAppStyles = () => {
     const stylesheetUrl = new URL('css/footer-estilo.css', frontendRoot).href;
     const alreadyLoaded = Array.from(document.querySelectorAll('link[rel="stylesheet"]'))
@@ -26,7 +33,8 @@
     try {
       const target = new URL(value, location.href);
       if (target.origin !== location.origin ||
-          (target.pathname !== toolsRootPath && !target.pathname.startsWith(toolsRoot))) return null;
+          !protectedToolsPaths.some(path =>
+            target.pathname === path || target.pathname.startsWith(`${path}/`))) return null;
       return `${target.pathname}${target.search}${target.hash}`;
     } catch {
       return null;
@@ -144,7 +152,7 @@
         aria-labelledby="waModalTitle" aria-hidden="true">
         <section class="maintenance-whatsapp-card">
           <h2 id="waModalTitle">Elegir contacto de WhatsApp</h2>
-          <a href="https://wa.me/595986221400" target="_blank" rel="noopener noreferrer">Cristhian Redes</a>
+          <a href="https://wa.me/595986780315" target="_blank" rel="noopener noreferrer">Cristino Mora</a>
           <a href="https://wa.me/595982156163" target="_blank" rel="noopener noreferrer">Gustavo González</a>
           <a href="https://wa.me/595986651207" target="_blank" rel="noopener noreferrer">Edgar Ledezma</a>
           <button id="closeBtn" type="button">Cerrar</button>
@@ -477,12 +485,19 @@
   });
   passwordModal.addEventListener('click', event => event.stopPropagation());
 
+  const loginRequested = new URLSearchParams(location.search).has('login');
   if (!sessionStorage.getItem('herramientas_token') && !embedMode) {
     const currentTarget = protectedToolsTarget(`${location.pathname}${location.search}${location.hash}`);
-    if (currentTarget) sessionStorage.setItem(redirectStorageKey, currentTarget);
+    if (currentTarget) {
+      sessionStorage.setItem(redirectStorageKey, currentTarget);
+      window.location.replace(`${toolsRoot}?login=1`);
+      return;
+    }
+    if (loginRequested) openLoginModal();
+  } else if (loginRequested && !embedMode) {
     openLoginModal();
-  } else if (new URLSearchParams(location.search).has('login')) {
-    openLoginModal();
+  }
+  if (loginRequested && !embedMode) {
     history.replaceState(null, '', `${location.pathname}${location.hash}`);
   }
 })();
