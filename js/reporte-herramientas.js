@@ -290,7 +290,7 @@ function urlRemisionSegura(value) {
   }
 }
 
-function renderListaRemisiones(remisiones) {
+function renderListaRemisiones(remisiones, permitirEliminar = false) {
   if (!remisiones.length) return '<p class="remision-vacia">Todavía no hay remisiones cargadas.</p>';
   return `<ol class="remisiones-lista">${remisiones.map((remision, index) => {
     const url = urlRemisionSegura(remision.url);
@@ -300,7 +300,7 @@ function renderListaRemisiones(remisiones) {
     return `<li class="remision-item">
       <div><strong>Remisión ${index + 1}</strong><small>${origen}${fechaTexto ? ` · ${esc(fechaTexto)}` : ''}</small></div>
       ${url ? `<a href="${esc(url)}" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">Remisión ${index + 1}</a>` : '<span>Enlace QR no válido</span>'}
-      ${esAdministradorHerramientas() ? `<button type="button" class="eliminar-remision" data-remision-id="${esc(remision.id)}" aria-label="Eliminar remisión ${index + 1}" title="Eliminar remisión">×</button>` : ''}
+      ${permitirEliminar && esAdministradorHerramientas() ? `<button type="button" class="eliminar-remision" data-remision-id="${esc(remision.id)}" aria-label="Eliminar remisión ${index + 1}" title="Eliminar remisión">×</button>` : ''}
     </li>`;
   }).join('')}</ol>`;
 }
@@ -320,7 +320,7 @@ function campoRemisiones(pedido) {
       <div><p id="estadoLectorQr" role="status" aria-live="polite"></p><button type="button" id="cancelarLecturaQr">Cancelar lectura</button></div>
     </div>
     <p id="mensajeRemisionesQR" class="mensaje-remisiones-qr" role="status" aria-live="polite"></p>
-    <div id="listaRemisionesQR">${renderListaRemisiones(pedido.remisiones_qr)}</div>
+    <div id="listaRemisionesQR">${renderListaRemisiones(pedido.remisiones_qr, true)}</div>
   </section>`;
 }
 
@@ -383,13 +383,17 @@ async function guardarRemisionQR(pedidoId, url, origen) {
   if (pedido) {
     pedido.remisiones_qr = Array.isArray(result.remisiones_qr) ? result.remisiones_qr : [];
     const lista = $('#listaRemisionesQR');
-    if (lista) lista.innerHTML = renderListaRemisiones(pedido.remisiones_qr);
+    if (lista) lista.innerHTML = renderListaRemisiones(pedido.remisiones_qr, true);
   }
 }
 
 async function eliminarRemisionQR(pedidoId, remisionId, boton) {
   if (!esAdministradorHerramientas() || !remisionId) return;
-  if (!window.confirm('¿Eliminar esta remisión? Esta acción no se puede deshacer.')) return;
+  const modal = $('#modalEnvio');
+  modal.close();
+  const confirmado = await window.siteDialog.confirm('¿Eliminar esta remisión? Esta acción no se puede deshacer.');
+  modal.showModal();
+  if (!confirmado) return;
   boton.disabled = true;
   try {
     const response = await API_FETCH(`/api/pedidos/${pedidoId}/remisiones/${encodeURIComponent(remisionId)}`, { method: 'DELETE' });
@@ -398,7 +402,7 @@ async function eliminarRemisionQR(pedidoId, remisionId, boton) {
     const pedido = pedidos.find(item => String(item.id) === String(pedidoId));
     if (pedido) pedido.remisiones_qr = Array.isArray(result.remisiones_qr) ? result.remisiones_qr : [];
     const lista = $('#listaRemisionesQR');
-    if (lista) lista.innerHTML = renderListaRemisiones(pedido?.remisiones_qr || []);
+    if (lista) lista.innerHTML = renderListaRemisiones(pedido?.remisiones_qr || [], true);
     mensajeRemisiones('Remisión eliminada.');
   } catch (error) {
     mensajeRemisiones(error.message || 'No se pudo eliminar la remisión.', true);
