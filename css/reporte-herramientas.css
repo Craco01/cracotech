@@ -762,6 +762,30 @@ dialog::backdrop {
   overflow-wrap: anywhere;
 }
 
+.eliminar-remision {
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--danger);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.eliminar-remision:hover {
+  border-color: var(--danger);
+  background: #fff5f5;
+}
+
+.eliminar-remision:disabled {
+  cursor: wait;
+  opacity: .6;
+}
+
 .m dl {
   display: grid;
   grid-template-columns: minmax(130px, 180px) 1fr;
