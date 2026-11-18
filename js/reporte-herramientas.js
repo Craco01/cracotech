@@ -525,7 +525,7 @@ function abrirModalEnvio(pedidoId) {
       <td>${esc(item.unidad_medida) || '—'}</td>
       <td><select name="estadoHerramienta" aria-label="Estado de ${esc(item.herramienta)}"
         data-herramienta-id="${item.id ?? `preview-${index}`}"
-        data-estado-original="${esc(item.estado_herramienta)}">${estadoActualVacio ? '<option value="" selected aria-label="Sin estado asignado"></option>' : ''}${estados}</select></td>
+        data-estado-original="${esc(item.estado_herramienta)}"><option value=""${estadoActualVacio ? ' selected' : ''}>Sin estado asignado</option>${estados}</select></td>
       <td><div class="nota-actual">${esc(item.observacion) || '—'}</div>
         <textarea name="notaHerramienta" data-nota-herramienta-id="${item.id ?? `preview-${index}`}" maxlength="300"
           aria-label="Agregar nota para ${esc(item.herramienta)}"
@@ -606,7 +606,7 @@ async function guardarEnvio(event) {
   }
   const herramientas = Array.from(form.querySelectorAll('[data-herramienta-id]'), select => ({
     id: Number(select.dataset.herramientaId),
-    estadoHerramienta: select.value || select.dataset.estadoOriginal || null,
+    estadoHerramienta: select.value === '' ? null : select.value,
     nota: form.querySelector(`[data-nota-herramienta-id="${select.dataset.herramientaId}"]`)?.value || ''
   }));
   const fechaEnvio = form.elements.fechaEnvio.value;
