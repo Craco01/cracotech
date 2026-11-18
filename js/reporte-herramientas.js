@@ -300,6 +300,7 @@ function renderListaRemisiones(remisiones) {
     return `<li class="remision-item">
       <div><strong>Remisión ${index + 1}</strong><small>${origen}${fechaTexto ? ` · ${esc(fechaTexto)}` : ''}</small></div>
       ${url ? `<a href="${esc(url)}" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">Remisión ${index + 1}</a>` : '<span>Enlace QR no válido</span>'}
+      ${esAdministradorHerramientas() ? `<button type="button" class="eliminar-remision" data-remision-id="${esc(remision.id)}" aria-label="Eliminar remisión ${index + 1}" title="Eliminar remisión">×</button>` : ''}
     </li>`;
   }).join('')}</ol>`;
 }
@@ -383,6 +384,25 @@ async function guardarRemisionQR(pedidoId, url, origen) {
     pedido.remisiones_qr = Array.isArray(result.remisiones_qr) ? result.remisiones_qr : [];
     const lista = $('#listaRemisionesQR');
     if (lista) lista.innerHTML = renderListaRemisiones(pedido.remisiones_qr);
+  }
+}
+
+async function eliminarRemisionQR(pedidoId, remisionId, boton) {
+  if (!esAdministradorHerramientas() || !remisionId) return;
+  if (!window.confirm('¿Eliminar esta remisión? Esta acción no se puede deshacer.')) return;
+  boton.disabled = true;
+  try {
+    const response = await API_FETCH(`/api/pedidos/${pedidoId}/remisiones/${encodeURIComponent(remisionId)}`, { method: 'DELETE' });
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error || 'No se pudo eliminar la remisión.');
+    const pedido = pedidos.find(item => String(item.id) === String(pedidoId));
+    if (pedido) pedido.remisiones_qr = Array.isArray(result.remisiones_qr) ? result.remisiones_qr : [];
+    const lista = $('#listaRemisionesQR');
+    if (lista) lista.innerHTML = renderListaRemisiones(pedido?.remisiones_qr || []);
+    mensajeRemisiones('Remisión eliminada.');
+  } catch (error) {
+    mensajeRemisiones(error.message || 'No se pudo eliminar la remisión.', true);
+    boton.disabled = false;
   }
 }
 
@@ -720,6 +740,9 @@ function init() {
     if (e.target.id === 'modalEnvio' || e.target.closest('[data-modal-close]') || e.target.id === 'cerrarEnvio') {
       detenerLecturaQR();
       $('#modalEnvio').close();
+    } else if (e.target.closest('.eliminar-remision')) {
+      const boton = e.target.closest('.eliminar-remision');
+      eliminarRemisionQR(Number($('#formEnvio').dataset.pedidoId), boton.dataset.remisionId, boton);
     } else if (e.target.id === 'leerQrRemision') {
       iniciarLecturaQR(Number($('#formEnvio').dataset.pedidoId));
     } else if (e.target.id === 'subirQrRemision') {
