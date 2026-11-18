@@ -27,7 +27,7 @@
       <button type="button" class="maintenance-whatsapp-button" id="waButton"
         aria-label="Elegir contacto por WhatsApp" aria-haspopup="dialog"
         aria-controls="waModal" aria-expanded="false">
-        <img src="${assetRoot}img/WhatsApp.png" alt="" aria-hidden="true">
+        <img src="${assetRoot}img/WhatsApp-azul.png" alt="" aria-hidden="true">
       </button>
       <div id="waModal" class="maintenance-whatsapp-overlay" role="dialog" aria-modal="true"
         aria-labelledby="waModalTitle" aria-hidden="true">

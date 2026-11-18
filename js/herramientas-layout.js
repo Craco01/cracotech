@@ -11,6 +11,16 @@
   const currentPath = location.pathname.replace(/\/+$/, '') || '/';
   const embedMode = new URLSearchParams(location.search).has('embed');
   const redirectStorageKey = 'herramientasPostLoginRedirect';
+  const ensureWhatsAppStyles = () => {
+    const stylesheetUrl = new URL('css/footer-estilo.css', frontendRoot).href;
+    const alreadyLoaded = Array.from(document.querySelectorAll('link[rel="stylesheet"]'))
+      .some(link => link.href === stylesheetUrl);
+    if (alreadyLoaded) return;
+    const stylesheet = document.createElement('link');
+    stylesheet.rel = 'stylesheet';
+    stylesheet.href = stylesheetUrl;
+    document.head.append(stylesheet);
+  };
   const protectedToolsTarget = value => {
     if (!value) return null;
     try {
@@ -121,17 +131,18 @@
   document.body.insertBefore(shell, document.body.firstChild);
 
   if (!embedMode) {
+    ensureWhatsAppStyles();
     const whatsapp = document.createElement('div');
     whatsapp.className = 'tools-whatsapp';
     whatsapp.innerHTML = `
-      <button class="tools-whatsapp-button" id="waButton" type="button"
+      <button class="maintenance-whatsapp-button" id="waButton" type="button"
         aria-label="Elegir contacto por WhatsApp" aria-haspopup="dialog"
         aria-controls="waModal" aria-expanded="false">
-        <img src="${new URL('img/WhatsApp.png', frontendRoot).pathname}" alt="" aria-hidden="true">
+        <img src="${new URL('img/WhatsApp-grafito.png', frontendRoot).pathname}" alt="" aria-hidden="true">
       </button>
-      <div class="tools-whatsapp-overlay" id="waModal" role="dialog" aria-modal="true"
+      <div class="maintenance-whatsapp-overlay" id="waModal" role="dialog" aria-modal="true"
         aria-labelledby="waModalTitle" aria-hidden="true">
-        <section class="tools-whatsapp-card">
+        <section class="maintenance-whatsapp-card">
           <h2 id="waModalTitle">Elegir contacto de WhatsApp</h2>
           <a href="https://wa.me/595986221400" target="_blank" rel="noopener noreferrer">Cristhian Redes</a>
           <a href="https://wa.me/595982156163" target="_blank" rel="noopener noreferrer">Gustavo González</a>
