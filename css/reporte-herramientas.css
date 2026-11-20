@@ -776,8 +776,15 @@ dialog::backdrop {
   cursor: pointer;
 }
 
-.eliminar-remision:hover { border-color: var(--danger); background: #fff5f5; }
-.eliminar-remision:disabled { cursor: wait; opacity: .6; }
+.eliminar-remision:hover {
+  border-color: var(--danger);
+  background: #fff5f5;
+}
+
+.eliminar-remision:disabled {
+  cursor: wait;
+  opacity: .6;
+}
 
 .m dl {
   display: grid;
