@@ -89,6 +89,11 @@ Si ejecutas el `server.js` de la raíz del proyecto, abre `http://127.0.0.1:5600
 
 No se publica durante las pruebas locales. Para publicar, sube los cambios revisados a `main` y verifica el workflow de GitHub Pages. Los cambios del backend no se publican con ese workflow: se despliegan manualmente en AWS Lightsail siguiendo la guía del repositorio backend, después de respaldar la base y aplicar las migraciones requeridas.
 
+El frontend es estático y no se ejecuta en PM2 ni en Lightsail. En producción,
+el navegador consume la API HTTPS; Nginx recibe esas solicitudes y las reenvía
+al backend. Para reiniciar el backend, usa las instrucciones de su README y el
+nombre `mvbackend`, no un ID numérico de PM2.
+
 El contacto para reportar vulnerabilidades se publica en [`.well-known/security.txt`](.well-known/security.txt). Renueva su fecha `Expires` antes de que venza.
 
 ## Consideraciones
