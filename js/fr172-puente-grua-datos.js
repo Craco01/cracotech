@@ -1,6 +1,6 @@
 /* Datos y utilidades compartidas por las vistas FR-172 de puente grúa. */
 const FR172 = {
-  filasBase: { trabajos: 1, materiales: 1 },
+  filasBase: { trabajos: 10, materiales: 6 },
   filasImpresionBase: { trabajos: 10, materiales: 6 },
   filasMax: 15,
   tiposPolipasto: ['Eléctrico a cadena', 'Eléctrico a cable', 'Manual a cadena', 'Neumático'],
