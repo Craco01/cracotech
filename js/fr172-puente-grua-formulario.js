@@ -373,7 +373,15 @@
       const params = new URLSearchParams(location.search);
       if (requestedId) {
         abrirFicha(requestedId).catch(error => {
-          aviso.textContent = `No se pudo abrir la ficha: ${error.message}`;
+          cargandoFicha = false;
+          if (/404|no existe/i.test(error.message)) {
+            idFicha = null;
+            history.replaceState(null, '', location.pathname);
+            aviso.textContent = 'La ficha indicada no existe. Puede crear un borrador nuevo.';
+          } else {
+            aviso.textContent = `No se pudo abrir la ficha: ${error.message}`;
+          }
+          actualizarModoEdicion();
         });
       } else {
         aviso.textContent = 'Nuevo borrador sin guardar';
