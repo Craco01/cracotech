@@ -116,6 +116,37 @@ tr.enc th { text-align: center; font: 600 4.8pt/1.05 var(--sans); background: #f
   content: ''; position: absolute; left: .25mm; top: -.1mm; width: 1mm; height: 1.7mm;
   border: solid var(--azul); border-width: 0 .4mm .4mm 0; transform: rotate(40deg);
 }
+.casilla-estado {
+  display: inline-grid;
+  margin: 0 auto;
+  place-items: center;
+  vertical-align: middle;
+}
+.radio-imprimible {
+  display: inline-grid;
+  width: 3mm;
+  height: 3mm;
+  margin: 0;
+  place-items: center;
+  appearance: none;
+  -webkit-appearance: none;
+  border: .25mm solid #64748b;
+  border-radius: 50%;
+  background: #fff;
+  vertical-align: middle;
+}
+.radio-imprimible:checked {
+  border-color: #148a2b;
+  background: radial-gradient(circle, #148a2b 0 0.72mm, #fff 0.82mm);
+}
+.t4 td.c, .t4 td.obs, .operativo-celdas {
+  text-align: center;
+  vertical-align: middle;
+}
+.t4 td.obs {
+  text-align: left;
+  padding: 1mm;
+}
 .subr { color: var(--tinta); font-weight: 400; border-bottom: .2mm solid #94a3b8; padding: 0 2mm; }
 .sin-dato { font-weight: 400; color: #64748b; }
 

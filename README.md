@@ -81,7 +81,7 @@ Desde este directorio, inicia el servidor estático local:
 node .\server.js
 ```
 
-Abre `http://127.0.0.1:5500/mantenimiento/` o `http://127.0.0.1:5500/herramientas/`. El servidor sirve los archivos estáticos y reenvía las solicitudes `/api/*` a `https://api.cracotech.com`, incluyendo las rutas de Herramientas bajo `/api/herramientas`; así ambos módulos acceden a producción desde el mismo origen local. En el reporte de Herramientas, gestores y administradores pueden leer un QR con la cámara o subir una imagen; cada enlace se agrega como una remisión independiente. No inicia un backend local. Se pueden cambiar el destino de API y el origen reenviado con las variables `API_TARGET` y `PROD_ORIGIN`. No copies credenciales ni archivos `.env` de otros entornos.
+Inicia primero el backend desde `backend-dev` y luego ejecuta `node .\server.js` desde este directorio. Abre `http://127.0.0.1:5500/mantenimiento/` o `http://127.0.0.1:5500/herramientas/`. El servidor sirve los archivos estáticos y reenvía las solicitudes `/api/*` al backend de desarrollo en `http://127.0.0.1:3000` por defecto. Se pueden cambiar el destino de API y el origen reenviado con las variables `API_TARGET` y `PROD_ORIGIN`. En `backend-dev`, el acceso FR-172 sin login está habilitado solo para solicitudes locales de pruebas; establece `FR172_LOGIN_ENABLED=true` en backend y `window.FR172_LOGIN_ENABLED = true` en `js/api-config.js` para volver a exigir autenticación. No copies credenciales ni archivos `.env` de otros entornos.
 
 Si ejecutas el `server.js` de la raíz del proyecto, abre `http://127.0.0.1:5600/`; ese servidor también reenvía ambas APIs a producción. Tras cambiar cualquiera de los servidores, reinícialo para que tome la nueva configuración.
 
