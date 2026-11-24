@@ -3,125 +3,164 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>FR-172 · Ficha de entrega y recepción de trabajo, puente grúa</title>
-  <meta name="description" content="FR-172 · Ficha de entrega y recepción de trabajo, puente grúa. Informacion y herramientas de gestion para mantenimiento industrial en Metalurgica Vera.">
+  <title>FR-172 · Puente grúa</title>
+  <meta name="description" content="Formulario de entrega y recepción de trabajo para puente grúa.">
   <link rel="icon" href="../../img/Logo.png" type="image/png" sizes="32x32">
   <link rel="stylesheet" href="../../css/styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="../../css/site-dialogs.css">
   <link rel="stylesheet" href="../../css/fr172-puente-grua-formulario.css?v=2">
+  <link rel="stylesheet" href="../../css/fr172-puente-grua-publica.css?v=3">
   <script src="../../js/site-dialogs.js"></script>
 </head>
 <body>
 
-<div class="tope">
+<div class="tope publica-tope">
   <div class="doc">
-    <h1>Ficha de entrega y recepción de trabajo</h1>
-    <p>Puente grúa &nbsp;|&nbsp; Código FR-172 &nbsp;|&nbsp; Rev. 00</p>
+    <h1>Ficha FR-172 · Puente grúa</h1>
+    <p>Formato FR-172 Rev. 00</p>
   </div>
   <div class="acciones">
-    <span id="guardado" class="guardado" role="status" aria-live="polite">Validando sesión...</span>
-    <a class="btn sec-btn" href="../reportes/?vista=fr172">Ver reportes FR-172</a>
+    <span id="guardado" class="guardado" role="status" aria-live="polite">Guardar para registrar en el servidor</span>
   </div>
 </div>
 
-<div id="acceso-requerido" class="acceso" role="alert">
-  Validando la sesión para abrir la ficha...
-  <a href="/mantenimiento/?loginRequired=1&amp;returnTo=%2Fmantenimiento%2Ffr172-puente-grua-formulario%2F">Ir al inicio de sesión</a>
-</div>
+<main class="contenedor publica-contenedor">
+<form id="ficha" autocomplete="off" novalidate>
+  <nav class="pasos" aria-label="Progreso del formulario">
+    <ol>
+      <li class="activo" data-paso-nav="1" role="button" tabindex="0" aria-current="step"><span>1</span><b>Servicio y equipo</b></li>
+      <li data-paso-nav="2" role="button" tabindex="0"><span>2</span><b>Trabajo realizado</b></li>
+      <li data-paso-nav="3" role="button" tabindex="0"><span>3</span><b>Verificaciones</b></li>
+      <li data-paso-nav="4" role="button" tabindex="0"><span>4</span><b>Cierre</b></li>
+      <li data-paso-nav="5" role="button" tabindex="0"><span>5</span><b>Documentación</b></li>
+      <li data-paso-nav="6" role="button" tabindex="0"><span>6</span><b>Recepción</b></li>
+    </ol>
+  </nav>
 
-<main class="contenedor">
-<form id="ficha" autocomplete="off" novalidate hidden>
-
-  <section class="sec">
-    <h2>Datos del servicio</h2>
+  <section class="sec paso activo" data-paso="1">
+    <div class="paso-cabecera">
+      <span>Paso 1 de 6</span>
+      <h2>Datos del servicio y equipo</h2>
+    </div>
     <div class="campos">
-      <label class="campo"><span>N° de orden de trabajo / servicio</span><input name="ot"></label>
+      <label class="campo"><span>N° de orden de trabajo / servicio</span><input name="ot" placeholder="Ej.: OT-2026-001"></label>
       <label class="campo"><span>Fecha</span><input type="date" name="fecha"></label>
-      <label class="campo"><span>Cliente / empresa</span><input name="cliente"></label>
-      <label class="campo"><span>Lugar / planta</span><input name="lugar"></label>
-      <label class="campo"><span>Técnico responsable</span><input name="tecnico"></label>
-      <label class="campo"><span>Contacto del cliente</span><input name="contacto"></label>
+      <label class="campo"><span>Técnico responsable</span><input name="tecnico" placeholder="Ej.: Juan Pérez"></label>
+      <label class="campo">
+        <span>Nombre y apellido del cliente</span>
+        <input name="datos_cliente_lugar">
+      </label>
+      <label class="campo"><span>Contacto del cliente</span><input name="contacto" type="tel" inputmode="tel" placeholder="+595 000 000 000"></label>
+      <label class="campo">
+        <span>Datos completos del equipo</span>
+        <input name="datos_equipo">
+      </label>
+      <label class="campo"><span>N° de puente grúa</span><input name="n_puente" placeholder="Ej.: PG-04"></label>
+      <label class="campo ancho"><span>Observaciones de identificación</span><textarea name="obs_ident" rows="3"></textarea></label>
     </div>
   </section>
 
-  <section class="sec">
-    <h2>1. Identificación del equipo</h2>
-    <div class="campos">
-      <label class="campo"><span>Tipo de polipasto</span><select name="tipo_polipasto" id="sel-polipasto"></select></label>
-      <label class="campo"><span>Capacidad nominal</span><input name="capacidad" placeholder="Ej.: 5 t"></label>
-      <label class="campo"><span>Marca / fabricante</span><input name="marca"></label>
-      <label class="campo"><span>Modelo</span><input name="modelo"></label>
-      <label class="campo"><span>N° de puente grúa</span><input name="n_puente"></label>
-      <label class="campo"><span>Tensión / alimentación</span><input name="tension" placeholder="Ej.: 380 V trifásica"></label>
-      <label class="campo"><span>Altura / luz / recorrido</span><input name="altura"></label>
-      <label class="campo"><span>Observaciones de identificación</span><input name="obs_ident"></label>
+  <section class="sec paso" data-paso="2">
+    <div class="paso-cabecera">
+      <span>Paso 2 de 6</span>
+      <h2>Trabajo realizado</h2>
     </div>
-  </section>
-
-  <section class="sec">
-    <h2>2. Tipo y alcance del trabajo</h2>
     <div class="campos">
       <label class="campo"><span>Tipo de trabajo</span><select name="tipo_trabajo" id="sel-trabajo"></select></label>
       <label class="campo"><span>Fecha de inicio</span><input type="date" name="fecha_inicio"></label>
       <label class="campo"><span>Fecha de finalización</span><input type="date" name="fecha_fin"></label>
-      <label class="campo"><span>Horas de trabajo</span><input name="horas" inputmode="decimal"></label>
-      <label class="campo ancho"><span>Descripción / motivo del servicio</span><textarea name="descripcion" rows="3"></textarea></label>
+      <label class="campo"><span>Horas de trabajo</span><input name="horas" inputmode="decimal" placeholder="Ej.: 8"></label>
     </div>
-  </section>
-
-  <section class="sec">
-    <h2>3. Trabajos realizados</h2>
-    <div class="fila fila-trab cab" aria-hidden="true"><span>Ítem</span><span>Actividad / trabajo realizado</span><span>Estado</span><span>Observaciones / mediciones / piezas reemplazadas</span></div>
+    <div class="fila fila-trab cab" aria-hidden="true"><span>Ítem</span><span>Actividad / trabajo realizado</span><span>Estado</span><span>Observaciones / mediciones / piezas</span></div>
     <div id="filas-trabajos"></div>
     <div class="pie-tabla">
-      <button type="button" class="btn sec-btn" data-fila="trabajos" data-delta="-1">Quitar última fila</button>
+      <button type="button" class="btn sec-btn" data-fila="trabajos" data-delta="1">Agregar trabajo</button>
+      <button type="button" class="btn sec-btn" data-fila="trabajos" data-delta="-1">Quitar último trabajo</button>
     </div>
-  </section>
 
-  <section class="sec">
-    <h2>4. Verificaciones y pruebas del equipo</h2>
-    <div class="fila fila-verif cab" aria-hidden="true"><span>Punto de verificación</span><span>Estado</span><span>Observaciones</span></div>
-    <div id="filas-verif"></div>
-  </section>
-
-  <section class="sec">
-    <h2>5. Materiales, repuestos y componentes utilizados</h2>
-    <div class="fila fila-mat cab" aria-hidden="true"><span>Ítem</span><span>Descripción</span><span>Cantidad</span><span>Unidad</span><span>N° de parte / referencia</span><span>Observaciones</span></div>
-    <div id="filas-materiales"></div>
+    <h3 class="subtitulo-paso">Materiales utilizados</h3>
+    <div class="tabla-boceto tabla-materiales-boceto">
+      <table class="tabla-materiales">
+        <thead>
+          <tr><th>Ítem</th><th>Descripción</th><th>Cantidad</th><th>Unidad</th><th>N° de parte / referencia</th><th>Observaciones</th></tr>
+        </thead>
+        <tbody id="filas-materiales"></tbody>
+      </table>
+    </div>
     <div class="pie-tabla">
-      <button type="button" class="btn sec-btn" data-fila="materiales" data-delta="-1">Quitar última fila</button>
+      <button type="button" class="btn sec-btn" data-fila="materiales" data-delta="1">Agregar material</button>
+      <button type="button" class="btn sec-btn" data-fila="materiales" data-delta="-1">Quitar último material</button>
     </div>
   </section>
 
-  <section class="sec">
-    <h2>6. Condiciones del equipo al finalizar el servicio</h2>
+  <section class="sec paso publica-opcional" data-paso="3">
+    <div class="paso-cabecera">
+      <span>Paso 3 de 6</span>
+      <h2>Verificaciones y pruebas</h2>
+    </div>
+    <div class="tabla-boceto">
+      <table class="tabla-verificaciones">
+        <thead>
+          <tr>
+            <th>Punto de verificación</th>
+            <th>Conforme</th>
+            <th>No conforme</th>
+            <th>Observado</th>
+            <th>No aplica</th>
+            <th>Observaciones</th>
+          </tr>
+        </thead>
+        <tbody id="filas-verif"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="sec paso" data-paso="4">
+    <div class="paso-cabecera">
+      <span>Paso 4 de 6</span>
+      <h2>Cierre del servicio</h2>
+    </div>
     <div class="campos">
-      <label class="campo"><span>Estado final del equipo</span><input name="estado_final"></label>
-      <label class="campo"><span>Equipo entregado operativo</span>
-        <select name="entregado_operativo" id="sel-operativo"></select></label>
-      <label class="campo ancho"><span>Pendientes / recomendaciones</span><textarea name="pendientes" rows="3"></textarea></label>
-      <label class="campo ancho"><span>Observaciones adicionales</span><textarea name="obs_adic" rows="3"></textarea></label>
+      <label class="campo"><span>Estado final del equipo</span><input name="estado_final" placeholder="Ej.: Operativo y listo para uso"></label>
+      <fieldset class="campo campo-radio campo-operativo">
+        <legend>Equipo entregado operativo</legend>
+        <div class="opciones-radio">
+          <label><input type="radio" name="entregado_operativo" value="Sí"><span>Sí</span></label>
+          <label><input type="radio" name="entregado_operativo" value="No"><span>No</span></label>
+          <label><input type="radio" name="entregado_operativo" value="Con restricciones"><span>Con restricciones</span></label>
+        </div>
+      </fieldset>
+      <label class="campo ancho"><span>Pendientes, recomendaciones y observaciones</span><textarea name="cierres_observaciones" rows="5" placeholder="Ej.: Pendiente: cambiar cable en el próximo mantenimiento. Observaciones: no se detectaron daños adicionales"></textarea></label>
     </div>
   </section>
 
-  <section class="sec">
-    <h2>7. Documentación / anexos entregados</h2>
+  <section class="sec paso" data-paso="5">
+    <div class="paso-cabecera">
+      <span>Paso 5 de 6</span>
+      <h2>Documentación entregada</h2>
+    </div>
     <div id="filas-docs"></div>
   </section>
 
-  <section class="sec">
-    <h2>8. Recepción y conformidad del cliente</h2>
-    <p class="legal">El cliente declara haber recibido el equipo/trabajo indicado en esta ficha y haber sido informado sobre los trabajos realizados, las pruebas efectuadas y, cuando corresponda, las observaciones o pendientes indicados. La firma acredita la recepción y conformidad con el servicio ejecutado, sin perjuicio de las observaciones expresamente consignadas en este documento.</p>
+  <section class="sec paso" data-paso="6">
+    <div class="paso-cabecera">
+      <span>Paso 6 de 6</span>
+      <h2>Recepción y conformidad</h2>
+    </div>
+    <p class="legal">El cliente declara haber recibido el equipo/trabajo indicado en esta ficha y haber sido informado sobre los trabajos realizados y las observaciones correspondientes.</p>
+    <div class="recepcion-solicitud">
+      <button type="button" class="btn sec-btn" id="solicitar-datos-cliente">Solicitar datos al cliente</button>
+      <small id="recepcion-solicitud-estado" role="status" aria-live="polite"></small>
+    </div>
     <div class="recepcion-grupos">
       <div class="recepcion-grupo">
         <h3>Datos del cliente</h3>
         <div class="campos">
-          <label class="campo"><span>Conformidad del cliente</span>
-            <select name="conformidad" id="sel-conformidad"></select></label>
+          <label class="campo"><span>Conformidad del cliente</span><select name="conformidad" id="sel-conformidad"></select></label>
           <label class="campo"><span>Fecha de recepción</span><input type="date" name="fecha_recepcion"></label>
-          <label class="campo ancho"><span>Nombre y apellido</span><input name="nombre"></label>
-          <label class="campo ancho"><span>Cargo</span><input name="cargo"></label>
+          <label class="campo ancho"><span>Nombre y apellido</span><input name="nombre" placeholder="Ej.: María Gómez"></label>
+          <label class="campo ancho"><span>Cargo</span><input name="cargo" placeholder="Ej.: Jefe de mantenimiento"></label>
         </div>
         <span class="etiqueta">Firma / sello del cliente</span>
         <svg id="cv-cliente" class="firma-path" viewBox="0 0 600 220" preserveAspectRatio="none" role="img" tabindex="0" aria-label="Área de firma del cliente"></svg>
@@ -134,23 +173,25 @@
         <button type="button" class="btn sec-btn" data-borrar-firma="firma_tecnico">Borrar firma</button>
       </div>
     </div>
+    <div class="acciones-finales">
+      <button type="button" class="btn borrador" id="guardar-borrador">Guardar borrador</button>
+      <button type="button" class="btn principal" id="finalizar-ficha">Finalizar ficha</button>
+    </div>
   </section>
 
-  <div class="final">
-    <button type="submit" id="btn-guardar-borrador" value="borrador" class="btn borrador">Guardar en borrador</button>
-    <button type="submit" id="btn-finalizar-ficha" value="finalizar" class="btn principal">Finalizar ficha de asistencia</button>
+  <div class="navegacion-pasos">
+    <button type="button" class="btn sec-btn" id="paso-anterior" hidden>Anterior</button>
+    <span id="progreso-paso" class="progreso-paso">Paso 1 de 6</span>
+    <button type="button" class="btn principal" id="paso-siguiente">Siguiente</button>
   </div>
-
 </form>
 </main>
 
-<script src="../../js/api-config.js?v=2"></script>
+<script src="../../js/api-config.js?v=3"></script>
 <script src="../../js/fr172-puente-grua-datos.js?v=3"></script>
 <script src="../../js/signature-pad.js"></script>
-<script src="../../js/fr172-puente-grua-formulario.js?v=4"></script>
+<script src="../../js/fr172-puente-grua-publica.js?v=4"></script>
 <script src="../../js/site-layout.js"></script>
-<script src="../../js/login-modal.js"></script>
 <script src="../../js/nav-responsive.js"></script>
-<script src="../../js/session-guard.js"></script>
 </body>
 </html>

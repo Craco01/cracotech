@@ -1,4 +1,4 @@
-// Sirve el frontend local y reenvía las solicitudes API a producción.
+// Sirve el frontend local y reenvía las solicitudes API al backend de desarrollo.
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
@@ -6,8 +6,8 @@ const path = require('path');
 const ROOT = __dirname;
 const HOST = process.env.FRONT_HOST || '127.0.0.1';
 const PORT = Number(process.env.FRONT_PORT || 5500);
-const API_TARGET = (process.env.API_TARGET || 'https://api.cracotech.com').replace(/\/+$/, '');
-const PROD_ORIGIN = process.env.PROD_ORIGIN || 'https://cracotech.com';
+const API_TARGET = (process.env.API_TARGET || 'http://127.0.0.1:3000').replace(/\/+$/, '');
+const PROD_ORIGIN = process.env.PROD_ORIGIN || `http://${HOST}:${PORT}`;
 const TYPES = {
   '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8',
   '.js': 'text/javascript; charset=utf-8', '.json': 'application/json; charset=utf-8',
@@ -42,7 +42,7 @@ async function proxy(req, res) {
     res.end(Buffer.from(await response.arrayBuffer()));
   } catch (error) {
     res.writeHead(502, { 'Content-Type': 'application/json; charset=utf-8' });
-    res.end(JSON.stringify({ error: 'No se pudo contactar a la API de producción: ' + error.message }));
+    res.end(JSON.stringify({ error: 'No se pudo contactar al backend de desarrollo: ' + error.message }));
   }
 }
 
@@ -70,4 +70,4 @@ http.createServer((req, res) => {
     res.writeHead(200, { 'Content-Type': TYPES[path.extname(file).toLowerCase()] || 'application/octet-stream', 'Cache-Control': 'no-store' });
     res.end(data);
   });
-}).listen(PORT, HOST, () => console.log(`Frontend + APIs de producción en http://${HOST}:${PORT}`));
+}).listen(PORT, HOST, () => console.log(`Frontend + API de desarrollo en http://${HOST}:${PORT}`));

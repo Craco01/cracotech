@@ -30,6 +30,8 @@
 
   function isProtectedPath(pathname, search = '') {
     const maintenanceRoute = maintenanceRouteName(pathname);
+    if (maintenanceRoute === 'fr172-puente-grua-formulario' &&
+        window.FR172_LOGIN_ENABLED !== true) return false;
     if (maintenanceRoute === 'visor-pdf') {
       return protectedViewerGroups.has(new URLSearchParams(search).get('grupo'));
     }

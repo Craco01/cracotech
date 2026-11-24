@@ -44,5 +44,32 @@ const FR172 = {
   fecha(iso) {
     const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || '');
     return m ? m[3] + '/' + m[2] + '/' + m[1] : (iso || '');
+  },
+
+  normalizarDatos(datosOriginales) {
+    const datos = { ...(datosOriginales || {}) };
+    if (!String(datos.datos_cliente_lugar || '').trim()) {
+      const cliente = String(datos.cliente || '').trim();
+      const lugar = String(datos.lugar || '').trim();
+      datos.datos_cliente_lugar = [cliente, lugar].filter(Boolean).join(' - ');
+    }
+    if (!String(datos.datos_equipo || '').trim()) {
+      const partes = [
+        datos.tipo_polipasto && `Tipo de polipasto: ${datos.tipo_polipasto}`,
+        datos.capacidad && `Capacidad: ${datos.capacidad}`,
+        datos.marca && `Marca/Fabricante: ${datos.marca}`,
+        datos.modelo && `Modelo: ${datos.modelo}`,
+        datos.tension && `Tensión: ${datos.tension}`,
+        datos.altura && `Altura/Luz/Recorrido: ${datos.altura}`
+      ].filter(Boolean);
+      datos.datos_equipo = partes.join('\n');
+    }
+    if (!String(datos.cierres_observaciones || '').trim()) {
+      const pendientes = String(datos.pendientes || '').trim();
+      const adicionales = String(datos.obs_adic || '').trim();
+      datos.cierres_observaciones = [pendientes, adicionales].filter(Boolean).join('\n');
+    }
+    if (!datos.entregado_operativo && datos.operativo) datos.entregado_operativo = datos.operativo;
+    return datos;
   }
 };

@@ -3,14 +3,22 @@
 
   const params = new URLSearchParams(location.search);
   const enBlanco = params.get('blanco') === '1';
+  const modoPublicoDos = params.get('public') === '2';
+  const formatoNuevo = true;
   const est = {};
   const fichaId = params.get('id');
-  if (fichaId && !enBlanco) {
+  if (modoPublicoDos) {
+    try {
+      Object.assign(est, JSON.parse(sessionStorage.getItem('fr172-publica-datos-2') || '{}'));
+    } catch {
+      // Si los datos temporales no están disponibles, se muestra la ficha en blanco.
+    }
+  } else if (fichaId && !enBlanco) {
     try {
       const response = await API_FETCH(`/api/fr172-puente-grua/${encodeURIComponent(fichaId)}`);
       const record = await response.json();
       if (!response.ok) throw new Error(record.error || 'No se pudo cargar la ficha.');
-      Object.assign(est, record.datos, {
+      Object.assign(est, FR172.normalizarDatos(record.datos), {
         firma_cliente: record.firma_cliente,
         firma_tecnico: record.firma_tecnico
       });
@@ -44,20 +52,39 @@
   });
 
   /* 3. Trabajos realizados */
-  const nT = Math.max(FR172.filasImpresionBase.trabajos, cantidadUsada('t'));
+  const baseTrabajos = modoPublicoDos ? 3 : FR172.filasImpresionBase.trabajos;
+  const nT = Math.max(Number(est.n_trab) || baseTrabajos, cantidadUsada('t'));
   $('filas-trabajos').innerHTML = Array.from({ length: nT }, (_, j) => {
     const i = j + 1;
     return `<tr><th>${i}</th>${celda('t' + i + '_act')}${celda('t' + i + '_estado', 'c')}${celda('t' + i + '_obs')}</tr>`;
   }).join('');
 
   /* 4. Verificaciones */
-  $('filas-verif').innerHTML = FR172.verificaciones.map((t, j) => {
-    const k = j + 1;
-    return `<tr><th>${esc(t)}</th>${celda('v' + k + '_estado', 'c')}${celda('v' + k + '_obs')}</tr>`;
-  }).join('');
+  if (formatoNuevo) {
+    $('filas-verif').innerHTML = FR172.verificaciones.map((t, j) => {
+      const k = j + 1;
+      const estado = String(est['v' + k + '_estado'] || 'N/A');
+      const radio = valor => `<span class="casilla-estado"><input class="radio-imprimible" type="radio" disabled${estado === valor ? ' checked' : ''} aria-label="${esc(valor)}"></span>`;
+      return `<tr><th>${esc(t)}</th><td class="c">${radio('Conforme')}</td><td class="c">${radio('No conforme')}</td><td class="c">${radio('Observado')}</td><td class="c">${radio('N/A')}</td><td class="obs">${esc(est['v' + k + '_obs'])}</td></tr>`;
+    }).join('');
+  } else {
+    $('filas-verif').innerHTML = FR172.verificaciones.map((t, j) => {
+      const k = j + 1;
+      return `<tr><th>${esc(t)}</th>${celda('v' + k + '_estado', 'c')}${celda('v' + k + '_obs')}</tr>`;
+    }).join('');
+  }
+
+  if (formatoNuevo) {
+    const operativo = String(est.entregado_operativo || '');
+    $('operativo-radio').innerHTML =
+      ['Sí', 'No', 'Con restricciones'].map(valor =>
+        `<span class="operativo-celdas"><span class="casilla-estado"><input class="radio-imprimible" type="radio" disabled${operativo === valor ? ' checked' : ''} aria-label="${esc(valor)}"></span> ${esc(valor)}</span>`
+      ).join('&nbsp;&nbsp;');
+  }
 
   /* 5. Materiales */
-  const nM = Math.max(FR172.filasImpresionBase.materiales, cantidadUsada('m'));
+  const baseMateriales = modoPublicoDos ? 3 : FR172.filasImpresionBase.materiales;
+  const nM = Math.max(Number(est.n_mat) || baseMateriales, cantidadUsada('m'));
   $('filas-materiales').innerHTML = Array.from({ length: nM }, (_, j) => {
     const i = j + 1;
     return `<tr><th>${i}</th>${celda('m' + i + '_desc')}${celda('m' + i + '_cant', 'c')}` +
@@ -102,7 +129,10 @@
 
   /* Barra de pantalla */
   $('b-imprimir').addEventListener('click', () => window.print());
-  $('b-volver').href = '../reportes/?vista=fr172';
+  $('b-volver').href = modoPublicoDos
+    ? '../fr172-puente-grua-formulario/'
+    : '../reportes/?vista=fr172';
+  $('b-volver').textContent = modoPublicoDos ? 'Volver al formulario' : 'Volver a reportes';
   const modo = $('b-modo');
   if (modo && enBlanco) {
     modo.textContent = 'Cargar datos del formulario';

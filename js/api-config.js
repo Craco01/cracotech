@@ -1,5 +1,8 @@
 /* Configuración centralizada de la API para el frontend */
-const API_BASE_URL = 'https://api.cracotech.com';
+const API_BASE_URL = window.location.protocol === 'file:'
+  ? 'http://127.0.0.1:3000'
+  : 'https://api.cracotech.com';
+window.FR172_LOGIN_ENABLED = true;
 
 localStorage.removeItem('token');
 
