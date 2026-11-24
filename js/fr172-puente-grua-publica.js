@@ -324,6 +324,7 @@
 
   async function cargarRecepcionPublica() {
     if (!recepcionToken) return false;
+    document.body.classList.add('fr172-recepcion-publica-cliente');
     $$('.paso', form).forEach(seccion => {
       seccion.classList.toggle('activo', Number(seccion.dataset.paso) === 6);
     });
@@ -332,9 +333,10 @@
     });
     $$('.paso:not([data-paso="6"])', form).forEach(seccion => { seccion.hidden = true; });
     $$('.pasos, .navegacion-pasos, #guardar-borrador').forEach(el => { el.hidden = true; });
+    $$('button:not(#finalizar-ficha)', form).forEach(boton => { boton.hidden = true; });
     $('.recepcion-solicitud', form).hidden = true;
     $('#datos-tecnico-recepcion').hidden = true;
-    $('#finalizar-ficha').textContent = 'Guardar recepción';
+    $('#finalizar-ficha').textContent = 'Enviar datos';
 
     const response = await API_FETCH(`/api/fr172-puente-grua/recepcion/${encodeURIComponent(recepcionToken)}`, { cache: 'no-store' });
     const result = await response.json();

@@ -234,6 +234,13 @@
 }
 .recepcion-solicitud[hidden],
 .recepcion-grupo[hidden] { display: none; }
+#ficha button[hidden] { display: none !important; }
+body.fr172-recepcion-publica-cliente .global-shell-header,
+body.fr172-recepcion-publica-cliente .footer-contacto,
+body.fr172-recepcion-publica-cliente #waButton,
+body.fr172-recepcion-publica-cliente #waModal { display: none !important; }
+body.fr172-recepcion-publica-cliente .navegacion-pasos[hidden] { display: none !important; }
+body.fr172-recepcion-publica-cliente .publica-tope { top: 0; }
 .subtitulo-paso {
   margin: 1.25rem .9rem .65rem;
   font: 700 1rem var(--serif);
