@@ -1,16 +1,6 @@
 (() => {
   'use strict';
 
-  const recepcionTokenInicial = new URLSearchParams(location.search).get('recepcion');
-  if (!recepcionTokenInicial && window.FR172_LOGIN_ENABLED === true && !sessionStorage.getItem('token')) {
-    const loginUrl = new URL('/mantenimiento/', location.origin);
-    const formRoute = new URL('../fr172-puente-grua-formulario/', location.href);
-    loginUrl.searchParams.set('loginRequired', '1');
-    loginUrl.searchParams.set('returnTo', `${formRoute.pathname}${location.search}${location.hash}`);
-    location.replace(loginUrl.href);
-    return;
-  }
-
   const STORAGE_KEY = 'fr172-publica-datos-2';
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
@@ -18,6 +8,9 @@
   const aviso = $('#guardado');
   const idSolicitado = new URLSearchParams(location.search).get('id');
   const recepcionToken = new URLSearchParams(location.search).get('recepcion');
+  if (!recepcionToken && window.FR172_LOGIN_ENABLED === true && !sessionStorage.getItem('token')) {
+    form.hidden = true;
+  }
   const requestedId = idSolicitado ? Number(idSolicitado) : null;
   let idFicha = requestedId;
   let estadoFicha = 'borrador';

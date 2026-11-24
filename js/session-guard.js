@@ -31,6 +31,8 @@
   function isProtectedPath(pathname, search = '') {
     const maintenanceRoute = maintenanceRouteName(pathname);
     if (maintenanceRoute === 'fr172-puente-grua-formulario' &&
+        new URLSearchParams(search).has('recepcion')) return false;
+    if (maintenanceRoute === 'fr172-puente-grua-formulario' &&
         window.FR172_LOGIN_ENABLED !== true) return false;
     if (maintenanceRoute === 'visor-pdf') {
       return protectedViewerGroups.has(new URLSearchParams(search).get('grupo'));
@@ -76,8 +78,14 @@
 
   if (isProtectedPath(currentPath, window.location.search)) {
     if (!sessionStorage.getItem('token')) {
-      redirectToLogin(`${currentPath}${window.location.search}${window.location.hash}`);
-      return;
+      const target = `${currentPath}${window.location.search}${window.location.hash}`;
+      if (maintenanceRouteName(currentPath) === 'fr172-puente-grua-formulario' && loginModal) {
+        sessionStorage.setItem(redirectStorageKey, target);
+        showLoginModal();
+      } else {
+        redirectToLogin(target);
+        return;
+      }
     }
     if (requiresEditor(currentPath) && !canEdit()) {
       window.location.replace('/mantenimiento/reportes/?vista=fr172&accessDenied=1');
