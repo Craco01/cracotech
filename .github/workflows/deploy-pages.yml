@@ -33,6 +33,9 @@ jobs:
           path: .
           name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
 
+      - name: Esperar la disponibilidad del artefacto
+        run: sleep 10
+
       - name: Publicar en GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
