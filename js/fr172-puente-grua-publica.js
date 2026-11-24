@@ -6,9 +6,14 @@
   const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
   const form = $('#ficha');
   const aviso = $('#guardado');
+  let falloStorageTemporalAvisado = false;
   const mostrarAviso = (estado, mensaje) => {
     aviso.textContent = mensaje;
     aviso.dataset.estado = estado;
+    if (['success', 'warning', 'error'].includes(estado)) {
+      return window.siteDialog.alert(mensaje);
+    }
+    return Promise.resolve();
   };
   const mostrarEstadoSolicitud = (estado, mensaje) => {
     const elemento = $('#recepcion-solicitud-estado');
@@ -150,9 +155,16 @@
   function guardarTemporal() {
     try {
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify(est));
+      falloStorageTemporalAvisado = false;
       mostrarAviso('info', 'Datos conservados temporalmente');
     } catch {
-      mostrarAviso('error', 'No se pudo conservar temporalmente en este navegador');
+      const mensaje = 'No se pudo conservar temporalmente en este navegador';
+      if (!falloStorageTemporalAvisado) {
+        falloStorageTemporalAvisado = true;
+        mostrarAviso('error', mensaje);
+      } else {
+        mostrarAviso('info', mensaje);
+      }
     }
   }
 
@@ -349,10 +361,9 @@
     pads.firma_tecnico.setPaths(result.firma_tecnico);
     if (result.estado === 'finalizada') {
       $$('input, select, textarea, button', form).forEach(el => { el.disabled = true; });
-      mostrarAviso('success', 'Recepción completada.');
     }
     mostrarPaso(6);
-    mostrarAviso(
+    await mostrarAviso(
       result.estado === 'finalizada' ? 'success' : 'info',
       result.estado === 'finalizada'
         ? 'Recepción completada.'
@@ -365,7 +376,7 @@
     const faltan = validarRecepcion();
     if (faltan.length) {
       enfocarErroresValidacion(faltan);
-      mostrarAviso(
+      await mostrarAviso(
         'warning',
         `Faltan datos para guardar la recepción: ${faltan.map(({ etiqueta }) => etiqueta).join(', ')}.`
       );
@@ -391,7 +402,7 @@
       if (!response.ok) throw new Error(result.error || 'No se pudo guardar la recepción.');
       estadoFicha = 'finalizada';
       $$('input, select, textarea, button', form).forEach(el => { el.disabled = true; });
-      mostrarAviso('success', 'Recepción guardada y ficha finalizada.');
+      await mostrarAviso('success', 'Recepción guardada y ficha finalizada.');
       const descarga = document.createElement('button');
       descarga.type = 'button';
       descarga.className = 'btn principal';
@@ -456,8 +467,8 @@
     pads.firma_tecnico.setPaths(est.firma_tecnico);
     actualizarModoEdicion();
     guardarTemporal();
-    mostrarAviso(
-      estadoFicha === 'finalizada' ? 'success' : 'info',
+    await mostrarAviso(
+      'success',
       estadoFicha === 'finalizada' ? 'Ficha finalizada' : 'Borrador cargado desde el servidor'
     );
   }
@@ -467,23 +478,29 @@
     boton.disabled = true;
     boton.setAttribute('aria-busy', 'true');
     mostrarAviso('info', 'Guardando borrador en el servidor...');
+    let estadoMensaje = 'success';
+    let mensaje;
     try {
       const id = await guardarEnServidor();
-      mostrarAviso('success', `Borrador ${id} guardado en el servidor.`);
+      mensaje = `Borrador ${id} guardado en el servidor.`;
     } catch (error) {
-      mostrarAviso('error', `No se pudo guardar el borrador: ${error.message}`);
+      estadoMensaje = 'error';
+      mensaje = `No se pudo guardar el borrador: ${error.message}`;
     } finally {
       boton.disabled = estadoFicha === 'finalizada';
       boton.removeAttribute('aria-busy');
     }
+    await mostrarAviso(estadoMensaje, mensaje);
   }
 
   async function finalizarFichaEnServidor() {
     const faltan = validarRecepcion();
     if (faltan.length) {
       enfocarErroresValidacion(faltan);
-      mostrarAviso('warning', `Faltan datos para finalizar: ${faltan.map(({ etiqueta }) => etiqueta).join(', ')}.`);
-      await window.siteDialog.alert(`Para finalizar la ficha complete la recepción: ${faltan.map(({ etiqueta }) => etiqueta).join(', ')}.`);
+      await mostrarAviso(
+        'warning',
+        `Para finalizar la ficha complete la recepción: ${faltan.map(({ etiqueta }) => etiqueta).join(', ')}.`
+      );
       return;
     }
 
@@ -500,10 +517,8 @@
       if (!response.ok) throw new Error(result.error || 'No se pudo finalizar la ficha.');
       estadoFicha = result.estado;
       guardarTemporal();
-      mostrarAviso('success', 'Ficha finalizada correctamente. Preparando el PDF...');
-      window.setTimeout(() => {
-        location.href = `../fr172-puente-grua-imprimible/?public=2&blanco=1&id=${encodeURIComponent(id)}`;
-      }, 700);
+      await mostrarAviso('success', 'Ficha finalizada correctamente. Preparando el PDF...');
+      location.href = `../fr172-puente-grua-imprimible/?public=2&blanco=1&id=${encodeURIComponent(id)}`;
     } catch (error) {
       mostrarAviso('error', `No se pudo finalizar la ficha: ${error.message}`);
       boton.disabled = false;
