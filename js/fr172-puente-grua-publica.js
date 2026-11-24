@@ -564,7 +564,10 @@
   siguiente.addEventListener('click', () => mostrarPaso(pasoActual + 1));
   $('#solicitar-datos-cliente')?.addEventListener('click', solicitarDatosCliente);
   $('#guardar-borrador').addEventListener('click', guardarBorradorEnServidor);
-  $('#finalizar-ficha').addEventListener('click', finalizarFichaEnServidor);
+  $('#finalizar-ficha').addEventListener('click', () => {
+    if (recepcionToken) guardarRecepcionPublica();
+    else finalizarFichaEnServidor();
+  });
   $$('[data-paso-nav]').forEach(item => {
     const abrir = () => mostrarPaso(Number(item.dataset.pasoNav));
     item.addEventListener('click', abrir);
