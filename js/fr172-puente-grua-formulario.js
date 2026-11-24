@@ -147,6 +147,11 @@
   function actualizarModoEdicion() {
     const finalizadaBloqueada = estadoFicha === 'finalizada' && rol !== 'administrador';
     const soloLectura = !tieneSesion || !puedeEditar || cargandoFicha || finalizadaBloqueada;
+    const solicitar = $('#solicitar-datos-cliente');
+    if (solicitar) {
+      solicitar.hidden = soloLectura || signaturePads.cliente.hasSignature();
+      solicitar.disabled = solicitar.hidden;
+    }
     $$('input, select, textarea, button[data-fila], button[data-borrar-firma]', form)
       .forEach(el => { el.disabled = soloLectura; });
     $$('button[data-fila][data-delta="1"]', form).forEach(el => {
@@ -279,7 +284,11 @@
     if (!response.ok) throw new Error(record.error || 'No se pudo abrir la ficha.');
     idFicha = record.id;
     estadoFicha = record.estado;
-    est = { ...record.datos, firma_cliente: record.firma_cliente, firma_tecnico: record.firma_tecnico };
+    est = FR172.normalizarDatos({
+      ...record.datos,
+      firma_cliente: record.firma_cliente,
+      firma_tecnico: record.firma_tecnico
+    });
     history.replaceState(null, '', `${location.pathname}?id=${idFicha}`);
     cargandoFicha = false;
     renderizarFicha();
@@ -299,6 +308,55 @@
     if (!signaturePads.cliente.hasSignature()) faltan.push('firma del cliente');
     return faltan;
   }
+
+  function normalizarTelefono(valor) {
+    let digits = String(valor || '').replace(/\D/g, '');
+    if (digits.startsWith('00')) digits = digits.slice(2);
+    if (digits.startsWith('0')) digits = `595${digits.slice(1)}`;
+    if (/^9\d{8}$/.test(digits)) digits = `595${digits}`;
+    if (!/^595\d{7,12}$/.test(digits)) return null;
+    return digits;
+  }
+
+  async function solicitarDatosCliente() {
+    if (!idFicha) {
+      aviso.textContent = 'Guarde la ficha antes de solicitar datos al cliente.';
+      await window.siteDialog.alert('Guarde la ficha antes de solicitar datos al cliente.');
+      return;
+    }
+    if (signaturePads.cliente.hasSignature()) {
+      aviso.textContent = 'La ficha ya tiene una firma del cliente.';
+      return;
+    }
+    const telefono = normalizarTelefono(est.contacto);
+    if (!telefono) {
+      aviso.textContent = 'Ingrese un número de WhatsApp válido en Contacto del cliente.';
+      await window.siteDialog.alert('Ingrese un número de WhatsApp válido en Contacto del cliente.');
+      return;
+    }
+
+    const boton = $('#solicitar-datos-cliente');
+    const estado = $('#recepcion-solicitud-estado');
+    boton.disabled = true;
+    estado.textContent = 'Generando enlace de 30 minutos...';
+    try {
+      const response = await API_FETCH(`/api/fr172-puente-grua/${idFicha}/recepcion-solicitud`, {
+        method: 'POST'
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'No se pudo generar el enlace.');
+      const enlace = new URL('../fr172-puente-grua-formulario/', location.href);
+      enlace.searchParams.set('recepcion', result.token);
+      const texto = `Complete la recepción de la ficha FR-172 de Puente Grúa: ${enlace.href}`;
+      estado.textContent = 'Enlace válido por 30 minutos.';
+      location.href = `https://wa.me/${telefono}?text=${encodeURIComponent(texto)}`;
+    } catch (error) {
+      estado.textContent = error.message;
+      boton.disabled = false;
+    }
+  }
+
+  $('#solicitar-datos-cliente')?.addEventListener('click', solicitarDatosCliente);
 
   form.addEventListener('submit', async event => {
     event.preventDefault();

@@ -13,12 +13,12 @@
   <link rel="stylesheet" href="../../css/fr172-puente-grua-publica.css?v=3">
   <script src="../../js/site-dialogs.js"></script>
 </head>
-<body data-no-login>
+<body>
 
 <div class="tope publica-tope">
   <div class="doc">
     <h1>Ficha FR-172 · Puente grúa</h1>
-    <p>Entorno de pruebas &nbsp;|&nbsp; Formato FR-172 Rev. 00</p>
+    <p>Formato FR-172 Rev. 00</p>
   </div>
   <div class="acciones">
     <span id="guardado" class="guardado" role="status" aria-live="polite">Guardar para registrar en el servidor</span>
@@ -149,6 +149,10 @@
       <h2>Recepción y conformidad</h2>
     </div>
     <p class="legal">El cliente declara haber recibido el equipo/trabajo indicado en esta ficha y haber sido informado sobre los trabajos realizados y las observaciones correspondientes.</p>
+    <div class="recepcion-solicitud">
+      <button type="button" class="btn sec-btn" id="solicitar-datos-cliente">Solicitar datos al cliente</button>
+      <small id="recepcion-solicitud-estado" role="status" aria-live="polite"></small>
+    </div>
     <div class="recepcion-grupos">
       <div class="recepcion-grupo">
         <h3>Datos del cliente</h3>

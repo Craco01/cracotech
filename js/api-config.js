@@ -2,7 +2,7 @@
 const API_BASE_URL = window.location.protocol === 'file:'
   ? 'http://127.0.0.1:3000'
   : 'https://api.cracotech.com';
-window.FR172_LOGIN_ENABLED = false;
+window.FR172_LOGIN_ENABLED = true;
 
 localStorage.removeItem('token');
 

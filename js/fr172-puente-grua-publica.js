@@ -1,7 +1,8 @@
 (() => {
   'use strict';
 
-  if (window.FR172_LOGIN_ENABLED === true && !sessionStorage.getItem('token')) {
+  const recepcionTokenInicial = new URLSearchParams(location.search).get('recepcion');
+  if (!recepcionTokenInicial && window.FR172_LOGIN_ENABLED === true && !sessionStorage.getItem('token')) {
     const loginUrl = new URL('/mantenimiento/', location.origin);
     const formRoute = new URL('../fr172-puente-grua-formulario/', location.href);
     loginUrl.searchParams.set('loginRequired', '1');
@@ -16,6 +17,7 @@
   const form = $('#ficha');
   const aviso = $('#guardado');
   const idSolicitado = new URLSearchParams(location.search).get('id');
+  const recepcionToken = new URLSearchParams(location.search).get('recepcion');
   const requestedId = idSolicitado ? Number(idSolicitado) : null;
   let idFicha = requestedId;
   let estadoFicha = 'borrador';
@@ -26,7 +28,7 @@
 
   let est = {};
   try {
-    est = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || '{}');
+    est = FR172.normalizarDatos(JSON.parse(sessionStorage.getItem(STORAGE_KEY) || '{}'));
   } catch {
     est = {};
   }
@@ -209,6 +211,84 @@
       svg.style.pointerEvents = bloqueada ? 'none' : '';
       svg.setAttribute('aria-disabled', String(bloqueada));
     });
+    const solicitar = $('#solicitar-datos-cliente');
+    if (solicitar) {
+      solicitar.hidden = bloqueada || pads.firma_cliente.hasSignature();
+      solicitar.disabled = solicitar.hidden;
+    }
+  }
+
+  async function cargarRecepcionPublica() {
+    if (!recepcionToken) return false;
+    $$('.paso', form).forEach(seccion => {
+      seccion.classList.toggle('activo', Number(seccion.dataset.paso) === 6);
+    });
+    $$('.paso-cabecera').forEach(cabecera => {
+      cabecera.closest('.paso')?.classList.toggle('recepcion-publica', true);
+    });
+    $$('.paso:not([data-paso="6"])', form).forEach(seccion => { seccion.hidden = true; });
+    $$('.pasos, .navegacion-pasos, #guardar-borrador').forEach(el => { el.hidden = true; });
+    $('#finalizar-ficha').textContent = 'Guardar recepción';
+
+    const response = await API_FETCH(`/api/fr172-puente-grua/recepcion/${encodeURIComponent(recepcionToken)}`, { cache: 'no-store' });
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error || 'El enlace de recepción no existe o ha vencido.');
+    idFicha = Number(result.id);
+    est = FR172.normalizarDatos(result.datos);
+    construir();
+    rellenar();
+    pads.firma_tecnico.setPaths(result.firma_tecnico);
+    if (result.estado === 'finalizada') {
+      $$('input, select, textarea, button', form).forEach(el => { el.disabled = true; });
+      aviso.textContent = 'Recepción completada.';
+    }
+    mostrarPaso(6);
+    aviso.textContent = result.estado === 'finalizada'
+      ? 'Recepción completada.'
+      : 'Complete los datos y firme para finalizar la ficha.';
+    return true;
+  }
+
+  async function guardarRecepcionPublica() {
+    const faltan = ['conformidad', 'fecha_recepcion', 'nombre', 'cargo']
+      .filter(nombre => !String(est[nombre] || '').trim());
+    if (faltan.length || !pads.firma_cliente.hasSignature()) {
+      aviso.textContent = 'Complete todos los datos y la firma del cliente antes de guardar.';
+      return;
+    }
+    const boton = $('#finalizar-ficha');
+    boton.disabled = true;
+    aviso.textContent = 'Guardando recepción...';
+    try {
+      const response = await API_FETCH(`/api/fr172-puente-grua/recepcion/${encodeURIComponent(recepcionToken)}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          conformidad: est.conformidad,
+          fecha_recepcion: est.fecha_recepcion,
+          nombre: est.nombre,
+          cargo: est.cargo,
+          firma_cliente: pads.firma_cliente.getPaths()
+        })
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'No se pudo guardar la recepción.');
+      estadoFicha = 'finalizada';
+      $$('input, select, textarea, button', form).forEach(el => { el.disabled = true; });
+      aviso.textContent = 'Recepción guardada y ficha finalizada.';
+      const descarga = document.createElement('button');
+      descarga.type = 'button';
+      descarga.className = 'btn principal';
+      descarga.textContent = 'Descargar PDF';
+      descarga.addEventListener('click', () => {
+        descarga.disabled = true;
+        location.href = `/api/fr172-puente-grua/recepcion/${encodeURIComponent(recepcionToken)}/pdf`;
+      });
+      boton.replaceWith(descarga);
+    } catch (error) {
+      aviso.textContent = error.message;
+      boton.disabled = false;
+    }
   }
 
   function guardarEnServidor() {
@@ -248,7 +328,11 @@
     }
     idFicha = Number(record.id);
     estadoFicha = record.estado;
-    est = { ...record.datos, firma_cliente: record.firma_cliente, firma_tecnico: record.firma_tecnico };
+    est = FR172.normalizarDatos({
+      ...record.datos,
+      firma_cliente: record.firma_cliente,
+      firma_tecnico: record.firma_tecnico
+    });
     construir();
     rellenar();
     pads.firma_cliente.setPaths(est.firma_cliente);
@@ -364,7 +448,8 @@
 
   form.addEventListener('submit', event => {
     event.preventDefault();
-    finalizarFichaEnServidor();
+    if (recepcionToken) guardarRecepcionPublica();
+    else finalizarFichaEnServidor();
   });
 
   if (idSolicitado && (!Number.isSafeInteger(requestedId) || requestedId < 1)) {
@@ -372,6 +457,12 @@
   } else if (requestedId) {
     abrirFicha(requestedId).catch(error => {
       aviso.textContent = `No se pudo cargar la ficha: ${error.message}`;
+    });
+  }
+  if (recepcionToken) {
+    cargarRecepcionPublica().catch(error => {
+      aviso.textContent = error.message;
+      form.hidden = true;
     });
   }
 })();

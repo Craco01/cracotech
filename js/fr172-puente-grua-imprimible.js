@@ -18,7 +18,7 @@
       const response = await API_FETCH(`/api/fr172-puente-grua/${encodeURIComponent(fichaId)}`);
       const record = await response.json();
       if (!response.ok) throw new Error(record.error || 'No se pudo cargar la ficha.');
-      Object.assign(est, record.datos, {
+      Object.assign(est, FR172.normalizarDatos(record.datos), {
         firma_cliente: record.firma_cliente,
         firma_tecnico: record.firma_tecnico
       });

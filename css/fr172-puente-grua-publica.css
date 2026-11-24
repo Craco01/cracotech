@@ -218,6 +218,20 @@
   margin-top: 1rem;
   border-top: 0;
 }
+.recepcion-solicitud {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  margin: 0 1rem 1rem;
+  padding: .75rem;
+  border: 1px solid #c3cad6;
+  border-radius: 6px;
+  background: #f7f9fc;
+}
+.recepcion-solicitud small {
+  color: #46546a;
+  font-weight: 700;
+}
 .subtitulo-paso {
   margin: 1.25rem .9rem .65rem;
   font: 700 1rem var(--serif);
