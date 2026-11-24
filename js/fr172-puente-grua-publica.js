@@ -6,6 +6,16 @@
   const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
   const form = $('#ficha');
   const aviso = $('#guardado');
+  const mostrarAviso = (estado, mensaje) => {
+    aviso.textContent = mensaje;
+    aviso.dataset.estado = estado;
+  };
+  const mostrarEstadoSolicitud = (estado, mensaje) => {
+    const elemento = $('#recepcion-solicitud-estado');
+    if (!elemento) return;
+    elemento.textContent = mensaje;
+    elemento.dataset.estado = estado;
+  };
   const idSolicitado = new URLSearchParams(location.search).get('id');
   const recepcionToken = new URLSearchParams(location.search).get('recepcion');
   if (!recepcionToken && window.FR172_LOGIN_ENABLED === true && !sessionStorage.getItem('token')) {
@@ -136,9 +146,9 @@
   function guardarTemporal() {
     try {
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify(est));
-      aviso.textContent = 'Datos conservados temporalmente';
+      mostrarAviso('info', 'Datos conservados temporalmente');
     } catch {
-      aviso.textContent = 'No se pudo conservar temporalmente en este navegador';
+      mostrarAviso('error', 'No se pudo conservar temporalmente en este navegador');
     }
   }
 
@@ -157,7 +167,11 @@
   const pads = {
     firma_cliente: window.createSignaturePad(firmaCliente, {
       width: 600, height: 220, maxStrokes: 100, maxPathLength: 40000, lineWidth: 2.4,
-      onChange: paths => { est.firma_cliente = paths; guardarTemporal(); }
+      onChange: paths => {
+        est.firma_cliente = paths;
+        limpiarErrorValidacion(firmaCliente);
+        guardarTemporal();
+      }
     }),
     firma_tecnico: window.createSignaturePad(firmaTecnico, {
       width: 600, height: 220, maxStrokes: 100, maxPathLength: 40000, lineWidth: 2.4,
@@ -178,6 +192,31 @@
     return { datos, firma_cliente, firma_tecnico };
   }
 
+  function limpiarErrorValidacion(elemento) {
+    elemento.removeAttribute('aria-invalid');
+    elemento.classList.remove('fr172-invalido');
+    elemento.closest('.campo')?.classList.remove('fr172-campo-invalido');
+    elemento.closest('.recepcion-grupo')?.classList.remove('fr172-campo-invalido');
+  }
+
+  function enfocarErroresValidacion(faltan) {
+    faltan.forEach(({ selector }) => {
+      const elemento = $(selector);
+      if (!elemento) return;
+      elemento.setAttribute('aria-invalid', 'true');
+      elemento.classList.add('fr172-invalido');
+      elemento.closest('.campo')?.classList.add('fr172-campo-invalido');
+      elemento.closest('.recepcion-grupo')?.classList.add('fr172-campo-invalido');
+    });
+
+    const primero = $(faltan[0]?.selector);
+    if (!primero) return;
+    const paso = primero.closest('.paso');
+    if (paso) mostrarPaso(Number(paso.dataset.paso));
+    primero.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    primero.focus({ preventScroll: true });
+  }
+
   function validarRecepcion() {
     const requeridos = [
       ['conformidad', 'conformidad del cliente'],
@@ -187,9 +226,80 @@
     ];
     const faltan = requeridos
       .filter(([nombre]) => !String(est[nombre] || '').trim())
-      .map(([, etiqueta]) => etiqueta);
-    if (!pads.firma_cliente.hasSignature()) faltan.push('firma del cliente');
+      .map(([nombre, etiqueta]) => ({ etiqueta, selector: `[name="${nombre}"]` }));
+    if (!pads.firma_cliente.hasSignature()) {
+      faltan.push({ etiqueta: 'firma del cliente', selector: '#cv-cliente' });
+    }
     return faltan;
+  }
+
+  function normalizarTelefono(valor) {
+    let digits = String(valor || '').replace(/\D/g, '');
+    if (digits.startsWith('00')) digits = digits.slice(2);
+    if (digits.startsWith('0')) digits = `595${digits.slice(1)}`;
+    if (/^9\d{8}$/.test(digits)) digits = `595${digits}`;
+    return /^595\d{7,12}$/.test(digits) ? digits : null;
+  }
+
+  async function solicitarDatosCliente() {
+    if (!idFicha) {
+      const mensaje = 'Guarde la ficha como borrador antes de solicitar los datos al cliente.';
+      await window.siteDialog.alert(mensaje);
+      return;
+    }
+    if (pads.firma_cliente.hasSignature()) {
+      const mensaje = 'La ficha ya tiene una firma del cliente; no es necesario solicitarla nuevamente.';
+      await window.siteDialog.alert(mensaje);
+      return;
+    }
+
+    const telefono = normalizarTelefono(est.contacto);
+    if (!telefono) {
+      const mensaje = 'Ingrese un número de WhatsApp válido en Contacto del cliente.';
+      enfocarErroresValidacion([{ selector: '[name="contacto"]' }]);
+      await window.siteDialog.alert(mensaje);
+      return;
+    }
+
+    const boton = $('#solicitar-datos-cliente');
+    boton.disabled = true;
+    boton.setAttribute('aria-busy', 'true');
+    mostrarEstadoSolicitud('info', 'Generando el enlace de 30 minutos...');
+
+    try {
+      const response = await API_FETCH(`/api/fr172-puente-grua/${encodeURIComponent(idFicha)}/recepcion-solicitud`, {
+        method: 'POST'
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'No se pudo generar el enlace de recepción.');
+      if (typeof result.token !== 'string' || !/^[a-f0-9]{64}$/i.test(result.token)) {
+        throw new Error('La API no devolvió un enlace de recepción válido.');
+      }
+
+      const telefonoConfirmado = normalizarTelefono(result.telefono);
+      if (!telefonoConfirmado) {
+        throw new Error('La API no devolvió un número de WhatsApp válido.');
+      }
+      const enlace = new URL(location.pathname, location.origin);
+      enlace.searchParams.set('recepcion', result.token);
+      const texto = `Complete la recepción de la ficha FR-172 de Puente Grúa. El enlace es válido por 30 minutos: ${enlace.href}`;
+      const whatsapp = new URL(`https://wa.me/${telefonoConfirmado}`);
+      whatsapp.searchParams.set('text', texto);
+
+      boton.disabled = false;
+      boton.removeAttribute('aria-busy');
+      mostrarEstadoSolicitud('', '');
+      await window.siteDialog.alert(
+        'Enlace generado y válido por 30 minutos. Al aceptar, se abrirá WhatsApp con el mensaje preparado. Revíselo y envíelo manualmente; no se enviará automáticamente.'
+      );
+      location.assign(whatsapp.href);
+    } catch (error) {
+      const mensaje = `No se pudo preparar WhatsApp: ${error.message}`;
+      boton.disabled = false;
+      boton.removeAttribute('aria-busy');
+      mostrarEstadoSolicitud('', '');
+      await window.siteDialog.alert(mensaje);
+    }
   }
 
   function actualizarModoEdicion() {
@@ -233,25 +343,32 @@
     pads.firma_tecnico.setPaths(result.firma_tecnico);
     if (result.estado === 'finalizada') {
       $$('input, select, textarea, button', form).forEach(el => { el.disabled = true; });
-      aviso.textContent = 'Recepción completada.';
+      mostrarAviso('success', 'Recepción completada.');
     }
     mostrarPaso(6);
-    aviso.textContent = result.estado === 'finalizada'
-      ? 'Recepción completada.'
-      : 'Complete los datos y firme para finalizar la ficha.';
+    mostrarAviso(
+      result.estado === 'finalizada' ? 'success' : 'info',
+      result.estado === 'finalizada'
+        ? 'Recepción completada.'
+        : 'Complete los datos y firme para finalizar la ficha.'
+    );
     return true;
   }
 
   async function guardarRecepcionPublica() {
-    const faltan = ['conformidad', 'fecha_recepcion', 'nombre', 'cargo']
-      .filter(nombre => !String(est[nombre] || '').trim());
-    if (faltan.length || !pads.firma_cliente.hasSignature()) {
-      aviso.textContent = 'Complete todos los datos y la firma del cliente antes de guardar.';
+    const faltan = validarRecepcion();
+    if (faltan.length) {
+      enfocarErroresValidacion(faltan);
+      mostrarAviso(
+        'warning',
+        `Faltan datos para guardar la recepción: ${faltan.map(({ etiqueta }) => etiqueta).join(', ')}.`
+      );
       return;
     }
     const boton = $('#finalizar-ficha');
     boton.disabled = true;
-    aviso.textContent = 'Guardando recepción...';
+    boton.setAttribute('aria-busy', 'true');
+    mostrarAviso('info', 'Guardando recepción...');
     try {
       const response = await API_FETCH(`/api/fr172-puente-grua/recepcion/${encodeURIComponent(recepcionToken)}`, {
         method: 'POST',
@@ -268,7 +385,7 @@
       if (!response.ok) throw new Error(result.error || 'No se pudo guardar la recepción.');
       estadoFicha = 'finalizada';
       $$('input, select, textarea, button', form).forEach(el => { el.disabled = true; });
-      aviso.textContent = 'Recepción guardada y ficha finalizada.';
+      mostrarAviso('success', 'Recepción guardada y ficha finalizada.');
       const descarga = document.createElement('button');
       descarga.type = 'button';
       descarga.className = 'btn principal';
@@ -279,8 +396,9 @@
       });
       boton.replaceWith(descarga);
     } catch (error) {
-      aviso.textContent = error.message;
+      mostrarAviso('error', `No se pudo guardar la recepción: ${error.message}`);
       boton.disabled = false;
+      boton.removeAttribute('aria-busy');
     }
   }
 
@@ -312,7 +430,7 @@
   }
 
   async function abrirFicha(id) {
-    aviso.textContent = 'Cargando ficha desde el servidor...';
+    mostrarAviso('info', 'Cargando ficha desde el servidor...');
     const response = await API_FETCH(`/api/fr172-puente-grua/${encodeURIComponent(id)}`, { cache: 'no-store' });
     const record = await response.json();
     if (!response.ok) throw new Error(record.error || 'No se pudo cargar la ficha.');
@@ -332,28 +450,34 @@
     pads.firma_tecnico.setPaths(est.firma_tecnico);
     actualizarModoEdicion();
     guardarTemporal();
-    aviso.textContent = estadoFicha === 'finalizada' ? 'Ficha finalizada' : 'Borrador cargado desde el servidor';
+    mostrarAviso(
+      estadoFicha === 'finalizada' ? 'success' : 'info',
+      estadoFicha === 'finalizada' ? 'Ficha finalizada' : 'Borrador cargado desde el servidor'
+    );
   }
 
   async function guardarBorradorEnServidor() {
     const boton = $('#guardar-borrador');
     boton.disabled = true;
-    aviso.textContent = 'Guardando borrador en el servidor...';
+    boton.setAttribute('aria-busy', 'true');
+    mostrarAviso('info', 'Guardando borrador en el servidor...');
     try {
       const id = await guardarEnServidor();
-      aviso.textContent = `Borrador ${id} guardado en el servidor`;
+      mostrarAviso('success', `Borrador ${id} guardado en el servidor.`);
     } catch (error) {
-      aviso.textContent = `Error al guardar el borrador: ${error.message}`;
+      mostrarAviso('error', `No se pudo guardar el borrador: ${error.message}`);
     } finally {
       boton.disabled = estadoFicha === 'finalizada';
+      boton.removeAttribute('aria-busy');
     }
   }
 
   async function finalizarFichaEnServidor() {
     const faltan = validarRecepcion();
     if (faltan.length) {
-      aviso.textContent = 'Complete los datos de recepción antes de finalizar.';
-      await window.siteDialog.alert(`Para finalizar la ficha complete la recepción: ${faltan.join(', ')}.`);
+      enfocarErroresValidacion(faltan);
+      mostrarAviso('warning', `Faltan datos para finalizar: ${faltan.map(({ etiqueta }) => etiqueta).join(', ')}.`);
+      await window.siteDialog.alert(`Para finalizar la ficha complete la recepción: ${faltan.map(({ etiqueta }) => etiqueta).join(', ')}.`);
       return;
     }
 
@@ -361,7 +485,8 @@
     const botonBorrador = $('#guardar-borrador');
     boton.disabled = true;
     botonBorrador.disabled = true;
-    aviso.textContent = 'Guardando y finalizando la ficha...';
+    boton.setAttribute('aria-busy', 'true');
+    mostrarAviso('info', 'Guardando y finalizando la ficha...');
     try {
       const id = await guardarEnServidor();
       const response = await API_FETCH(`/api/fr172-puente-grua/${id}/finalizar`, { method: 'POST' });
@@ -369,23 +494,29 @@
       if (!response.ok) throw new Error(result.error || 'No se pudo finalizar la ficha.');
       estadoFicha = result.estado;
       guardarTemporal();
-      location.href = `../fr172-puente-grua-imprimible/?public=2&blanco=1&id=${encodeURIComponent(id)}`;
+      mostrarAviso('success', 'Ficha finalizada correctamente. Preparando el PDF...');
+      window.setTimeout(() => {
+        location.href = `../fr172-puente-grua-imprimible/?public=2&blanco=1&id=${encodeURIComponent(id)}`;
+      }, 700);
     } catch (error) {
-      aviso.textContent = `Error al finalizar la ficha: ${error.message}`;
+      mostrarAviso('error', `No se pudo finalizar la ficha: ${error.message}`);
       boton.disabled = false;
       botonBorrador.disabled = false;
+      boton.removeAttribute('aria-busy');
     }
   }
 
   form.addEventListener('input', event => {
     const elemento = event.target;
     if (!elemento.name) return;
+    limpiarErrorValidacion(elemento);
     est[elemento.name] = elemento.type === 'checkbox' ? elemento.checked : elemento.value;
     guardarTemporal();
   });
   form.addEventListener('change', event => {
     const elemento = event.target;
     if (!elemento.name) return;
+    limpiarErrorValidacion(elemento);
     est[elemento.name] = elemento.type === 'checkbox' ? elemento.checked : elemento.value;
     guardarTemporal();
   });
@@ -425,6 +556,7 @@
 
   anterior.addEventListener('click', () => mostrarPaso(pasoActual - 1));
   siguiente.addEventListener('click', () => mostrarPaso(pasoActual + 1));
+  $('#solicitar-datos-cliente')?.addEventListener('click', solicitarDatosCliente);
   $('#guardar-borrador').addEventListener('click', guardarBorradorEnServidor);
   $('#finalizar-ficha').addEventListener('click', finalizarFichaEnServidor);
   $$('[data-paso-nav]').forEach(item => {
@@ -446,15 +578,15 @@
   });
 
   if (idSolicitado && (!Number.isSafeInteger(requestedId) || requestedId < 1)) {
-    aviso.textContent = 'El identificador de ficha no es válido.';
+    mostrarAviso('error', 'El identificador de ficha no es válido.');
   } else if (requestedId) {
     abrirFicha(requestedId).catch(error => {
-      aviso.textContent = `No se pudo cargar la ficha: ${error.message}`;
+      mostrarAviso('error', `No se pudo cargar la ficha: ${error.message}`);
     });
   }
   if (recepcionToken) {
     cargarRecepcionPublica().catch(error => {
-      aviso.textContent = error.message;
+      mostrarAviso('error', error.message);
       form.hidden = true;
     });
   }
