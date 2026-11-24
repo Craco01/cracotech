@@ -232,6 +232,8 @@
   color: #46546a;
   font-weight: 700;
 }
+.recepcion-solicitud[hidden],
+.recepcion-grupo[hidden] { display: none; }
 .subtitulo-paso {
   margin: 1.25rem .9rem .65rem;
   font: 700 1rem var(--serif);

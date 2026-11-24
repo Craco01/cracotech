@@ -28,6 +28,10 @@
   const esc = value => String(value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
   const opciones = lista =>
     '<option value="">Seleccione una opción</option>' + lista.map(value => `<option>${esc(value)}</option>`).join('');
+  const fechaActualLocal = () => {
+    const hoy = new Date();
+    return `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}-${String(hoy.getDate()).padStart(2, '0')}`;
+  };
 
   let est = {};
   try {
@@ -156,10 +160,7 @@
   FR172.verificaciones.forEach((_, i) => {
     if (!est[`v${i + 1}_estado`]) est[`v${i + 1}_estado`] = 'N/A';
   });
-  if (!est.fecha) {
-    const hoy = new Date();
-    est.fecha = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}-${String(hoy.getDate()).padStart(2, '0')}`;
-  }
+  if (!est.fecha) est.fecha = fechaActualLocal();
   rellenar();
 
   const firmaCliente = $('#cv-cliente');
@@ -331,6 +332,8 @@
     });
     $$('.paso:not([data-paso="6"])', form).forEach(seccion => { seccion.hidden = true; });
     $$('.pasos, .navegacion-pasos, #guardar-borrador').forEach(el => { el.hidden = true; });
+    $('.recepcion-solicitud', form).hidden = true;
+    $('#datos-tecnico-recepcion').hidden = true;
     $('#finalizar-ficha').textContent = 'Guardar recepción';
 
     const response = await API_FETCH(`/api/fr172-puente-grua/recepcion/${encodeURIComponent(recepcionToken)}`, { cache: 'no-store' });
@@ -338,6 +341,7 @@
     if (!response.ok) throw new Error(result.error || 'El enlace de recepción no existe o ha vencido.');
     idFicha = Number(result.id);
     est = FR172.normalizarDatos(result.datos);
+    if (!String(est.fecha_recepcion || '').trim()) est.fecha_recepcion = fechaActualLocal();
     construir();
     rellenar();
     pads.firma_tecnico.setPaths(result.firma_tecnico);
