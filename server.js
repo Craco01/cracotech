@@ -1,4 +1,4 @@
-// Sirve el frontend local y reenvía las solicitudes API al backend de desarrollo.
+// Sirve el frontend local y reenvía las solicitudes API al backend configurado.
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
@@ -6,8 +6,8 @@ const path = require('path');
 const ROOT = __dirname;
 const HOST = process.env.FRONT_HOST || '127.0.0.1';
 const PORT = Number(process.env.FRONT_PORT || 5500);
-const API_TARGET = (process.env.API_TARGET || 'http://127.0.0.1:3000').replace(/\/+$/, '');
-const PROD_ORIGIN = process.env.PROD_ORIGIN || `http://${HOST}:${PORT}`;
+const API_TARGET = (process.env.API_TARGET || 'https://api.cracotech.com').replace(/\/+$/, '');
+const PROD_ORIGIN = process.env.PROD_ORIGIN || 'https://cracotech.com';
 const TYPES = {
   '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8',
   '.js': 'text/javascript; charset=utf-8', '.json': 'application/json; charset=utf-8',
