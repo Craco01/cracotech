@@ -34,6 +34,42 @@
   background: #005f99;
 }
 
+.inventario-reportes-button--imprimir {
+  background: #007acc;
+}
+
+.inventario-reportes-button--imprimir:hover {
+  background: #005f99;
+}
+
+.inventario-reportes-button--cargar {
+  background: #198754;
+}
+
+.inventario-reportes-button--cargar:hover {
+  background: #146c43;
+}
+
+@media (max-width: 600px) {
+  .inventario-reportes-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: calc(100% - 32px);
+    text-align: center;
+  }
+
+  .inventario-reportes-button {
+    box-sizing: border-box;
+    width: 100%;
+    text-align: center;
+  }
+
+  .inventario-reportes-button--cargar {
+    order: -1;
+  }
+}
+
 #inventario-table-wrap {
   width: min(90%, 1300px);
   height: 75vh;
