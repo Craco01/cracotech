@@ -1,9 +1,18 @@
 (() => {
   if (window.siteDialog) return;
 
+  function restoreWindowScroll(position) {
+    const root = document.documentElement;
+    const previousBehavior = root.style.scrollBehavior;
+    root.style.scrollBehavior = 'auto';
+    window.scrollTo(position.x, position.y);
+    root.style.scrollBehavior = previousBehavior;
+  }
+
   function show(message, confirmMode) {
     return new Promise(resolve => {
       const previousFocus = document.activeElement;
+      const previousScroll = { x: window.scrollX, y: window.scrollY };
       const layer = document.createElement('div');
       const dialog = document.createElement('section');
       const title = document.createElement('h2');
@@ -32,7 +41,8 @@
         finished = true;
         document.removeEventListener('keydown', onKeyDown);
         layer.remove();
-        if (previousFocus instanceof HTMLElement && previousFocus.isConnected) previousFocus.focus();
+        if (previousFocus instanceof HTMLElement && previousFocus.isConnected) previousFocus.focus({ preventScroll: true });
+        restoreWindowScroll(previousScroll);
         resolve(result);
       }
 
@@ -72,7 +82,8 @@
       layer.appendChild(dialog);
       document.body.appendChild(layer);
       document.addEventListener('keydown', onKeyDown);
-      accept.focus();
+      accept.focus({ preventScroll: true });
+      restoreWindowScroll(previousScroll);
     });
   }
 

@@ -16,7 +16,7 @@ const puedeEliminarInventario = localStorage.getItem('role') === 'administrador'
 const columnasNumericas = new Set(["StockF9", "CantidadFisica", "Diferencia"]);
 document.getElementById('inventario-actions-header').hidden = !puedeEliminarInventario;
 
-async function cargarInventario({ busqueda = busquedaActiva, pagina = paginaActual } = {}) {
+async function cargarInventario({ busqueda = busquedaActiva, pagina = paginaActual, reiniciarScrollTabla = false } = {}) {
   const cargaActual = ++solicitudCarga;
   busquedaActiva = busqueda.trim();
   paginaActual = pagina;
@@ -46,7 +46,9 @@ async function cargarInventario({ busqueda = busquedaActiva, pagina = paginaActu
     totalInventario = Number(result.total);
     actualizarVistaInventario();
     renderPaginacionInventario();
-    document.getElementById("inventario-table-wrap").scrollTop = 0;
+    if (reiniciarScrollTabla) {
+      document.getElementById("inventario-table-wrap").scrollTop = 0;
+    }
   } catch (error) {
     if (cargaActual === solicitudCarga) {
       estado.textContent = "Error";
@@ -144,6 +146,23 @@ function renderPaginacionInventario() {
   siguiente.disabled = (paginaActual + 1) * LIMITE_POR_PAGINA >= totalInventario;
 }
 
+function capturarPosicionInventario() {
+  return {
+    x: window.scrollX,
+    y: window.scrollY,
+    tabla: document.getElementById("inventario-table-wrap").scrollTop
+  };
+}
+
+function restaurarPosicionInventario(posicion) {
+  const root = document.documentElement;
+  const comportamientoAnterior = root.style.scrollBehavior;
+  root.style.scrollBehavior = "auto";
+  window.scrollTo(posicion.x, posicion.y);
+  root.style.scrollBehavior = comportamientoAnterior;
+  document.getElementById("inventario-table-wrap").scrollTop = posicion.tabla;
+}
+
 function configurarEncabezadosOrdenables() {
   const columnas = ["Codigo", "Producto", "UM", "StockF9", "Diferencia", "CantidadFisica", "Ubicacion", "Observacion"];
   document.querySelectorAll("#inventario-table th").forEach((th, indice) => {
@@ -159,7 +178,7 @@ function configurarEncabezadosOrdenables() {
       const nuevaColumna = button.dataset.sort;
       direccionOrden = columnaOrden === nuevaColumna && direccionOrden === "asc" ? "desc" : "asc";
       columnaOrden = nuevaColumna;
-      cargarInventario({ pagina: 0 });
+      cargarInventario({ pagina: 0, reiniciarScrollTabla: true });
     });
     th.replaceChildren(button);
     th.setAttribute("scope", "col");
@@ -170,19 +189,19 @@ function configurarEncabezadosOrdenables() {
 document.getElementById("inventario-search").addEventListener("input", event => {
   clearTimeout(temporizadorBusqueda);
   const busqueda = event.target.value;
-  temporizadorBusqueda = setTimeout(() => cargarInventario({ busqueda, pagina: 0 }), 300);
+  temporizadorBusqueda = setTimeout(() => cargarInventario({ busqueda, pagina: 0, reiniciarScrollTabla: true }), 300);
 });
 
 document.getElementById("inventario-prev").addEventListener("click", () => {
   if (paginaActual > 0) {
     document.getElementById("inventario-table-wrap").scrollIntoView({ behavior: "smooth", block: "start" });
-    cargarInventario({ pagina: paginaActual - 1 });
+    cargarInventario({ pagina: paginaActual - 1, reiniciarScrollTabla: true });
   }
 });
 document.getElementById("inventario-next").addEventListener("click", () => {
   if ((paginaActual + 1) * LIMITE_POR_PAGINA < totalInventario) {
     document.getElementById("inventario-table-wrap").scrollIntoView({ behavior: "smooth", block: "start" });
-    cargarInventario({ pagina: paginaActual + 1 });
+    cargarInventario({ pagina: paginaActual + 1, reiniciarScrollTabla: true });
   }
 });
 
@@ -211,7 +230,7 @@ document.getElementById("inventario-body").addEventListener("click", function (e
   const modal = document.getElementById("inventario-modal");
   modal.style.display = "flex";
   modal.setAttribute('aria-hidden', 'false');
-  document.getElementById("inventario-modal-input").focus();
+  document.getElementById("inventario-modal-input").focus({ preventScroll: true });
 });
 
 document.getElementById('inventario-body').addEventListener('click', event => {
@@ -223,7 +242,10 @@ document.getElementById('inventario-body').addEventListener('click', event => {
 async function eliminarInventario(codigo, button) {
   const item = inventarioData.find(row => String(row.Codigo) === String(codigo));
   const detalle = item ? `${item.Codigo} - ${item.Producto}` : codigo;
-  if (!await window.siteDialog.confirm(`¿Eliminar el registro ${detalle}? Esta acción no se puede deshacer.`)) return;
+  const posicion = capturarPosicionInventario();
+  const confirmado = await window.siteDialog.confirm(`¿Eliminar el registro ${detalle}? Esta acción no se puede deshacer.`);
+  restaurarPosicionInventario(posicion);
+  if (!confirmado) return;
 
   button.disabled = true;
   try {
@@ -239,6 +261,7 @@ async function eliminarInventario(codigo, button) {
     await window.siteDialog.alert(error.message || 'No se pudo eliminar el registro.');
   } finally {
     button.disabled = false;
+    restaurarPosicionInventario(posicion);
   }
 }
 
@@ -294,7 +317,7 @@ function cerrarInventarioModal() {
   modal.setAttribute('aria-hidden', 'true');
   filaEnEdicion = null;
   campoEnEdicion = null;
-  controlInventarioActivo?.focus();
+  controlInventarioActivo?.focus({ preventScroll: true });
   controlInventarioActivo = null;
 }
 
@@ -334,7 +357,7 @@ inventarioAddButton.addEventListener('click', async () => {
     codigoPropuestoAdicional = await obtenerSiguienteCodigoProvisional();
     inventarioAddCode.value = codigoPropuestoAdicional;
     inventarioAddSave.disabled = false;
-    inventarioAddProduct.focus();
+    inventarioAddProduct.focus({ preventScroll: true });
   } catch (error) {
     cerrarModalAdicional();
     await window.siteDialog.alert(error.message || 'No se pudo obtener el siguiente código provisional.');
@@ -415,5 +438,5 @@ function cerrarModalAdicional() {
   inventarioAddModal.style.display = 'none';
   inventarioAddModal.setAttribute('aria-hidden', 'true');
   codigoPropuestoAdicional = '';
-  inventarioAddButton.focus();
+  inventarioAddButton.focus({ preventScroll: true });
 }
