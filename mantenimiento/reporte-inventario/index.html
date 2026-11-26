@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Listado para Inventario</title>
   <meta name="description" content="Listado para Inventario. Informacion y herramientas de gestion para mantenimiento industrial en Metalurgica Vera.">
-<link rel="stylesheet" href="../../css/reporte_inventario.css?v=20260923-11">
+<link rel="stylesheet" href="../../css/reporte_inventario.css?v=20261126-1">
 <script src="../../js/api-config.js"></script>
 </head>
 <body data-no-global-layout>
@@ -27,6 +27,7 @@
         <col class="col-ubicacion">
         <col class="col-stock">
         <col class="col-fisica">
+        <col class="col-diferencia">
         <col class="col-observacion">
       </colgroup>
       <thead>
@@ -35,7 +36,7 @@
             <span class="empresa-nombre">Metalúrgica Vera S.A.E.</span>
             <span class="empresa-direccion">Carretera Ruta PY 01 Acceso Sur Km 28.6 Ypane - Tel. 3283242</span>
           </th>
-          <th colspan="3" class="celda-meta">
+          <th colspan="4" class="celda-meta">
             <div class="meta-contenido">
               <div class="meta-linea">Pag: <span id="paginaActual">1</span> de <span id="totalPaginas">1</span></div>
               <div class="meta-linea" id="usuario">CristhianRedes</div>
@@ -43,7 +44,7 @@
             </div>
           </th>
         </tr>
-        <tr class="fila-subtitulo"><th colspan="7">Listado para Inventario</th></tr>
+        <tr class="fila-subtitulo"><th colspan="8">Listado para Inventario</th></tr>
         <tr class="fila-columnas">
           <th class="col-codigo">Codigo</th>
           <th class="col-descripcion">Descripción de Producto</th>
@@ -51,12 +52,13 @@
           <th class="col-ubicacion">Ubicación</th>
           <th class="col-stock">Stock F9</th>
           <th class="col-fisica">Cantidad Física</th>
+          <th class="col-diferencia">Diferencia</th>
           <th class="col-observacion">Observación</th>
         </tr>
       </thead>
       <tbody id="cuerpoTabla">
         <tr>
-          <td colspan="7" class="sin-datos">Cargando datos...</td>
+          <td colspan="8" class="sin-datos">Cargando datos...</td>
         </tr>
       </tbody>
       <tfoot>
@@ -64,6 +66,7 @@
           <td colspan="4"></td>
           <td id="totalStock">0</td>
           <td id="totalFisica">0</td>
+          <td id="totalDiferencia">0</td>
           <td></td>
         </tr>
       </tfoot>
@@ -100,7 +103,7 @@
     </section>
 
   </main>
-<script src="../../js/reporte_inventario.js"></script>
+<script src="../../js/reporte_inventario.js?v=20261126-1"></script>
 
 
 

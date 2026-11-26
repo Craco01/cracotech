@@ -7,7 +7,7 @@
   <meta name="description" content="Mantenimiento Metalúrgica Vera S.A.E.. Informacion y herramientas de gestion para mantenimiento industrial en Metalurgica Vera.">
         <link rel="icon" href="../../img/Logo.png" type="image/png" sizes="32x32">
         <link rel="stylesheet" href="../../css/styles.css">
-        <link rel="stylesheet" href="../../css/inventario.css">
+        <link rel="stylesheet" href="../../css/inventario.css?v=20261126-2">
         <link rel="stylesheet" href="../../css/report-pagination.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="../../js/api-config.js"></script>
@@ -19,6 +19,7 @@
         <div class="inventario-reportes-actions">
           <a class="inventario-reportes-button inventario-reportes-button--imprimir" href="../reporte-inventario/">Imprimir reporte</a>
           <a class="inventario-reportes-button inventario-reportes-button--cargar" href="../carga-xlsx/?tabla=inventario">Cargar inventario</a>
+          <button id="inventario-add-button" class="inventario-reportes-button inventario-reportes-button--adicional" type="button" hidden>Agregar adicional</button>
         </div>
         <input type="search" id="inventario-search" aria-label="Buscar en el inventario por código o producto" placeholder="Buscar por código o producto…">
 
@@ -63,7 +64,37 @@
             </form>
           </div>
         </div>
-<script src="../../js/inventario.js"></script>
+        <div id="inventario-add-modal" role="dialog" aria-modal="true" aria-labelledby="inventario-add-title" aria-hidden="true">
+          <div id="inventario-add-modal-content">
+            <button type="button" id="inventario-add-close" aria-label="Cerrar formulario de sobrante">&times;</button>
+            <h3 id="inventario-add-title">Agregar adicional</h3>
+            <p class="inventario-add-help">Registro para un producto físico que no figura en el listado. La diferencia conserva la fórmula actual: Stock F9 menos Cantidad Física.</p>
+            <form id="inventario-add-form">
+              <div class="inventario-add-grid">
+                <label for="inventario-add-code">Código provisional</label>
+                <input type="number" id="inventario-add-code" min="33000" step="1" required>
+                <label for="inventario-add-product">Producto</label>
+                <input type="text" id="inventario-add-product" maxlength="255" required>
+                <label for="inventario-add-um">UM</label>
+                <input type="text" id="inventario-add-um" maxlength="20" value="Unid" required>
+                <label for="inventario-add-stock">Stock F9</label>
+                <input type="number" id="inventario-add-stock" value="0" readonly>
+                <label for="inventario-add-physical">Cantidad Física</label>
+                <input type="number" id="inventario-add-physical" min="0.01" step="0.01" required>
+                <label for="inventario-add-location">Ubicación (opcional)</label>
+                <input type="text" id="inventario-add-location" maxlength="100">
+                <label for="inventario-add-observation">Observación (opcional)</label>
+                <textarea id="inventario-add-observation" maxlength="5000" rows="3"></textarea>
+              </div>
+              <div id="inventario-add-status" role="alert" aria-live="polite"></div>
+              <div class="inventario-modal-actions">
+                <button type="button" id="inventario-add-cancel">Cancelar</button>
+                <button type="submit" id="inventario-add-save">Guardar adicional</button>
+              </div>
+            </form>
+          </div>
+        </div>
+<script src="../../js/inventario.js?v=20261126-2"></script>
 
 
 

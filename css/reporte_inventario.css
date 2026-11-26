@@ -204,10 +204,12 @@ body {
 .col-ubicacion{ width: 13%; }
 .col-stock    { width: 11%; text-align: right; }
 .col-fisica   { width: 11%; text-align: right; }
-.col-observacion { width: 27.6%; }
+.col-diferencia { width: 11%; text-align: right; }
+.col-observacion { width: 16.6%; }
 
 .tabla-inventario tbody td:nth-child(5),
-.tabla-inventario tbody td:nth-child(6) {
+.tabla-inventario tbody td:nth-child(6),
+.tabla-inventario tbody td:nth-child(7) {
   text-align: right;
 }
 

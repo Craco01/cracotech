@@ -5,6 +5,43 @@
   margin-bottom: 15px;
 }
 
+#inventario-add-modal-content .inventario-add-help {
+  margin: 8px 0 16px;
+  color: #666;
+  font-size: 13px;
+}
+
+#inventario-add-form .inventario-add-grid {
+  display: grid;
+  grid-template-columns: minmax(120px, 1fr) minmax(0, 2fr);
+  gap: 8px 12px;
+  align-items: center;
+}
+
+#inventario-add-form label {
+  font-weight: bold;
+}
+
+#inventario-add-form input,
+#inventario-add-form textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font: inherit;
+}
+
+#inventario-add-form input[readonly] {
+  background: #f2f2f2;
+}
+
+#inventario-add-status {
+  min-height: 20px;
+  margin: 8px 0;
+  color: #b00020;
+}
+
 #inventario-search {
   display: flex;
   width: 80%;
@@ -50,6 +87,21 @@
   background: #146c43;
 }
 
+#inventario-add-button[hidden] {
+  display: none;
+}
+
+.inventario-reportes-button--adicional {
+  border: 0;
+  background: #6c757d;
+  cursor: pointer;
+  font: inherit;
+}
+
+.inventario-reportes-button--adicional:hover {
+  background: #565e64;
+}
+
 @media (max-width: 600px) {
   .inventario-reportes-actions {
     display: flex;
@@ -67,6 +119,11 @@
 
   .inventario-reportes-button--cargar {
     order: -1;
+  }
+
+  #inventario-add-form .inventario-add-grid {
+    grid-template-columns: 1fr;
+    gap: 4px;
   }
 }
 
@@ -129,7 +186,8 @@
 .inventario-sort:focus-visible,
 .inventario-input:focus-visible,
 #inventario-search:focus-visible,
-#inventario-modal-close:focus-visible {
+#inventario-modal-close:focus-visible,
+#inventario-add-close:focus-visible {
   outline: 3px solid #005fcc;
   outline-offset: 2px;
 }
@@ -187,9 +245,30 @@
   z-index: 1000;
 }
 
+#inventario-add-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+}
+
 #inventario-modal-content {
   background: #fff;
   width: min(90%, 400px);
+  border-radius: 8px;
+  padding: 20px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+#inventario-add-modal-content {
+  background: #fff;
+  width: min(92%, 560px);
+  max-height: 90vh;
+  overflow-y: auto;
   border-radius: 8px;
   padding: 20px;
   box-sizing: border-box;
@@ -208,7 +287,24 @@
   color: #555;
 }
 
+#inventario-add-close {
+  position: absolute;
+  top: 8px;
+  right: 14px;
+  border: 0;
+  padding: 4px 8px;
+  background: transparent;
+  font-size: 22px;
+  cursor: pointer;
+  color: #555;
+}
+
 #inventario-modal-title {
+  margin: 0 0 4px;
+  color: #007acc;
+}
+
+#inventario-add-title {
   margin: 0 0 4px;
   color: #007acc;
 }

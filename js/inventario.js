@@ -4,12 +4,14 @@ let campoEnEdicion = null;
 let columnaOrden = null;
 let direccionOrden = "asc";
 const LIMITE_POR_PAGINA = 120;
+const CODIGO_PROVISIONAL_INICIAL = 33000;
 let paginaActual = 0;
 let totalInventario = 0;
 let busquedaActiva = "";
 let solicitudCarga = 0;
 let temporizadorBusqueda = null;
 let controlInventarioActivo = null;
+let codigoPropuestoAdicional = "";
 const columnasNumericas = new Set(["StockF9", "CantidadFisica", "Diferencia"]);
 
 async function cargarInventario({ busqueda = busquedaActiva, pagina = paginaActual } = {}) {
@@ -238,8 +240,9 @@ document.getElementById("inventario-modal").addEventListener("click", function (
   if (event.target === this) cerrarInventarioModal();
 });
 document.addEventListener('keydown', event => {
-  if (event.key === 'Escape' && document.getElementById('inventario-modal').style.display === 'flex') {
-    cerrarInventarioModal();
+  if (event.key === 'Escape') {
+    if (document.getElementById('inventario-modal').style.display === 'flex') cerrarInventarioModal();
+    if (document.getElementById('inventario-add-modal').style.display === 'flex') cerrarModalAdicional();
   }
 });
 
@@ -251,4 +254,124 @@ function cerrarInventarioModal() {
   campoEnEdicion = null;
   controlInventarioActivo?.focus();
   controlInventarioActivo = null;
+}
+
+async function obtenerSiguienteCodigoProvisional() {
+  const response = await API_FETCH('/api/inventario', { cache: 'no-store' });
+  const rows = await response.json();
+  if (!response.ok) throw new Error(rows.error || `HTTP ${response.status}`);
+  if (!Array.isArray(rows)) throw new Error('La respuesta del inventario no tiene el formato esperado.');
+
+  const occupiedCodes = new Set(rows
+    .map(row => Number(String(row.Codigo ?? '').trim()))
+    .filter(code => Number.isSafeInteger(code) && code >= CODIGO_PROVISIONAL_INICIAL));
+  let nextCode = CODIGO_PROVISIONAL_INICIAL;
+  while (occupiedCodes.has(nextCode)) nextCode += 1;
+  return String(nextCode);
+}
+
+const inventarioAddButton = document.getElementById('inventario-add-button');
+const inventarioAddModal = document.getElementById('inventario-add-modal');
+const inventarioAddForm = document.getElementById('inventario-add-form');
+const inventarioAddCode = document.getElementById('inventario-add-code');
+const inventarioAddProduct = document.getElementById('inventario-add-product');
+const inventarioAddStatus = document.getElementById('inventario-add-status');
+const inventarioAddSave = document.getElementById('inventario-add-save');
+
+inventarioAddButton.hidden = !['editor', 'supervisor', 'administrador'].includes(localStorage.getItem('role'));
+inventarioAddButton.addEventListener('click', async () => {
+  inventarioAddForm.reset();
+  document.getElementById('inventario-add-um').value = 'Unid';
+  document.getElementById('inventario-add-stock').value = '0';
+  inventarioAddStatus.textContent = '';
+  inventarioAddSave.disabled = true;
+  inventarioAddModal.style.display = 'flex';
+  inventarioAddModal.setAttribute('aria-hidden', 'false');
+
+  try {
+    codigoPropuestoAdicional = await obtenerSiguienteCodigoProvisional();
+    inventarioAddCode.value = codigoPropuestoAdicional;
+    inventarioAddSave.disabled = false;
+    inventarioAddProduct.focus();
+  } catch (error) {
+    cerrarModalAdicional();
+    await window.siteDialog.alert(error.message || 'No se pudo obtener el siguiente código provisional.');
+  }
+});
+
+document.getElementById('inventario-add-close').addEventListener('click', cerrarModalAdicional);
+document.getElementById('inventario-add-cancel').addEventListener('click', cerrarModalAdicional);
+inventarioAddModal.addEventListener('click', event => {
+  if (event.target === inventarioAddModal) cerrarModalAdicional();
+});
+inventarioAddForm.addEventListener('submit', async event => {
+  event.preventDefault();
+  const codigo = inventarioAddCode.value.trim();
+  const producto = inventarioAddProduct.value.trim();
+  const cantidadFisica = Number(document.getElementById('inventario-add-physical').value);
+  if (!/^\d+$/.test(codigo) || !Number.isSafeInteger(Number(codigo)) || Number(codigo) < CODIGO_PROVISIONAL_INICIAL) {
+    inventarioAddStatus.textContent = `El código provisional debe ser un entero desde ${CODIGO_PROVISIONAL_INICIAL}.`;
+    inventarioAddCode.focus();
+    return;
+  }
+  if (!producto) {
+    inventarioAddStatus.textContent = 'El producto es obligatorio.';
+    inventarioAddProduct.focus();
+    return;
+  }
+  if (!Number.isFinite(cantidadFisica) || cantidadFisica < 0.01) {
+    inventarioAddStatus.textContent = 'La cantidad física debe ser mayor que cero.';
+    document.getElementById('inventario-add-physical').focus();
+    return;
+  }
+
+  inventarioAddSave.disabled = true;
+  inventarioAddStatus.textContent = '';
+  try {
+    const response = await API_FETCH('/api/inventario/bulk', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        rows: [{
+          Codigo: codigo,
+          Producto: producto,
+          UM: document.getElementById('inventario-add-um').value.trim(),
+          Unidades: null,
+          StockF9: 0,
+          CantidadFisica: cantidadFisica,
+          Ubicacion: document.getElementById('inventario-add-location').value.trim(),
+          Observacion: document.getElementById('inventario-add-observation').value.trim()
+        }]
+      })
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      if (response.status === 409 && codigo === codigoPropuestoAdicional) {
+        codigoPropuestoAdicional = await obtenerSiguienteCodigoProvisional();
+        inventarioAddCode.value = codigoPropuestoAdicional;
+        inventarioAddStatus.textContent = `Ese código acaba de ocuparse. Se asignó ${codigoPropuestoAdicional}; revise y vuelva a guardar.`;
+        inventarioAddCode.focus();
+        return;
+      }
+      throw new Error(result.error || `HTTP ${response.status}`);
+    }
+
+    cerrarModalAdicional();
+    const search = document.getElementById('inventario-search');
+    search.value = codigo;
+    await cargarInventario({ busqueda: codigo, pagina: 0 });
+    await window.siteDialog.alert(`Adicional agregado con el código ${codigo}.`);
+  } catch (error) {
+    console.error('Error agregando adicional al inventario:', error);
+    inventarioAddStatus.textContent = error.message || 'No se pudo guardar el adicional.';
+  } finally {
+    inventarioAddSave.disabled = false;
+  }
+});
+
+function cerrarModalAdicional() {
+  inventarioAddModal.style.display = 'none';
+  inventarioAddModal.setAttribute('aria-hidden', 'true');
+  codigoPropuestoAdicional = '';
+  inventarioAddButton.focus();
 }

@@ -73,7 +73,7 @@ async function cargarInventario(endpoint) {
 /**
  * Acepta tanto un array plano de filas como un objeto { data: [...] }
  * y normaliza los nombres de columna esperados desde la tabla SQL:
- * Codigo, Producto, UM, StockF9, CantidadFisica, Ubicacion
+ * Codigo, Producto, UM, StockF9, CantidadFisica, Diferencia, Ubicacion
  */
 function normalizarFilas(datos) {
   const lista = Array.isArray(datos) ? datos : (datos.data || datos.rows || []);
@@ -85,6 +85,7 @@ function normalizarFilas(datos) {
     ubicacion: item.Ubicacion ?? item.ubicacion ?? "",
     stockF9: toNumeroOpcional(item.StockF9 ?? item.stockF9 ?? item.Stock ?? item.stock),
     cantidadFisica: item.CantidadFisica ?? item.cantidadFisica ?? null,
+    diferencia: toNumeroOpcional(item.Diferencia ?? item.diferencia),
     observacion: item.Observacion ?? item.observacion ?? ""
   }));
 }
@@ -107,13 +108,14 @@ function renderizarTabla(filas) {
   cuerpo.innerHTML = "";
 
   if (!filas.length) {
-    cuerpo.innerHTML = `<tr><td colspan="7" class="sin-datos">No hay registros para mostrar.</td></tr>`;
-    actualizarTotales(0, 0, 0);
+    cuerpo.innerHTML = `<tr><td colspan="8" class="sin-datos">No hay registros para mostrar.</td></tr>`;
+    actualizarTotales(0, 0, 0, 0);
     return;
   }
 
   let totalStock = 0;
   let totalFisica = 0;
+  let totalDiferencia = 0;
 
   const fragment = document.createDocumentFragment();
 
@@ -130,6 +132,7 @@ function renderizarTabla(filas) {
           ? formatearNumero(toNumero(fila.cantidadFisica))
           : ""
       }</td>
+      <td>${formatearNumero(fila.diferencia)}</td>
       <td>${escapeHtml(fila.observacion)}</td>
     `;
     fragment.appendChild(tr);
@@ -137,7 +140,7 @@ function renderizarTabla(filas) {
     if ((indice + 1) % FILAS_POR_PAGINA === 0 && indice < filas.length - 1) {
       const separador = document.createElement("tr");
       separador.className = "separador-pagina";
-      separador.innerHTML = '<td colspan="7"></td>';
+      separador.innerHTML = '<td colspan="8"></td>';
       fragment.appendChild(separador);
     }
 
@@ -145,15 +148,17 @@ function renderizarTabla(filas) {
     if (fila.cantidadFisica !== null && fila.cantidadFisica !== undefined) {
       totalFisica += toNumero(fila.cantidadFisica);
     }
+    if (fila.diferencia !== null) totalDiferencia += fila.diferencia;
   });
 
   cuerpo.appendChild(fragment);
-  actualizarTotales(totalStock, totalFisica, filas.length);
+  actualizarTotales(totalStock, totalFisica, totalDiferencia, filas.length);
 }
 
-function actualizarTotales(totalStock, totalFisica, lineas) {
+function actualizarTotales(totalStock, totalFisica, totalDiferencia, lineas) {
   document.getElementById("totalStock").textContent = formatearNumero(totalStock);
   document.getElementById("totalFisica").textContent = formatearNumero(totalFisica);
+  document.getElementById("totalDiferencia").textContent = formatearNumero(totalDiferencia);
 
   document.getElementById("totalStockResumen").textContent = formatearNumero(totalStock);
   document.getElementById("totalLineas").textContent = String(lineas);
