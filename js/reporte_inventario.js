@@ -154,13 +154,6 @@ function renderizarTabla(filas) {
     `;
     fragment.appendChild(tr);
 
-    if ((indice + 1) % FILAS_POR_PAGINA === 0 && indice < filas.length - 1) {
-      const separador = document.createElement("tr");
-      separador.className = "separador-pagina";
-      separador.innerHTML = '<td colspan="8"></td>';
-      fragment.appendChild(separador);
-    }
-
     totalStock += fila.stockF9;
     if (fila.cantidadFisica !== null && fila.cantidadFisica !== undefined) {
       totalFisica += toNumero(fila.cantidadFisica);
