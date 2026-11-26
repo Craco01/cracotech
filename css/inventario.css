@@ -334,6 +334,12 @@
   font-size: 14px;
 }
 
+#inventario-modal-help {
+  margin: -8px 0 16px;
+  color: #666;
+  font-size: 13px;
+}
+
 #inventario-modal-form label {
   display: block;
   margin-bottom: 6px;

@@ -223,9 +223,17 @@ document.getElementById("inventario-body").addEventListener("click", function (e
   campoEnEdicion = campo;
 
   const etiqueta = input.dataset.etiqueta || campo;
-  document.getElementById("inventario-modal-title").textContent = `Actualizar ${etiqueta}`;
+  const esAjusteCantidad = campo === "CantidadFisica";
+  document.getElementById("inventario-modal-title").textContent = esAjusteCantidad
+    ? `Ajustar Cantidad Física (actual: ${item.CantidadFisica ?? 0})`
+    : `Actualizar ${etiqueta}`;
   document.getElementById("inventario-modal-info").textContent = `${item.Codigo} - ${item.Producto}`;
-  document.getElementById("inventario-modal-input").value = item[campo] ?? "";
+  document.getElementById("inventario-modal-label").textContent = esAjusteCantidad
+    ? "Cantidad a sumar o restar"
+    : "Nuevo valor";
+  const ayuda = document.getElementById("inventario-modal-help");
+  ayuda.hidden = !esAjusteCantidad;
+  document.getElementById("inventario-modal-input").value = esAjusteCantidad ? "" : (item[campo] ?? "");
   document.getElementById("inventario-modal-input").type = campo === "CantidadFisica" ? "number" : "text";
   document.getElementById("inventario-modal-input").step = campo === "CantidadFisica" ? "any" : "";
 
@@ -269,10 +277,13 @@ async function eliminarInventario(codigo, button) {
 }
 
 async function guardarCampo(codigo, campo, valor) {
+  const body = campo === "CantidadFisica"
+    ? { CantidadFisicaIncremento: valor }
+    : { [campo]: valor };
   const res = await API_FETCH(`/api/inventario/${encodeURIComponent(codigo)}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ [campo]: valor })
+    body: JSON.stringify(body)
   });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
