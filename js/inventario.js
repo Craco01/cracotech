@@ -11,6 +11,7 @@ let busquedaActiva = "";
 let solicitudCarga = 0;
 let temporizadorBusqueda = null;
 let controlInventarioActivo = null;
+let posicionModalInventario = null;
 let codigoPropuestoAdicional = "";
 const puedeEliminarInventario = localStorage.getItem('role') === 'administrador';
 const columnasNumericas = new Set(["StockF9", "CantidadFisica", "Diferencia"]);
@@ -216,6 +217,7 @@ document.getElementById("inventario-body").addEventListener("click", function (e
   const item = inventarioData.find(i => String(i.Codigo) === String(codigo));
   if (!item) return;
 
+  posicionModalInventario = capturarPosicionInventario();
   controlInventarioActivo = input;
   filaEnEdicion = item;
   campoEnEdicion = campo;
@@ -231,6 +233,7 @@ document.getElementById("inventario-body").addEventListener("click", function (e
   modal.style.display = "flex";
   modal.setAttribute('aria-hidden', 'false');
   document.getElementById("inventario-modal-input").focus({ preventScroll: true });
+  restaurarPosicionInventario(posicionModalInventario);
 });
 
 document.getElementById('inventario-body').addEventListener('click', event => {
@@ -287,9 +290,11 @@ document.getElementById("inventario-modal-form").addEventListener("submit", asyn
   const botonGuardar = document.getElementById("inventario-modal-save");
   botonGuardar.disabled = true;
   try {
+    const posicion = posicionModalInventario || capturarPosicionInventario();
     await guardarCampo(filaEnEdicion.Codigo, campoEnEdicion, nuevoValor);
-    cerrarInventarioModal();
+    cerrarInventarioModal(false);
     await cargarInventario();
+    restaurarPosicionInventario(posicion);
   } catch (error) {
     console.error("Error guardando inventario:", error);
     await window.siteDialog.alert(error.message || "No se pudo actualizar el dato");
@@ -311,7 +316,7 @@ document.addEventListener('keydown', event => {
   }
 });
 
-function cerrarInventarioModal() {
+function cerrarInventarioModal(restaurarPosicion = true) {
   const modal = document.getElementById("inventario-modal");
   modal.style.display = "none";
   modal.setAttribute('aria-hidden', 'true');
@@ -319,6 +324,9 @@ function cerrarInventarioModal() {
   campoEnEdicion = null;
   controlInventarioActivo?.focus({ preventScroll: true });
   controlInventarioActivo = null;
+  const posicion = posicionModalInventario;
+  posicionModalInventario = null;
+  if (restaurarPosicion && posicion) restaurarPosicionInventario(posicion);
 }
 
 async function obtenerSiguienteCodigoProvisional() {
