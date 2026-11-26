@@ -8,6 +8,7 @@
 
 const DEFAULT_ENDPOINT = "/api/inventario";
 const FILAS_POR_PAGINA = 35;
+const CODIGO_PROVISIONAL_INICIAL = 33000;
 
 document.addEventListener("DOMContentLoaded", () => {
   pintarFechaHora();
@@ -59,7 +60,7 @@ async function cargarInventario(endpoint) {
     }
 
     const datos = await respuesta.json();
-    const filas = normalizarFilas(datos);
+    const filas = ordenarAdicionalesAlFinal(normalizarFilas(datos));
     renderizarTabla(filas);
     actualizarContadorPaginas(filas.length);
     estadoEl.textContent = `Datos cargados: ${filas.length} línea(s).`;
@@ -68,6 +69,22 @@ async function cargarInventario(endpoint) {
     estadoEl.classList.add("error");
     console.error("Error al cargar inventario:", error);
   }
+}
+
+function ordenarAdicionalesAlFinal(filas) {
+  const inventarioCargado = [];
+  const adicionales = [];
+
+  filas.forEach(fila => {
+    const codigo = Number(String(fila.codigo).trim());
+    if (Number.isSafeInteger(codigo) && codigo >= CODIGO_PROVISIONAL_INICIAL) {
+      adicionales.push(fila);
+    } else {
+      inventarioCargado.push(fila);
+    }
+  });
+
+  return [...inventarioCargado, ...adicionales];
 }
 
 /**
