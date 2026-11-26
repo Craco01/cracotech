@@ -17,6 +17,7 @@
     <div><div class="eyebrow">Herramienta de administración</div><h1 id="pageTitle">Usuarios y empleados</h1><p class="subtle">Consulta y administra las cuentas y el personal de mantenimiento.</p></div>
   </section>
 
+  <div class="status" id="adminStatus" aria-live="polite"></div>
   <section class="panel hidden" id="adminPanel" aria-labelledby="adminPanelTitle">
     <div style="display:flex;justify-content:space-between;gap:12px;align-items:start;flex-wrap:wrap"><div><h2 id="adminPanelTitle">Cuenta y empleado</h2><p class="subtle">Una operación guarda ambos registros. El usuario de la cuenta se sincroniza con empleados.user.</p></div></div>
     <form id="accountForm">
@@ -47,7 +48,6 @@
         <div class="actions"><button type="submit">Guardar nueva contraseña</button><button class="secondary" id="cancelPasswordReset" type="button">Cancelar</button></div>
       </form>
     </section>
-    <div class="status" id="adminStatus" aria-live="polite"></div>
     <div class="table-wrap"><table aria-label="Cuentas de usuario y empleados"><thead><tr><th scope="col">Usuario</th><th scope="col">Rol</th><th scope="col">Empleado</th><th scope="col">Cargo</th><th scope="col">Vínculo</th><th scope="col">Acción</th></tr></thead><tbody id="accountsBody"><tr><td colspan="6">Cargando cuentas y empleados...</td></tr></tbody></table></div>
   </section>
 </main>
