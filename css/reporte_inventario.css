@@ -80,7 +80,7 @@ body {
 .hoja {
   background: #fff;
   width: 210mm;
-  min-height: 297mm;
+  min-height: 0;
   margin: 20px auto;
   padding: 8mm 10mm;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
@@ -191,21 +191,33 @@ body {
   overflow: visible;
 }
 
-.tabla-inventario tbody td {
-  height: 18px;
-  max-height: 18px;
-  line-height: 13px;
-  white-space: nowrap;
+.tabla-inventario tfoot {
+  display: table-row-group;
 }
 
-.col-codigo   { width: 9%; }
-.col-descripcion { width: 21.4%; }
-.col-um       { width: 7%;  text-align: center; }
-.col-ubicacion{ width: 13%; }
-.col-stock    { width: 11%; text-align: right; }
-.col-fisica   { width: 11%; text-align: right; }
-.col-diferencia { width: 11%; text-align: right; }
-.col-observacion { width: 16.6%; }
+.tabla-inventario tbody td {
+  height: auto;
+  max-height: none;
+  line-height: 13px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  vertical-align: top;
+}
+
+.col-codigo   { width: 8%; }
+.col-descripcion { width: 24%; }
+.col-um       { width: 5%;  text-align: center; }
+.col-ubicacion{ width: 10%; }
+.col-stock    { width: 9%; text-align: right; }
+.col-fisica   { width: 10%; text-align: right; }
+.col-diferencia { width: 9%; text-align: right; }
+.col-observacion { width: 25%; }
+
+.tabla-inventario tbody td:nth-child(8) {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
 
 .tabla-inventario tbody td:nth-child(5),
 .tabla-inventario tbody td:nth-child(6),
@@ -225,7 +237,7 @@ body {
 }
 
 .separador-pagina {
-  display: table-row;
+  display: none;
 }
 
 .separador-pagina td {
@@ -292,8 +304,8 @@ body {
   .hoja {
     box-shadow: none;
     margin: 0;
-    width: 210mm;
-    min-height: 297mm;
+    width: 100%;
+    min-height: 0;
     padding: 8mm 10mm;
   }
 
@@ -306,14 +318,17 @@ body {
     page-break-inside: auto;
   }
 
+  .tabla-inventario tfoot {
+    display: table-row-group;
+  }
+
   .tabla-inventario tr {
     break-inside: avoid;
     page-break-inside: avoid;
   }
 
-  .separador-pagina {
-    break-before: page;
-    page-break-before: always;
+  .tabla-inventario tbody td:nth-child(8) {
+    overflow: visible;
   }
 
   thead {
