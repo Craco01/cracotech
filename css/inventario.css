@@ -185,6 +185,7 @@
 
 .inventario-sort:focus-visible,
 .inventario-input:focus-visible,
+.inventario-delete-button:focus-visible,
 #inventario-search:focus-visible,
 #inventario-modal-close:focus-visible,
 #inventario-add-close:focus-visible {
@@ -227,6 +228,24 @@
 .inventario-input--modal {
   background: #fffbe6;
   cursor: pointer;
+}
+
+.inventario-delete-button {
+  padding: 6px 10px;
+  border: 0;
+  border-radius: 4px;
+  background: #b02a37;
+  color: #fff;
+  cursor: pointer;
+}
+
+.inventario-delete-button:hover {
+  background: #842029;
+}
+
+.inventario-delete-button:disabled {
+  cursor: wait;
+  opacity: 0.65;
 }
 
 /* Se edita directamente en la fila */

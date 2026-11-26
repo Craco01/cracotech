@@ -12,7 +12,9 @@ let solicitudCarga = 0;
 let temporizadorBusqueda = null;
 let controlInventarioActivo = null;
 let codigoPropuestoAdicional = "";
+const puedeEliminarInventario = localStorage.getItem('role') === 'administrador';
 const columnasNumericas = new Set(["StockF9", "CantidadFisica", "Diferencia"]);
+document.getElementById('inventario-actions-header').hidden = !puedeEliminarInventario;
 
 async function cargarInventario({ busqueda = busquedaActiva, pagina = paginaActual } = {}) {
   const cargaActual = ++solicitudCarga;
@@ -99,6 +101,17 @@ function renderInventarioTable(items) {
     agregarCampo('CantidadFisica', 'Cantidad Física', item.CantidadFisica);
     agregarCampo('Ubicacion', 'Ubicación', item.Ubicacion);
     agregarCampo('Observacion', 'Observación', item.Observacion);
+    if (puedeEliminarInventario) {
+      const celda = document.createElement('td');
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'inventario-delete-button';
+      button.dataset.codigo = String(item.Codigo ?? '');
+      button.setAttribute('aria-label', `Eliminar ${item.Producto || item.Codigo}`);
+      button.textContent = 'Eliminar';
+      celda.appendChild(button);
+      row.appendChild(celda);
+    }
     tableBody.appendChild(row);
   });
 }
@@ -134,6 +147,7 @@ function renderPaginacionInventario() {
 function configurarEncabezadosOrdenables() {
   const columnas = ["Codigo", "Producto", "UM", "StockF9", "Diferencia", "CantidadFisica", "Ubicacion", "Observacion"];
   document.querySelectorAll("#inventario-table th").forEach((th, indice) => {
+    if (!columnas[indice]) return;
     const etiqueta = th.textContent.trim();
     const button = document.createElement("button");
     const icono = document.createElement("span");
@@ -199,6 +213,34 @@ document.getElementById("inventario-body").addEventListener("click", function (e
   modal.setAttribute('aria-hidden', 'false');
   document.getElementById("inventario-modal-input").focus();
 });
+
+document.getElementById('inventario-body').addEventListener('click', event => {
+  const button = event.target.closest('.inventario-delete-button');
+  if (!button || !puedeEliminarInventario) return;
+  eliminarInventario(button.dataset.codigo, button);
+});
+
+async function eliminarInventario(codigo, button) {
+  const item = inventarioData.find(row => String(row.Codigo) === String(codigo));
+  const detalle = item ? `${item.Codigo} - ${item.Producto}` : codigo;
+  if (!await window.siteDialog.confirm(`¿Eliminar el registro ${detalle}? Esta acción no se puede deshacer.`)) return;
+
+  button.disabled = true;
+  try {
+    const response = await API_FETCH(`/api/inventario/${encodeURIComponent(codigo)}`, { method: 'DELETE' });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.error || `HTTP ${response.status}`);
+
+    const pagina = inventarioData.length === 1 && paginaActual > 0 ? paginaActual - 1 : paginaActual;
+    await cargarInventario({ pagina });
+    await window.siteDialog.alert(`Se eliminó el código ${codigo}.`);
+  } catch (error) {
+    console.error('Error eliminando inventario:', error);
+    await window.siteDialog.alert(error.message || 'No se pudo eliminar el registro.');
+  } finally {
+    button.disabled = false;
+  }
+}
 
 async function guardarCampo(codigo, campo, valor) {
   const res = await API_FETCH(`/api/inventario/${encodeURIComponent(codigo)}`, {
