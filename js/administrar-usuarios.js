@@ -76,8 +76,8 @@ function setFormMode() {
   const hasAccount = Boolean(state.selected?.userId);
   $('username').required = !hasAccount;
   $('employeeName').required = !hasAccount;
-  $('password').required = !hasAccount;
-  $('passwordConfirm').required = !hasAccount;
+  $('adminAccountPassword').required = !hasAccount;
+  $('adminAccountPasswordConfirm').required = !hasAccount;
   $('passwordHint').textContent = hasAccount ? 'Opcional al editar; vacia el campo para conservarla' : 'Obligatoria al crear; 3 a 9 caracteres alfanumericos';
   $('saveButton').textContent = state.selected ? (hasAccount ? 'Actualizar cuenta y empleado' : 'Crear cuenta vinculada') : 'Crear cuenta y empleado';
   $('deleteButton').disabled = !state.selected;
@@ -87,8 +87,8 @@ function setFormMode() {
 function clearForm() {
   state.selected = null;
   $('accountForm').reset();
-  $('password').value = '';
-  $('passwordConfirm').value = '';
+  $('adminAccountPassword').value = '';
+  $('adminAccountPasswordConfirm').value = '';
   $('accountSelection').classList.add('hidden');
   $('accountSelectionName').textContent = '';
   $('resetPasswordPanel').classList.add('hidden');
@@ -141,8 +141,8 @@ function bindRows() {
     $('employeeLegajo').value = row.dataset.legajo;
     $('employeeCargo').value = row.children[3].textContent.trim() === '—' ? '' : row.children[3].textContent.trim();
     $('employeeSalary').value = row.dataset.salary;
-    $('password').value = '';
-    $('passwordConfirm').value = '';
+    $('adminAccountPassword').value = '';
+    $('adminAccountPasswordConfirm').value = '';
     $('accountSelectionName').textContent = row.dataset.username || 'Empleado sin cuenta';
     $('accountSelection').classList.remove('hidden');
     $('resetPasswordPanel').classList.add('hidden');
@@ -182,11 +182,11 @@ $('resetPasswordForm').addEventListener('submit', async event => {
 });
 $('accountForm').addEventListener('submit', async event => {
   event.preventDefault();
-  if ($('password').value !== $('passwordConfirm').value) return setStatus('adminStatus', 'Las contraseñas no coinciden.', 'error');
+  if ($('adminAccountPassword').value !== $('adminAccountPasswordConfirm').value) return setStatus('adminStatus', 'Las contraseñas no coinciden.', 'error');
   const body = {
     username: $('username').value.trim(),
     role: $('role').value,
-    password: $('password').value,
+    password: $('adminAccountPassword').value,
     employeeId: state.selected?.employeeId ?? null,
     employee: {
       nombre_apellido: $('employeeName').value.trim(),

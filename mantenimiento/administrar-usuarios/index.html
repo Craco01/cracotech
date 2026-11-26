@@ -23,8 +23,8 @@
       <div class="grid">
         <label>Usuario<input id="username" maxlength="50" autocomplete="off"></label>
         <label>Rol<select id="role" required><option value="viewer">viewer</option><option value="editor">editor</option><option value="supervisor">supervisor</option><option value="administrador">administrador</option></select><span class="subtle">Selecciona una cuenta del listado para cambiar su rol y luego guarda los cambios.</span></label>
-        <label>Contraseña <span class="subtle" id="passwordHint">Obligatoria al crear; vacia para conservarla</span><input id="password" type="password" minlength="3" maxlength="9" pattern="[A-Za-z0-9]{3,9}" autocomplete="new-password"></label>
-        <label>Confirmar contraseña<input id="passwordConfirm" type="password" minlength="3" maxlength="9" pattern="[A-Za-z0-9]{3,9}" autocomplete="new-password"></label>
+        <label>Contraseña <span class="subtle" id="passwordHint">Obligatoria al crear; vacia para conservarla</span><input id="adminAccountPassword" type="password" minlength="3" maxlength="9" pattern="[A-Za-z0-9]{3,9}" autocomplete="new-password"></label>
+        <label>Confirmar contraseña<input id="adminAccountPasswordConfirm" type="password" minlength="3" maxlength="9" pattern="[A-Za-z0-9]{3,9}" autocomplete="new-password"></label>
         <label>Nombre y apellido<input id="employeeName" maxlength="255"></label>
         <label>CI<input id="employeeCi" type="number" step="1"></label>
         <label>Legajo<input id="employeeLegajo" type="number" step="1"></label>
@@ -57,6 +57,6 @@
 <script src="../../js/session-guard.js?v=20261112-4"></script>
 <script src="../../js/nav-responsive.js"></script>
 <script src="../../js/site-dialogs.js"></script>
-<script src="../../js/administrar-usuarios.js?v=20261112-4"></script>
+<script src="../../js/administrar-usuarios.js?v=20261126-1"></script>
 </body>
 </html>
