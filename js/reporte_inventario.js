@@ -7,7 +7,6 @@
    ========================================================== */
 
 const DEFAULT_ENDPOINT = "/api/inventario";
-const FILAS_POR_PAGINA = 35;
 const CODIGO_PROVISIONAL_INICIAL = 33000;
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -62,7 +61,6 @@ async function cargarInventario(endpoint) {
     const datos = await respuesta.json();
     const filas = ordenarAdicionalesAlFinal(normalizarFilas(datos));
     renderizarTabla(filas);
-    actualizarContadorPaginas(filas.length);
     estadoEl.textContent = `Datos cargados: ${filas.length} línea(s).`;
   } catch (error) {
     estadoEl.textContent = `No se pudieron cargar los datos (${error.message}). Verifique el endpoint GET.`;
@@ -172,12 +170,6 @@ function actualizarTotales(totalStock, totalFisica, totalDiferencia, lineas) {
 
   document.getElementById("totalStockResumen").textContent = formatearNumero(totalStock);
   document.getElementById("totalLineas").textContent = String(lineas);
-}
-
-function actualizarContadorPaginas(totalFilas) {
-  const totalPaginas = Math.max(1, Math.ceil(totalFilas / FILAS_POR_PAGINA));
-  document.getElementById("paginaActual").textContent = "1";
-  document.getElementById("totalPaginas").textContent = String(totalPaginas);
 }
 
 /* ---------- Utilidades ---------- */
