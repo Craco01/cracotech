@@ -162,8 +162,14 @@
   color: #c62828;
 }
 
+#tablaHabilitaciones .habilitaciones-estado--completada {
+  color: #1d4ed8;
+  font-weight: 700;
+}
+
 #tablaHabilitaciones .habilitaciones-estado--habilitado,
-#tablaHabilitaciones .habilitaciones-estado--no-habilitado {
+#tablaHabilitaciones .habilitaciones-estado--no-habilitado,
+#tablaHabilitaciones .habilitaciones-estado--completada {
   word-break: normal;
   overflow-wrap: normal;
 }

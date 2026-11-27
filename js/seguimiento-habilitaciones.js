@@ -146,13 +146,15 @@
 
     const puedeActualizar = ['supervisor', 'administrador'].includes(localStorage.getItem('role'));
     const estaHabilitado = String(orden.habilitado || 'no').trim().toLowerCase() === 'si';
-    const statusCell = crearCelda(estaHabilitado ? 'Habilitado' : 'No habilitado');
-    if (estaHabilitado) statusCell.classList.add('habilitaciones-estado--habilitado');
+    const estaCompletada = String(orden.progreso || '').trim().toLowerCase() === 'completado';
+    const statusCell = crearCelda(estaCompletada ? 'Completada' : estaHabilitado ? 'Habilitado' : 'No habilitado');
+    if (estaCompletada) statusCell.classList.add('habilitaciones-estado--completada');
+    else if (estaHabilitado) statusCell.classList.add('habilitaciones-estado--habilitado');
     else statusCell.classList.add('habilitaciones-estado--no-habilitado');
     const actionCell = document.createElement('td');
     const actionGroup = document.createElement('div');
     actionGroup.className = 'habilitaciones-acciones-grupo';
-    if (puedeActualizar) {
+    if (puedeActualizar && !estaCompletada) {
       const habilitarButton = document.createElement('button');
       habilitarButton.type = 'button';
       habilitarButton.className = 'habilitaciones-accion';
@@ -184,7 +186,7 @@
       });
       actionGroup.appendChild(habilitarButton);
     }
-    if (puedeActualizar) {
+    if (puedeActualizar && !estaCompletada) {
       const borrarButton = document.createElement('button');
       borrarButton.type = 'button';
       borrarButton.className = 'habilitaciones-accion habilitaciones-accion--borrar';
@@ -206,7 +208,11 @@
       });
       actionGroup.appendChild(borrarButton);
     }
-    actionCell.appendChild(actionGroup);
+    if (estaCompletada) {
+      actionCell.textContent = 'Solo lectura';
+    } else {
+      actionCell.appendChild(actionGroup);
+    }
     row.append(statusCell, actionCell);
     return row;
   }
