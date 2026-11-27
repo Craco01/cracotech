@@ -437,8 +437,8 @@ inventarioAddForm.addEventListener('submit', async event => {
   const codigo = inventarioAddCode.value.trim();
   const producto = inventarioAddProduct.value.trim();
   const cantidadFisica = Number(document.getElementById('inventario-add-physical').value);
-  if (!/^\d+$/.test(codigo) || !Number.isSafeInteger(Number(codigo)) || Number(codigo) < CODIGO_PROVISIONAL_INICIAL) {
-    inventarioAddStatus.textContent = `El código provisional debe ser un entero desde ${CODIGO_PROVISIONAL_INICIAL}.`;
+  if (!/^\d+$/.test(codigo) || !Number.isSafeInteger(Number(codigo))) {
+    inventarioAddStatus.textContent = 'El código debe ser un entero válido.';
     inventarioAddCode.focus();
     return;
   }
