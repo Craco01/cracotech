@@ -312,6 +312,15 @@ body {
   @page {
     size: A4 portrait;
     margin: 8mm 10mm;
+
+    @top-right {
+      content: "Pag: " counter(page) " de " counter(pages);
+      color: #1e3a5f;
+      font: 9px 'Segoe UI', Arial, sans-serif;
+      text-align: right;
+      vertical-align: bottom;
+      padding-bottom: 1mm;
+    }
   }
 
   .tabla-inventario {
@@ -329,6 +338,10 @@ body {
 
   .tabla-inventario tbody td:nth-child(8) {
     overflow: visible;
+  }
+
+  .tabla-inventario .celda-meta .meta-linea:first-child {
+    visibility: hidden;
   }
 
   thead {
