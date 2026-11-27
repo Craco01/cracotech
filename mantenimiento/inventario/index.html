@@ -7,7 +7,7 @@
   <meta name="description" content="Mantenimiento Metalúrgica Vera S.A.E.. Informacion y herramientas de gestion para mantenimiento industrial en Metalurgica Vera.">
         <link rel="icon" href="../../img/Logo.png" type="image/png" sizes="32x32">
         <link rel="stylesheet" href="../../css/styles.css">
-        <link rel="stylesheet" href="../../css/inventario.css?v=20261126-6">
+        <link rel="stylesheet" href="../../css/inventario.css?v=20261127-1">
         <link rel="stylesheet" href="../../css/report-pagination.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="../../js/api-config.js"></script>
@@ -96,7 +96,19 @@
             </form>
           </div>
         </div>
-<script src="../../js/inventario.js?v=20261126-6"></script>
+        <dialog id="inventario-masterkey-dialog" aria-labelledby="inventario-masterkey-title" aria-describedby="inventario-masterkey-description">
+          <form id="inventario-masterkey-form">
+            <h3 id="inventario-masterkey-title">Confirmar eliminación</h3>
+            <p id="inventario-masterkey-description"></p>
+            <label for="inventario-masterkey-input">Clave maestra</label>
+            <input id="inventario-masterkey-input" type="password" autocomplete="current-password" required>
+            <div class="inventario-modal-actions">
+              <button id="inventario-masterkey-cancel" type="button">Cancelar</button>
+              <button id="inventario-masterkey-submit" type="submit">Eliminar</button>
+            </div>
+          </form>
+        </dialog>
+<script src="../../js/inventario.js?v=20261127-1"></script>
 
 
 

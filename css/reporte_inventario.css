@@ -304,14 +304,14 @@ body {
   .hoja {
     box-shadow: none;
     margin: 0;
-    width: 100%;
+    width: auto;
     min-height: 0;
-    padding: 8mm 10mm;
+    padding: 0;
   }
 
   @page {
     size: A4 portrait;
-    margin: 0;
+    margin: 8mm 10mm;
   }
 
   .tabla-inventario {

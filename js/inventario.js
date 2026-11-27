@@ -258,9 +258,16 @@ async function eliminarInventario(codigo, button) {
   restaurarPosicionInventario(posicion);
   if (!confirmado) return;
 
+  let masterPassword = await solicitarClaveMaestraInventario(detalle);
+  restaurarPosicionInventario(posicion);
+  if (masterPassword === null) return;
+
   button.disabled = true;
   try {
-    const response = await API_FETCH(`/api/inventario/${encodeURIComponent(codigo)}`, { method: 'DELETE' });
+    const response = await API_FETCH(`/api/inventario/${encodeURIComponent(codigo)}`, {
+      method: 'DELETE',
+      headers: { 'X-Master-Password': masterPassword }
+    });
     const result = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(result.error || `HTTP ${response.status}`);
 
@@ -271,9 +278,46 @@ async function eliminarInventario(codigo, button) {
     console.error('Error eliminando inventario:', error);
     await window.siteDialog.alert(error.message || 'No se pudo eliminar el registro.');
   } finally {
+    masterPassword = '';
     button.disabled = false;
     restaurarPosicionInventario(posicion);
   }
+}
+
+function solicitarClaveMaestraInventario(detalle) {
+  const modal = document.getElementById('inventario-masterkey-dialog');
+  const form = document.getElementById('inventario-masterkey-form');
+  const input = document.getElementById('inventario-masterkey-input');
+  const descripcion = document.getElementById('inventario-masterkey-description');
+  const cancel = document.getElementById('inventario-masterkey-cancel');
+
+  return new Promise(resolve => {
+    const finish = value => {
+      form.removeEventListener('submit', onSubmit);
+      cancel.removeEventListener('click', onCancel);
+      modal.removeEventListener('cancel', onDialogCancel);
+      input.value = '';
+      if (modal.open) modal.close();
+      resolve(value);
+    };
+    const onSubmit = event => {
+      event.preventDefault();
+      finish(input.value);
+    };
+    const onCancel = () => finish(null);
+    const onDialogCancel = event => {
+      event.preventDefault();
+      finish(null);
+    };
+
+    descripcion.textContent = `Ingresa la clave maestra para eliminar ${detalle}.`;
+    input.value = '';
+    form.addEventListener('submit', onSubmit);
+    cancel.addEventListener('click', onCancel);
+    modal.addEventListener('cancel', onDialogCancel);
+    modal.showModal();
+    input.focus();
+  });
 }
 
 async function guardarCampo(codigo, campo, valor) {

@@ -294,6 +294,49 @@
   position: relative;
 }
 
+#inventario-masterkey-dialog {
+  box-sizing: border-box;
+  width: min(90%, 420px);
+  border: 0;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+#inventario-masterkey-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+#inventario-masterkey-dialog h3 {
+  margin: 0 0 8px;
+  color: #007acc;
+}
+
+#inventario-masterkey-dialog p {
+  margin: 0 0 16px;
+  color: #555;
+}
+
+#inventario-masterkey-dialog label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 700;
+}
+
+#inventario-masterkey-input {
+  box-sizing: border-box;
+  width: 100%;
+  margin-bottom: 16px;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#inventario-masterkey-submit {
+  background: #b42318;
+  color: #fff;
+}
+
 #inventario-modal-close {
   position: absolute;
   top: 8px;
