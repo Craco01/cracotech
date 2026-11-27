@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /mantenimiento/
+Disallow: /herramientas/
+Disallow: /rrhh/
+
+Sitemap: https://cracotech.com/sitemap.xml
